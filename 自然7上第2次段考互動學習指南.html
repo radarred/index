@@ -1,0 +1,2373 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="dashboard">
+  <meta name="design-style" content="vitals">
+  <title>七年級生物第二次段考互動式學習指南</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Figtree:wght@300..900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Vitals style tokens */
+      --background: #ffffff;
+      --surface-container-low: #f1f7f8;
+      --surface-container: #e3f1f3;
+      --surface-container-high: #d5e9ec;
+
+      --on-surface: #1b2b33;
+      --on-surface-variant: #46585f;
+
+      --outline: #7b9198;
+      --outline-variant: #d5e3e5;
+
+      --primary: #0f7c8a;
+      --on-primary: #ffffff;
+      --primary-container: #e3f1f3;
+      --on-primary-container: #0a5560;
+      --secondary: #1d5e3a;
+      --tertiary: #2e7d4f;
+      --error: #b3261e;
+      --on-error: #ffffff;
+
+      --data-1: #0f7c8a;
+      --data-2: #2e7d4f;
+      --data-3: #b86e00;
+      --data-4: #5c5fb0;
+      --data-context: #b8c7ca;
+
+      --font-headline: 'Noto Sans TC', 'Figtree', sans-serif;
+      --font-body: 'Noto Sans TC', 'Atkinson Hyperlegible', sans-serif;
+      --font-label: 'Noto Sans TC', 'Figtree', sans-serif;
+
+      --rounded: 0.625rem;
+      --rounded-lg: 0.875rem;
+      --rounded-full: 9999px;
+
+      --top-bar: 6px solid var(--primary);
+      --status-bar-width: 4px;
+      --card-border: 1px solid var(--outline-variant);
+      --card-lift: 0 1px 2px rgb(27 43 51 / 0.05), 0 6px 16px rgb(27 43 51 / 0.05);
+
+      /* Shared semantic & foundation tokens */
+      --positive: #2e7d4f;
+      --warning: #b86e00;
+      --warning-container: #fdf4e3;
+      --positive-container: #e5f3ea;
+      --error-container: #fbeae8;
+      --focus: #0f7c8a;
+
+      /* Type scale (Dashboard / Explorer) */
+      --display-size: clamp(1.625rem, 1.3rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.2rem, 1.05rem + 0.5vw, 1.45rem);
+      --subhead-size: clamp(1.05rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.8125rem;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+    button, input, select, textarea { font-family: inherit; }
+
+    .page-shell {
+      border-top: var(--top-bar);
+      min-height: 100vh;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Header */
+    .guide-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .header-kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-xs);
+    }
+    .title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .lede {
+      font-size: var(--body-size);
+      line-height: 1.6;
+      color: var(--on-surface-variant);
+      max-width: 64ch;
+      margin: var(--space-xs) 0 0;
+    }
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover {
+      background-color: var(--on-primary-container);
+    }
+    .btn-outline {
+      background-color: var(--background);
+      color: var(--primary);
+      border-color: var(--outline);
+    }
+    .btn-outline:hover {
+      background-color: var(--surface-container);
+    }
+    .btn-danger-outline {
+      background-color: var(--background);
+      color: var(--error);
+      border-color: var(--outline);
+    }
+    .btn-danger-outline[data-armed="true"] {
+      background-color: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+
+    /* Overview KPI Cards */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .status-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-xs);
+    }
+    .status-card[data-status="ok"] { border-left-color: var(--tertiary); }
+    .status-card[data-status="warn"] { border-left-color: var(--warning); }
+    .status-card[data-status="alert"] { border-left-color: var(--error); }
+
+    .kpi-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .kpi-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-surface-variant);
+    }
+    .kpi-value {
+      font-family: var(--font-headline);
+      font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin: var(--space-xs) 0 0;
+    }
+    .kpi-caption {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+    .kpi-caption.ok { color: var(--secondary); font-weight: 700; }
+
+    /* Chips */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: var(--rounded-full);
+      background: var(--positive-container);
+      color: var(--secondary);
+      white-space: nowrap;
+    }
+    .chip[data-status="info"] {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .chip[data-status="warn"] {
+      background: var(--warning-container);
+      color: var(--on-surface);
+    }
+    .chip[data-status="alert"] {
+      background: var(--error-container);
+      color: var(--error);
+    }
+
+    /* Progress Bar */
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background-color: var(--surface-container);
+      border-radius: var(--rounded-full);
+      overflow: hidden;
+      margin-top: var(--space-xs);
+    }
+    .progress-fill {
+      height: 100%;
+      background-color: var(--primary);
+      border-radius: var(--rounded-full);
+      transition: width var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+    }
+    .progress-fill.complete {
+      background-color: var(--tertiary);
+    }
+
+    /* Section Header */
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+    }
+    .section-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 800;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .section-sub {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    /* Stage Selector Cards */
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .stage-card {
+      text-align: left;
+      background: var(--background);
+      border: var(--card-border);
+      border-top: 4px solid var(--outline-variant);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      min-height: 148px;
+      transition: transform var(--dur-micro) var(--ease-out), box-shadow var(--dur-short) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+    }
+    .stage-card:hover {
+      box-shadow: var(--card-lift);
+      transform: translateY(-2px);
+      background-color: var(--background);
+    }
+    .stage-card.active {
+      border-top-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary), var(--card-lift);
+      background-color: var(--background);
+    }
+    .stage-card.completed {
+      border-top-color: var(--tertiary);
+    }
+    .stage-card.active.completed {
+      border-top-color: var(--tertiary);
+      box-shadow: 0 0 0 2px var(--tertiary), var(--card-lift);
+    }
+    .stage-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .stage-num {
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--on-primary-container);
+      background: var(--primary-container);
+      padding: 0.15rem 0.55rem;
+      border-radius: var(--rounded-full);
+    }
+    .stage-card.active .stage-num {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .stage-card-title {
+      font-family: var(--font-headline);
+      font-size: 1.0625rem;
+      font-weight: 800;
+      color: var(--on-surface);
+      margin: var(--space-xs) 0 0;
+      line-height: 1.3;
+    }
+    .stage-card-desc {
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+      line-height: 1.45;
+    }
+    .stage-card-foot {
+      margin-top: auto;
+      padding-top: var(--space-xs);
+    }
+    .stage-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--on-surface-variant);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Expanded Detail Workspace */
+    .detail-workspace {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--card-lift);
+      display: grid;
+      gap: var(--space-lg);
+      animation: fadeSlideIn var(--dur-short) var(--ease-out);
+    }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .detail-banner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .detail-title {
+      font-family: var(--font-headline);
+      font-size: clamp(1.3rem, 1.15rem + 0.6vw, 1.65rem);
+      font-weight: 900;
+      margin: var(--space-xs) 0 0;
+      color: var(--on-surface);
+    }
+    .detail-summary {
+      color: var(--on-surface-variant);
+      margin: var(--space-xs) 0 0;
+      max-width: 68ch;
+    }
+
+    /* Two-column workspace grid */
+    .workspace-cols {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .panel-box {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .panel-box-white {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .panel-heading {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 800;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* Concept Cards inside Detail */
+    .concept-list {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .concept-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+    }
+    .concept-card h4 {
+      font-family: var(--font-headline);
+      font-size: 1rem;
+      font-weight: 800;
+      margin: 0 0 var(--space-xs);
+      color: var(--on-surface);
+    }
+    .concept-card p, .concept-card ul {
+      margin: 0;
+      color: var(--on-surface-variant);
+      font-size: 0.9375rem;
+    }
+    .concept-card ul {
+      padding-left: 1.25rem;
+      margin-top: var(--space-xs);
+      display: grid;
+      gap: 0.3rem;
+    }
+    .concept-card strong {
+      color: var(--on-surface);
+    }
+
+    /* Rules / Pitfalls */
+    .rule-callout {
+      background: var(--primary-container);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      color: var(--on-primary-container);
+    }
+    .rule-callout.warn {
+      background: var(--warning-container);
+      border-left-color: var(--warning);
+      color: var(--on-surface);
+    }
+    .rule-list {
+      display: grid;
+      gap: var(--space-sm);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .rule-item {
+      background: var(--background);
+      border: var(--card-border);
+      border-left: var(--status-bar-width) solid var(--error);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.9125rem;
+    }
+    .rule-item strong {
+      color: var(--error);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* Data Table */
+    .table-wrap {
+      overflow-x: auto;
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      background: var(--background);
+    }
+    table.bio-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      font-variant-numeric: tabular-nums;
+    }
+    table.bio-table th {
+      background: var(--surface-container-low);
+      color: var(--on-surface-variant);
+      font-family: var(--font-label);
+      font-weight: 700;
+      text-align: left;
+      padding: 0.65rem 0.75rem;
+      border-bottom: 1px solid var(--outline-variant);
+      white-space: nowrap;
+    }
+    table.bio-table td {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid var(--outline-variant);
+      color: var(--on-surface);
+      vertical-align: top;
+    }
+    table.bio-table tr:last-child td { border-bottom: none; }
+
+    /* Chart & SVG Containers */
+    .chart-box {
+      position: relative;
+      min-height: 270px;
+      width: 100%;
+      margin-top: var(--space-sm);
+    }
+    .svg-box {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-sm);
+      margin-top: var(--space-sm);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .svg-box svg {
+      width: 100%;
+      height: auto;
+      max-height: 260px;
+      display: block;
+    }
+
+    /* Interactive Tools inside Stages */
+    .interactive-lab {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .lab-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: var(--space-sm);
+      align-items: end;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .field-group label {
+      font-family: var(--font-label);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+    .field-group input, .field-group select {
+      min-height: 44px;
+      padding: 0.45rem 0.7rem;
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline);
+      background: var(--background);
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .field-group select {
+      padding-right: 1.75rem;
+    }
+    .lab-result-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      background: var(--background);
+      border: var(--card-border);
+      border-left: var(--status-bar-width) solid var(--tertiary);
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    .pill-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .pill-tab {
+      min-height: 44px;
+      padding: 0.4rem 0.85rem;
+      border-radius: var(--rounded-full);
+      border: 1px solid var(--outline);
+      background: var(--background);
+      color: var(--on-surface);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .pill-tab.active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    /* Checkable Progress Tracker */
+    .checklist-grid {
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: 0.65rem 0.85rem;
+      min-height: 44px;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .check-item:hover {
+      background-color: var(--surface-container-low);
+    }
+    .check-item.checked {
+      background-color: var(--positive-container);
+      border-color: var(--tertiary);
+    }
+    .check-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin: 2px 0 0;
+      accent-color: var(--tertiary);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .check-text {
+      font-size: 0.9125rem;
+      color: var(--on-surface);
+      line-height: 1.45;
+    }
+    .check-item.checked .check-text {
+      color: var(--secondary);
+      font-weight: 500;
+    }
+
+    /* Mini Quiz Section */
+    .quiz-grid {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .quiz-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .quiz-q {
+      font-weight: 700;
+      color: var(--on-surface);
+      margin: 0;
+      font-size: 0.95rem;
+    }
+    .quiz-source {
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+    }
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-xs);
+    }
+    .quiz-opt {
+      min-height: 44px;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline);
+      background: var(--background);
+      color: var(--on-surface);
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .quiz-opt:hover {
+      background: var(--surface-container-low);
+    }
+    .quiz-opt.correct {
+      background: var(--positive-container);
+      border-color: var(--tertiary);
+      color: var(--secondary);
+      font-weight: 700;
+    }
+    .quiz-opt.wrong {
+      background: var(--error-container);
+      border-color: var(--error);
+      color: var(--error);
+      font-weight: 700;
+    }
+    .quiz-feedback {
+      font-size: 0.875rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: var(--rounded);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border-left: 3px solid var(--primary);
+    }
+    .quiz-feedback.correct {
+      background: var(--positive-container);
+      border-left-color: var(--tertiary);
+      color: var(--secondary);
+    }
+    .quiz-feedback.wrong {
+      background: var(--error-container);
+      border-left-color: var(--error);
+      color: var(--error);
+    }
+
+    /* Footer */
+    .guide-footer {
+      border-top: 1px solid var(--outline-variant);
+      padding-top: var(--space-md);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    /* Container & Media Queries */
+    @media (max-width: 980px) {
+      .overview-grid, .stage-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .workspace-cols {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-md);
+      }
+      .overview-grid, .stage-grid, .quiz-options {
+        grid-template-columns: 1fr;
+      }
+      .detail-workspace {
+        padding: var(--space-md);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <main class="page-grid">
+      <!-- Top Header -->
+      <header class="guide-header">
+        <div>
+          <div class="header-kicker">
+            <i data-lucide="microscope" aria-hidden="true" width="16" height="16"></i>
+            <span>七年級上學期第二次段考 · 生物科全方位複習系統</span>
+          </div>
+          <h1 class="title">生物體的營養、運輸與循環 — 互動式學習指南</h1>
+          <p class="lede">系統化統整四大段考核心單元、關鍵比例圖表、高頻必考陷阱規則，並支援即時進度勾選與歷屆段考精選演練。</p>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="btn btn-outline" id="btn-export-summary" onclick="exportProgressReport()">
+            <i data-lucide="download" aria-hidden="true" width="16" height="16"></i>
+            匯出學習紀錄
+          </button>
+          <button type="button" class="btn btn-danger-outline" id="btn-reset-progress" data-armed="false" onclick="handleResetProgress(this)">
+            <i data-lucide="rotate-ccw" aria-hidden="true" width="16" height="16"></i>
+            重設所有進度
+          </button>
+        </div>
+      </header>
+
+      <!-- Overview Cards (上方總覽卡片) -->
+      <section aria-label="學習進度總覽">
+        <div class="overview-grid">
+          <article class="status-card" id="kpi-card-overall" data-status="info">
+            <div class="kpi-top">
+              <span class="kpi-label">總體知識點掌握度</span>
+              <span class="chip" id="kpi-overall-chip" data-status="info">複習進行中</span>
+            </div>
+            <div class="kpi-value" id="kpi-overall-pct">0%</div>
+            <div class="progress-track" aria-hidden="true">
+              <div class="progress-fill" id="kpi-overall-bar" style="width: 0%"></div>
+            </div>
+            <p class="kpi-caption" id="kpi-overall-sub">已完成 0 / 24 項必考檢核點</p>
+          </article>
+
+          <article class="status-card" id="kpi-card-chapters" data-status="info">
+            <div class="kpi-top">
+              <span class="kpi-label">已完攻關卡數</span>
+              <i data-lucide="layers" aria-hidden="true" width="18" height="18" style="color: var(--primary);"></i>
+            </div>
+            <div class="kpi-value" id="kpi-chapters-count">0 / 4 關</div>
+            <p class="kpi-caption" id="kpi-chapters-sub">點選下方任一關卡卡片展開詳細筆記</p>
+          </article>
+
+          <article class="status-card" id="kpi-card-quiz" data-status="info">
+            <div class="kpi-top">
+              <span class="kpi-label">歷屆實戰快篩得分</span>
+              <span class="chip" id="kpi-quiz-chip" data-status="info">12 題精選</span>
+            </div>
+            <div class="kpi-value" id="kpi-quiz-score">0 / 12 題</div>
+            <p class="kpi-caption" id="kpi-quiz-sub">尚餘 12 題待挑戰</p>
+          </article>
+
+          <article class="status-card" data-status="ok">
+            <div class="kpi-top">
+              <span class="kpi-label">段考核心涵蓋率</span>
+              <span class="chip">15 份試題彙整</span>
+            </div>
+            <div class="kpi-value">4 大章節</div>
+            <p class="kpi-caption ok">營養熱量 · 酵素消化 · 植物維管束 · 循環防禦</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Middle Interactive Stage Cards (中間可點擊切換的關卡卡片) -->
+      <section aria-label="學習關卡切換">
+        <div class="section-head">
+          <h2 class="section-title">選擇複習關卡</h2>
+          <p class="section-sub">點擊任一關卡卡片，下方立即展開該單元圖表比例、構造圖解、重點規則與進度追蹤</p>
+        </div>
+        <div class="stage-grid" id="stage-cards-grid" style="margin-top: var(--space-sm);"></div>
+      </section>
+
+      <!-- Lower Expanded Detail Panel (下方展開詳細說明、圖表比例、規則與進度追蹤) -->
+      <section aria-live="polite" aria-label="關卡詳細學習區">
+        <div class="detail-workspace" id="detail-workspace">
+          <div class="detail-banner">
+            <div>
+              <div style="display: flex; align-items: center; gap: var(--space-xs); flex-wrap: wrap;">
+                <span class="stage-num" id="detail-stage-num">關卡 01</span>
+                <span class="chip" id="detail-progress-chip" data-status="info">本關進度：0 / 6（0%）</span>
+              </div>
+              <h2 class="detail-title" id="detail-title">生物體的營養與光合作用</h2>
+              <p class="detail-summary" id="detail-summary"></p>
+            </div>
+            <button type="button" class="btn btn-primary" id="detail-mark-all-btn" onclick="markActiveStageAllChecked()">
+              <i data-lucide="check-check" aria-hidden="true" width="16" height="16"></i>
+              本關全數標記為已掌握
+            </button>
+          </div>
+
+          <div class="workspace-cols">
+            <!-- Left Column: Core Knowledge + Interactive Lab + Traps -->
+            <div style="display: grid; gap: var(--space-lg);">
+              <div class="concept-list" id="detail-concepts"></div>
+
+              <div id="detail-lab"></div>
+
+              <div class="panel-box">
+                <h3 class="panel-heading">
+                  <i data-lucide="alert-triangle" aria-hidden="true" width="18" height="18" style="color: var(--error);"></i>
+                  <span>段考高頻陷阱與重點規則</span>
+                </h3>
+                <ul class="rule-list" id="detail-rules"></ul>
+              </div>
+            </div>
+
+            <!-- Right Column: Chart + SVG Diagram + Progress Checklist -->
+            <div style="display: grid; gap: var(--space-lg);">
+              <div class="panel-box-white">
+                <h3 class="panel-heading">
+                  <i data-lucide="bar-chart-3" aria-hidden="true" width="18" height="18" style="color: var(--primary);"></i>
+                  <span id="stage-chart-title">核心比例與數據圖表</span>
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--on-surface-variant); margin: 0;" id="stage-chart-caption"></p>
+                <div class="chart-box">
+                  <canvas id="stage-chart-canvas"></canvas>
+                </div>
+              </div>
+
+              <div class="panel-box-white">
+                <h3 class="panel-heading">
+                  <i data-lucide="scan-eye" aria-hidden="true" width="18" height="18" style="color: var(--primary);"></i>
+                  <span>核心構造與機制圖解</span>
+                </h3>
+                <div class="svg-box" id="stage-svg-container"></div>
+              </div>
+
+              <div class="panel-box">
+                <h3 class="panel-heading">
+                  <i data-lucide="check-square" aria-hidden="true" width="18" height="18" style="color: var(--tertiary);"></i>
+                  <span id="detail-checklist-heading">可勾選學習進度追蹤（0/6）</span>
+                </h3>
+                <div class="checklist-grid" id="detail-checklist"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Practice Quiz Row -->
+          <div class="panel-box" style="margin-top: var(--space-xs);">
+            <h3 class="panel-heading">
+              <i data-lucide="clipboard-check" aria-hidden="true" width="18" height="18" style="color: var(--primary);"></i>
+              <span id="detail-quiz-heading">歷屆段考精選快篩</span>
+            </h3>
+            <div class="quiz-grid" id="detail-quiz-grid"></div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="guide-footer">
+        <span>資料來源：彙整自土城、大灣、屏東中正、屏東明正、中港、中興、同德、文昌、新興、林園、歸仁、石門、埤頭、溪湖、福興等國中七年級第二次段考生物試題與複習指導。</span>
+        <span id="save-status-note">進度自動儲存於學習工作區</span>
+      </footer>
+    </main>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    // =========================================================================
+    // Data Model: 4 Core Biology Stages grounded strictly in uploaded sources
+    // =========================================================================
+    const STAGES = [
+      {
+        id: 'stage-1',
+        num: '關卡 01',
+        title: `生物體的營養與光合作用`,
+        shortDesc: `三大產能養分熱量計算、碘液與本氏液檢測、葉片構造與光合作用實驗`,
+        examWeight: `約佔段考 25%`,
+        summary: `掌握六大類養分的供能與否及每公克產熱值，熟記澱粉與葡萄糖檢測試劑顏色變化；並理解植物如何透過葉綠體、氣孔與根部合作完成光合作用。`,
+        chartTitle: `養分熱量密度與營養標示分析`,
+        chartCaption: `每公克脂質產熱（9 大卡）為醣類與蛋白質（4 大卡）的 2.25 倍；水、礦物質、維生素與纖維素無法由人體細胞代謝產生熱量。`,
+        concepts: [
+          {
+            title: `六大養分分類與熱量公式`,
+            html: `<ul>
+              <li><strong>可產生能量的養分</strong>：醣類（4 大卡/g）、蛋白質（4 大卡/g）、脂質（9 大卡/g）。細胞利用順序為「<strong>醣類 → 脂質 → 蛋白質</strong>」，因蛋白質是肌肉與毛髮的主要原料，非不得已不分解產能（細胞內的高貴能源）。</li>
+              <li><strong>不可產生能量的養分</strong>：水、礦物質（如鈣防骨鬆、鐵造血紅素）、維生素（如缺維生素 A 夜盲、缺 C 壞血症），以及人體無法消化的<strong>纖維素</strong>（多醣類，助腸胃蠕動與排便）。</li>
+              <li><strong>急速失溫補充</strong>：應優先給予<strong>葡萄糖液</strong>，因屬小分子不需消化即可吸收產能。</li>
+            </ul>`
+          },
+          {
+            title: `養分檢測試劑對照規則`,
+            html: `<div class="table-wrap">
+              <table class="bio-table">
+                <thead>
+                  <tr><th>待測養分</th><th>使用試劑</th><th>是否加熱</th><th>原液顏色</th><th>陽性反應顏色</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>澱粉</strong>（多醣）</td><td>碘液</td><td>否（直接滴）</td><td>黃褐色</td><td>藍黑色（無澱粉維持黃褐）</td></tr>
+                  <tr><td><strong>葡萄糖</strong>（單醣）</td><td>本氏液</td><td><strong>是（隔水加熱）</strong></td><td>淡藍色</td><td>糖濃度低→高：綠 → 黃 → 橙 → 紅</td></tr>
+                </tbody>
+              </table>
+            </div>`
+          },
+          {
+            title: `葉片光合作用與「葉片澱粉測定」實驗 4 步驟`,
+            html: `<ul>
+              <li><strong>光合作用反應</strong>：原料為<strong>水</strong>（根毛吸收→木質部）與<strong>二氧化碳</strong>（氣孔進入）；場所為含葉綠素的<strong>葉綠體</strong>（主要在葉肉細胞，<strong>保衛細胞</strong>也有，上下表皮細胞無葉綠體僅具保護功能）；主要產物為<strong>葡萄糖</strong>（轉為澱粉儲存）與<strong>氧氣</strong>（氣孔釋出）。</li>
+              <li><strong>澱粉檢測步驟</strong>：鋁箔遮光數日（對照組無遮光）→ <strong>① 熱水煮沸</strong>（軟化角質層、破壞細胞）→ <strong>② 酒精隔水加熱</strong>（溶解葉綠素使葉片褪為黃白色，避免葉色干擾）→ <strong>③ 熱水漂洗</strong>（洗去酒精）→ <strong>④ 滴加碘液</strong>（照光處變藍黑、遮光處維持黃褐）。</li>
+            </ul>`
+          }
+        ],
+        rules: [
+          { title: `陷阱 1：包裝「份數」沒乘到`, detail: `看清營養標示是否寫「本包裝含 2 份」或「共 400 mL，每份 100 mL（即 4 份）」，總熱量務必乘以總份數。` },
+          { title: `陷阱 2：酒精不可直接加熱`, detail: `酒精易燃，移除葉綠素時一定要將裝酒精的小燒杯置於大燒杯熱水中「隔水加熱」。` },
+          { title: `陷阱 3：植物行光合作用的目的`, detail: `最主要目的是「製造葡萄糖供植物本身利用」，產生氧氣供動物呼吸只是附加效果；水主要來自根部而非氣孔。` }
+        ],
+        checkpoints: [
+          `熟背每公克醣類(4)、蛋白質(4)、脂質(9)大卡與細胞利用順序`,
+          `區分「不產能養分」：水、礦物質、維生素、纖維素（助蠕動）`,
+          `會計算含有「多份」標示的食物總熱量`,
+          `分辨碘液（黃褐→藍黑、不加熱）與本氏液（藍→綠黃橙紅、須隔水加熱）`,
+          `熟記葉片澱粉檢測四步驟（沸水軟化→酒精隔水加熱→熱水漂洗→碘液）`,
+          `辨識葉片各構造：角質層防散失、表皮無葉綠體、葉肉與保衛細胞可行光合作用`
+        ],
+        quizzes: [
+          {
+            id: `q1-1`,
+            source: `土城國中 113-1-2 段考第 1 題`,
+            question: `微波餐盒外包裝標示每份含：醣類 200 公克、脂質 20 公克、蛋白質 40 公克，鈉、鈣各 20 毫克，並標示「含有兩份」。請問這個餐盒總熱量為多少大卡？`,
+            options: [`(A) 1140 大卡`, `(B) 2280 大卡`, `(C) 1220 大卡`, `(D) 2080 大卡`],
+            answer: 1,
+            explanation: `每份熱量 = 200×4 + 20×9 + 40×4 = 800 + 180 + 160 = 1140 大卡（鈉、鈣為礦物質不產熱）。共含兩份，故總熱量 = 1140 × 2 = 2280 大卡。`
+          },
+          {
+            id: `q1-2`,
+            source: `高雄大灣國中 113-1-2 段考第 11 題`,
+            question: `用鋁箔包住葉片一週後進行澱粉測定，實驗步驟有：(甲)熱水中漂洗；(乙)放入熱水浸泡 3 分鐘；(丙)加入碘液；(丁)放入酒精中隔水加熱。正確操作順序為何？`,
+            options: [`(A) 甲乙丙丁`, `(B) 乙丁甲丙`, `(C) 甲乙丁丙`, `(D) 乙甲丙丁`],
+            answer: 1,
+            explanation: `正確順序為：先熱水煮沸軟化(乙) → 酒精隔水加熱溶出葉綠素(丁) → 熱水漂洗(甲) → 滴加碘液觀察變色(丙)。`
+          },
+          {
+            id: `q1-3`,
+            source: `屏東中正國中 114-1-2 段考第 8 題`,
+            question: `關於澱粉和葡萄糖的試劑檢測配對，下列哪一組敘述完全正確？`,
+            options: [`(A) 澱粉／本氏液／須加熱／藍變紅`, `(B) 澱粉／碘液／不加熱／藍變藍黑`, `(C) 葡萄糖／本氏液／須加熱／藍變黃`, `(D) 葡萄糖／碘液／不加熱／黃褐變藍黑`],
+            answer: 2,
+            explanation: `碘液原本為黃褐色（不是藍色），滴在澱粉上不加熱即變藍黑；本氏液原本為淡藍色，與葡萄糖混合隔水加熱後依濃度變為綠、黃、橙或紅色。`
+          }
+        ]
+      },
+      {
+        id: 'stage-2',
+        num: '關卡 02',
+        title: `酵素特性與人體消化作用`,
+        shortDesc: `酵素的專一性與溫/pH影響、人體消化道與消化腺分工、三大養分消化曲線`,
+        examWeight: `約佔段考 25%`,
+        summary: `理解酵素作為生物催化劑的蛋白質本質，掌握溫度（高溫永久破壞 vs 低溫暫停）與酸鹼度影響；熟悉消化管依序路徑、各大消化腺分泌液及養分分解終產物。`,
+        chartTitle: `三大養分在消化道中「未消化分子」比例變化`,
+        chartCaption: `開始分解順序為「醣類(口腔) → 蛋白質(胃) → 脂質(小腸)」，且三者最終都在小腸分解並被絨毛吸收；纖維素則全程不被消化。`,
+        concepts: [
+          {
+            title: `酵素（酶）的核心性質`,
+            html: `<ul>
+              <li><strong>成分與重複性</strong>：主要成分為<strong>蛋白質</strong>；參與反應前後本身不會消耗改變，可<strong>重複使用</strong>，且離開細胞後只要環境適合仍可作用。</li>
+              <li><strong>專一性</strong>：一種酵素只能催化特定受質的反應（如鎖與鑰匙關係）；故人體唾液澱粉酶不能分解纖維素。</li>
+              <li><strong>溫度與酸鹼性（pH）</strong>：過高溫度（如 100℃ 煮沸）會破壞蛋白質結構導致<strong>永久失去活性</strong>（降回室溫也無效）；低溫（如 0℃ 冰箱）僅<strong>降低活性</strong>使細菌不易分解食物，升溫後可恢復。不同酵素有不同最適 pH：唾液（中性）、胃液（強酸）、胰液與腸液（鹼性）。</li>
+            </ul>`
+          },
+          {
+            title: `人體消化系統：消化道與消化腺分工`,
+            html: `<div class="table-wrap">
+              <table class="bio-table">
+                <thead>
+                  <tr><th>部位 / 腺體</th><th>分泌消化液</th><th>酸鹼環境</th><th>主要分解對象與重點</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>口腔（唾腺）</strong></td><td>唾液</td><td>中性</td><td>初步分解<strong>澱粉</strong>為麥芽糖</td></tr>
+                  <tr><td><strong>食道</strong></td><td>無消化腺</td><td>—</td><td>僅蠕動推進食物（不分解）</td></tr>
+                  <tr><td><strong>胃（胃腺）</strong></td><td>胃液（含鹽酸）</td><td>強酸性</td><td>殺菌並初步分解<strong>蛋白質</strong>；胃蛋白酶入小腸後失活</td></tr>
+                  <tr><td><strong>肝臟 → 膽囊</strong></td><td>膽汁（儲於膽囊）</td><td>鹼性</td><td><strong>無消化酵素！</strong>作用於小腸，物理性<strong>乳化脂質</strong>成小油滴</td></tr>
+                  <tr><td><strong>胰臟</strong></td><td>胰液（經導管入小腸）</td><td>鹼性</td><td>含多種酵素，可分解<strong>醣類、蛋白質、脂質</strong></td></tr>
+                  <tr><td><strong>小腸（腸腺）</strong></td><td>腸液</td><td>鹼性</td><td>兼有消化管與消化腺功能；完成分解，<strong>絨毛吸收養分與大部分水分</strong></td></tr>
+                  <tr><td><strong>大腸 / 肛門</strong></td><td>無消化腺</td><td>—</td><td>大腸吸收剩餘水分、形成糞便（無絨毛）</td></tr>
+                </tbody>
+              </table>
+            </div>`
+          },
+          {
+            title: `養分分解終產物與吸收途徑`,
+            html: `<ul>
+              <li><strong>澱粉 → 葡萄糖</strong>；<strong>蛋白質 → 胺基酸</strong>；<strong>脂質 → 脂肪酸＋甘油</strong>。</li>
+              <li>小腸內壁的<strong>絨毛</strong>（與植物根部的<strong>根毛</strong>相同原理）呈現細小突起，核心意義在於<strong>大幅增加吸收表面積</strong>。</li>
+              <li>餐後流經小腸絨毛的血管比較：流離小腸的靜脈血相較流進的動脈血，其<strong>葡萄糖與胺基酸含量較高</strong>。</li>
+            </ul>`
+          }
+        ],
+        rules: [
+          { title: `陷阱 1：膽汁由「肝臟」製造，非膽囊`, detail: `膽囊只負責儲存與濃縮膽汁；膽汁不含酵素，故切除膽囊者應減少「高油脂」食物（如炸雞、食用油），但仍能有限度乳化。` },
+          { title: `陷阱 2：並非所有器官都有消化腺`, detail: `「食道、大腸、肛門」沒有消化腺；「肝臟、胰臟、唾腺」食物不會直接通過，屬於純消化腺（消化液由導管送入消化道，不由血液運送）。` },
+          { title: `陷阱 3：冰箱保存食物不是殺死細菌`, detail: `低溫並不會殺死細菌，而是降低細菌體內酵素的活性，使其代謝與分解食物速率減慢。` }
+        ],
+        checkpoints: [
+          `理解酵素為蛋白質、具專一性（鎖與鑰匙）且可重複使用`,
+          `分辨高溫 100℃（結構破壞永久失活）與低溫 0℃（活性降低、回溫可恢復）`,
+          `區分消化液最適 pH：唾液中性、胃液強酸、小腸/胰液鹼性（胃蛋白酶到小腸失活）`,
+          `熟記消化道順序（口→咽→食道→胃→小腸→大腸→肛門）及各處有無消化腺`,
+          `明確「肝臟製造膽汁、膽囊儲存、小腸作用」且膽汁無酵素只乳化脂質`,
+          `熟記三大養分開始分解順序（醣→蛋→脂）與最終小分子產物（葡萄糖、胺基酸、脂肪酸+甘油）`
+        ],
+        quizzes: [
+          {
+            id: `q2-1`,
+            source: `土城國中 113-1-2 段考第 11、24 題綜合`,
+            question: `關於人體消化作用的敘述，下列何者正確？`,
+            options: [`(A) 膽囊能分泌膽汁分解脂質`, `(B) 胃蛋白酶進入小腸後仍可繼續分解蛋白質`, `(C) 肝臟的消化液導入消化道後無分解養分的酵素功能`, `(D) 人體攝食的水分全部都在大腸被吸收`],
+            answer: 2,
+            explanation: `肝臟分泌的膽汁不含消化酵素，僅乳化脂質；胃蛋白酶進入鹼性的小腸後會失去活性；大部分水分與養分是在小腸被吸收。`
+          },
+          {
+            id: `q2-2`,
+            source: `屏東明正國中 114-1-2 段考第 21 題`,
+            question: `木瓜酵素能分解牛奶中的酪蛋白產生苦味，但若先將木瓜「加熱煮成木瓜醬」再與牛奶攪打，就能避免苦味產生，原因為何？`,
+            options: [`(A) 木瓜與木瓜醬酵素種類不同`, `(B) 加熱破壞酵素活性，使其無法分解蛋白質`, `(C) 打碎過程破壞了酵素結構`, `(D) 牛奶溫度過低使酵素休眠`],
+            answer: 1,
+            explanation: `酵素成分為蛋白質，高溫加熱會永久破壞木瓜酵素的立體結構與活性，使其無法再分解牛奶蛋白質。`
+          },
+          {
+            id: `q2-3`,
+            source: `土城國中 113-1-2 段考第 35 題`,
+            question: `在消化道「口腔 → 胃 → 小腸」的過程中，人體所攝取的養分「開始被分解」的先後順序應為何？`,
+            options: [`(A) 脂質 → 蛋白質 → 醣類`, `(B) 蛋白質 → 醣類 → 脂質`, `(C) 醣類 → 蛋白質 → 脂質`, `(D) 醣類 → 脂質 → 蛋白質`],
+            answer: 2,
+            explanation: `醣類(澱粉)在口腔由唾液開始初步分解 → 蛋白質在胃由胃液開始初步分解 → 脂質直到小腸才由膽汁乳化並經胰液、腸液分解。`
+          }
+        ]
+      },
+      {
+        id: 'stage-3',
+        num: '關卡 03',
+        title: `植物體內的運輸與年輪`,
+        shortDesc: `木質部與韌皮部方向、單雙子葉莖橫切比較、年輪深淺成因與環狀剝皮`,
+        examWeight: `約佔段考 20%`,
+        summary: `區分維管束內木質部與韌皮部的內外位置及運輸方向，理解形成層如何形成年輪與樹皮／木材構造，並能判讀蒸散作用實驗與環狀剝皮的連鎖效應。`,
+        chartTitle: `不同葉片處理對植物蒸散吸水量（液面下降量）影響`,
+        chartCaption: `實驗設定：植物上下表皮均有氣孔，且「上表皮氣孔多於下表皮」。氣孔被凡士林堵住越多或摘除葉片，蒸散作用與吸水速率越慢。`,
+        concepts: [
+          {
+            title: `植物維管束構造與運輸方向`,
+            html: `<ul>
+              <li><strong>木質部（靠內側）</strong>：運輸根毛吸收的<strong>水分與礦物質</strong>（肥料氮、磷、鉀）；運輸方向<strong>只能由下往上</strong>（主要動力為葉片的<strong>蒸散作用</strong>）。實驗中插入紅墨水，變紅的即為木質部。</li>
+              <li><strong>韌皮部（靠外側）</strong>：運輸葉片行光合作用製造的<strong>有機養分（葡萄糖/蔗糖）</strong>；運輸方向為<strong>雙向（可由上往下，也能由下往上）</strong>，例如早春尚未長出葉片前，根或莖儲存的養分會向上運送供新芽開花。</li>
+              <li><strong>形成層（介於兩者之間）</strong>：行細胞分裂，向內產生新木質部、向外產生新韌皮部，使莖逐年加粗。</li>
+            </ul>`
+          },
+          {
+            title: `單子葉 vs 雙子葉莖橫切面與樹幹由內而外排列`,
+            html: `<div class="table-wrap">
+              <table class="bio-table">
+                <thead>
+                  <tr><th>代表植物</th><th>維管束排列</th><th>有無形成層</th><th>樹幹構造由內而外</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>玉米、水稻、小麥</strong>（單子葉）</td><td>散生排列</td><td>無（無法逐年明顯加粗）</td><td>無年輪與木材分化</td></tr>
+                  <tr><td><strong>向日葵、榕樹、玫瑰、桃花心木</strong></td><td>環狀排列</td><td><strong>有形成層</strong></td><td><strong>老木質部 → 新木質部 → 形成層 → 新韌皮部 → 老韌皮部</strong></td></tr>
+                </tbody>
+              </table>
+            </div>`
+          },
+          {
+            title: `年輪形成原理與環狀剝皮效應`,
+            html: `<ul>
+              <li><strong>年輪（木質部細胞形成）</strong>：溫帶四季分明地區最明顯。<strong>溫暖多雨季節（春夏）</strong>細胞生長快、體積大、<strong>顏色較淺</strong>；<strong>寒冷少雨季節（秋冬）</strong>生長慢、細胞小、<strong>顏色較深</strong>。從年輪可推估樹木年齡、過去氣候及砍伐季節（但無法得知葉子數量或樹種數）。</li>
+              <li><strong>神木中空仍能存活</strong>：樹幹中心為已無運輸功能的<strong>老木質部</strong>，外圍仍保有<strong>新木質部</strong>與韌皮部，故仍可輸水與存活。</li>
+              <li><strong>環狀剝皮（剝去樹皮／韌皮部）</strong>：發生順序為「<strong>① 養分運輸受阻 → ② 根細胞死亡 → ③ 水分吸收與運輸受阻 → ④ 葉細胞與全株枯死</strong>」。果農於結果枝條下方局部環狀剝皮，可阻止養分下運，使果實更肥大甜美。</li>
+            </ul>`
+          }
+        ],
+        rules: [
+          { title: `陷阱 1：葉片維管束（葉脈）方向相反`, detail: `在「莖」中木質部在內、韌皮部在外；到「葉片（葉脈）」時，<strong>木質部在上方（靠上表皮），韌皮部在下方（靠下表皮）</strong>！` },
+          { title: `陷阱 2：樹皮與木材的界線`, detail: `「木材」全部是<strong>木質部</strong>（含深色與淺色年輪）；「樹皮」是指<strong>形成層以外</strong>的所有構造（包含韌皮部與表皮），不含木質部。` },
+          { title: `陷阱 3：肥料（礦物質）由木質部運送`, detail: `施肥提供的氮、磷、鉀屬於無機礦物質，溶於水中由根毛吸收後，經「木質部」向上運送，並非韌皮部。` }
+        ],
+        checkpoints: [
+          `熟記木質部（內、水與礦物質、只能由下往上）與韌皮部（外、養分、可雙向運輸）`,
+          `區分玉米/水稻（散生、無形成層）與向日葵/榕樹（環狀、有形成層）`,
+          `能排出木本莖由內而外：老木質部→新木質部→形成層→新韌皮部→老韌皮部`,
+          `理解葉脈位置：上方為木質部、下方為韌皮部`,
+          `解釋年輪成因（春夏淺大、秋冬深小）與神木中空不死原因（外圍仍有新木質部）`,
+          `排出環狀剝皮枯死順序：養分受阻→根先死→水分運輸受阻→全株枯死`
+        ],
+        quizzes: [
+          {
+            id: `q3-1`,
+            source: `土城國中 113-1-2 段考第 26 題`,
+            question: `將植物環狀剝皮造成全株死亡，下列發生的先後順序應為何？甲.根細胞死亡；乙.養分運輸受阻；丙.葉細胞死亡；丁.水分運輸受阻。`,
+            options: [`(A) 甲乙丙丁`, `(B) 乙丙甲丁`, `(C) 丁丙乙甲`, `(D) 乙甲丁丙`],
+            answer: 3,
+            explanation: `剝皮去除韌皮部後，養分無法下送(乙) → 根部缺養分先死亡(甲) → 無法吸水導致水分運輸受阻(丁) → 葉細胞缺水死亡(丙)。`
+          },
+          {
+            id: `q3-2`,
+            source: `屏東明正國中 114-1-2 段考第 2 題`,
+            question: `下列哪一個構造中「沒有」包含木質部？`,
+            options: [`(A) 樹皮`, `(B) 木材`, `(C) 年輪的深色環紋`, `(D) 年輪的淺色環紋`],
+            answer: 0,
+            explanation: `形成層向內分裂產生木質部（形成木材與年輪的深淺環紋）；形成層以外統稱為樹皮，包含韌皮部與表皮，不包含木質部。`
+          },
+          {
+            id: `q3-3`,
+            source: `土城國中 113-1-2 段考第 41 題改編`,
+            question: `在植物施肥時，會提供氮、磷、鉀及微量礦物質等養分，請問維管束中何種組織負責輸送這些養分？`,
+            options: [`(A) 韌皮部`, `(B) 木質部`, `(C) 形成層`, `(D) 角質層`],
+            answer: 1,
+            explanation: `礦物質溶於水後由根毛吸收，是透過「木質部」隨著蒸散拉力向上輸送（韌皮部輸送的是光合作用產生的有機養分如葡萄糖/蔗糖）。`
+          }
+        ]
+      },
+      {
+        id: 'stage-4',
+        num: '關卡 04',
+        title: `人體循環系統與免疫防禦`,
+        shortDesc: `血液組成、三種血管與小魚尾鰭觀察、心臟雙循環路徑、淋巴與三道防線`,
+        examWeight: `約佔段考 30%`,
+        summary: `循環與免疫是本次段考比重最高的單元。必須釐清血液與淋巴成分差異、判斷動脈/微血管/靜脈水流方向、熟練體循環與肺循環路徑，以及疫苗引發的第三道專一性防禦機制。`,
+        chartTitle: `人類血液成分比例 & 疫苗兩次感染專一性防禦曲線`,
+        chartCaption: `血液中血漿占 55%（90%為水）、血球占 45%；疫苗注射建立記憶性後，第二次遭遇相同病原體時反應時間更短且抗體強度大幅提升。`,
+        concepts: [
+          {
+            title: `血液組成與三種血管比較`,
+            html: `<div class="table-wrap">
+              <table class="bio-table">
+                <thead>
+                  <tr><th>血球 / 血管</th><th>構造與特徵</th><th>主要生理功能與考點</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>血漿（55%）</strong></td><td>90%水，含蛋白質、抗體、激素、養分、CO₂</td><td>運輸物質與代謝廢物（<strong>不含胰液等消化液</strong>）</td></tr>
+                  <tr><td><strong>紅血球</strong></td><td>數量最多、雙凹圓盤狀、<strong>成熟無細胞核</strong></td><td>含血紅素負責<strong>攜帶氧氣</strong>（無法作為DNA檢驗）</td></tr>
+                  <tr><td><strong>白血球</strong></td><td>體積最大、<strong>有細胞核</strong>、數量最少</td><td>可變形穿出微血管吞噬病菌、產生抗體；可供DNA檢驗</td></tr>
+                  <tr><td><strong>血小板</strong></td><td>體積最小、不規則形、無細胞核</td><td>負責<strong>止血與凝血</strong>作用</td></tr>
+                  <tr><td><strong>動脈 → 微血管 → 靜脈</strong></td><td>動脈壁最厚有脈搏；微血管單層細胞；靜脈有瓣膜</td><td><strong>流速：動脈＞靜脈＞微血管</strong>；交換物質只在微血管；抽血注射用靜脈</td></tr>
+                </tbody>
+              </table>
+            </div>`
+          },
+          {
+            title: `心臟四腔室與體／肺循環路徑`,
+            html: `<ul>
+              <li><strong>心臟結構重點</strong>：上房下室、圖示<strong>左右相反</strong>；<strong>左心室肌肉壁最厚</strong>；心房與心室間、心室與動脈間具<strong>瓣膜</strong>防止血液逆流；聽診器聽到的「撲—通」為血液撞擊關閉的瓣膜聲（<strong>1 次心搏 = 2 聲心音 = 1 次脈搏</strong>）。</li>
+              <li><strong>肺循環</strong>：右心室 → 肺動脈（<strong>缺氧血</strong>）→ 肺泡微血管（肺泡 O₂ 進血、血中 CO₂ 出至肺泡）→ 肺靜脈（<strong>充氧血</strong>）→ 左心房。</li>
+              <li><strong>體循環</strong>：左心室 → 主動脈（<strong>充氧血</strong>）→ 全身組織微血管（O₂ 給細胞、CO₂ 與廢物進血）→ 上/下大靜脈（<strong>缺氧血</strong>）→ 右心房。</li>
+            </ul>`
+          },
+          {
+            title: `淋巴系統與人體三道防禦防線`,
+            html: `<ul>
+              <li><strong>淋巴流動</strong>：血漿滲出微血管 → 組織液 → 進入淋巴管 → 淋巴（<strong>無紅血球</strong>，含淋巴球/白血球）→ <strong>淋巴結</strong>（過濾病原體，感染發炎時會腫大）→ 最後匯入<strong>靜脈</strong>返回血液循環。</li>
+              <li><strong>第一道防線（非專一）</strong>：皮膚、黏膜（物理與化學阻隔）。</li>
+              <li><strong>第二道防線（非專一）</strong>：白血球吞噬作用、發炎反應（紅腫熱痛）。</li>
+              <li><strong>第三道防線（專一性）</strong>：淋巴球產生<strong>抗體</strong>，具<strong>專一性與記憶性</strong>（施打新冠肺炎或流感疫苗即誘發此防線，對不同病毒無交叉保護力）。</li>
+            </ul>`
+          }
+        ],
+        rules: [
+          { title: `陷阱 1：動脈不等於充氧血，靜脈不等於缺氧血`, detail: `判斷動靜脈唯一標準是「<strong>血流方向</strong>」（流出心臟＝動脈；流回心臟＝靜脈）。<strong>肺動脈</strong>流缺氧血，<strong>肺靜脈</strong>流充氧血！` },
+          { title: `陷阱 2：手臂靜脈注射藥物必經「肺循環」`, detail: `從手臂靜脈打針要流到左腳或肝臟：手臂靜脈 → 上大靜脈 → <strong>右心房 → 右心室 → 肺動脈 → 肺微血管 → 肺靜脈 → 左心房 → 左心室</strong> → 主動脈 → 全身目標。` },
+          { title: `陷阱 3：顯微鏡下小魚尾鰭魚頭方位`, detail: `小動脈是由粗分支成細（從魚頭流向魚尾）。因複式顯微鏡成像「上下左右皆顛倒」，若視野中血流方向為「由右向左」，實際魚頭位於觀察者的「<strong>左邊</strong>」！` }
+        ],
+        checkpoints: [
+          `分辨紅血球（最多、無核、運氧）、白血球（最大、有核、防禦）、血小板（最小、無核、凝血）`,
+          `區別血漿與淋巴（淋巴不含紅血球與血小板；血漿不運輸消化液）`,
+          `熟記顯微鏡小魚尾鰭血管判斷（分支為小動脈、匯集為小靜脈）與倒像魚頭方位`,
+          `記熟肺動脈（缺氧血）與肺靜脈（充氧血）及心臟左心室壁最厚`,
+          `能完整寫出靜脈注射藥物經心肺送到身體器官的循環路線`,
+          `區分人體三道防禦防線，理解疫苗的「專一性」與「記憶性」曲線特徵`
+        ],
+        quizzes: [
+          {
+            id: `q4-1`,
+            source: `土城國中 113-1-2 段考第 16 題`,
+            question: `醫生替傷患在手臂靜脈注射消炎藥劑，此藥劑自手臂到左腳的流動次序為何？（甲.主動脈；乙.上大靜脈；丙.肺靜脈；丁.肺動脈；戊.心臟；己.小動脈）`,
+            options: [`(A) 甲→戊→丙→丁→戊→乙→己`, `(B) 乙→戊→丁→丙→戊→甲→己`, `(C) 乙→戊→丁→戊→丙→甲→己`, `(D) 丁→戊→乙→丙→甲→己→戊`],
+            answer: 1,
+            explanation: `手臂靜脈 → 上大靜脈(乙) → 右心房/右心室(戊) → 肺動脈(丁) → 肺微血管 → 肺靜脈(丙) → 左心房/左心室(戊) → 主動脈(甲) → 小動脈(己) 送達左腳。`
+          },
+          {
+            id: `q4-2`,
+            source: `高雄大灣國中 113-1-2 段考第 9 題`,
+            question: `測得人體心臟內甲、乙兩心室血液中 O₂ 含量分別為：甲 15.8 mL/100mL、乙 20.1 mL/100mL。下列敘述何者最「不合理」？`,
+            options: [`(A) 甲與右心房相連`, `(B) 甲與肺動脈連接`, `(C) 乙與肺靜脈連接`, `(D) 乙與主動脈連接`],
+            answer: 2,
+            explanation: `乙含氧量高為左心室（連接左心房與主動脈）；肺靜脈是與「左心房」相連，並非直接與左心室(乙)相連！`
+          },
+          {
+            id: `q4-3`,
+            source: `高雄大灣國中 113-1-2 段考第 37 題`,
+            question: `于萱注射流感疫苗，致亨注射新冠肺炎疫苗，班上有同學確診新冠肺炎，下列敘述何者正確？`,
+            options: [`(A) 于萱有打流感疫苗，一定不會感染新冠肺炎`, `(B) 致亨打新冠疫苗，一定不會普通感冒`, `(C) 疫苗具有專一性，故于萱仍可能感染新冠肺炎`, `(D) 施打疫苗引發的是第二道非專一性防禦`],
+            answer: 2,
+            explanation: `疫苗誘發第三道專一性防禦，產生的抗體與記憶細胞僅針對特定病原體有效，流感疫苗無法預防新冠肺炎。`
+          }
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // Persistent State & Runtime Variables
+    // =========================================================================
+    let appState = {
+      activeStageId: 'stage-1',
+      checkedItems: {},      // { "stage-1-0": true, ... }
+      quizAnswers: {},       // { "q1-1": 1, ... }
+      calcState: { carb: 200, fat: 20, prot: 40, servings: 2 },
+      transpirationView: 'all',
+      circulationMode: 'systemic' // 'systemic' | 'pulmonary' | 'injection'
+    };
+
+    let activeChartInstance = null;
+
+    function getCssToken(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    // =========================================================================
+    // Persistence helpers (notebookAppApi)
+    // =========================================================================
+    async function saveAppState() {
+      const noteEl = document.getElementById('save-status-note');
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState(appState);
+          if (noteEl) noteEl.textContent = `學習進度已同步儲存（${new Date().toLocaleTimeString('zh-TW', { hour12: false })}）`;
+        }
+      } catch (err) {
+        if (noteEl) noteEl.textContent = `目前為本機預覽模式`;
+      }
+    }
+
+    async function loadAppState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            appState = {
+              activeStageId: saved.activeStageId || 'stage-1',
+              checkedItems: saved.checkedItems && typeof saved.checkedItems === 'object' ? saved.checkedItems : {},
+              quizAnswers: saved.quizAnswers && typeof saved.quizAnswers === 'object' ? saved.quizAnswers : {},
+              calcState: saved.calcState && typeof saved.calcState === 'object' ? saved.calcState : { carb: 200, fat: 20, prot: 40, servings: 2 },
+              transpirationView: saved.transpirationView || 'all',
+              circulationMode: saved.circulationMode || 'systemic'
+            };
+          }
+        }
+      } catch (err) {
+        // Fallback silently to default state
+      }
+    }
+
+    // =========================================================================
+    // Overview & Stage Cards Rendering
+    // =========================================================================
+    function computeMetrics() {
+      let totalChecks = 0;
+      let doneChecks = 0;
+      let completedStages = 0;
+      let totalQuizzes = 0;
+      let correctQuizzes = 0;
+      let answeredQuizzes = 0;
+
+      const stageStats = {};
+      STAGES.forEach((stage) => {
+        const sTotal = stage.checkpoints.length;
+        let sDone = 0;
+        stage.checkpoints.forEach((_, idx) => {
+          totalChecks += 1;
+          if (appState.checkedItems[`${stage.id}-${idx}`]) {
+            sDone += 1;
+            doneChecks += 1;
+          }
+        });
+        if (sDone === sTotal && sTotal > 0) completedStages += 1;
+        stageStats[stage.id] = { done: sDone, total: sTotal, pct: Math.round((sDone / sTotal) * 100) };
+
+        stage.quizzes.forEach((q) => {
+          totalQuizzes += 1;
+          const chosen = appState.quizAnswers[q.id];
+          if (chosen !== undefined && chosen !== null) {
+            answeredQuizzes += 1;
+            if (chosen === q.answer) correctQuizzes += 1;
+          }
+        });
+      });
+
+      const overallPct = totalChecks > 0 ? Math.round((doneChecks / totalChecks) * 100) : 0;
+      return { totalChecks, doneChecks, completedStages, totalQuizzes, correctQuizzes, answeredQuizzes, overallPct, stageStats };
+    }
+
+    function renderOverviewAndStageCards() {
+      const m = computeMetrics();
+
+      // Update Top Overview KPIs
+      const pctEl = document.getElementById('kpi-overall-pct');
+      const barEl = document.getElementById('kpi-overall-bar');
+      const subEl = document.getElementById('kpi-overall-sub');
+      const chipEl = document.getElementById('kpi-overall-chip');
+      const cardOverall = document.getElementById('kpi-card-overall');
+
+      if (pctEl) pctEl.textContent = `${m.overallPct}%`;
+      if (barEl) {
+        barEl.style.width = `${m.overallPct}%`;
+        barEl.classList.toggle('complete', m.overallPct === 100);
+      }
+      if (subEl) subEl.textContent = `已完成 ${m.doneChecks} / ${m.totalChecks} 項必考檢核點`;
+      if (chipEl && cardOverall) {
+        if (m.overallPct === 100) {
+          chipEl.textContent = `全部掌握`;
+          chipEl.setAttribute('data-status', 'ok');
+          cardOverall.setAttribute('data-status', 'ok');
+        } else if (m.doneChecks > 0) {
+          chipEl.textContent = `持續推進中`;
+          chipEl.setAttribute('data-status', 'info');
+          cardOverall.setAttribute('data-status', 'info');
+        } else {
+          chipEl.textContent = `尚未開始勾選`;
+          chipEl.setAttribute('data-status', 'warn');
+          cardOverall.setAttribute('data-status', 'info');
+        }
+      }
+
+      const chapEl = document.getElementById('kpi-chapters-count');
+      const chapSub = document.getElementById('kpi-chapters-sub');
+      const chapCard = document.getElementById('kpi-card-chapters');
+      if (chapEl) chapEl.textContent = `${m.completedStages} / ${STAGES.length} 關`;
+      if (chapSub) {
+        chapSub.textContent = m.completedStages === STAGES.length
+          ? `太棒了！所有段考關卡檢核點已完成`
+          : `完成該關卡全部 6 項檢核點即計入完攻`;
+        chapSub.className = m.completedStages === STAGES.length ? 'kpi-caption ok' : 'kpi-caption';
+      }
+      if (chapCard) chapCard.setAttribute('data-status', m.completedStages === STAGES.length ? 'ok' : 'info');
+
+      const qScore = document.getElementById('kpi-quiz-score');
+      const qSub = document.getElementById('kpi-quiz-sub');
+      const qChip = document.getElementById('kpi-quiz-chip');
+      const qCard = document.getElementById('kpi-card-quiz');
+      if (qScore) qScore.textContent = `${m.correctQuizzes} / ${m.totalQuizzes} 題`;
+      if (qSub) {
+        const rem = m.totalQuizzes - m.answeredQuizzes;
+        qSub.textContent = rem === 0
+          ? `已全數作答完畢（正確率 ${Math.round((m.correctQuizzes / m.totalQuizzes) * 100)}%）`
+          : `已作答 ${m.answeredQuizzes} 題，尚餘 ${rem} 題待挑戰`;
+      }
+      if (qChip && qCard) {
+        if (m.answeredQuizzes === m.totalQuizzes && m.correctQuizzes === m.totalQuizzes) {
+          qChip.textContent = `滿分通過`;
+          qChip.setAttribute('data-status', 'ok');
+          qCard.setAttribute('data-status', 'ok');
+        } else if (m.answeredQuizzes > 0) {
+          qChip.textContent = `正確率 ${Math.round((m.correctQuizzes / m.answeredQuizzes) * 100)}%`;
+          qChip.setAttribute('data-status', 'info');
+          qCard.setAttribute('data-status', 'info');
+        } else {
+          qChip.textContent = `12 題精選`;
+          qChip.setAttribute('data-status', 'info');
+          qCard.setAttribute('data-status', 'info');
+        }
+      }
+
+      // Render 4 Interactive Stage Cards
+      const grid = document.getElementById('stage-cards-grid');
+      if (!grid) return;
+
+      grid.innerHTML = STAGES.map((stage) => {
+        const st = m.stageStats[stage.id];
+        const isActive = appState.activeStageId === stage.id;
+        const isDone = st.done === st.total;
+        const cardClass = `stage-card${isActive ? ' active' : ''}${isDone ? ' completed' : ''}`;
+        const statusChip = isDone
+          ? `<span class="chip">已完成</span>`
+          : `<span class="chip" data-status="info">${stage.examWeight}</span>`;
+
+        return `
+          <button type="button" class="${cardClass}" aria-pressed="${isActive ? 'true' : 'false'}" onclick="selectStage('${stage.id}')">
+            <div>
+              <div class="stage-card-head">
+                <span class="stage-num">${stage.num}</span>
+                ${statusChip}
+              </div>
+              <h3 class="stage-card-title">${stage.title}</h3>
+              <p class="stage-card-desc">${stage.shortDesc}</p>
+            </div>
+            <div class="stage-card-foot">
+              <div class="stage-meta-row">
+                <span>學習檢核進度</span>
+                <span>${st.done} / ${st.total} (${st.pct}%)</span>
+              </div>
+              <div class="progress-track" aria-hidden="true">
+                <div class="progress-fill${isDone ? ' complete' : ''}" style="width: ${st.pct}%"></div>
+              </div>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // Detail Workspace Rendering
+    // =========================================================================
+    function getStageDiagramSvg(stageId) {
+      const cPrimary = getCssToken('--primary');
+      const cTertiary = getCssToken('--tertiary');
+      const cWarn = getCssToken('--data-3');
+      const cIndigo = getCssToken('--data-4');
+      const cError = getCssToken('--error');
+      const cInk = getCssToken('--on-surface');
+      const cMuted = getCssToken('--on-surface-variant');
+      const cBg = getCssToken('--background');
+      const cWash = getCssToken('--surface-container-low');
+      const cTint = getCssToken('--primary-container');
+      const cBorder = getCssToken('--outline');
+
+      if (stageId === 'stage-1') {
+        return `
+          <svg viewBox="0 0 540 245" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="葉片橫切面與光合作用構造示意圖">
+            <rect x="0" y="0" width="540" height="245" fill="${cBg}" />
+            <!-- Cuticle & Upper Epidermis -->
+            <rect x="40" y="24" width="320" height="10" rx="3" fill="${cWarn}" opacity="0.28" stroke="${cWarn}" stroke-width="1.2" />
+            <text x="372" y="33" font-size="12" font-weight="700" fill="${cInk}">角質層（防水分過度散失）</text>
+
+            <rect x="40" y="36" width="320" height="24" rx="2" fill="${cWash}" stroke="${cBorder}" stroke-width="1.2" />
+            <text x="52" y="52" font-size="12" fill="${cInk}">上表皮細胞（緊密保護，無葉綠體）</text>
+            <text x="372" y="52" font-size="11.5" fill="${cMuted}">→ 透明可透光</text>
+
+            <!-- Mesophyll -->
+            <rect x="40" y="64" width="320" height="86" rx="4" fill="${cTertiary}" fill-opacity="0.12" stroke="${cTertiary}" stroke-width="1.5" />
+            <circle cx="80" cy="90" r="11" fill="${cTertiary}" opacity="0.85" />
+            <circle cx="115" cy="95" r="11" fill="${cTertiary}" opacity="0.85" />
+            <circle cx="150" cy="88" r="11" fill="${cTertiary}" opacity="0.85" />
+            <circle cx="95" cy="126" r="10" fill="${cTertiary}" opacity="0.7" />
+            <circle cx="138" cy="128" r="10" fill="${cTertiary}" opacity="0.7" />
+            <text x="176" y="96" font-size="13" font-weight="700" fill="${cInk}">葉肉組織（含大量葉綠體）</text>
+            <text x="176" y="116" font-size="11.5" fill="${cMuted}">行光合作用最主要場所：產生葡萄糖＋氧氣</text>
+
+            <!-- Vein (Leaf Vascular Bundle) -->
+            <ellipse cx="295" cy="108" rx="44" ry="26" fill="${cBg}" stroke="${cPrimary}" stroke-width="2" />
+            <path d="M 253 108 L 337 108" stroke="${cBorder}" stroke-width="1.2" />
+            <text x="295" y="100" text-anchor="middle" font-size="11" font-weight="700" fill="${cPrimary}">上：木質部（水）</text>
+            <text x="295" y="122" text-anchor="middle" font-size="11" font-weight="700" fill="${cWarn}">下：韌皮部（養分）</text>
+            <text x="372" y="112" font-size="12" font-weight="700" fill="${cPrimary}">葉脈（輸水＋養分）</text>
+
+            <!-- Lower Epidermis & Stoma -->
+            <rect x="40" y="154" width="110" height="24" rx="2" fill="${cWash}" stroke="${cBorder}" stroke-width="1.2" />
+            <ellipse cx="170" cy="166" rx="14" ry="11" fill="${cTertiary}" opacity="0.85" />
+            <rect x="184" y="160" width="14" height="12" rx="4" fill="${cBg}" stroke="${cPrimary}" stroke-width="1.5" />
+            <ellipse cx="212" cy="166" rx="14" ry="11" fill="${cTertiary}" opacity="0.85" />
+            <rect x="228" y="154" width="132" height="24" rx="2" fill="${cWash}" stroke="${cBorder}" stroke-width="1.2" />
+            <text x="372" y="170" font-size="12" font-weight="700" fill="${cInk}">下表皮與保衛細胞</text>
+
+            <!-- Gas Exchange Arrows -->
+            <path d="M 186 218 L 186 178" stroke="${cPrimary}" stroke-width="2.2" marker-end="url(#arrow-teal)" />
+            <path d="M 196 178 L 196 218" stroke="${cTertiary}" stroke-width="2.2" marker-end="url(#arrow-green)" />
+            <text x="40" y="212" font-size="12" font-weight="700" fill="${cPrimary}">CO₂ 進入氣孔</text>
+            <text x="214" y="212" font-size="12" font-weight="700" fill="${cTertiary}">O₂ 與水蒸氣由氣孔散失</text>
+            <text x="214" y="232" font-size="11" fill="${cMuted}">（保衛細胞呈半月形、含葉綠體，控制氣孔開閉）</text>
+            <defs>
+              <marker id="arrow-teal" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                <polygon points="0 0, 7 3.5, 0 7" fill="${cPrimary}" />
+              </marker>
+              <marker id="arrow-green" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                <polygon points="0 0, 7 3.5, 0 7" fill="${cTertiary}" />
+              </marker>
+            </defs>
+          </svg>
+        `;
+      }
+
+      if (stageId === 'stage-2') {
+        return `
+          <svg viewBox="0 0 540 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="人體消化道與消化腺順序示意圖">
+            <rect x="0" y="0" width="540" height="230" fill="${cBg}" />
+            <!-- Main tract line -->
+            <line x1="50" y1="88" x2="490" y2="88" stroke="${cBorder}" stroke-width="4" stroke-linecap="round" />
+
+            <!-- Nodes: Mouth, Esophagus, Stomach, Small Intestine, Large Intestine -->
+            <circle cx="62" cy="88" r="24" fill="${cTint}" stroke="${cPrimary}" stroke-width="2" />
+            <text x="62" y="85" text-anchor="middle" font-size="12" font-weight="800" fill="${cInk}">口腔</text>
+            <text x="62" y="100" text-anchor="middle" font-size="10" fill="${cPrimary}">pH 中性</text>
+            <text x="62" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="${cInk}">唾液</text>
+            <text x="62" y="148" text-anchor="middle" font-size="10.5" fill="${cMuted}">始分解澱粉</text>
+
+            <circle cx="152" cy="88" r="22" fill="${cWash}" stroke="${cBorder}" stroke-width="2" />
+            <text x="152" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="${cInk}">食道</text>
+            <text x="152" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="${cError}">無消化腺</text>
+            <text x="152" y="148" text-anchor="middle" font-size="10.5" fill="${cMuted}">僅蠕動推進</text>
+
+            <circle cx="246" cy="88" r="26" fill="${cTint}" stroke="${cPrimary}" stroke-width="2" />
+            <text x="246" y="85" text-anchor="middle" font-size="12" font-weight="800" fill="${cInk}">胃</text>
+            <text x="246" y="100" text-anchor="middle" font-size="10" fill="${cError}">強酸性</text>
+            <text x="246" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="${cInk}">胃液(含鹽酸)</text>
+            <text x="246" y="148" text-anchor="middle" font-size="10.5" fill="${cMuted}">始分解蛋白質</text>
+
+            <circle cx="358" cy="88" r="30" fill="${cTertiary}" fill-opacity="0.16" stroke="${cTertiary}" stroke-width="2.5" />
+            <text x="358" y="85" text-anchor="middle" font-size="13" font-weight="900" fill="${cInk}">小腸</text>
+            <text x="358" y="101" text-anchor="middle" font-size="10" font-weight="700" fill="${cTertiary}">鹼性環境</text>
+            <text x="358" y="135" text-anchor="middle" font-size="11" font-weight="700" fill="${cTertiary}">消化＋吸收主場</text>
+            <text x="358" y="151" text-anchor="middle" font-size="10.5" fill="${cMuted}">絨毛吸收養分/水</text>
+
+            <circle cx="468" cy="88" r="23" fill="${cWash}" stroke="${cBorder}" stroke-width="2" />
+            <text x="468" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="${cInk}">大腸</text>
+            <text x="468" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="${cError}">無消化腺</text>
+            <text x="468" y="148" text-anchor="middle" font-size="10.5" fill="${cMuted}">吸餘水、成糞便</text>
+
+            <!-- Accessory glands feeding into Small Intestine -->
+            <rect x="275" y="14" width="166" height="32" rx="6" fill="${cWarn}" fill-opacity="0.14" stroke="${cWarn}" stroke-width="1.5" />
+            <text x="358" y="34" text-anchor="middle" font-size="11.5" font-weight="700" fill="${cInk}">肝臟膽汁(無酵素) ＋ 胰臟胰液</text>
+            <path d="M 358 46 L 358 56" stroke="${cWarn}" stroke-width="2" />
+
+            <!-- Summary Banner -->
+            <rect x="40" y="176" width="460" height="38" rx="6" fill="${cWash}" stroke="${cBorder}" stroke-width="1" />
+            <text x="270" y="199" text-anchor="middle" font-size="12" font-weight="700" fill="${cInk}">開始分解順序：醣類(口) → 蛋白質(胃) → 脂質(小腸)；大腸與食道不分泌酵素</text>
+          </svg>
+        `;
+      }
+
+      if (stageId === 'stage-3') {
+        return `
+          <svg viewBox="0 0 540 245" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="雙子葉木本莖年輪與單子葉散生維管束對照圖">
+            <rect x="0" y="0" width="540" height="245" fill="${cBg}" />
+            <!-- Left: Dicot Woody Stem -->
+            <text x="145" y="24" text-anchor="middle" font-size="13" font-weight="800" fill="${cInk}">雙子葉木本（如向日葵、榕樹）</text>
+            <circle cx="145" cy="126" r="82" fill="${cWarn}" fill-opacity="0.16" stroke="${cInk}" stroke-width="2.5" />
+            <!-- Cambium ring -->
+            <circle cx="145" cy="126" r="64" fill="${cBg}" stroke="${cPrimary}" stroke-width="3" stroke-dasharray="5 3" />
+            <!-- Growth rings (xylem) -->
+            <circle cx="145" cy="126" r="48" fill="${cWarn}" fill-opacity="0.08" stroke="${cWarn}" stroke-width="2" />
+            <circle cx="145" cy="126" r="30" fill="${cWarn}" fill-opacity="0.22" stroke="${cWarn}" stroke-width="2.5" />
+            <circle cx="145" cy="126" r="12" fill="${cWarn}" fill-opacity="0.35" />
+
+            <text x="145" y="130" text-anchor="middle" font-size="10.5" font-weight="700" fill="${cInk}">老木質部</text>
+            <text x="145" y="182" text-anchor="middle" font-size="10.5" font-weight="700" fill="${cPrimary}">形成層（環狀）</text>
+            <text x="145" y="226" text-anchor="middle" font-size="11" fill="${cMuted}">外圈為韌皮部（屬樹皮）／內為木質部（木材）</text>
+
+            <!-- Divider -->
+            <line x1="290" y1="20" x2="290" y2="230" stroke="${cBorder}" stroke-width="1" stroke-dasharray="4 4" />
+
+            <!-- Right: Monocot Stem -->
+            <text x="415" y="24" text-anchor="middle" font-size="13" font-weight="800" fill="${cInk}">單子葉草本（如玉米、水稻）</text>
+            <circle cx="415" cy="126" r="76" fill="${cWash}" stroke="${cBorder}" stroke-width="2" />
+            <!-- Scattered bundles -->
+            <circle cx="380" cy="90" r="8" fill="${cPrimary}" opacity="0.8" />
+            <circle cx="430" cy="82" r="8" fill="${cPrimary}" opacity="0.8" />
+            <circle cx="455" cy="120" r="8" fill="${cPrimary}" opacity="0.8" />
+            <circle cx="405" cy="125" r="8" fill="${cPrimary}" opacity="0.8" />
+            <circle cx="368" cy="145" r="8" fill="${cPrimary}" opacity="0.8" />
+            <circle cx="438" cy="162" r="8" fill="${cPrimary}" opacity="0.8" />
+            <circle cx="398" cy="172" r="8" fill="${cPrimary}" opacity="0.8" />
+            <text x="415" y="226" text-anchor="middle" font-size="11" fill="${cMuted}">維管束散生排列，無形成層（無年輪）</text>
+          </svg>
+        `;
+      }
+
+      // Stage 4: Heart & Dual Circulation SVG
+      const mode = appState.circulationMode || 'systemic';
+      const isSys = mode === 'systemic' || mode === 'injection';
+      const isPul = mode === 'pulmonary' || mode === 'injection';
+      return `
+        <svg viewBox="0 0 540 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="人體心臟四腔室與體循環肺循環流向圖">
+          <rect x="0" y="0" width="540" height="250" fill="${cBg}" />
+          <!-- Lungs (Top) -->
+          <rect x="195" y="14" width="150" height="38" rx="19" fill="${isPul ? cTint : cWash}" stroke="${isPul ? cPrimary : cBorder}" stroke-width="2" />
+          <text x="270" y="37" text-anchor="middle" font-size="12.5" font-weight="800" fill="${cInk}">肺泡微血管（氣體交換）</text>
+
+          <!-- Heart Right side (Viewer's Left = Deoxygenated) -->
+          <rect x="140" y="84" width="126" height="50" rx="6" fill="${cIndigo}" fill-opacity="0.14" stroke="${cIndigo}" stroke-width="1.8" />
+          <text x="203" y="106" text-anchor="middle" font-size="12.5" font-weight="800" fill="${cInk}">右心房（缺氧血）</text>
+          <text x="203" y="123" text-anchor="middle" font-size="10.5" fill="${cMuted}">接上下大靜脈</text>
+
+          <rect x="140" y="138" width="126" height="54" rx="6" fill="${cIndigo}" fill-opacity="0.22" stroke="${cIndigo}" stroke-width="1.8" />
+          <text x="203" y="162" text-anchor="middle" font-size="12.5" font-weight="800" fill="${cInk}">右心室（缺氧血）</text>
+          <text x="203" y="179" text-anchor="middle" font-size="10.5" fill="${cMuted}">壓血進肺動脈</text>
+
+          <!-- Heart Left side (Viewer's Right = Oxygenated) -->
+          <rect x="274" y="84" width="126" height="50" rx="6" fill="${cError}" fill-opacity="0.12" stroke="${cError}" stroke-width="1.8" />
+          <text x="337" y="106" text-anchor="middle" font-size="12.5" font-weight="800" fill="${cInk}">左心房（充氧血）</text>
+          <text x="337" y="123" text-anchor="middle" font-size="10.5" fill="${cMuted}">接肺靜脈</text>
+
+          <rect x="274" y="138" width="126" height="54" rx="6" fill="${cError}" fill-opacity="0.2" stroke="${cError}" stroke-width="2.5" />
+          <text x="337" y="162" text-anchor="middle" font-size="12.5" font-weight="900" fill="${cInk}">左心室（最厚實）</text>
+          <text x="337" y="179" text-anchor="middle" font-size="10.5" fill="${cMuted}">壓血進主動脈</text>
+
+          <!-- Body Tissues (Bottom) -->
+          <rect x="175" y="206" width="190" height="34" rx="17" fill="${isSys ? cTint : cWash}" stroke="${isSys ? cPrimary : cBorder}" stroke-width="2" />
+          <text x="270" y="227" text-anchor="middle" font-size="12" font-weight="800" fill="${cInk}">全身組織細胞微血管</text>
+
+          <!-- Connecting Arrows -->
+          <path d="M 140 165 L 70 165 L 70 33 L 192 33" fill="none" stroke="${cIndigo}" stroke-width="${isPul ? 3 : 1.5}" opacity="${isPul ? 1 : 0.35}" />
+          <text x="72" y="96" font-size="11" font-weight="700" fill="${cIndigo}">肺動脈</text>
+
+          <path d="M 345 33 L 465 33 L 465 108 L 402 108" fill="none" stroke="${cError}" stroke-width="${isPul ? 3 : 1.5}" opacity="${isPul ? 1 : 0.35}" />
+          <text x="415" y="70" font-size="11" font-weight="700" fill="${cError}">肺靜脈</text>
+
+          <path d="M 400 165 L 465 165 L 465 223 L 368 223" fill="none" stroke="${cError}" stroke-width="${isSys ? 3 : 1.5}" opacity="${isSys ? 1 : 0.35}" />
+          <text x="415" y="198" font-size="11" font-weight="700" fill="${cError}">主動脈</text>
+
+          <path d="M 175 223 L 70 223 L 70 108 L 138 108" fill="none" stroke="${cIndigo}" stroke-width="${isSys ? 3 : 1.5}" opacity="${isSys ? 1 : 0.35}" />
+          <text x="72" y="198" font-size="11" font-weight="700" fill="${cIndigo}">大靜脈</text>
+        </svg>
+      `;
+    }
+
+    function getStageLabHtml(stageId) {
+      if (stageId === 'stage-1') {
+        const c = appState.calcState;
+        const perServing = (c.carb * 4) + (c.fat * 9) + (c.prot * 4);
+        const total = perServing * c.servings;
+        return `
+          <div class="interactive-lab">
+            <div class="panel-heading" style="margin-bottom: 0;">
+              <i data-lucide="calculator" aria-hidden="true" width="18" height="18" style="color: var(--primary);"></i>
+              <span>互動營養標示熱量試算（模擬段考包裝題）</span>
+            </div>
+            <div class="lab-inputs">
+              <div class="field-group">
+                <label for="calc-carb">每份醣類（公克）</label>
+                <input type="number" id="calc-carb" data-field="calc-carb" min="0" max="1000" value="${c.carb}" oninput="updateCalorieCalc()">
+              </div>
+              <div class="field-group">
+                <label for="calc-fat">每份脂質（公克）</label>
+                <input type="number" id="calc-fat" data-field="calc-fat" min="0" max="1000" value="${c.fat}" oninput="updateCalorieCalc()">
+              </div>
+              <div class="field-group">
+                <label for="calc-prot">每份蛋白質（公克）</label>
+                <input type="number" id="calc-prot" data-field="calc-prot" min="0" max="1000" value="${c.prot}" oninput="updateCalorieCalc()">
+              </div>
+              <div class="field-group">
+                <label for="calc-servings">本包裝總份數</label>
+                <input type="number" id="calc-servings" data-field="calc-servings" min="1" max="20" value="${c.servings}" oninput="updateCalorieCalc()">
+              </div>
+            </div>
+            <div class="lab-result-bar">
+              <div>
+                <div style="font-size: 0.8rem; color: var(--on-surface-variant);">單份熱量：<strong data-field="calc-per-val">${perServing}</strong> 大卡</div>
+                <div style="font-size: 1.05rem; font-weight: 800; color: var(--on-surface);">包裝總熱量：<span data-field="calc-total-val" style="color: var(--primary);">${total}</span> 大卡</div>
+              </div>
+              <div class="pill-tabs">
+                <button type="button" class="pill-tab" onclick="applyCalcPreset(200, 20, 40, 2)">土城段考餐盒(2份)</button>
+                <button type="button" class="pill-tab" onclick="applyCalcPreset(6, 2, 4, 4)">屏東豆漿(4份)</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (stageId === 'stage-2') {
+        return `
+          <div class="interactive-lab">
+            <div class="panel-heading" style="margin-bottom: 0;">
+              <i data-lucide="flask-conical" aria-hidden="true" width="18" height="18" style="color: var(--primary);"></i>
+              <span>唾液與溫度交互實驗速查模擬</span>
+            </div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--on-surface-variant);">點選試管條件，立即檢視「30 分鐘後加入本氏液並隔水加熱」的顏色判讀結果：</p>
+            <div class="pill-tabs">
+              <button type="button" class="pill-tab active" onclick="showEnzymeSim(this, '37C')">試管 A：澱粉＋唾液（37℃）</button>
+              <button type="button" class="pill-tab" onclick="showEnzymeSim(this, '0C')">試管 B：澱粉＋唾液（0℃）</button>
+              <button type="button" class="pill-tab" onclick="showEnzymeSim(this, '100C')">試管 C：澱粉＋唾液（煮沸 100℃）</button>
+              <button type="button" class="pill-tab" onclick="showEnzymeSim(this, 'water')">試管 D：澱粉＋清水（37℃）</button>
+            </div>
+            <div class="lab-result-bar" data-field="enzyme-sim-result">
+              <div>
+                <strong>本氏液加熱結果：綠 → 黃 → 橙 → 紅色（有變色反應）</strong>
+                <div style="font-size: 0.85rem; color: var(--on-surface-variant);">37℃ 接近人體體溫，唾液澱粉酶活性最佳，成功將澱粉分解為麥芽糖／葡萄糖；若改加碘液則維持黃褐色。</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (stageId === 'stage-3') {
+        return `
+          <div class="interactive-lab">
+            <div class="panel-heading" style="margin-bottom: 0;">
+              <i data-lucide="droplets" aria-hidden="true" width="18" height="18" style="color: var(--primary);"></i>
+              <span>蒸散實驗圖表聚焦切換</span>
+            </div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--on-surface-variant);">此植物上下表皮皆有氣孔，且<strong>上表皮氣孔多於下表皮</strong>（可塗凡士林堵住氣孔）：</p>
+            <div class="pill-tabs">
+              <button type="button" class="pill-tab ${appState.transpirationView === 'all' ? 'active' : ''}" onclick="setTranspirationFilter('all')">顯示全部四組</button>
+              <button type="button" class="pill-tab ${appState.transpirationView === 'upper' ? 'active' : ''}" onclick="setTranspirationFilter('upper')">比較塗抹上下表皮</button>
+              <button type="button" class="pill-tab ${appState.transpirationView === 'leaf' ? 'active' : ''}" onclick="setTranspirationFilter('leaf')">比較保留與摘除葉片</button>
+            </div>
+          </div>
+        `;
+      }
+
+      // Stage 4 circulation path switcher
+      const mode = appState.circulationMode;
+      let pathDesc = '';
+      if (mode === 'systemic') {
+        pathDesc = `體循環路線：<strong>左心室（充氧血）→ 主動脈 → 全身組織微血管（提供 O₂ 與養分）→ 上／下大靜脈（缺氧血）→ 右心房</strong>`;
+      } else if (mode === 'pulmonary') {
+        pathDesc = `肺循環路線：<strong>右心室（缺氧血）→ 肺動脈 → 肺泡微血管（獲得 O₂、排出 CO₂）→ 肺靜脈（充氧血）→ 左心房</strong>`;
+      } else {
+        pathDesc = `手臂靜脈注射藥物送達左腳：<strong>手臂靜脈 → 上大靜脈 → 右心房 → 右心室 → 肺動脈 → 肺微血管 → 肺靜脈 → 左心房 → 左心室 → 主動脈 → 小動脈 → 左腳</strong>`;
+      }
+      return `
+        <div class="interactive-lab">
+          <div class="panel-heading" style="margin-bottom: 0;">
+            <i data-lucide="heart-pulse" aria-hidden="true" width="18" height="18" style="color: var(--primary);"></i>
+            <span>心血管循環路線互動高亮器</span>
+          </div>
+          <div class="pill-tabs">
+            <button type="button" class="pill-tab ${mode === 'systemic' ? 'active' : ''}" onclick="setCirculationMode('systemic')">體循環</button>
+            <button type="button" class="pill-tab ${mode === 'pulmonary' ? 'active' : ''}" onclick="setCirculationMode('pulmonary')">肺循環</button>
+            <button type="button" class="pill-tab ${mode === 'injection' ? 'active' : ''}" onclick="setCirculationMode('injection')">靜脈注射完整路徑</button>
+          </div>
+          <div class="lab-result-bar">
+            <div style="font-size: 0.9rem;">${pathDesc}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderChecklistSection(stage, st) {
+      const progressChip = document.getElementById('detail-progress-chip');
+      if (progressChip) {
+        progressChip.setAttribute('data-status', st.done === st.total ? 'ok' : 'info');
+        progressChip.textContent = `本關進度：${st.done} / ${st.total}（${st.pct}%）`;
+      }
+      const heading = document.getElementById('detail-checklist-heading');
+      if (heading) {
+        heading.textContent = `可勾選學習進度追蹤（${st.done}/${st.total}）`;
+      }
+      const listEl = document.getElementById('detail-checklist');
+      if (!listEl) return;
+
+      listEl.innerHTML = stage.checkpoints.map((text, idx) => {
+        const key = `${stage.id}-${idx}`;
+        const checked = Boolean(appState.checkedItems[key]);
+        return `
+          <label class="check-item ${checked ? 'checked' : ''}" for="chk-${key}">
+            <input type="checkbox" id="chk-${key}" ${checked ? 'checked' : ''} onchange="toggleCheckpoint('${stage.id}', ${idx}, this.checked)">
+            <span class="check-text">${text}</span>
+          </label>
+        `;
+      }).join('');
+    }
+
+    function renderQuizSection(stage) {
+      const heading = document.getElementById('detail-quiz-heading');
+      if (heading) {
+        heading.textContent = `${stage.num} 歷屆段考精選快篩`;
+      }
+      const gridEl = document.getElementById('detail-quiz-grid');
+      if (!gridEl) return;
+
+      gridEl.innerHTML = stage.quizzes.map((q, qIdx) => {
+        const userChoice = appState.quizAnswers[q.id];
+        const answered = userChoice !== undefined && userChoice !== null;
+        const isCorrect = answered && userChoice === q.answer;
+        const optsHtml = q.options.map((optText, oIdx) => {
+          let cls = 'quiz-opt';
+          if (answered) {
+            if (oIdx === q.answer) cls += ' correct';
+            else if (oIdx === userChoice) cls += ' wrong';
+          }
+          return `<button type="button" class="${cls}" onclick="answerQuiz('${q.id}', ${oIdx})">${optText}</button>`;
+        }).join('');
+
+        const feedbackHtml = answered
+          ? `<div class="quiz-feedback ${isCorrect ? 'correct' : 'wrong'}">
+              <strong>${isCorrect ? '答對了！' : '再想一下：'}</strong>${q.explanation}
+            </div>`
+          : '';
+
+        return `
+          <div class="quiz-card">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-xs); flex-wrap: wrap;">
+              <span class="chip" data-status="info">精選實戰第 ${qIdx + 1} 題</span>
+              <span class="quiz-source">${q.source}</span>
+            </div>
+            <p class="quiz-q">${q.question}</p>
+            <div class="quiz-options">${optsHtml}</div>
+            ${feedbackHtml}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderStageDetail() {
+      const stage = STAGES.find((s) => s.id === appState.activeStageId) || STAGES[0];
+      const m = computeMetrics();
+      const st = m.stageStats[stage.id];
+
+      const numEl = document.getElementById('detail-stage-num');
+      const titleEl = document.getElementById('detail-title');
+      const sumEl = document.getElementById('detail-summary');
+      const conceptsEl = document.getElementById('detail-concepts');
+      const labEl = document.getElementById('detail-lab');
+      const rulesEl = document.getElementById('detail-rules');
+      const chartTitleEl = document.getElementById('stage-chart-title');
+      const chartCaptionEl = document.getElementById('stage-chart-caption');
+      const svgEl = document.getElementById('stage-svg-container');
+
+      if (numEl) numEl.textContent = stage.num;
+      if (titleEl) titleEl.textContent = stage.title;
+      if (sumEl) sumEl.textContent = stage.summary;
+      if (chartTitleEl) chartTitleEl.textContent = stage.chartTitle;
+      if (chartCaptionEl) chartCaptionEl.textContent = stage.chartCaption;
+
+      if (conceptsEl) {
+        conceptsEl.innerHTML = stage.concepts.map((c) => `
+          <article class="concept-card">
+            <h4>${c.title}</h4>
+            ${c.html}
+          </article>
+        `).join('');
+      }
+
+      if (labEl) {
+        labEl.innerHTML = getStageLabHtml(stage.id);
+      }
+
+      if (rulesEl) {
+        rulesEl.innerHTML = stage.rules.map((r) => `
+          <li class="rule-item">
+            <strong>${r.title}</strong>
+            <span>${r.detail}</span>
+          </li>
+        `).join('');
+      }
+
+      if (svgEl) {
+        svgEl.innerHTML = getStageDiagramSvg(stage.id);
+      }
+
+      renderChecklistSection(stage, st);
+      renderQuizSection(stage);
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+      renderStageChart(stage.id);
+    }
+
+    // =========================================================================
+    // Chart.js Visualizations per Stage
+    // =========================================================================
+    function renderStageChart(stageId) {
+      const canvas = document.getElementById('stage-chart-canvas');
+      if (!canvas || typeof Chart === 'undefined') return;
+
+      if (activeChartInstance) {
+        activeChartInstance.destroy();
+        activeChartInstance = null;
+      }
+
+      const c1 = getCssToken('--data-1');
+      const c2 = getCssToken('--data-2');
+      const c3 = getCssToken('--data-3');
+      const c4 = getCssToken('--data-4');
+      const cCtx = getCssToken('--data-context');
+      const cGrid = getCssToken('--outline-variant');
+      const cInk = getCssToken('--on-surface');
+      const cMuted = getCssToken('--on-surface-variant');
+      const cFont = getCssToken('--font-label');
+
+      const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: cInk, font: { family: cFont, size: 12, weight: '700' }, boxWidth: 12 }
+          }
+        }
+      };
+
+      if (stageId === 'stage-1') {
+        const c = appState.calcState;
+        const kcalCarb = c.carb * 4 * c.servings;
+        const kcalFat = c.fat * 9 * c.servings;
+        const kcalProt = c.prot * 4 * c.servings;
+        activeChartInstance = new Chart(canvas, {
+          type: 'bar',
+          data: {
+            labels: [`醣類 (4卡/g)`, `脂質 (9卡/g)`, `蛋白質 (4卡/g)`, `水/礦物質/維生素`],
+            datasets: [
+              {
+                label: `每公克產能 (大卡/g)`,
+                data: [4, 9, 4, 0],
+                backgroundColor: [c1, c3, c2, cCtx],
+                borderRadius: 4,
+                yAxisID: 'y'
+              },
+              {
+                label: `目前試算餐盒熱量佔比 (大卡)`,
+                data: [kcalCarb, kcalFat, kcalProt, 0],
+                backgroundColor: c4,
+                borderRadius: 4,
+                yAxisID: 'y1'
+              }
+            ]
+          },
+          options: {
+            ...commonOptions,
+            scales: {
+              x: { grid: { display: false }, ticks: { color: cMuted, font: { family: cFont, size: 11 } } },
+              y: {
+                position: 'left',
+                title: { display: true, text: '每公克大卡', color: cMuted },
+                grid: { color: cGrid },
+                ticks: { color: cMuted }
+              },
+              y1: {
+                position: 'right',
+                title: { display: true, text: '試算總大卡', color: cMuted },
+                grid: { drawOnChartArea: false },
+                ticks: { color: cMuted }
+              }
+            }
+          }
+        });
+      } else if (stageId === 'stage-2') {
+        activeChartInstance = new Chart(canvas, {
+          type: 'line',
+          data: {
+            labels: [`進入前`, `口腔`, `食道`, `胃`, `小腸`, `大腸`],
+            datasets: [
+              {
+                label: `澱粉(醣類)未消化 %`,
+                data: [100, 65, 65, 65, 0, 0],
+                borderColor: c1,
+                backgroundColor: c1,
+                borderWidth: 2.5,
+                tension: 0.2,
+                pointRadius: 4
+              },
+              {
+                label: `蛋白質未消化 %`,
+                data: [100, 100, 100, 60, 0, 0],
+                borderColor: c2,
+                backgroundColor: c2,
+                borderWidth: 2.5,
+                tension: 0.2,
+                pointRadius: 4
+              },
+              {
+                label: `脂質未消化 %`,
+                data: [100, 100, 100, 100, 0, 0],
+                borderColor: c3,
+                backgroundColor: c3,
+                borderWidth: 2.5,
+                tension: 0.2,
+                pointRadius: 4
+              },
+              {
+                label: `纖維素未消化 %`,
+                data: [100, 100, 100, 100, 100, 100],
+                borderColor: cCtx,
+                borderDash: [5, 4],
+                borderWidth: 2,
+                pointRadius: 3
+              }
+            ]
+          },
+          options: {
+            ...commonOptions,
+            scales: {
+              x: { grid: { display: false }, ticks: { color: cMuted } },
+              y: {
+                min: 0, max: 110,
+                title: { display: true, text: '未消化分子比例 (%)', color: cMuted },
+                grid: { color: cGrid },
+                ticks: { color: cMuted }
+              }
+            }
+          }
+        });
+      } else if (stageId === 'stage-3') {
+        const filter = appState.transpirationView;
+        const allSets = [
+          { id: 'none', label: `未做處理（蒸散最快）`, data: [10, 7.6, 5.4, 3.2, 1.2], borderColor: c1, backgroundColor: c1, borderWidth: 2.5, tension: 0.2 },
+          { id: 'lower', label: `下表皮塗凡士林（次快）`, data: [10, 8.5, 7.0, 5.6, 4.2], borderColor: c2, backgroundColor: c2, borderWidth: 2.5, tension: 0.2 },
+          { id: 'upper', label: `上表皮塗凡士林（較慢）`, data: [10, 9.2, 8.4, 7.7, 7.0], borderColor: c3, backgroundColor: c3, borderWidth: 2.5, tension: 0.2 },
+          { id: 'cut', label: `摘除葉片（最慢/幾乎不變）`, data: [10, 9.8, 9.6, 9.5, 9.4], borderColor: cCtx, backgroundColor: cCtx, borderDash: [5, 4], borderWidth: 2, tension: 0.2 }
+        ];
+        let shown = allSets;
+        if (filter === 'upper') shown = allSets.filter((d) => d.id === 'lower' || d.id === 'upper');
+        if (filter === 'leaf') shown = allSets.filter((d) => d.id === 'none' || d.id === 'cut');
+
+        activeChartInstance = new Chart(canvas, {
+          type: 'line',
+          data: {
+            labels: [`0 分`, `10 分`, `20 分`, `30 分`, `40 分`],
+            datasets: shown
+          },
+          options: {
+            ...commonOptions,
+            scales: {
+              x: { grid: { display: false }, ticks: { color: cMuted } },
+              y: {
+                min: 0, max: 11,
+                title: { display: true, text: '量筒剩餘液面高度 (mL)', color: cMuted },
+                grid: { color: cGrid },
+                ticks: { color: cMuted }
+              }
+            }
+          }
+        });
+      } else {
+        // Stage 4: Dual dataset - Vaccine Immune Response (First vs Second)
+        activeChartInstance = new Chart(canvas, {
+          type: 'line',
+          data: {
+            labels: [`第0天(打疫苗)`, `第7天`, `第14天`, `第21天`, `第28天(二次感染)`, `第31天`, `第35天`, `第42天`],
+            datasets: [
+              {
+                label: `專一性防禦作用強度（抗體量）`,
+                data: [0, 12, 34, 18, 12, 68, 96, 82],
+                borderColor: c1,
+                backgroundColor: c1,
+                borderWidth: 2.8,
+                tension: 0.3,
+                pointRadius: 4
+              },
+              {
+                label: `血液成分參考：血漿(55%) vs 血球(45%)`,
+                data: [55, 55, 55, 55, 55, 55, 55, 55],
+                borderColor: c2,
+                borderDash: [4, 4],
+                borderWidth: 1.5,
+                pointRadius: 0
+              }
+            ]
+          },
+          options: {
+            ...commonOptions,
+            scales: {
+              x: { grid: { display: false }, ticks: { color: cMuted, font: { size: 10.5 } } },
+              y: {
+                min: 0, max: 105,
+                title: { display: true, text: '相對強度 / 比例 (%)', color: cMuted },
+                grid: { color: cGrid },
+                ticks: { color: cMuted }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // =========================================================================
+    // Hoisted Event Handlers (for inline onclick / oninput / onchange)
+    // =========================================================================
+    function selectStage(stageId) {
+      appState.activeStageId = stageId;
+      renderOverviewAndStageCards();
+      renderStageDetail();
+      saveAppState();
+    }
+
+    function toggleCheckpoint(stageId, idx, isChecked) {
+      appState.checkedItems[`${stageId}-${idx}`] = Boolean(isChecked);
+      renderOverviewAndStageCards();
+      const stage = STAGES.find((s) => s.id === stageId) || STAGES[0];
+      const m = computeMetrics();
+      renderChecklistSection(stage, m.stageStats[stage.id]);
+      saveAppState();
+    }
+
+    function markActiveStageAllChecked() {
+      const stage = STAGES.find((s) => s.id === appState.activeStageId);
+      if (!stage) return;
+      stage.checkpoints.forEach((_, idx) => {
+        appState.checkedItems[`${stage.id}-${idx}`] = true;
+      });
+      renderOverviewAndStageCards();
+      const m = computeMetrics();
+      renderChecklistSection(stage, m.stageStats[stage.id]);
+      saveAppState();
+    }
+
+    function answerQuiz(qId, optionIdx) {
+      appState.quizAnswers[qId] = optionIdx;
+      renderOverviewAndStageCards();
+      const stage = STAGES.find((s) => s.id === appState.activeStageId) || STAGES[0];
+      renderQuizSection(stage);
+      saveAppState();
+    }
+
+    function updateCalorieCalc() {
+      const labEl = document.getElementById('detail-lab');
+      if (!labEl) return;
+      const carbEl = labEl.querySelector('[data-field="calc-carb"]');
+      const fatEl = labEl.querySelector('[data-field="calc-fat"]');
+      const protEl = labEl.querySelector('[data-field="calc-prot"]');
+      const servEl = labEl.querySelector('[data-field="calc-servings"]');
+      if (!carbEl || !fatEl || !protEl || !servEl) return;
+
+      const carb = Math.max(0, Number(carbEl.value) || 0);
+      const fat = Math.max(0, Number(fatEl.value) || 0);
+      const prot = Math.max(0, Number(protEl.value) || 0);
+      const servings = Math.max(1, Number(servEl.value) || 1);
+
+      appState.calcState = { carb, fat, prot, servings };
+      const perServing = (carb * 4) + (fat * 9) + (prot * 4);
+      const total = perServing * servings;
+
+      const perVal = labEl.querySelector('[data-field="calc-per-val"]');
+      const totVal = labEl.querySelector('[data-field="calc-total-val"]');
+      if (perVal) perVal.textContent = String(perServing);
+      if (totVal) totVal.textContent = String(total);
+
+      renderStageChart('stage-1');
+      saveAppState();
+    }
+
+    function applyCalcPreset(carb, fat, prot, servings) {
+      const labEl = document.getElementById('detail-lab');
+      if (!labEl) return;
+      appState.calcState = { carb, fat, prot, servings };
+      const carbEl = labEl.querySelector('[data-field="calc-carb"]');
+      const fatEl = labEl.querySelector('[data-field="calc-fat"]');
+      const protEl = labEl.querySelector('[data-field="calc-prot"]');
+      const servEl = labEl.querySelector('[data-field="calc-servings"]');
+      if (carbEl) carbEl.value = carb;
+      if (fatEl) fatEl.value = fat;
+      if (protEl) protEl.value = prot;
+      if (servEl) servEl.value = servings;
+      updateCalorieCalc();
+    }
+
+    function showEnzymeSim(btn, mode) {
+      const parent = btn.parentElement;
+      if (parent) {
+        parent.querySelectorAll('.pill-tab').forEach((b) => b.classList.remove('active'));
+      }
+      btn.classList.add('active');
+
+      const labEl = document.getElementById('detail-lab');
+      const res = labEl ? labEl.querySelector('[data-field="enzyme-sim-result"]') : null;
+      if (!res) return;
+
+      if (mode === '37C') {
+        res.innerHTML = `<div><strong>本氏液加熱結果：綠 → 黃 → 橙 → 紅色（有變色反應）</strong><div style="font-size:0.85rem;color:var(--on-surface-variant);">37℃ 接近人體體溫，唾液澱粉酶活性最佳，成功將澱粉分解為麥芽糖／葡萄糖；若改加碘液則維持黃褐色。</div></div>`;
+      } else if (mode === '0C') {
+        res.innerHTML = `<div><strong>本氏液加熱結果：維持淡藍色或僅微弱變綠（幾乎無分解）</strong><div style="font-size:0.85rem;color:var(--on-surface-variant);">0℃ 低溫使酵素活性大幅降低、暫停作用，但酵素結構未壞，若移回 37℃ 溫水可恢復分解能力。</div></div>`;
+      } else if (mode === '100C') {
+        res.innerHTML = `<div><strong>本氏液加熱結果：維持淡藍色（無反應）</strong><div style="font-size:0.85rem;color:var(--on-surface-variant);">100℃ 高溫已永久破壞唾液中蛋白質酵素的結構，即使後續降溫至 37℃ 也無法恢復活性！</div></div>`;
+      } else {
+        res.innerHTML = `<div><strong>本氏液加熱結果：維持淡藍色（無反應）</strong><div style="font-size:0.85rem;color:var(--on-surface-variant);">對照組只有澱粉與清水，缺少酵素催化故不會分解出糖類；若改滴碘液則呈藍黑色。</div></div>`;
+      }
+    }
+
+    function setTranspirationFilter(mode) {
+      appState.transpirationView = mode;
+      const labEl = document.getElementById('detail-lab');
+      if (labEl) {
+        labEl.innerHTML = getStageLabHtml('stage-3');
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          window.lucide.createIcons();
+        }
+      }
+      renderStageChart('stage-3');
+      saveAppState();
+    }
+
+    function setCirculationMode(mode) {
+      appState.circulationMode = mode;
+      const labEl = document.getElementById('detail-lab');
+      const svgEl = document.getElementById('stage-svg-container');
+      if (labEl) {
+        labEl.innerHTML = getStageLabHtml('stage-4');
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          window.lucide.createIcons();
+        }
+      }
+      if (svgEl) {
+        svgEl.innerHTML = getStageDiagramSvg('stage-4');
+      }
+      saveAppState();
+    }
+
+    function handleResetProgress(btn) {
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = `再點一次確認重設`;
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.innerHTML = `<i data-lucide="rotate-ccw" aria-hidden="true" width="16" height="16"></i> 重設所有進度`;
+      appState.checkedItems = {};
+      appState.quizAnswers = {};
+      renderOverviewAndStageCards();
+      renderStageDetail();
+      saveAppState();
+    }
+
+    function exportProgressReport() {
+      const m = computeMetrics();
+      const lines = [
+        `關卡,檢核點內容,完成狀態`,
+        ...STAGES.flatMap((s) =>
+          s.checkpoints.map((txt, i) => {
+            const done = appState.checkedItems[`${s.id}-${i}`] ? `已完成` : `未完成`;
+            return `"${s.num} ${s.title}","${txt}","${done}"`;
+          })
+        ),
+        ``,
+        `總體掌握度,${m.overallPct}%,已完成 ${m.doneChecks}/${m.totalChecks}`,
+        `歷屆快篩得分,${m.correctQuizzes}/${m.totalQuizzes}`
+      ].join('\n');
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === 'function') {
+        window.notebookAppApi.triggerFileDownload({
+          content: '\uFEFF' + lines,
+          contentType: 'text/csv',
+          encoding: 'UTF-8',
+          filename: '七年級生物段考學習進度.csv'
+        });
+      }
+    }
+
+    // =========================================================================
+    // App Initialization
+    // =========================================================================
+    async function initApp() {
+      await loadAppState();
+      renderOverviewAndStageCards();
+      renderStageDetail();
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
