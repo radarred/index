@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="dashboard">
+  <meta name="design-style" content="haven">
+  <title>七上國文第二次段考｜互動式學習指南與進度追蹤</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Haven) */
+      --background: #f5f6f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #e3ebe2;
+      --surface-container-high: #dbe2dd;
+
+      /* Ink */
+      --on-surface: #23272a;
+      --on-surface-variant: #5c6468;
+
+      /* Rules */
+      --outline: #c9d0cc;
+      --outline-variant: #dde2df;
+
+      /* Accents */
+      --primary: #3c5a6e;
+      --on-primary: #ffffff;
+      --primary-container: #e2e9ee;
+      --on-primary-container: #2a4152;
+      --secondary: #4f6b53;
+      --tertiary: #5f7c63;
+      --error: #a63d32;
+      --on-error: #ffffff;
+      --error-container: #f7eae8;
+
+      /* Data series */
+      --data-1: #3c5a6e;
+      --data-2: #5f7c63;
+      --data-3: #a8694a;
+      --data-4: #8a7a68;
+      --data-context: #c3cac6;
+
+      /* Fonts */
+      --font-headline: 'Noto Sans TC', 'Outfit', sans-serif;
+      --font-body: 'Noto Sans TC', 'Hanken Grotesk', sans-serif;
+      --font-label: 'Noto Sans TC', 'Outfit', sans-serif;
+      --font-num: 'Outfit', 'Noto Sans TC', sans-serif;
+
+      /* Shape */
+      --rounded: 0.375rem;
+      --rounded-lg: 0.5rem;
+      --rounded-full: 9999px;
+
+      /* Style effects */
+      --hairline: 1px solid var(--outline-variant);
+      --hairline-control: 1px solid var(--outline);
+      --active-ring: 0 0 0 2px var(--primary);
+      --elevation: none;
+
+      /* Shared semantic & focus */
+      --positive: #4f6b53;
+      --warning: #a8694a;
+      --focus: #3c5a6e;
+
+      /* Type scale (Dashboard / Tool) */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      color: inherit;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-xl);
+      padding: var(--space-xl) var(--space-lg) var(--space-2xl);
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Typography helpers */
+    .headline {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .headline strong {
+      font-weight: 700;
+    }
+    .display-title {
+      font-size: var(--display-size);
+    }
+    .section-title {
+      font-size: var(--headline-size);
+    }
+    .subhead-title {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 500;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--on-surface-variant);
+    }
+    .caption-sage {
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--secondary);
+      margin: var(--space-xs) 0 0;
+    }
+    .prose-note {
+      max-width: 65ch;
+      color: var(--on-surface-variant);
+      margin: var(--space-xs) 0 0;
+    }
+
+    /* Hairline Panel */
+    .panel {
+      background: var(--surface-container-low);
+      border: var(--hairline);
+      border-radius: var(--rounded-lg);
+      box-shadow: var(--elevation);
+      padding: var(--space-md) var(--space-lg);
+    }
+
+    /* Hairline section divide */
+    .section-block + .section-block {
+      border-top: var(--hairline);
+      padding-top: var(--space-xl);
+    }
+
+    /* Header / Masthead */
+    .masthead {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+      padding-bottom: var(--space-lg);
+      border-bottom: var(--hairline);
+    }
+    .masthead-copy {
+      max-width: 65ch;
+    }
+    .masthead-kicker {
+      display: inline-block;
+      margin-bottom: var(--space-xs);
+    }
+    .masthead-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+      box-shadow: var(--elevation);
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-primary:hover {
+      background-color: var(--on-primary-container);
+    }
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--on-surface);
+      border: var(--hairline-control);
+    }
+    .btn-secondary:hover {
+      background-color: var(--surface-container-high);
+    }
+    .btn-secondary[data-armed="true"] {
+      background-color: var(--error-container);
+      color: var(--error);
+      border-color: var(--error);
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* Tags / Pills */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded-full);
+      background-color: var(--surface-container);
+      color: var(--secondary);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      line-height: 1.3;
+    }
+    .tag-slate {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .tag-neutral {
+      background-color: var(--background);
+      color: var(--on-surface-variant);
+      border: var(--hairline);
+    }
+
+    /* Top Overview Grid (Asymmetric) */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    .kpi-value {
+      font-family: var(--font-num);
+      font-size: clamp(1.75rem, 1.4rem + 1vw, 2.25rem);
+      font-weight: 500;
+      line-height: 1.15;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+      margin-top: var(--space-xs);
+    }
+    .kpi-sub {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      font-weight: 400;
+      margin-left: var(--space-xs);
+    }
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      border-radius: var(--rounded-full);
+      background-color: var(--surface-container-high);
+      overflow: hidden;
+      margin-top: var(--space-sm);
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: var(--rounded-full);
+      background-color: var(--primary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .progress-fill.is-done {
+      background-color: var(--secondary);
+    }
+
+    /* Section Header Bar */
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    /* Stage Selector Cards Grid */
+    .stages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .stage-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: left;
+      width: 100%;
+      background-color: var(--surface-container-low);
+      border: var(--hairline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .stage-card:hover {
+      background-color: var(--surface-container-high);
+    }
+    .stage-card.is-active {
+      background-color: var(--primary-container);
+      box-shadow: var(--active-ring);
+    }
+    .stage-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+    .stage-card-title {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 500;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-xs);
+    }
+    .stage-card.is-active .stage-card-title {
+      color: var(--on-primary-container);
+      font-weight: 700;
+    }
+    .stage-card-lesson {
+      font-size: 0.8125rem;
+      color: var(--secondary);
+      font-weight: 500;
+      margin-bottom: var(--space-sm);
+    }
+    .stage-card-desc {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      margin: 0 0 var(--space-md);
+      line-height: 1.5;
+    }
+    .stage-card-footer {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      margin-top: auto;
+    }
+    .stage-card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-variant-numeric: tabular-nums;
+    }
+    .stage-card-link {
+      color: var(--primary);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* Detail Workspace */
+    .detail-workspace {
+      display: grid;
+      gap: var(--space-lg);
+      animation: fadeSlide var(--dur-short) var(--ease-out);
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .detail-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-md);
+    }
+    .detail-nav-btns {
+      display: flex;
+      gap: var(--space-sm);
+    }
+
+    /* 2-col Chart + Checklist Split */
+    .detail-split {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: var(--space-md);
+      align-items: stretch;
+    }
+    .chart-box {
+      position: relative;
+      min-height: 230px;
+      margin-top: var(--space-sm);
+    }
+
+    /* Checklist Tracker */
+    .checklist-list {
+      display: grid;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border: var(--hairline);
+      border-radius: var(--rounded);
+      background-color: var(--background);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .check-item:hover {
+      background-color: var(--surface-container-high);
+    }
+    .check-item.is-checked {
+      background-color: var(--surface-container);
+    }
+    .check-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin: 3px 0 0;
+      accent-color: var(--primary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .check-item-text {
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      color: var(--on-surface);
+    }
+    .check-item.is-checked .check-item-text {
+      color: var(--secondary);
+    }
+
+    /* Knowledge Grid (Rules & Comparisons) */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .rule-list {
+      margin: var(--space-sm) 0 0;
+      padding-left: 1.25rem;
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .rule-list li {
+      color: var(--on-surface);
+      line-height: 1.55;
+    }
+    .rule-list li strong {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Pitfall Tinted Panel (at most one sage mist callout per view) */
+    .pitfall-callout {
+      background-color: var(--surface-container);
+      border: var(--hairline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .pitfall-callout-title {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      color: var(--secondary);
+      font-weight: 600;
+      margin: 0 0 var(--space-sm);
+    }
+
+    /* Tables (Haven rules: no vertical lines, no zebra stripes, hairlines between rows) */
+    .table-scroll {
+      overflow-x: auto;
+      margin-top: var(--space-sm);
+    }
+    table.study-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9375rem;
+    }
+    table.study-table th {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      color: var(--on-surface-variant);
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--hairline-control);
+    }
+    table.study-table td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--hairline);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    table.study-table tbody tr:hover {
+      background-color: var(--surface-container-high);
+    }
+
+    /* Interactive Lexicon Filter Bar (Stage 5) */
+    .filter-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      justify-content: space-between;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .filter-btn {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded);
+      border: var(--hairline-control);
+      background-color: var(--surface-container-low);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .filter-btn:hover {
+      background-color: var(--surface-container-high);
+    }
+    .filter-btn.is-active {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .search-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      min-width: 220px;
+    }
+    .search-input {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border: var(--hairline-control);
+      border-radius: var(--rounded);
+      background-color: var(--surface-container-low);
+      font-size: 0.9375rem;
+    }
+    .search-input:focus {
+      outline: 2px solid var(--focus);
+      outline-offset: 0;
+      border-color: var(--primary);
+    }
+
+    /* Quick Quiz */
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-sm);
+    }
+    .quiz-card {
+      border: var(--hairline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      background-color: var(--background);
+    }
+    .quiz-stem {
+      font-weight: 500;
+      margin: 0 0 var(--space-sm);
+      line-height: 1.55;
+    }
+    .quiz-options {
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .quiz-opt {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      width: 100%;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      text-align: left;
+      border: var(--hairline-control);
+      border-radius: var(--rounded);
+      background-color: var(--surface-container-low);
+      cursor: pointer;
+      font-size: 0.9375rem;
+      line-height: 1.45;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .quiz-opt:hover {
+      background-color: var(--surface-container-high);
+    }
+    .quiz-opt.is-correct {
+      background-color: var(--surface-container);
+      border-color: var(--secondary);
+      color: var(--secondary);
+      font-weight: 500;
+    }
+    .quiz-opt.is-wrong {
+      background-color: var(--error-container);
+      border-color: var(--error);
+      color: var(--error);
+    }
+    .quiz-feedback {
+      margin-top: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.875rem;
+      line-height: 1.5;
+      background-color: var(--surface-container-low);
+      border-left: 3px solid var(--primary);
+    }
+    .quiz-feedback.is-ok {
+      border-left-color: var(--secondary);
+      color: var(--secondary);
+    }
+    .quiz-feedback.is-err {
+      border-left-color: var(--error);
+      color: var(--error);
+    }
+
+    /* Footer */
+    .page-footer {
+      border-top: var(--hairline);
+      padding-top: var(--space-lg);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+      color: var(--on-surface-variant);
+      font-size: 0.8125rem;
+    }
+    .inline-status {
+      font-size: 0.875rem;
+      color: var(--secondary);
+      font-weight: 500;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 960px) {
+      .overview-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .detail-split {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+      .masthead {
+        align-items: flex-start;
+      }
+      .detail-nav-btns {
+        width: 100%;
+      }
+      .detail-nav-btns .btn {
+        flex: 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+    <!-- Top Masthead -->
+    <header class="masthead">
+      <div class="masthead-copy">
+        <span class="label masthead-kicker">國中國文七年級上學期・第二次段考總複習</span>
+        <h1 class="headline display-title">七上國文段考<strong>互動學習指南</strong></h1>
+        <p class="caption-sage">整合《論語選》、〈背影〉、〈心囚〉、語文常識與形音義修辭高頻考點</p>
+      </div>
+      <div class="masthead-actions">
+        <span id="status-message" class="inline-status" aria-live="polite"></span>
+        <button type="button" class="btn btn-secondary" onclick="exportProgress()">
+          <i data-lucide="download" width="16" height="16" aria-hidden="true"></i>
+          匯出學習紀錄
+        </button>
+        <button type="button" class="btn btn-secondary" id="reset-btn" data-armed="false" onclick="handleResetProgress(this)">
+          <i data-lucide="rotate-ccw" width="16" height="16" aria-hidden="true"></i>
+          重設進度
+        </button>
+      </div>
+    </header>
+
+    <!-- Top Overview Cards -->
+    <section aria-labelledby="overview-heading">
+      <div class="section-header">
+        <h2 id="overview-heading" class="headline section-title">學習總覽與<strong>段考配分指標</strong></h2>
+        <span class="label">勾選下方任一關卡檢核點，進度將自動儲存並更新</span>
+      </div>
+      <div class="overview-grid">
+        <div class="panel">
+          <div class="label">整體複習完成度</div>
+          <div class="kpi-value" id="kpi-percent">0%<span class="kpi-sub" id="kpi-fraction">0 / 24 項</span></div>
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-fill" id="overall-progress-fill" style="width: 0%;"></div>
+          </div>
+          <p class="caption-sage" id="kpi-overall-note">點選下方關卡開始勾選第一項複習清單</p>
+        </div>
+
+        <div class="panel">
+          <div class="label">已精熟關卡數</div>
+          <div class="kpi-value" id="kpi-mastered">0<span class="kpi-sub">/ 6 關</span></div>
+          <p class="caption-sage">單關 4 項檢核全勾選即達精熟</p>
+        </div>
+
+        <div class="panel">
+          <div class="label">隨堂自測答對率</div>
+          <div class="kpi-value" id="kpi-quiz-score">0<span class="kpi-sub" id="kpi-quiz-total">/ 12 題</span></div>
+          <p class="caption-sage" id="kpi-quiz-note">尚未開始隨堂檢測</p>
+        </div>
+
+        <div class="panel">
+          <div class="label">段考典型配分結構</div>
+          <div class="kpi-value">70<span class="kpi-sub">: 30</span></div>
+          <p class="caption-sage">選擇題與閱讀約 70%・手寫字音注釋默寫 30%</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Middle Interactive Stage Cards -->
+    <section class="section-block" aria-labelledby="stages-heading">
+      <div class="section-header">
+        <div>
+          <h2 id="stages-heading" class="headline section-title">切換複習<strong>關卡與章節卡片</strong></h2>
+          <p class="prose-note">點選任一張章節卡片，下方隨即展開該單元的命題比重圖表、重點規則對照與進度檢核清單。</p>
+        </div>
+        <span class="tag tag-slate" id="active-stage-indicator">目前檢視：關卡 01</span>
+      </div>
+      <div class="stages-grid" id="stages-grid"></div>
+    </section>
+
+    <!-- Lower Expanded Detail Workspace -->
+    <section class="section-block" id="detail-section" aria-live="polite">
+      <div class="detail-workspace" id="detail-workspace"></div>
+    </section>
+
+    <!-- Sources & Attribution Footer -->
+    <footer class="page-footer">
+      <div>資料來源彙整：高雄陽明國中、高雄大灣國中、新北土城國中、新北桃子腳國中小、臺北仁愛國中、桃園中興／文昌／同德／平南國中、嘉義北興國中、彰化埔心／埤頭／溪湖國中七年級國文第二次段考試題與解答。</div>
+      <div>學習狀態由系統安全儲存，重新開啟後仍可接續複習。</div>
+    </footer>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    const STAGES = [
+      {
+        id: `lunyu`,
+        code: `關卡 01`,
+        title: `《論語選》義理與國學常識`,
+        lesson: `第四課｜語錄體經典・孝道與為學`,
+        summary: `掌握〈子游問孝〉、〈吾日三省吾身〉、〈譬如為山〉三則精義，破解「孔子編纂」等高頻國學陷阱。`,
+        chartTitle: `《論語選》段考命題焦點比例`,
+        chartNote: `統計顯示，課文關鍵字詞（敬、忠信習、恆）與《論語》編者／篇名常識合計佔本課試題近六成。`,
+        chartLabels: [`三則原典釋義`, `國學常識辨偽`, `延伸問孝與四科`, `默寫與成語應用`],
+        chartData: [34, 24, 24, 18],
+        pitfallTitle: `段考高頻陷阱避雷：這四句最容易誤判`,
+        pitfalls: [
+          `《論語》不是孔子本人著述，也不是孔子與弟子合編，而是由「孔子弟子與再傳弟子」記錄編輯而成。`,
+          `全書共二十篇，篇名取自各篇首章開頭二、三字（如〈學而〉、〈為政〉），與全篇內容主旨「無必然關聯」。`,
+          `〈吾日三省吾身〉自省的三件事是「處事（忠）、待人（信）、學習（習）」，不包含「孝順父母」或「當官政績」。`,
+          `南宋朱熹合編《四書》為《論語》、《孟子》、《大學》、《中庸》，不含《春秋》。`
+        ],
+        coreTables: [
+          {
+            title: `三則課文核心對照表`,
+            headers: [`選文篇章`, `關鍵核心概念`, `寫作與修辭手法`, `對應成語與引申名言`],
+            rows: [
+              [`〈子游問孝〉`, `孝順核心在於「敬」（誠敬之心），非僅物質口體奉養`, `對比（人與犬馬）、設問（激問：不敬，何以別乎）`, `色難（和顏悅色）／晨昏定省／菽水承歡`],
+              [`〈吾日三省吾身〉`, `曾子以「忠（為人謀）、信（交友）、習（溫習）」每日自省`, `排比問句（層遞檢視處事、待人、為學）`, `學而時習之，不亦說乎／言而有信`],
+              [`〈譬如為山〉`, `「為山」戒半途而廢；「平地」勉積少成多、成敗操之在己`, `譬喻（堆土為山、填平窪地）＋正反對比映襯`, `正：鐵杵成針、滴水穿石、駑馬十駕、鍥而不捨；反：功虧一簣、淺嘗輒止、行百里者半九十`]
+            ]
+          },
+          {
+            title: `延伸《論語》問孝、四科十哲與年齡代稱`,
+            headers: [`考點分類`, `核心內容`, `段考常見配對`],
+            rows: [
+              [`孔子論孝（因材施教）`, `孟懿子：無違（生事以禮，死葬祭以禮）；子夏：色難（態度和悅）；孟武伯：父母唯其疾之憂`, `「父母之年，不可不知也，一則以喜，一則以懼」；「父母在，不遠遊，遊必有方」`],
+              [`孔門四科十哲`, `德行（顏淵、閔子騫、冉伯牛、仲弓）；言語（宰我、子貢）；政事（冉有、季路）；文學（子游、子夏）`, `顏回：一簞食、不遷怒、不貳過；季路：車馬衣裘與朋友共（重情義）`],
+              [`古人年齡代稱`, `始齔（7–8歲）、志學（15）、二八年華（16）、而立（30）、不惑（40）、知天命（50）、耳順（60）、從心／古稀（70）`, `陷阱：幼兒園剛畢業不可稱「志學之年」；退休含飴弄孫不可稱「始齔之年」`]
+            ]
+          }
+        ],
+        checklist: [
+          { id: `lunyu-1`, text: `能精準默寫〈子游問孝〉與〈吾日三省吾身〉，不錯寫「是謂能養」、「皆能有養」` },
+          { id: `lunyu-2`, text: `能辨明《論語》由弟子與再傳弟子編輯，且篇名取自首章字詞、非依主旨分類` },
+          { id: `lunyu-3`, text: `能區分「為山（半途而廢）」與「平地（持之以恆）」各自對應的成語群組` },
+          { id: `lunyu-4`, text: `熟記孔門四科代表人物、因材施教問孝內容，以及 15 至 70 歲年齡代稱` }
+        ],
+        quizzes: [
+          {
+            id: `q-lunyu-1`,
+            stem: `關於《論語》一書的國學常識整理，下列哪一位同學的筆記完全正確？`,
+            options: [
+              `甲生：《論語》是孔子晚年親自著述，並交由弟子補充完成的儒家經典`,
+              `乙生：全書共有二十篇，每篇篇名都緊扣該篇內容的中心思想`,
+              `丙生：屬於語錄體，由孔子弟子與再傳弟子記錄孔子及時人應答編輯而成`,
+              `丁生：南宋朱熹將《論語》、《孟子》、《大學》、《春秋》合稱為四書`
+            ],
+            answer: 2,
+            explanation: `正確答案為丙生。《論語》非孔子本人著述（甲錯）；篇名取首章開頭二、三字，與篇旨無必然關聯（乙錯）；四書為論、孟、大學、中庸（丁錯）。`
+          },
+          {
+            id: `q-lunyu-2`,
+            stem: `〈譬如為山〉中「譬如平地，雖覆一簣，進，吾往也。」所傳達的為學精神，與下列哪一個成語最不相關？`,
+            options: [
+              `鐵杵成針`,
+              `淺嘗輒止`,
+              `滴水穿石`,
+              `駑馬十駕`
+            ],
+            answer: 1,
+            explanation: `「雖覆一簣，進，吾往也」強調學貴有恆、積少成多。鐵杵成針、滴水穿石、駑馬十駕皆強調堅持累積；「淺嘗輒止」指略微嘗試便停止，與持之以恆相反。`
+          }
+        ]
+      },
+      {
+        id: `back`,
+        code: `關卡 02`,
+        title: `〈背影〉情感脈絡與象徵意涵`,
+        lesson: `第五課｜朱自清・倒敘鏡框與四次落淚`,
+        summary: `釐清「現在—過去—現在」鏡框結構、四次落淚的真實心境轉折，以及橘子、紫毛大衣與背影的象徵意義。`,
+        chartTitle: `〈背影〉段考命題比重分析`,
+        chartNote: `試題高度集中於「物品象徵意義」與「作者心境轉折」，尤其是第一次落淚與買橘後心情的辨析。`,
+        chartLabels: [`象徵物意涵辨析`, `四次落淚與情感轉折`, `寫作手法與虛實背影`, `語氣判讀與倒反修辭`],
+        chartData: [30, 30, 22, 18],
+        pitfallTitle: `段考高頻陷阱避雷：四次落淚與倒反語氣`,
+        pitfalls: [
+          `第一次在徐州院子落淚，是因為看見滿院狼藉、想起祖母去世與家境慘澹而「悲傷哀痛」，不是「對父親不耐煩而生氣」。`,
+          `「我現在想想，那時真是太聰明了！」是使用「倒反」修辭，表達作者對當時年少無知、不體諒父親的「懊悔自責」，並非誇讚自己獨立自主。`,
+          `「紫毛大衣」象徵父親無微不至的溫暖呵護，並非炫耀家中經濟富裕。`,
+          `全文四次寫到父親的背影，其中開頭「最不能忘記的是他的背影」與末段讀信浮現的背影屬於「虛寫（回憶／想像）」，只有浦口買橘與車廂目送兩次是「親眼目睹（實寫）」。`
+        ],
+        coreTables: [
+          {
+            title: `〈背影〉四次落淚與四次背影完整對照`,
+            headers: [`階段與場景`, `背影虛實`, `觸動原因`, `作者真實心境`],
+            rows: [
+              [`首段開頭（兩年餘未見）`, `第 1 次背影（虛寫・回憶）`, `開門見山點題，引出往事`, `懷念深情，奠定全篇基調`],
+              [`徐州奔喪（第 1 次落淚）`, `—`, `祖母去世、父失業交卸、見滿院狼藉`, `哀痛家境變故的悲傷之淚`],
+              [`浦口買橘（第 2 次落淚）`, `第 2 次背影（實寫・目睹）`, `父穿深青布棉袍與黑布馬褂，蹣跚攀爬月台買橘`, `被父愛震撼，感到愧疚與感動`],
+              [`月台送別（第 3 次落淚）`, `第 3 次背影（實寫・目睹）`, `父親背影混入來往人群中，再也找不著`, `依依不捨、悵然離別之淚`],
+              [`北京讀信（第 4 次落淚）`, `第 4 次背影（虛寫・想像）`, `父親來信輕描淡寫病情，感嘆「大約大去之期不遠」`, `感傷不知何時再見的思念之淚`]
+            ]
+          },
+          {
+            title: `核心寫作手法與象徵物件解碼`,
+            headers: [`物件／手法`, `象徵意涵／寫作作用`, `考題常考對比`],
+            rows: [
+              [`背影`, `象徵深沉內斂、不善言辭卻厚重如山的父愛`, `全文沒有一個「愛」字，卻透過小事展現深情`],
+              [`朱紅的橘子`, `象徵父愛的溫暖與光亮，父親「心裡很輕鬆似的」因已將兒子打點妥當`, `鮮明朱紅對比父親黯淡衣著，格外觸動人心`],
+              [`紫毛大衣`, `父親為兒子定做、鋪好座位，象徵溫暖的呵護`, `與「黑布小帽、黑布大馬褂、深青布棉袍」象徵的愁苦心境形成映襯`],
+              [`鏡框式倒敘與詳略剪裁`, `現在→過去→現在（首尾呼應）；略寫奔喪失業，詳寫攀爬買橘`, `「三個終於」（終於不放心、終於決定、終於講定價錢）凸顯父親對兒子的牽掛`]
+            ]
+          }
+        ],
+        checklist: [
+          { id: `back-1`, text: `熟記「現在→過去→現在」倒敘結構，能區分兩次實寫與兩次虛寫（回憶）的背影` },
+          { id: `back-2`, text: `釐清作者「悲傷→嫌迂暗笑→感動懊悔→依依不捨→感傷思念」的情感轉折` },
+          { id: `back-3`, text: `準確對應背影、朱紅橘子、紫毛大衣與黑深青布衣的象徵意涵` },
+          { id: `back-4`, text: `能判斷「那時真是太聰明了」屬倒反修辭，且知父親買橘後感到輕鬆是因盡了為父心意` }
+        ],
+        quizzes: [
+          {
+            id: `q-back-1`,
+            stem: `關於朱自清在〈背影〉一文中四次落淚的心境敘述，下列何者「錯誤」？`,
+            options: [
+              `在徐州看見滿院狼藉想起祖母過世，是對家中境況感到不耐煩與生氣而落淚`,
+              `看見父親攀爬月台買橘子的背影而落淚，是因真切體會父愛而感動流淚`,
+              `送行時見父親背影混入人群直至看不見，不由得感到悵然不捨而落淚`,
+              `收到父親家書提及身體大去之期不遠，心想不知何時能再見而感傷落淚`
+            ],
+            answer: 0,
+            explanation: `第一次落淚（徐州院子）是面對祖母過世與家道中落的「悲痛與哀傷」，並不是對父親感到不耐煩或生氣（不耐煩是後來父親與茶房、腳夫交涉時的表現）。`
+          },
+          {
+            id: `q-back-2`,
+            stem: `〈背影〉寫作時在許多具體事物上寄託抽象情感，下列象徵配對何者「不正確」？`,
+            options: [
+              `父親的背影：象徵深沉含蓄的父愛`,
+              `朱紅的橘子：象徵父愛的溫暖關懷`,
+              `紫毛大衣：象徵父親在物質上炫耀家境富裕`,
+              `黑布大馬褂與深青布棉袍：象徵家境慘澹與父親愁苦的心情`
+            ],
+            answer: 2,
+            explanation: `紫毛大衣是父親特意為兒子定做的保暖衣物，象徵父親對兒子的體貼呵護與「舐犢情深」，並非炫耀家境。`
+          }
+        ]
+      },
+      {
+        id: `prison`,
+        code: `關卡 03`,
+        title: `〈心囚〉哲思與現代素養閱讀`,
+        lesson: `第六課／自學選文｜心靈自由・正向思考・逆思維`,
+        summary: `辨析「身體之囚」與「心靈之囚」的差異，並整合〈貪睡的長頸鹿〉錯置觀念與《逆思維》科學家心態。`,
+        chartTitle: `生命哲思與素養題組命題分佈`,
+        chartNote: `近年段考常將〈心囚〉核心概念延伸至現代非小說選文（如〈貪睡的長頸鹿〉、〈逆思維〉），測驗跨文本比較能力。`,
+        chartLabels: [`〈心囚〉主旨與排比映襯`, `正向思考態度辨析`, `〈長頸鹿〉錯置觀念`, `《逆思維》四種思考心態`],
+        chartData: [35, 25, 20, 20],
+        pitfallTitle: `段考高頻陷阱避雷：排比句法與正向思考`,
+        pitfalls: [
+          `「多的是身體健康，卻心理不健全的人；多的是表面歡樂，卻心中痛苦的人……」此段運用了「排比、類疊、映襯」修辭，並「沒有」使用譬喻修辭。`,
+          `「正向思考」不是「假裝困難不存在」或「只要我喜歡有什麼不可以」，而是看清現實限制後，將情緒與事實分開，尋找解決問題的轉機。`,
+          `〈貪睡的長頸鹿〉所謂「錯置」，是指沒有獅子的能力與擔當，卻只想享有獅子的待遇（如只模仿偶像外表，卻忽略背後充實）。`,
+          `《逆思維》建議採取「科學家」心態：把自己的念頭當「假設」，勇於質疑並根據新證據更新觀點；「傳教士、檢察官、政治人物」心態皆容易陷入自我防衛盲點。`
+        ],
+        coreTables: [
+          {
+            title: `〈心囚〉核心對照與跨文本素養整合`,
+            headers: [`主題面向`, `「受困者」特徵`, `「自由者」實踐`, `段考經典對應`],
+            rows: [
+              [`〈心囚〉杏林子`, `被失望、悲觀、頹喪、名利權勢、外貌執念或賭博貪念困住`, `「我只看我所擁有的，不看我所沒有的」；不屈於病痛而樂觀創作`, `周大觀〈我還有一隻腳〉／海倫凱勒：「世上唯一的黑暗，乃是無知和無覺」`],
+              [`〈貪睡的長頸鹿〉`, `錯置：搞不清楚自己是誰，羨慕長官高薪卻不願承擔責任`, `認分踏實、了解自身條件，像長頸鹿般保持警覺且恰如其分`, `叢林法則：無法當獅子，就做永不鬆懈的長頸鹿`],
+              [`《逆思維》思考心態`, `傳教士（死守信念）、檢察官（專挑人錯）、政治人物（只求拉攏支持）`, `科學家：不依直覺宣導，願承認可能錯誤，用實驗與證據修正假設`, `轉念即心靈實驗：原念頭為假設，透過提問與驗證進化信念`]
+            ]
+          }
+        ],
+        checklist: [
+          { id: `prison-1`, text: `理解〈心囚〉主旨：真正囚住人的是心理負面情緒，人生光明或黯淡取決於「心」` },
+          { id: `prison-2`, text: `能判斷「身體健康卻心理不健全…」一段使用排比、類疊、映襯，不含譬喻` },
+          { id: `prison-3`, text: `能區分「正向思考」與「逃避困難／盲目樂觀」的本質差別` },
+          { id: `prison-4`, text: `掌握〈長頸鹿〉「錯置」含意，以及《逆思維》四種思考模式的判斷標準` }
+        ],
+        quizzes: [
+          {
+            id: `q-prison-1`,
+            stem: `讀完杏林子的〈心囚〉後，下列哪一種人「不是」作者所說的「心囚」？`,
+            options: [
+              `盲目追求流行事物而失去自我風格的人`,
+              `身體雖有殘缺，卻仍熱愛運動並努力練習想在體壇發光的人`,
+              `一心想發橫財而天天沉迷投注樂透彩券的人`,
+              `為追求光鮮亮麗外表而對自我長相極度自卑、不斷整形的人`
+            ],
+            answer: 1,
+            explanation: `〈心囚〉強調身體限制不了心靈的自由。B 選項雖可能有外在限制，卻保有熱情與踏實目標，屬於心靈自由者；其餘三項皆受困於盲從、貪念或外貌執念。`
+          },
+          {
+            id: `q-prison-2`,
+            stem: `根據《逆思維》一書提到的四種思考心態，下列哪一個人的表現屬於「科學家」思考模式？`,
+            options: [
+              `面對別人的論點瑕疵，立刻列舉證據駁倒對方以贏得辯論（檢察官）`,
+              `深信偶像完美無瑕，到處向人宣揚其優點並拒絕接受任何批評（傳教士）`,
+              `對於已知的教導保持好奇與懷疑，並根據新發現的證據主動更新自己的觀點`,
+              `為了讓同學喜歡自己的劇本，到處遊說拉票爭取大家支持（政治人物）`
+            ],
+            answer: 2,
+            explanation: `科學家心態的特徵是「跟隨問題帶領、接受證據教導、勇於反對或更新自己的論點」。A 為檢察官、B 為傳教士、D 為政治人物心態。`
+          }
+        ]
+      },
+      {
+        id: `literacy`,
+        code: `關卡 04`,
+        title: `語文常識與非連續性文本`,
+        lesson: `語文常識二｜古今職稱・資訊檢索・圖表閱讀`,
+        summary: `破解古裝劇常見用詞錯誤（百里侯、西席、仵作、捕快），並熟練圖表步驟與網路資料查證。`,
+        chartTitle: `語文常識高頻考向分佈`,
+        chartNote: `古今職稱代稱幾乎每校必考 1–2 題情境題；非連續性文本則測驗閱讀順序與圖表數據交叉驗證。`,
+        chartLabels: [`古今職稱與生活詞彙`, `非連續性文本四步驟`, `網路檢索與讀物類型`, `部首查字與書寫規範`],
+        chartData: [40, 22, 20, 18],
+        pitfallTitle: `段考高頻陷阱避雷：古裝劇名詞千萬別張冠李戴`,
+        pitfalls: [
+          `「茶房」是指旅館或餐館的服務生，不是「賣茶的小房間」或「私廚」；「腳夫」是搬運工人，不是服務生。`,
+          `「仵作」是古代專責驗屍的法醫，不是「間諜（細作）」或「治病醫生（大夫／郎中）」。`,
+          `「百里侯」指古代縣長，不可誤當作現代「立法委員」；「西席」指老師，不可誤當作「保鑣」或「宰相」。`,
+          `「受業」是學生對老師的自稱（指學生），不是「業務」；「紅娘」代指媒人，不是「戲劇演員（俳優／伶優）」。`
+        ],
+        coreTables: [
+          {
+            title: `古今職稱與生活詞彙速查表`,
+            headers: [`古稱詞彙`, `正確今義`, `段考常設錯誤選項`],
+            rows: [
+              [`百里侯`, `縣長（掌理百里之地的長官）`, `立法委員、市長`],
+              [`西席／夫子／先生`, `老師`, `保鑣、丈夫、宰相`],
+              [`受業／桃李`, `學生、門生`, `業務、水果`],
+              [`茶房／店小二`, `餐旅業服務生`, `賣茶的房間、私廚`],
+              [`腳夫／盤纏`, `搬運工人／旅費`, `服務生／薪水`],
+              [`仵作／細作／捕快`, `驗屍官／間諜／警察差役`, `把仵作當間諜、把捕快當茶樓服務生`],
+              [`俳優（伶優）／紅娘／庖丁`, `演員／媒人／廚師`, `把紅娘當演員、把俳優當土匪`]
+            ]
+          },
+          {
+            title: `非連續性文本閱讀步驟、部首查字與關鍵字檢索`,
+            headers: [`能力項目`, `標準流程與關鍵知識`],
+            rows: [
+              [`非連續性文本四步驟`, `1. 從文本與圖表的標題找到主題 → 2. 判讀確認圖表中所傳達的重要訊息 → 3. 釐清圖表中呈現的各項資訊 → 4. 結合圖表與文字兩部分歸納推論要旨並提出見解（土城國中段考排序標準）`],
+              [`部首檢字法（以「針砭」為例）`, `步驟一：分析「砭」屬「石」部 → 步驟二：查部首目錄「石」部頁碼 → 步驟三：在「石」部五畫處找「砭」字 → 步驟四：在詞目中找到「針砭」詞義`],
+              [`人物關鍵字檢索`, `朱自清：「佩弦、〈歐遊雜記〉」｜杏林子：「〈生之歌〉、類風溼關節炎」｜胡適：「白話文運動、《四十自述》」`],
+              [`資訊來源公信力與讀物類型`, `查詢臺灣境內傳染病與防疫政策 → 應上「行政院衛生福利部網站」；圖書分類須依內容區分「歷史傳記、心理勵志、藝術人文、自然科普」`]
+            ]
+          }
+        ],
+        checklist: [
+          { id: `lit-1`, text: `能正確配對百里侯、西席、受業、茶房、腳夫、仵作、細作、庖丁的古今詞義` },
+          { id: `lit-2`, text: `熟記非連續性文本閱讀與圖表分析的標準思考順序` },
+          { id: `lit-3`, text: `能區分朱自清、杏林子、胡適三人的字號、代表作與搜尋關鍵字` },
+          { id: `lit-4`, text: `熟悉「石部五畫找砭字」等部首查字流程與官方公信網站辨別` }
+        ],
+        quizzes: [
+          {
+            id: `q-lit-1`,
+            stem: `編劇阿禎正在撰寫古裝劇劇本，下列哪一句台詞中的古今職業稱呼使用「正確」？`,
+            options: [
+              `你這樣的「俳優」大爺，哪裡懂得我們這些小老百姓的苦`,
+              `有的遊客不須「腳夫」跟隨，將行李放上驢背便在山路間奔跑起來`,
+              `這座茶樓的「捕快」端碗送茶、加開水的手腳都十分俐落`,
+              `我只是戲班裡的一名「紅娘」，塗上胭脂在舞台上演一場落寞的悲劇`
+            ],
+            answer: 1,
+            explanation: `「腳夫」指搬運貨物行李的工人，符合句意。「俳優」指演員（非大爺）；茶樓端茶應為「店小二／茶房」（非捕快）；演戲塗胭脂應為「伶優／俳優」（紅娘指媒人）。`
+          },
+          {
+            id: `q-lit-2`,
+            stem: `想要查詢台灣境內傳染病最新統計及官方防疫措施，以及搜尋作家「朱自清」的生平資料，下列哪組作法皆正確？`,
+            options: [
+              `查防疫上社群論壇／搜朱自清輸入「類風溼關節炎、〈生之歌〉」`,
+              `查防疫上行政院衛生福利部網站／搜朱自清輸入「佩弦、〈歐遊雜記〉」`,
+              `查防疫上重編國語辭典修訂本／搜朱自清輸入「白話文運動、《四十自述》」`,
+              `查防疫上影音平台／搜朱自清輸入「新詩、平交道」`
+            ],
+            answer: 1,
+            explanation: `官方防疫訊息以「行政院衛生福利部網站」最具公信力；朱自清字佩弦，著有〈背影〉、〈歐遊雜記〉等（〈生之歌〉為杏林子、《四十自述》為胡適）。`
+          }
+        ]
+      },
+      {
+        id: `lexicon`,
+        code: `關卡 05`,
+        title: `高頻形音義與一字多義庫`,
+        lesson: `基礎語文｜十大破音字・易錯字形・多義詞・手寫注釋`,
+        summary: `彙整各校段考出現率最高的破音字讀音、易混淆部首字形、一詞多義比較與手寫注釋，支援即時篩選查詢。`,
+        chartTitle: `基礎語文（形音義與注釋）考題比重`,
+        chartNote: `國字注音與字形字音選擇合計佔總分兩成以上，其中「差、傳、養、喪、鋪、省、載、帖、質」為最高頻破音字。`,
+        chartLabels: [`破音字與讀音比較`, `同音異字與字形辨誤`, `一詞多義與詞性`, `手寫卷必背注釋`],
+        chartData: [30, 30, 22, 18],
+        pitfallTitle: `段考高頻陷阱避雷：注意「養、載、質、躊躇」`,
+        pitfalls: [
+          `「奉養父母、是謂能養、皆能有養」的養讀「ㄧㄤˋ」；「養育之恩、修養心性」的養讀「ㄧㄤˇ」，兩者讀音不同！`,
+          `「載歌載舞、怨聲載道、詳實記載」的載皆讀「ㄗㄞˋ」（依國語一字多音審訂表）；「千秋萬載、一年半載」讀「ㄗㄞˇ」。`,
+          `「典質（抵押）、人質」讀「ㄓˋ」；「文質彬彬、質疑」讀「ㄓˊ」。`,
+          `「躊躇不前」指猶豫不決；「躊躇滿志」指心滿意足、自得的樣子，兩者詞義完全不同！`
+        ],
+        coreTables: [],
+        checklist: [
+          { id: `lex-1`, text: `能分辨「差、傳、養、喪、鋪、省、載、帖、質」等九大破音字在不同語境的讀音` },
+          { id: `lex-2`, text: `熟記「矚/囑、匱/潰/饋/簣、淪/倫、撩/潦/繚、讒/饞/攙」的部首差異` },
+          { id: `lex-3`, text: `能依句意判別「料理、左右、光景、斗、平、躊躇」的一詞多義` },
+          { id: `lex-4`, text: `精熟手寫卷必考注釋：未成一簣、囹圄、蹣跚、典質、狼藉、賦閒、頹喪、沉溺` }
+        ],
+        quizzes: [
+          {
+            id: `q-lex-1`,
+            stem: `下列各選項「」中的讀音，何組前後完全相同？`,
+            options: [
+              `「養」育之恩／奉「養」父母`,
+              `變賣典「質」／交換人「質」`,
+              `「傳」而不習／不見經「傳」`,
+              `「差」強人意／參「差」不齊`
+            ],
+            answer: 1,
+            explanation: `「典質（抵押）」與「人質」皆讀ㄓˋ。A 為 ㄧㄤˇ／ㄧㄤˋ；C 為 ㄔㄨㄢˊ／ㄓㄨㄢˋ；D 為 ㄔㄚ／ㄘ。`
+          },
+          {
+            id: `q-lex-2`,
+            stem: `下列各組「」中的注音寫成國字後，何組前後字形「完全相同」？`,
+            options: [
+              `眼花「ㄌㄧㄠˊ」亂／字跡「ㄌㄧㄠˊ」草`,
+              `聽信「ㄔㄢˊ」言／「ㄔㄢˊ」涎欲滴`,
+              `高瞻遠「ㄓㄨˇ」／眾所「ㄓㄨˇ」目`,
+              `不虞「ㄎㄨㄟˋ」乏／功虧一「ㄎㄨㄟˋ」`
+            ],
+            answer: 2,
+            explanation: `高瞻遠「矚」與眾所「矚」目皆為目部的「矚」。A 為撩／潦；B 為讒／饞；D 為匱／簣。`
+          }
+        ]
+      },
+      {
+        id: `rhetoric`,
+        code: `關卡 06`,
+        title: `修辭技巧、語氣與成語實戰`,
+        lesson: `修辭與語用｜倒反・婉曲・雙聲疊韻・成語辨析`,
+        summary: `掌握「倒反」與「象徵」兩大修辭，分辨雙聲疊韻複詞、死亡婉辭真偽，以及《論語》成語正確用法。`,
+        chartTitle: `修辭與語用題型佔比`,
+        chartNote: `修辭以「倒反、象徵、雙聲疊韻、並列構詞（枷鎖）」最常出現；成語則聚焦「死亡婉辭」與「《論語》出處成語」。`,
+        chartLabels: [`倒反與婉曲修辭`, `象徵與雙關技巧`, `雙聲疊韻與構詞法`, `成語正用與語氣判別`],
+        chartData: [30, 24, 22, 24],
+        pitfallTitle: `段考高頻陷阱避雷：這三個語用錯最多`,
+        pitfalls: [
+          `「奄奄一息」是指氣息微弱、生命垂危但「尚未死亡」；不可與「撒手人寰、一命嗚呼、蒙主寵召、駕鶴西歸、杳如黃鶴」等已死亡成語混淆。`,
+          `「高齡的爺爺慢慢失智」屬於直接陳述事實，並「沒有」使用婉曲修辭（賦閒、圓寂、發福、大去才屬婉曲）。`,
+          `「你就在此地不要走動」展現父親對兒子的叮嚀與關懷語氣，不是「命令」或「徵詢」語氣。`
+        ],
+        coreTables: [
+          {
+            title: `五大核心修辭與構詞規則表`,
+            headers: [`修辭／構詞名稱`, `判斷原則`, `段考高頻例句`],
+            rows: [
+              [`倒反（反語）`, `言辭表面意思與內心真意相反，表懊悔、自嘲或諷刺`, `「我現在想想，那時真是太聰明了！」／「你可真行，唱到大家都走光了」／「戒菸有什麼難？我已經戒了一百多次」`],
+              [`婉曲`, `不直講本意，用委婉詞語烘托（失業、死亡、胖等忌諱語）`, `「賦閒」在家（失業）／在打坐中「圓寂」（過世）／近來「發福」（變胖）`],
+              [`諧音雙關`, `借字音相同或相近，同時關照兩種語意`, `「娘（涼）什麼！老子都不老子呀」／「碎碎（歲歲）平安」／「一幣（臂）之力」／「相敬如冰（賓）」／「有教無淚（類）」`],
+              [`並列引申構詞`, `兩個具體事物詞素並列，引申為抽象概念`, `「枷鎖」（頸刑具＋腳鐐→束縛）／「鐐銬」／「矛盾」／「規矩」（❌ 非「憤怒」）`],
+              [`雙聲／疊韻複詞`, `雙聲＝兩字聲母相同；疊韻＝兩字韻母相同`, `雙聲：躊躇、彷彿、吩咐、崎嶇、慷慨、琵琶｜疊韻：蹣跚、窈窕、荒唐、徬徨、蜿蜒、朦朧`]
+            ]
+          },
+          {
+            title: `《論語》成語與常見誤用對照表`,
+            headers: [`成語`, `正確含義與用法`, `考卷常見誤用陷阱`],
+            rows: [
+              [`當仁不讓`, `遇到合乎正義或分內該做的事，勇敢承擔不推辭`, `班長管好秩序並當同學榜樣，是「當仁不讓」的事（✅ 正確）`],
+              [`不恥下問`, `不以向地位或學問不如自己的人請教為恥`, `❌ 父母發現有錯，向孩子「不恥下問」地道歉（道歉非請教，誤用）`],
+              [`既往不咎`, `對於過去所犯的錯誤不再追究責備`, `❌ 登山找到方向後，要謹守「既往不咎」原則才不會走失（望文生義）`],
+              [`巧言令色`, `用花言巧語和假裝和善的臉色討好他人（貶義）`, `❌ 女孩在舞會處處「巧言令色」，令男士有賓至如歸之感（貶詞褒用）`]
+            ]
+          }
+        ],
+        checklist: [
+          { id: `rhe-1`, text: `能一眼認出〈背影〉與生活情境中的「倒反」修辭例句` },
+          { id: `rhe-2`, text: `能分辨「婉曲」表現與「直述事實（如失智）」的差異` },
+          { id: `rhe-3`, text: `熟記雙聲複詞（躊躇、彷彿、吩咐）與疊韻複詞（蹣跚、荒唐、徬徨、窈窕）` },
+          { id: `rhe-4`, text: `區分「奄奄一息（未死）」與死亡成語，並能正確運用《論語》出處成語` }
+        ],
+        quizzes: [
+          {
+            id: `q-rhe-1`,
+            stem: `下列各句「」中的詞語，何者「沒有」死亡的意思？`,
+            options: [
+              `他既已「撒手人寰」，過往所有的恩怨就一筆勾銷吧`,
+              `他被送到醫院時已經「奄奄一息」，家屬看到情況都泣不成聲`,
+              `來不及到醫院急救，他就在冬夜一氧化碳中毒「一命嗚呼」了`,
+              `黃先生因病情急遽惡化，昨晚不幸「蒙主寵召」了`
+            ],
+            answer: 1,
+            explanation: `「奄奄一息」形容呼吸微弱、生命垂危，但尚未氣絕死亡；其餘三項皆為死亡的婉辭或成語。`
+          },
+          {
+            id: `q-rhe-2`,
+            stem: `下列句子中「」內的《論語》成語或修辭說明，何者完全「正確」？`,
+            options: [
+              `身為班長將秩序管理好並以身作則，對他而言是件「當仁不讓」的事`,
+              `現代父母一發現自己有錯，必會「不恥下問」地向孩子道歉`,
+              `高齡的爺爺慢慢「失智」，這裡使用了委婉暗示的「婉曲」修辭`,
+              `化裝舞會上每個女孩都「巧言令色」，令在場男士感受賓至如歸`
+            ],
+            answer: 0,
+            explanation: `「當仁不讓」指遇到分內該做的正義之事積極承擔，使用正確。「不恥下問」是指請教而非道歉；「失智」是直述非婉曲；「巧言令色」為貶義詞。`
+          }
+        ]
+      }
+    ];
+
+    const LEXICON_ITEMS = [
+      { cat: `破音字讀音`, term: `「差」使／出「差」 vs 參「差」 vs 「差」強人意`, rule: `ㄔㄞ（任務職務）／ ㄘ（不整齊）／ ㄔㄚ（尚可、勉強）`, tip: `交卸差使讀 ㄔㄞ，為〈背影〉開頭高頻必考音。` },
+      { cat: `破音字讀音`, term: `「傳」而不習／眉目「傳」情 vs 不見經「傳」／「傳」記`, rule: `ㄔㄨㄢˊ（傳授、傳遞）／ ㄓㄨㄢˋ（典籍、記敘生平之文）`, tip: `名詞性的書籍或生平文章多讀 ㄓㄨㄢˋ。` },
+      { cat: `破音字讀音`, term: `奉「養」／是謂能「養」 vs 「養」育之恩／修「養」`, rule: `ㄧㄤˋ（晚輩供養尊長）／ ㄧㄤˇ（長輩撫育、培養心性）`, tip: `〈子游問孝〉「能養、有養」與「奉養」在段考中讀 ㄧㄤˋ。` },
+      { cat: `破音字讀音`, term: `奔「喪」／婚「喪」喜慶 vs 頹「喪」／淪「喪」／玩物「喪」志`, rule: `ㄙㄤ（死亡、喪事）／ ㄙㄤˋ（失去、消沉）`, tip: `與喪事儀式相關讀平聲 ㄙㄤ，與失去或情緒低落相關讀去聲 ㄙㄤˋ。` },
+      { cat: `破音字讀音`, term: `「鋪」設鐵路／「鋪」棉被 vs 雜貨「鋪」／臥「鋪」`, rule: `ㄆㄨ（攤開、擺設，動詞）／ ㄆㄨˋ（商店、床位，名詞）`, tip: `〈背影〉「鋪好座位」讀 ㄆㄨ；「床鋪、店鋪」讀 ㄆㄨˋ。` },
+      { cat: `破音字讀音`, term: `三「省」吾身／晨昏定「省」 vs 「省」吃儉用`, rule: `ㄒㄧㄥˇ（反省、探望問候）／ ㄕㄥˇ（節省、省區）`, tip: `曾子三省與晨昏定省皆讀 ㄒㄧㄥˇ，注意兩者詞性皆為動詞。` },
+      { cat: `破音字讀音`, term: `「載」歌載舞／怨聲「載」道／詳實記「載」 vs 千秋萬「載」`, rule: `ㄗㄞˋ（充滿、記錄、承受）／ ㄗㄞˇ（年）`, tip: `依一字多音審訂表，「記載」讀 ㄗㄞˋ；唯有表示「年」時讀 ㄗㄞˇ。` },
+      { cat: `破音字讀音`, term: `妥「帖」／俯首「帖」耳 vs 一「帖」良藥 vs 喜「帖」`, rule: `ㄊㄧㄝ（穩當、順從）／ ㄊㄧㄝˇ（藥劑量詞）／ ㄊㄧㄝˋ（請柬、字帖）`, tip: `〈背影〉「照料妥帖」讀 ㄊㄧㄝ，切勿誤讀為 ㄊㄧㄝˇ。` },
+      { cat: `破音字讀音`, term: `變賣典「質」／交換人「質」 vs 文「質」彬彬／「質」疑`, rule: `ㄓˋ（抵押品、被扣押者）／ ㄓˊ（本質、詢問）`, tip: `〈背影〉「變賣典質」讀 ㄓˋ，意為抵押物品借錢。` },
+      { cat: `破音字讀音`, term: `「箇」中滋味 vs 禁「錮」／桎「梏」／陳年「痼」疾`, rule: `ㄍㄜˋ（其中）／ ㄍㄨˋ（關押、束縛、久病）`, tip: `「箇」讀四聲 ㄍㄜˋ，常與「禁錮、痼疾」合考辨音。` },
+      { cat: `易錯字形`, term: `高瞻遠「矚」・眾所「矚」目 vs 千叮萬「囑」`, rule: `目部「矚」（看、注視）／ 口部「囑」（叮嚀吩咐）`, tip: `看的地方用「目」，說的話語用「口」，兩字不可混用。` },
+      { cat: `易錯字形`, term: `不虞「匱」乏 vs 功虧一「簣」 vs 「潰」不成軍 vs 「饋」贈`, rule: `匱（匚部，缺乏）／ 簣（竹部，竹筐）／ 潰（水部，敗散）／ 饋（食部，贈送）`, tip: `〈譬如為山〉是竹部的「一簣」，勿寫成「潰」或「匱」。` },
+      { cat: `易錯字形`, term: `道德「淪」喪・「淪」落 vs 無與「倫」比・語無「倫」次`, rule: `淪（水部，沉沒、墜落）／ 倫（人部，條理、輩分）`, tip: `「無與倫比」與「語無倫次」皆從「人」部。` },
+      { cat: `易錯字形`, term: `眼花「撩」亂・春色「撩」人 vs 字跡「潦」草・窮途「潦」倒 vs 煙霧「繚」繞`, rule: `撩（手部，挑動撥弄）／ 潦（水部，草率、困頓）／ 繚（糸部，纏繞）`, tip: `眼花「撩」亂是手部，常被誤寫成水部的「潦」。` },
+      { cat: `易錯字形`, term: `聽信「讒」言 vs 「饞」涎欲滴 vs 「攙」扶老人`, rule: `讒（言部，毀謗壞話）／ 饞（食部，貪吃）／ 攙（手部，扶持）`, tip: `〈背影〉「我去攙他」為手部「攙」，勿誤用「纏」。` },
+      { cat: `易錯字形`, term: `禁「錮」・桎「梏」・低「窪」・「罹」患・鋃「鐺」・一股「腦」兒`, rule: `錮（金部）／ 梏（木部，手銬）／ 窪（穴部）／ 罹（网部）／ 鐺（金部）`, tip: `「一股腦兒」是「股」與「腦」，切勿寫成「一鼓腦兒」。` },
+      { cat: `一詞多義`, term: `「料理」自己／「料理」家務 vs 異國「料理」`, rule: `動詞（照料、處理安排）／ 名詞（菜餚、烹調手藝）`, tip: `〈背影〉「難道還不能料理自己嗎」為照料處理之意。` },
+      { cat: `一詞多義`, term: `房子「左右」 vs 九點「左右」 vs 不受他人「左右」`, rule: `方位詞（兩側）／ 副詞（約略）／ 動詞（支配、控制）`, tip: `〈心囚〉常考「為名利所左右」＝受到支配控制。` },
+      { cat: `一詞多義`, term: `家中「光景」 vs 一百公尺「光景」`, rule: `名詞（境況、生活處境）／ 副詞助詞（表示數量、時間約略）`, tip: `〈背影〉「家中光景是一日不如一日」指處境狀況。` },
+      { cat: `一詞多義`, term: `「斗」室 vs 「斗」膽 vs 才高八「斗」 vs 情勢「斗」變`, rule: `形容狹小（斗室）／ 形容膽大（斗膽）／ 容量單位／ 通「陡」，突然`, tip: `「斗室生輝」的斗用來形容房間狹小如量米的斗。` },
+      { cat: `一詞多義`, term: `「望」回走／「望」車外看 vs 登高「望」遠 vs 德高「望」重`, rule: `介詞（朝、向）／ 動詞（向遠處看）／ 名詞（聲譽）`, tip: `〈背影〉「抱了橘子望回走」與「望車外看」皆作「向」解。` },
+      { cat: `必背注釋`, term: `未成一簣／譬如「平地」`, rule: `未成一簣：只差一筐土沒有倒上去（簣：盛土竹筐）。平地：動詞「填平窪地」。`, tip: `注意「平地」在此作「填平低窪之地」解，非名詞平坦地面。` },
+      { cat: `必背注釋`, term: `囹圄／枷鎖／鐐銬`, rule: `囹圄（ㄌㄧㄥˊ ㄩˇ）：監獄。枷鎖、鐐銬：古代刑具，皆引申為束縛。`, tip: `〈心囚〉常考這三個詞語的國字注音與引申義。` },
+      { cat: `必背注釋`, term: `蹣跚／狼藉／妥帖／躊躇`, rule: `蹣跚（ㄇㄢˊ ㄕㄢ）：走路緩慢搖擺不穩。狼藉：散亂不整。妥帖：妥當周到。躊躇：猶豫不決。`, tip: `「躊躇」與「躊躇滿志（自得滿足）」意義不同。` },
+      { cat: `必背注釋`, term: `典質／賦閒／頹喪／沉溺`, rule: `典質：抵押物品借錢。賦閒：失業在家。頹喪：消沉喪氣。沉溺：陷入不良嗜好或困境無法自拔。`, tip: `「賦閒」為婉曲用法，指失業或沒有職務在身。` }
+    ];
+
+    const appState = {
+      activeStageId: `lunyu`,
+      checkedIds: [],
+      quizAnswers: {},
+      lexFilter: `全部`,
+      lexSearch: ``
+    };
+
+    let activeChart = null;
+
+    function getCssVar(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, `&amp;`)
+        .replace(/</g, `&lt;`)
+        .replace(/>/g, `&gt;`)
+        .replace(/"/g, `&quot;`);
+    }
+
+    function showStatus(msg) {
+      const el = document.getElementById(`status-message`);
+      if (!el) return;
+      el.textContent = msg;
+      setTimeout(function () {
+        if (el.textContent === msg) el.textContent = ``;
+      }, 3000);
+    }
+
+    async function persistState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+        try {
+          await window.notebookAppApi.setAppState({
+            activeStageId: appState.activeStageId,
+            checkedIds: appState.checkedIds,
+            quizAnswers: appState.quizAnswers
+          });
+        } catch (err) {
+          /* silent fallback */
+        }
+      }
+    }
+
+    function getStageStats(stage) {
+      const total = stage.checklist.length;
+      let done = 0;
+      for (let i = 0; i < total; i++) {
+        if (appState.checkedIds.indexOf(stage.checklist[i].id) !== -1) done++;
+      }
+      return { done: done, total: total, isMastered: done === total && total > 0 };
+    }
+
+    function updateOverview() {
+      let totalChecks = 0;
+      let doneChecks = 0;
+      let masteredStages = 0;
+      let totalQuizzes = 0;
+      let answeredQuizzes = 0;
+      let correctQuizzes = 0;
+
+      for (let i = 0; i < STAGES.length; i++) {
+        const st = STAGES[i];
+        const stats = getStageStats(st);
+        totalChecks += stats.total;
+        doneChecks += stats.done;
+        if (stats.isMastered) masteredStages++;
+
+        for (let j = 0; j < st.quizzes.length; j++) {
+          totalQuizzes++;
+          const q = st.quizzes[j];
+          if (typeof appState.quizAnswers[q.id] === `number`) {
+            answeredQuizzes++;
+            if (appState.quizAnswers[q.id] === q.answer) correctQuizzes++;
+          }
+        }
+      }
+
+      const pct = totalChecks > 0 ? Math.round((doneChecks / totalChecks) * 100) : 0;
+
+      const kpiPercent = document.getElementById(`kpi-percent`);
+      if (kpiPercent) {
+        kpiPercent.innerHTML = `${pct}%<span class="kpi-sub" id="kpi-fraction">${doneChecks} / ${totalChecks} 項</span>`;
+      }
+      const fill = document.getElementById(`overall-progress-fill`);
+      if (fill) {
+        fill.style.width = `${pct}%`;
+        if (pct === 100) fill.classList.add(`is-done`);
+        else fill.classList.remove(`is-done`);
+      }
+      const overallNote = document.getElementById(`kpi-overall-note`);
+      if (overallNote) {
+        if (doneChecks === 0) overallNote.textContent = `點選下方關卡開始勾選第一項複習清單`;
+        else if (pct === 100) overallNote.textContent = `全部段考檢核點已完成，考前可再快速複習錯題陷阱`;
+        else overallNote.textContent = `尚餘 ${totalChecks - doneChecks} 項考前檢核待完成`;
+      }
+
+      const kpiMastered = document.getElementById(`kpi-mastered`);
+      if (kpiMastered) {
+        kpiMastered.innerHTML = `${masteredStages}<span class="kpi-sub">/ ${STAGES.length} 關</span>`;
+      }
+
+      const kpiQuizScore = document.getElementById(`kpi-quiz-score`);
+      if (kpiQuizScore) {
+        kpiQuizScore.innerHTML = `${correctQuizzes}<span class="kpi-sub">/ ${totalQuizzes} 題</span>`;
+      }
+      const kpiQuizNote = document.getElementById(`kpi-quiz-note`);
+      if (kpiQuizNote) {
+        if (answeredQuizzes === 0) kpiQuizNote.textContent = `尚未開始隨堂檢測`;
+        else kpiQuizNote.textContent = `已作答 ${answeredQuizzes} / ${totalQuizzes} 題，正確率 ${Math.round((correctQuizzes / answeredQuizzes) * 100)}%`;
+      }
+    }
+
+    function renderStageCards() {
+      const container = document.getElementById(`stages-grid`);
+      if (!container) return;
+
+      let html = ``;
+      for (let i = 0; i < STAGES.length; i++) {
+        const st = STAGES[i];
+        const isActive = st.id === appState.activeStageId;
+        const stats = getStageStats(st);
+        const pct = Math.round((stats.done / stats.total) * 100);
+
+        let badgeClass = `tag-neutral`;
+        let badgeText = `待複習`;
+        if (stats.isMastered) {
+          badgeClass = ``;
+          badgeText = `已精熟 ${stats.done}/${stats.total}`;
+        } else if (stats.done > 0) {
+          badgeClass = `tag-slate`;
+          badgeText = `進行中 ${stats.done}/${stats.total}`;
+        }
+
+        html += `
+          <button type="button"
+            class="stage-card ${isActive ? `is-active` : ``}"
+            aria-pressed="${isActive ? `true` : `false`}"
+            onclick="selectStage('${st.id}')">
+            <div>
+              <div class="stage-card-top">
+                <span class="label">${escapeHtml(st.code)}</span>
+                <span class="tag ${badgeClass}">${escapeHtml(badgeText)}</span>
+              </div>
+              <h3 class="stage-card-title">${escapeHtml(st.title)}</h3>
+              <div class="stage-card-lesson">${escapeHtml(st.lesson)}</div>
+              <p class="stage-card-desc">${escapeHtml(st.summary)}</p>
+            </div>
+            <div class="stage-card-footer">
+              <div class="stage-card-meta">
+                <span>完成進度 ${pct}%</span>
+                <span class="stage-card-link">${isActive ? `正在檢視` : `展開詳情 →`}</span>
+              </div>
+              <div class="progress-track" aria-hidden="true">
+                <div class="progress-fill ${stats.isMastered ? `is-done` : ``}" style="width: ${pct}%;"></div>
+              </div>
+            </div>
+          </button>
+        `;
+      }
+      container.innerHTML = html;
+
+      const indicator = document.getElementById(`active-stage-indicator`);
+      const activeStage = getActiveStage();
+      if (indicator && activeStage) {
+        indicator.textContent = `目前檢視：${activeStage.code}・${activeStage.title}`;
+      }
+    }
+
+    function getActiveStage() {
+      for (let i = 0; i < STAGES.length; i++) {
+        if (STAGES[i].id === appState.activeStageId) return STAGES[i];
+      }
+      return STAGES[0];
+    }
+
+    function renderLexiconRowsHtml() {
+      const q = appState.lexSearch.trim().toLowerCase();
+      const cat = appState.lexFilter;
+      let rows = ``;
+      let count = 0;
+
+      for (let i = 0; i < LEXICON_ITEMS.length; i++) {
+        const item = LEXICON_ITEMS[i];
+        if (cat !== `全部` && item.cat !== cat) continue;
+        if (q !== ``) {
+          const hay = (item.term + ` ` + item.rule + ` ` + item.tip + ` ` + item.cat).toLowerCase();
+          if (hay.indexOf(q) === -1) continue;
+        }
+        count++;
+        rows += `
+          <tr>
+            <td><span class="tag tag-neutral">${escapeHtml(item.cat)}</span></td>
+            <td><strong>${escapeHtml(item.term)}</strong></td>
+            <td>${escapeHtml(item.rule)}</td>
+            <td style="color: var(--on-surface-variant);">${escapeHtml(item.tip)}</td>
+          </tr>
+        `;
+      }
+
+      if (count === 0) {
+        rows = `
+          <tr>
+            <td colspan="4" style="text-align:center; padding: var(--space-lg); color: var(--on-surface-variant);">
+              找不到符合「${escapeHtml(appState.lexSearch)}」的形音義條目，請嘗試清除搜尋字詞或切換分類。
+            </td>
+          </tr>
+        `;
+      }
+      return { rowsHtml: rows, count: count };
+    }
+
+    function renderDetailWorkspace() {
+      const container = document.getElementById(`detail-workspace`);
+      if (!container) return;
+      const stage = getActiveStage();
+      const stageIdx = STAGES.indexOf(stage);
+      const stats = getStageStats(stage);
+
+      let pitfallsHtml = ``;
+      for (let i = 0; i < stage.pitfalls.length; i++) {
+        pitfallsHtml += `<li>${escapeHtml(stage.pitfalls[i])}</li>`;
+      }
+
+      let checklistHtml = ``;
+      for (let i = 0; i < stage.checklist.length; i++) {
+        const chk = stage.checklist[i];
+        const isChecked = appState.checkedIds.indexOf(chk.id) !== -1;
+        checklistHtml += `
+          <label class="check-item ${isChecked ? `is-checked` : ``}" for="chk-${chk.id}">
+            <input type="checkbox" id="chk-${chk.id}" ${isChecked ? `checked` : ``} onchange="toggleCheckItem('${chk.id}')">
+            <span class="check-item-text">${escapeHtml(chk.text)}</span>
+          </label>
+        `;
+      }
+
+      let tablesHtml = ``;
+      for (let t = 0; t < stage.coreTables.length; t++) {
+        const tbl = stage.coreTables[t];
+        let ths = ``;
+        for (let h = 0; h < tbl.headers.length; h++) {
+          ths += `<th>${escapeHtml(tbl.headers[h])}</th>`;
+        }
+        let trs = ``;
+        for (let r = 0; r < tbl.rows.length; r++) {
+          let tds = ``;
+          for (let c = 0; c < tbl.rows[r].length; c++) {
+            tds += `<td>${c === 0 ? `<strong>${escapeHtml(tbl.rows[r][c])}</strong>` : escapeHtml(tbl.rows[r][c])}</td>`;
+          }
+          trs += `<tr>${tds}</tr>`;
+        }
+        tablesHtml += `
+          <div class="panel">
+            <h3 class="subhead-title">${escapeHtml(tbl.title)}</h3>
+            <div class="table-scroll">
+              <table class="study-table">
+                <thead><tr>${ths}</tr></thead>
+                <tbody>${trs}</tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
+      let lexiconSectionHtml = ``;
+      if (stage.id === `lexicon`) {
+        const cats = [`全部`, `破音字讀音`, `易錯字形`, `一詞多義`, `必背注釋`];
+        let filterBtns = ``;
+        for (let c = 0; c < cats.length; c++) {
+          const active = appState.lexFilter === cats[c] ? `is-active` : ``;
+          filterBtns += `<button type="button" class="filter-btn ${active}" onclick="setLexFilter('${cats[c]}')">${escapeHtml(cats[c])}</button>`;
+        }
+        const lexResult = renderLexiconRowsHtml();
+        lexiconSectionHtml = `
+          <div class="panel">
+            <div class="filter-toolbar">
+              <div>
+                <h3 class="subhead-title">高頻形音義與必背注釋速查表</h3>
+                <p class="caption-sage" id="lex-count-note">共顯示 ${lexResult.count} 筆精選高頻考點</p>
+              </div>
+              <div style="display:flex; flex-wrap:wrap; align-items:end; gap: var(--space-md);">
+                <div class="filter-pills" role="group" aria-label="詞彙分類篩選">
+                  ${filterBtns}
+                </div>
+                <div class="search-field-group">
+                  <label for="lex-search-input" class="label">關鍵字快速篩選（如：載、養、矚、料理）</label>
+                  <input type="text" id="lex-search-input" class="search-input" value="${escapeHtml(appState.lexSearch)}" oninput="onLexSearchInput(this.value)">
+                </div>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table class="study-table">
+                <thead>
+                  <tr>
+                    <th style="width:120px;">類別</th>
+                    <th style="width:240px;">詞組／對比項</th>
+                    <th>正確讀音與字義規則</th>
+                    <th>段考提醒</th>
+                  </tr>
+                </thead>
+                <tbody id="lex-tbody">
+                  ${lexResult.rowsHtml}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
+      let quizHtml = ``;
+      for (let qIdx = 0; qIdx < stage.quizzes.length; qIdx++) {
+        const q = stage.quizzes[qIdx];
+        const chosen = appState.quizAnswers[q.id];
+        const hasChosen = typeof chosen === `number`;
+        let optsHtml = ``;
+        const letters = [`A`, `B`, `C`, `D`];
+        for (let o = 0; o < q.options.length; o++) {
+          let cls = ``;
+          if (hasChosen) {
+            if (o === q.answer) cls = `is-correct`;
+            else if (o === chosen) cls = `is-wrong`;
+          }
+          optsHtml += `
+            <button type="button" class="quiz-opt ${cls}" onclick="answerQuiz('${q.id}', ${o})">
+              <span><strong>(${letters[o]})</strong></span>
+              <span>${escapeHtml(q.options[o])}</span>
+            </button>
+          `;
+        }
+        let fbHtml = ``;
+        if (hasChosen) {
+          const isOk = chosen === q.answer;
+          fbHtml = `
+            <div class="quiz-feedback ${isOk ? `is-ok` : `is-err`}">
+              <strong>${isOk ? `答對了！` : `再確認一下：正確答案為 (${letters[q.answer]})`}</strong><br>
+              ${escapeHtml(q.explanation)}
+            </div>
+          `;
+        }
+        quizHtml += `
+          <div class="quiz-card">
+            <div class="label" style="margin-bottom: var(--space-xs);">隨堂自測 第 ${qIdx + 1} 題</div>
+            <p class="quiz-stem">${escapeHtml(q.stem)}</p>
+            <div class="quiz-options">${optsHtml}</div>
+            ${fbHtml}
+          </div>
+        `;
+      }
+
+      const prevDisabled = stageIdx <= 0 ? `disabled` : ``;
+      const nextDisabled = stageIdx >= STAGES.length - 1 ? `disabled` : ``;
+
+      container.innerHTML = `
+        <div class="detail-header">
+          <div>
+            <div style="display:flex; align-items:center; gap: var(--space-sm); margin-bottom: var(--space-xs);">
+              <span class="tag tag-slate">${escapeHtml(stage.code)}</span>
+              <span class="label">${escapeHtml(stage.lesson)}</span>
+            </div>
+            <h2 class="headline section-title"><strong>${escapeHtml(stage.title)}</strong></h2>
+            <p class="prose-note">${escapeHtml(stage.summary)}</p>
+          </div>
+          <div class="detail-nav-btns">
+            <button type="button" class="btn btn-secondary" ${prevDisabled} onclick="stepStage(-1)">← 上一關</button>
+            <button type="button" class="btn btn-primary" ${nextDisabled} onclick="stepStage(1)">下一關 →</button>
+          </div>
+        </div>
+
+        <div class="detail-split">
+          <div class="panel">
+            <div class="label">命題權重視覺化</div>
+            <h3 class="subhead-title" style="margin-top: var(--space-xs);">${escapeHtml(stage.chartTitle)}</h3>
+            <div class="chart-box">
+              <canvas id="stage-chart"></canvas>
+            </div>
+            <p class="caption-sage">${escapeHtml(stage.chartNote)}</p>
+          </div>
+
+          <div class="panel">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap: var(--space-sm);">
+              <div>
+                <div class="label">學習進度追蹤</div>
+                <h3 class="subhead-title" style="margin-top: var(--space-xs);">本關考前檢核清單</h3>
+              </div>
+              <span class="tag ${stats.isMastered ? `` : `tag-slate`}" id="stage-check-badge">${stats.done} / ${stats.total} 已勾選</span>
+            </div>
+            <div class="checklist-list">
+              ${checklistHtml}
+            </div>
+          </div>
+        </div>
+
+        <div class="pitfall-callout">
+          <h3 class="subhead-title pitfall-callout-title">
+            <i data-lucide="alert-circle" width="18" height="18" aria-hidden="true"></i>
+            ${escapeHtml(stage.pitfallTitle)}
+          </h3>
+          <ul class="rule-list">
+            ${pitfallsHtml}
+          </ul>
+        </div>
+
+        ${tablesHtml}
+        ${lexiconSectionHtml}
+
+        <div class="panel">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap: var(--space-sm);">
+            <div>
+              <div class="label">即時驗證理解</div>
+              <h3 class="subhead-title" style="margin-top: var(--space-xs);">本關段考模擬自測（2 題）</h3>
+            </div>
+            <span class="caption-sage">點選選項立即查看解題關鍵</span>
+          </div>
+          <div class="quiz-grid">
+            ${quizHtml}
+          </div>
+        </div>
+      `;
+
+      renderStageChart(stage);
+      if (window.lucide && typeof window.lucide.createIcons === `function`) {
+        window.lucide.createIcons();
+      }
+    }
+
+    function renderStageChart(stage) {
+      const canvas = document.getElementById(`stage-chart`);
+      if (!canvas || typeof Chart === `undefined`) return;
+
+      if (activeChart) {
+        activeChart.destroy();
+        activeChart = null;
+      }
+
+      const c1 = getCssVar(`--data-1`);
+      const c2 = getCssVar(`--data-2`);
+      const c3 = getCssVar(`--data-3`);
+      const c4 = getCssVar(`--data-4`);
+      const textPrimary = getCssVar(`--on-surface`);
+      const textMuted = getCssVar(`--on-surface-variant`);
+      const gridColor = getCssVar(`--outline-variant`);
+      const fontFamily = getCssVar(`--font-body`);
+
+      activeChart = new Chart(canvas.getContext(`2d`), {
+        type: `bar`,
+        data: {
+          labels: stage.chartLabels,
+          datasets: [{
+            label: `考點比重 (%)`,
+            data: stage.chartData,
+            backgroundColor: [c1, c2, c3, c4],
+            borderRadius: { topLeft: 2, topRight: 2, bottomLeft: 2, bottomRight: 2 },
+            borderSkipped: false,
+            barThickness: 26
+          }]
+        },
+        options: {
+          indexAxis: `y`,
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function (ctx) {
+                  return `佔該關重點約 ${ctx.parsed.x}%`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              max: 50,
+              grid: {
+                color: gridColor,
+                drawBorder: false
+              },
+              ticks: {
+                color: textMuted,
+                font: { family: fontFamily, size: 12 },
+                callback: function (val) { return val + `%`; }
+              }
+            },
+            y: {
+              grid: { display: false, drawBorder: false },
+              ticks: {
+                color: textPrimary,
+                font: { family: fontFamily, size: 13, weight: `500` }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function selectStage(stageId) {
+      appState.activeStageId = stageId;
+      renderStageCards();
+      renderDetailWorkspace();
+      persistState();
+      const detailSec = document.getElementById(`detail-section`);
+      if (detailSec) {
+        detailSec.scrollIntoView({ behavior: `smooth`, block: `nearest` });
+      }
+    }
+
+    function stepStage(delta) {
+      const current = getActiveStage();
+      const idx = STAGES.indexOf(current);
+      const nextIdx = idx + delta;
+      if (nextIdx >= 0 && nextIdx < STAGES.length) {
+        selectStage(STAGES[nextIdx].id);
+      }
+    }
+
+    function toggleCheckItem(checkId) {
+      const idx = appState.checkedIds.indexOf(checkId);
+      if (idx === -1) {
+        appState.checkedIds.push(checkId);
+      } else {
+        appState.checkedIds.splice(idx, 1);
+      }
+      updateOverview();
+      renderStageCards();
+
+      const activeStage = getActiveStage();
+      const stats = getStageStats(activeStage);
+      const badge = document.getElementById(`stage-check-badge`);
+      if (badge) {
+        badge.textContent = `${stats.done} / ${stats.total} 已勾選`;
+        badge.className = `tag ${stats.isMastered ? `` : `tag-slate`}`;
+      }
+      const inputEl = document.getElementById(`chk-${checkId}`);
+      if (inputEl && inputEl.parentElement) {
+        if (idx === -1) inputEl.parentElement.classList.add(`is-checked`);
+        else inputEl.parentElement.classList.remove(`is-checked`);
+      }
+
+      persistState();
+    }
+
+    function setLexFilter(cat) {
+      appState.lexFilter = cat;
+      renderDetailWorkspace();
+    }
+
+    function onLexSearchInput(val) {
+      appState.lexSearch = val;
+      const tbody = document.getElementById(`lex-tbody`);
+      const countNote = document.getElementById(`lex-count-note`);
+      const res = renderLexiconRowsHtml();
+      if (tbody) tbody.innerHTML = res.rowsHtml;
+      if (countNote) countNote.textContent = `共顯示 ${res.count} 筆精選高頻考點`;
+    }
+
+    function answerQuiz(quizId, optionIdx) {
+      appState.quizAnswers[quizId] = optionIdx;
+      updateOverview();
+      renderDetailWorkspace();
+      persistState();
+    }
+
+    function handleResetProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.innerHTML = `<i data-lucide="alert-triangle" width="16" height="16" aria-hidden="true"></i>再次點擊確認重設`;
+        if (window.lucide && typeof window.lucide.createIcons === `function`) {
+          window.lucide.createIcons();
+        }
+        setTimeout(function () {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.innerHTML = `<i data-lucide="rotate-ccw" width="16" height="16" aria-hidden="true"></i>重設進度`;
+            if (window.lucide && typeof window.lucide.createIcons === `function`) {
+              window.lucide.createIcons();
+            }
+          }
+        }, 4000);
+        return;
+      }
+
+      btn.dataset.armed = `false`;
+      btn.innerHTML = `<i data-lucide="rotate-ccw" width="16" height="16" aria-hidden="true"></i>重設進度`;
+      appState.checkedIds = [];
+      appState.quizAnswers = {};
+      updateOverview();
+      renderStageCards();
+      renderDetailWorkspace();
+      persistState();
+      showStatus(`已清除所有複習勾選與自測紀錄`);
+    }
+
+    function exportProgress() {
+      let lines = [`七上國文第二次段考｜個人學習進度報告`, `====================================`];
+      let totalDone = 0;
+      let totalItems = 0;
+
+      for (let i = 0; i < STAGES.length; i++) {
+        const st = STAGES[i];
+        const stats = getStageStats(st);
+        totalDone += stats.done;
+        totalItems += stats.total;
+        lines.push(``);
+        lines.push(`${st.code} ${st.title}（${stats.done}/${stats.total} 完成）`);
+        for (let j = 0; j < st.checklist.length; j++) {
+          const chk = st.checklist[j];
+          const mark = appState.checkedIds.indexOf(chk.id) !== -1 ? `[已完成]` : `[待複習]`;
+          lines.push(`  ${mark} ${chk.text}`);
+        }
+      }
+      lines.push(``);
+      lines.push(`總完成進度：${totalDone} / ${totalItems} 項`);
+
+      const content = lines.join(`\n`);
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: content,
+          contentType: `text/plain`,
+          encoding: `UTF-8`,
+          filename: `七上國文二段學習進度.txt`
+        });
+        showStatus(`已匯出學習進度文字檔`);
+      } else {
+        showStatus(`目前共完成 ${totalDone}/${totalItems} 項檢核`);
+      }
+    }
+
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            if (typeof saved.activeStageId === `string`) appState.activeStageId = saved.activeStageId;
+            if (Array.isArray(saved.checkedIds)) appState.checkedIds = saved.checkedIds;
+            if (saved.quizAnswers && typeof saved.quizAnswers === `object`) appState.quizAnswers = saved.quizAnswers;
+          }
+        } catch (err) {
+          /* ignore load error */
+        }
+      }
+
+      updateOverview();
+      renderStageCards();
+      renderDetailWorkspace();
+
+      if (window.lucide && typeof window.lucide.createIcons === `function`) {
+        window.lucide.createIcons();
+      }
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>

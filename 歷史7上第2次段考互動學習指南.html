@@ -1,0 +1,2351 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="dashboard">
+  <meta name="design-style" content="briefing">
+  <title>七年級歷史第二次段考・互動式學習指南</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Briefing style tokens */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+      --outline-control: #c8c4b8;
+
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --secondary-soft: #e9f1f4;
+      --tertiary: #785008;
+      --tertiary-soft: #f5e6c4;
+      --error: #b42318;
+      --error-soft: #fceceb;
+      --on-error: #ffffff;
+
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-5: #5e4b8b;
+      --data-context: #c4bfb2;
+
+      --font-headline: 'Noto Serif TC', 'Source Serif 4', serif;
+      --font-body: 'Noto Sans TC', 'Plus Jakarta Sans', sans-serif;
+      --font-label: 'Geist Mono', 'Noto Sans TC', monospace;
+
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --control-border: 1px solid var(--outline-control);
+      --badge-radius: 2px;
+      --heading-tracking: -0.02em;
+      --label-tracking: 0.08em;
+
+      /* 2. Shared semantic, scale, spacing, and motion tokens */
+      --positive: #2b6e52;
+      --positive-soft: #e6f2ec;
+      --warning: #d99000;
+      --focus: #1f4e5f;
+
+      --display-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.35rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.55vw, 1.55rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+    button, input, select, textarea { font-family: inherit; }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 2.5px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Dossier Header & Section Bar */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-left {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: var(--label-tracking);
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--badge-radius);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      letter-spacing: 0;
+    }
+    .dossier-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .page-header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: 1.15;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      color: var(--secondary);
+      margin: 0;
+      max-width: 68ch;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: var(--control-border);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .btn:hover {
+      background: var(--surface-container);
+    }
+    .btn:active {
+      background: var(--surface-container-high);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+    .btn-sm {
+      min-height: 36px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8125rem;
+    }
+    .btn-danger-armed {
+      background: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+    .btn-danger-armed:hover {
+      background: var(--error);
+      opacity: 0.92;
+    }
+    .inline-toast {
+      font-size: var(--label-size);
+      color: var(--positive);
+      font-weight: 600;
+      min-height: 1.25em;
+    }
+
+    /* Overview KPI Strip */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .figure-card.spotlight {
+      border-top: 3px solid var(--secondary);
+    }
+    .kpi-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xs);
+    }
+    .kpi-value {
+      font-family: var(--font-headline);
+      font-size: clamp(1.5rem, 1.25rem + 0.9vw, 2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--on-surface);
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    .kpi-sub {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      line-height: 1.4;
+    }
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: var(--surface-container);
+      border-radius: var(--badge-radius);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--secondary);
+      transition: width var(--dur-short) var(--ease-out);
+      width: 0%;
+    }
+    .progress-fill.complete {
+      background: var(--positive);
+    }
+    .unit-dots-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      margin-top: var(--space-xs);
+    }
+    .unit-dot {
+      flex: 1;
+      height: 6px;
+      border-radius: var(--badge-radius);
+      background: var(--surface-container-high);
+      transition: background-color var(--dur-short) var(--ease-out);
+    }
+    .unit-dot.partial { background: var(--warning); }
+    .unit-dot.done { background: var(--positive); }
+
+    /* Unit Checkpoint Switcher */
+    .section-block {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+    }
+    .section-head-left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+    .section-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      margin: 0;
+      color: var(--on-surface);
+      line-height: 1.2;
+    }
+    .section-caption {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    .unit-switcher-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .unit-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      min-height: 148px;
+      transition: background-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+      position: relative;
+    }
+    .unit-card:hover {
+      background: var(--surface-container);
+    }
+    .unit-card.active {
+      background: var(--surface-container-low);
+      box-shadow: inset 0 4px 0 0 var(--primary-container), 0 0 0 1.5px var(--outline);
+    }
+    .unit-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xs);
+    }
+    .index-num {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--secondary);
+      background: var(--secondary-soft);
+      padding: 0.125rem 0.45rem;
+      border-radius: var(--badge-radius);
+    }
+    .unit-card.active .index-num {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .era-tag {
+      font-family: var(--font-label);
+      font-size: 0.72rem;
+      color: var(--on-surface-variant);
+      font-variant-numeric: tabular-nums;
+    }
+    .unit-card-title {
+      font-family: var(--font-headline);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--on-surface);
+      line-height: 1.3;
+      margin: 0;
+    }
+    .unit-card-desc {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      line-height: 1.45;
+      margin: 0;
+    }
+    .unit-card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xs);
+      padding-top: var(--space-xs);
+      border-top: 1px solid var(--outline-variant);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+    .unit-card-foot.done {
+      color: var(--positive);
+    }
+
+    /* Main Workspace Grid: Left Learning Cards + Right Analytics/Stats */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    /* Active Unit Header & Toolbar */
+    .unit-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md);
+      border-radius: 0 0 var(--rounded-lg) var(--rounded-lg);
+    }
+    .unit-toolbar-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .unit-toolbar-title {
+      font-family: var(--font-headline);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .unit-toolbar-sub {
+      font-size: 0.875rem;
+      color: var(--secondary);
+      font-weight: 600;
+      margin: 0;
+    }
+    .toolbar-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .filter-group {
+      display: inline-flex;
+      border: var(--control-border);
+      border-radius: var(--rounded);
+      background: var(--surface-container-low);
+      overflow: hidden;
+    }
+    .filter-btn {
+      min-height: 38px;
+      padding: 0 var(--space-md);
+      border: 0;
+      background: transparent;
+      color: var(--on-surface-variant);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .filter-btn:hover {
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+    .filter-btn.active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    /* Topic Checklist & Expandable Cards */
+    .topic-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .topic-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      overflow: hidden;
+      transition: box-shadow var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+    }
+    .topic-card.checked {
+      box-shadow: inset 4px 0 0 0 var(--positive);
+    }
+    .topic-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    /* Accessible 44x44 Checkbox Hit Target */
+    .check-btn {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      border-radius: var(--rounded);
+      color: var(--on-surface-variant);
+      padding: 0;
+    }
+    .check-btn:hover {
+      background: var(--surface-container);
+    }
+    .check-box-visual {
+      width: 22px;
+      height: 22px;
+      border-radius: var(--rounded);
+      border: 2px solid var(--outline-control);
+      background: var(--surface-container-low);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .topic-card.checked .check-box-visual {
+      background: var(--positive);
+      border-color: var(--positive);
+      color: var(--on-primary);
+    }
+
+    .topic-trigger {
+      flex: 1;
+      min-height: 44px;
+      background: transparent;
+      border: 0;
+      padding: var(--space-xs) var(--space-xs);
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      color: var(--on-surface);
+    }
+    .topic-trigger:hover .topic-title {
+      color: var(--secondary);
+    }
+    .topic-head-main {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .topic-badges {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .topic-code {
+      font-family: var(--font-label);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+    .freq-chip {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: var(--badge-radius);
+      background: var(--tertiary-soft);
+      color: var(--tertiary);
+    }
+    .freq-chip.high {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .done-chip {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: var(--badge-radius);
+      background: var(--positive-soft);
+      color: var(--positive);
+    }
+    .topic-title {
+      font-family: var(--font-headline);
+      font-size: 1.0625rem;
+      font-weight: 700;
+      line-height: 1.35;
+      transition: color var(--dur-micro) var(--ease-out);
+    }
+    .topic-summary {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      line-height: 1.45;
+    }
+    .expand-chevron {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--on-surface-variant);
+      transition: transform var(--dur-short) var(--ease-out);
+    }
+    .topic-card.expanded .expand-chevron {
+      transform: rotate(180deg);
+      color: var(--secondary);
+    }
+
+    /* Expandable Body */
+    .topic-body {
+      display: none;
+      padding: 0 var(--space-lg) var(--space-lg) var(--space-lg);
+      border-top: 1px solid var(--outline-variant);
+      background: var(--surface-container-low);
+      animation: fadeSlide var(--dur-short) var(--ease-out);
+    }
+    .topic-card.expanded .topic-body {
+      display: block;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .detail-points {
+      margin: var(--space-md) 0;
+      padding-left: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .detail-points li {
+      line-height: 1.65;
+      color: var(--on-surface);
+      max-width: 65ch;
+    }
+    .detail-points strong {
+      color: var(--secondary);
+      font-weight: 700;
+    }
+
+    /* Exam Trap Callout */
+    .trap-box {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md);
+      border-radius: 0 0 var(--rounded) var(--rounded);
+      margin-top: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .trap-label {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--tertiary);
+    }
+    .trap-text {
+      font-size: 0.875rem;
+      color: var(--on-surface);
+      margin: 0;
+      line-height: 1.55;
+    }
+
+    /* Mini Quiz Inside Expanded Card */
+    .quiz-box {
+      margin-top: var(--space-md);
+      padding: var(--space-md);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      background: var(--background);
+    }
+    .quiz-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-xs);
+    }
+    .quiz-badge {
+      font-family: var(--font-label);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--secondary);
+      background: var(--secondary-soft);
+      padding: 2px 6px;
+      border-radius: var(--badge-radius);
+    }
+    .quiz-q {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      margin: 0 0 var(--space-sm) 0;
+      line-height: 1.5;
+    }
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+    .quiz-opt {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      text-align: left;
+      background: var(--surface-container-low);
+      border: var(--control-border);
+      border-radius: var(--rounded);
+      font-size: 0.875rem;
+      color: var(--on-surface);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .quiz-opt:hover {
+      background: var(--surface-container);
+    }
+    .quiz-opt.correct {
+      background: var(--positive-soft);
+      border-color: var(--positive);
+      color: var(--positive);
+      font-weight: 600;
+    }
+    .quiz-opt.wrong {
+      background: var(--error-soft);
+      border-color: var(--error);
+      color: var(--error);
+    }
+    .quiz-feedback {
+      margin-top: var(--space-sm);
+      font-size: 0.84rem;
+      line-height: 1.5;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+      display: none;
+    }
+    .quiz-feedback.show {
+      display: block;
+    }
+    .quiz-feedback.ok {
+      background: var(--positive-soft);
+      color: var(--positive);
+    }
+    .quiz-feedback.no {
+      background: var(--error-soft);
+      color: var(--error);
+    }
+
+    /* Empty state for filtered list */
+    .empty-state {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .empty-state h4 {
+      font-family: var(--font-headline);
+      margin: 0;
+      font-size: 1.125rem;
+    }
+    .empty-state p {
+      margin: 0;
+      color: var(--on-surface-variant);
+      font-size: 0.9rem;
+    }
+
+    /* Right Column Charts & Reference */
+    .analytics-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .chart-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .chart-title {
+      font-family: var(--font-headline);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .chart-subtitle {
+      font-size: 0.78rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+      min-height: 270px;
+    }
+    .chart-wrap-sm {
+      position: relative;
+      width: 100%;
+      min-height: 220px;
+    }
+
+    /* Comparative Matrix Table Section */
+    .matrix-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .matrix-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .table-scroll {
+      width: 100%;
+      overflow-x: auto;
+    }
+    table.briefing-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      min-width: 640px;
+    }
+    table.briefing-table th {
+      text-align: left;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--section-rule);
+      background: var(--surface-container);
+    }
+    table.briefing-table td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    table.briefing-table tr:hover td {
+      background: var(--background);
+    }
+    .td-key {
+      font-weight: 700;
+      color: var(--secondary);
+      white-space: nowrap;
+    }
+    .td-mono {
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    /* Unit Footer Nav */
+    .unit-nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding-top: var(--space-sm);
+    }
+
+    /* Source Footer */
+    .source-footer {
+      border-top: var(--section-rule);
+      padding-top: var(--space-md);
+      margin-top: var(--space-md);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 1024px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .unit-switcher-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-md);
+      }
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      .unit-switcher-grid {
+        grid-template-columns: 1fr;
+      }
+      .quiz-options {
+        grid-template-columns: 1fr;
+      }
+      .unit-card {
+        min-height: auto;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-grid">
+    <!-- Dossier Header -->
+    <header class="page-header">
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="dossier-pill">STUDY DOSSIER</span>
+          <span class="dossier-meta">七年級上學期・歷史科第二次段考複習（翰林版 L3–L4 範圍）</span>
+        </div>
+        <div class="dossier-actions">
+          <span id="status-toast" class="inline-toast" role="status" aria-live="polite"></span>
+          <button type="button" class="btn btn-sm" onclick="exportProgress()">
+            <i data-lucide="download" aria-hidden="true"></i>
+            匯出進度報告
+          </button>
+          <button type="button" id="reset-btn" class="btn btn-sm" onclick="resetProgress(this)">
+            <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+            重設進度
+          </button>
+        </div>
+      </div>
+      <h1 class="title">七年級歷史第二次段考・互動式學習指南</h1>
+      <p class="standfirst">從大航海時代原漢互動到清領後期現代化建設，整合 17 份國中段考試卷的高頻考點、圖表統計與隨堂檢核。</p>
+    </header>
+
+    <!-- 1. 頂部總覽卡片 (Top Overview Summary Cards) -->
+    <section aria-label="總覽與學習統計">
+      <div class="kpi-grid">
+        <article class="figure-card spotlight">
+          <div class="kpi-label">
+            <span>整體掌握進度</span>
+            <i data-lucide="check-circle-2" aria-hidden="true"></i>
+          </div>
+          <div id="kpi-progress-val" class="kpi-value">0 / 20</div>
+          <div>
+            <div class="progress-track" aria-hidden="true">
+              <div id="kpi-progress-bar" class="progress-fill"></div>
+            </div>
+            <div id="kpi-progress-sub" class="kpi-sub" style="margin-top: var(--space-xs);">已完成 0% 核心考點（勾選下方卡片即可自動儲存）</div>
+          </div>
+        </article>
+
+        <article class="figure-card">
+          <div class="kpi-label">
+            <span>五大單元關卡</span>
+            <i data-lucide="layers" aria-hidden="true"></i>
+          </div>
+          <div id="kpi-units-done" class="kpi-value">0 / 5 關</div>
+          <div>
+            <div id="kpi-unit-dots" class="unit-dots-row" aria-label="各單元完成狀態">
+              <span class="unit-dot"></span>
+              <span class="unit-dot"></span>
+              <span class="unit-dot"></span>
+              <span class="unit-dot"></span>
+              <span class="unit-dot"></span>
+            </div>
+            <div class="kpi-sub" style="margin-top: var(--space-xs);">時間跨度 1624–1895 年（含史前至清末）</div>
+          </div>
+        </article>
+
+        <article class="figure-card">
+          <div class="kpi-label">
+            <span>段考高頻考點資料庫</span>
+            <i data-lucide="bar-chart-3" aria-hidden="true"></i>
+          </div>
+          <div class="kpi-value">17 份試卷</div>
+          <div class="kpi-sub">歸納仁愛、中興、北興、大樹、二水等校 445 題次考點分布與常見陷阱</div>
+        </article>
+
+        <article class="figure-card">
+          <div class="kpi-label">
+            <span>當前檢視關卡</span>
+            <i data-lucide="compass" aria-hidden="true"></i>
+          </div>
+          <div id="kpi-active-title" class="kpi-value" style="font-size: 1.25rem; line-height: 1.3;">01・大航海時代與荷西鄭</div>
+          <div id="kpi-active-sub" class="kpi-sub">本單元進度：0 / 4 項完成・實戰測驗 0 / 4 題答對</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 2. 中間可切換的單元關卡卡片 (Unit Checkpoints Switcher) -->
+    <section class="section-block" aria-label="單元關卡選擇">
+      <div class="section-head">
+        <div class="section-head-left">
+          <span class="dossier-pill">CHECKPOINTS</span>
+          <h2 class="section-title">選擇單元關卡</h2>
+        </div>
+        <p class="section-caption">點擊任一關卡卡片，切換下方詳細重點說明與隨堂檢核</p>
+      </div>
+      <div id="unit-switcher" class="unit-switcher-grid" role="tablist" aria-label="歷史學習單元關卡">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- 3. 展開詳細重點說明 + 右側圖表統計 (Main Workspace) -->
+    <section class="workspace-grid" aria-label="單元詳細重點與考點統計">
+      <!-- Left: Expandable & Checkable Knowledge Cards -->
+      <div class="section-block">
+        <div class="unit-toolbar">
+          <div class="unit-toolbar-info">
+            <h2 id="active-unit-heading" class="unit-toolbar-title">單元 01：大航海時代與荷西鄭治臺</h2>
+            <p id="active-unit-subtitle" class="unit-toolbar-sub">17 世紀原住民與外來政權的貿易、傳教與衝突</p>
+          </div>
+          <div class="toolbar-controls">
+            <div class="filter-group" role="group" aria-label="篩選學習項目">
+              <button type="button" id="filter-all" class="filter-btn active" onclick="setFilter('all')">全部顯示</button>
+              <button type="button" id="filter-todo" class="filter-btn" onclick="setFilter('todo')">僅看未完成</button>
+            </div>
+            <button type="button" class="btn btn-sm" onclick="toggleAllExpand(true)">全部展開</button>
+            <button type="button" class="btn btn-sm" onclick="toggleAllExpand(false)">全部收合</button>
+          </div>
+        </div>
+
+        <div id="topic-list" class="topic-list">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="unit-nav-bar">
+          <button type="button" id="prev-unit-btn" class="btn" onclick="stepUnit(-1)">
+            <i data-lucide="arrow-left" aria-hidden="true"></i>
+            上一關卡
+          </button>
+          <span id="unit-step-label" class="dossier-meta">關卡 1 / 5</span>
+          <button type="button" id="next-unit-btn" class="btn btn-primary" onclick="stepUnit(1)">
+            下一關卡
+            <i data-lucide="arrow-right" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right: Exam Frequency & Progress Charts -->
+      <aside class="analytics-stack" aria-label="段考圖表統計">
+        <article class="chart-card">
+          <div>
+            <h3 class="chart-title">段考九大主題出題頻率統計</h3>
+            <p class="chart-subtitle">統計自收錄之 17 份七年級上學期第二次段考試卷（單位：考點出現題次）</p>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="freqChart" aria-label="段考主題出題頻率橫條圖"></canvas>
+          </div>
+        </article>
+
+        <article class="chart-card">
+          <div>
+            <h3 class="chart-title">各關卡學習進度分布</h3>
+            <p class="chart-subtitle">即時反映您已勾選掌握的核心考點比例</p>
+          </div>
+          <div class="chart-wrap-sm">
+            <canvas id="progressChart" aria-label="各關卡學習進度長條圖"></canvas>
+          </div>
+        </article>
+      </aside>
+    </section>
+
+    <!-- 4. 高頻考點總整理對照表 (Switchable Comparison Matrix) -->
+    <section class="matrix-card" aria-label="跨時期重點對照表">
+      <div class="matrix-header">
+        <div>
+          <div style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-xs);">
+            <span class="dossier-pill">QUICK MATRIX</span>
+            <h2 class="section-title">段考必背跨時期比較表</h2>
+          </div>
+          <p class="section-caption">考前五分鐘快速核對最常混淆的政權比較與清代行政區演變</p>
+        </div>
+        <div class="filter-group" role="group" aria-label="切換對照表">
+          <button type="button" id="matrix-btn-regime" class="filter-btn active" onclick="switchMatrix('regime')">荷西鄭政權比較</button>
+          <button type="button" id="matrix-btn-admin" class="filter-btn" onclick="switchMatrix('admin')">清代行政區演變</button>
+          <button type="button" id="matrix-btn-late" class="filter-btn" onclick="switchMatrix('late')">沈葆楨 vs 劉銘傳</button>
+        </div>
+      </div>
+      <div id="matrix-container" class="table-scroll">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="source-footer">
+      <span>資料來源：臺北市仁愛國中、桃園市中興與石門與同德國中、嘉義市北興國中、高雄市大樹與林園國中、彰化縣二水與埔心與埤頭與溪湖與福興國中、民族實中等七年級歷史段考試卷。</span>
+      <span>學習進度與測驗紀錄會自動儲存於筆記本狀態中。</span>
+    </footer>
+  </main>
+
+  <api-shim></api-shim>
+  <script>
+    // =========================================================================
+    // 1. Grounded Curriculum & Exam Data (from 17 Source Exam Papers)
+    // =========================================================================
+    const UNITS = [
+      {
+        id: 'u1',
+        num: '01',
+        era: '1624–1683',
+        title: `大航海時代與荷西鄭治臺`,
+        subtitle: `原漢互動、荷西貿易傳教與鄭氏屯墾`,
+        shortDesc: `南島語族、新港文書、馬賽人、大肚王國與郭懷一事件`,
+        topics: [
+          {
+            id: 'u1_t1',
+            code: '考點 1-1',
+            freq: '高頻必考',
+            highFreq: true,
+            title: `臺灣進入歷史時代與原住民（游耕、馬賽人）`,
+            summary: `原住民屬南島語系；荷蘭人以羅馬字母拼寫原住民語言，象徵臺灣歷史時代的開端。`,
+            points: [
+              `<strong>歷史時代的開端</strong>：臺灣原住民屬<strong>南島語系</strong>，早期缺乏文字。17 世紀荷蘭傳教士設學校，以羅馬字母拼寫原住民語言（新港文），文字的出現與使用標誌臺灣由史前時代進入歷史時代。`,
+              `<strong>傳統生計方式</strong>：早期原住民以<strong>漁獵</strong>與<strong>游耕</strong>為主，常見「砍樹焚根以種芋」，以焚林方式維持地力。`,
+              `<strong>北臺灣的馬賽人</strong>：屬<strong>凱達格蘭族</strong>支系，分布於三芝以東至三貂角一帶（雞籠、金包里、三貂社）。擅長操舟航行、多語溝通與貨幣計算，是大航海時代漢人、西班牙人與其他部落貿易（如硫磺、東部採金）的重要中間人。`
+            ],
+            trap: `【常考陷阱】象徵歷史時代開端的是「文字使用（荷蘭傳教士設校教導拼寫原住民語）」，不是鄭經建孔廟或乾隆御龜碑！另外，馬賽人屬於「凱達格蘭族」支系，不要誤選成西拉雅族或噶瑪蘭族。`,
+            quiz: {
+              q: `17 世紀初，北臺灣哪一個原住民族群因善於操舟航行、通曉漢語與外語且懂得使用貨幣，常扮演漢人與其他部落交易的中間人？`,
+              options: [`西拉雅族`, `凱達格蘭族馬賽人`, `排灣族牡丹社`, `巴布拉族大肚社`],
+              answer: 1,
+              explain: `馬賽人為凱達格蘭族支系，活動於北海岸（雞籠、金包里、三貂社），擅長採集硫磺與跨族群商業交易。`
+            }
+          },
+          {
+            id: 'u1_t2',
+            code: '考點 1-2',
+            freq: '全卷最高頻',
+            highFreq: true,
+            title: `荷蘭 V.O.C. 統治：貿易、傳教與「新港文書」`,
+            summary: `1624 年佔大員建熱蘭遮城，傳基督教、創「新港文」（番仔契），開地方會議間接統治。`,
+            points: [
+              `<strong>據點與亞洲總部</strong>：1604、1622 年曾佔澎湖（遭明將沈有容勸退、明軍逼退拆城），1624 年轉佔臺灣南部大員。亞洲總部在<strong>印尼巴達維亞</strong>；臺灣建<strong>熱蘭遮城</strong>（安平古堡，行政中心）與<strong>普羅民遮城</strong>（赤崁樓，商業市鎮）。`,
+              `<strong>經濟輸出與引進作物</strong>：主要輸出<strong>鹿皮</strong>（大量銷往日本）、<strong>蔗糖</strong>、<strong>稻米</strong>並轉運絲織品與瓷器；引進<strong>豌豆（椪風豆）、番茄、耕牛</strong>（設牛頭司繁殖）、甘蔗。`,
+              `<strong>宗教與新港文</strong>：荷蘭傳播<strong>基督教（新教）</strong>，在新港社（臺南新市）、麻豆社設教堂與學校，以稻穀、布匹鼓勵入學。牧師以羅馬字母拼寫西拉雅語成為「<strong>新港文（紅毛字）</strong>」，最初用於翻譯《馬太福音》傳教，清代演變為漢人與平埔族訂立土地契約的雙語「<strong>番仔契</strong>」（由「教冊仔」橫書記錄，遲至 19 世紀初仍有人使用）。`,
+              `<strong>族群關係與重大衝突</strong>：透過在赤崁召開「<strong>地方會議</strong>」授旗幟與銀頭籐杖給各社長老，行間接統治。<strong>新港社</strong>一直為荷蘭盟友，曾助荷人攻打<strong>麻豆社</strong>（1635 年麻豆社事件奠定南臺灣統治）及平定 1652 年<strong>郭懷一事件</strong>（漢人因無土地所有權與苛稅重斂抗荷失敗）。1630–1640 年代荷軍亦曾因船民遇害，派兵屠殺小琉球原住民（「<strong>烏鬼洞</strong>」由來）。`
+            ],
+            trap: `【常考陷阱】荷蘭人傳「基督教（新教）」、亞洲總部在「印尼巴達維亞」；西班牙才傳「天主教」。另外「新港文書」並非只用於 17 世紀，而是持續使用到 19 世紀初的漢番土地契約；荷蘭人並未在此設立漢文學校，漢文教育是鄭氏時期才推廣。`,
+            quiz: {
+              q: `清代臺南地區流傳的「番仔契」（新港文書），將漢字與羅馬字母並列於土地契約上。下列關於此文字的敘述何者正確？`,
+              options: [`僅使用於 17 世紀荷治時期`, `最早用於傳播天主教教義`, `源自荷蘭人拼寫西拉雅語，清代仍用於漢番立約`, `是鄭經為培養貿易翻譯人才所創`],
+              answer: 2,
+              explain: `新港文是荷蘭基督教傳教士以羅馬字拼寫西拉雅族語言，清乾隆、嘉慶乃至 19 世紀初仍見於漢人與平埔族的土地契約。`
+            }
+          },
+          {
+            id: 'u1_t3',
+            code: '考點 1-3',
+            freq: '必考對照',
+            highFreq: true,
+            title: `西班牙統治北臺灣（1626–1642）`,
+            summary: `以馬尼拉為基地佔雞籠、淡水與三貂角，傳布天主教，因貿易受挫兵力減少敗給荷蘭。`,
+            points: [
+              `<strong>佔領據點與命名</strong>：以菲律賓<strong>馬尼拉</strong>為據點北上，佔領<strong>雞籠（基隆，建聖薩爾瓦多城）</strong>、<strong>淡水（建紅毛城）</strong>，並命名<strong>三貂角</strong>（源自西班牙語 Santiago）。`,
+              `<strong>傳教與互動</strong>：傳播<strong>天主教</strong>（基隆和平島考古出土 300 多年前教堂牆基與原住民甕棺）並傳授西方醫學；在馬賽人協助下赴東部採金與採硫磺。但曾因向已婚原住民課徵「二隻雞與三甘當米」重稅，引發淡水/北部原住民襲擊城堡殺死 30 名西班牙人。`,
+              `<strong>退出原因</strong>：受<strong>日本鎖國政策</strong>影響對日貿易受挫（鎖國後僅許中國與荷蘭在長崎貿易），加上殖民地開銷大而減少駐臺兵力，最終於 1642 年遭荷蘭北上擊敗退出臺灣。`
+            ],
+            trap: `【常考陷阱】考題常引用「課徵二隻雞和三甘當米的稅，殺了 30 個西班牙人」或「和平島教堂遺址」，地點必選「北部（基隆／淡水）」、宗教必選「天主教」、征服者是「荷蘭」而非明鄭！`,
+            quiz: {
+              q: `17 世紀文獻記載：「西班牙人每年向該地已婚原住民課徵二隻雞和三甘當米的稅，原住民無法忍受而襲擊城堡，殺了 30 個西班牙人。」此事件最可能發生於何處？`,
+              options: [`臺南安平`, `彰化大肚`, `北部淡水、雞籠一帶`, `屏東恆春`],
+              answer: 2,
+              explain: `西班牙勢力主要在北臺灣的雞籠與淡水一帶，統治當地凱達格蘭族等原住民。`
+            }
+          },
+          {
+            id: 'u1_t4',
+            code: '考點 1-4',
+            freq: '中上高頻',
+            highFreq: false,
+            title: `鄭氏政權治理與「大肚王國」的反抗`,
+            summary: `鄭氏行軍屯解決缺糧、建孔廟興漢學，中部大肚王部落聯盟抗鄭最激烈並遭鎮壓衰微。`,
+            points: [
+              `<strong>行政、軍屯與文教</strong>：1661 年鄭成功驅荷後設承天府（臺南），推行「<strong>寓兵於農</strong>」的<strong>軍屯</strong>解決軍民糧食問題（今臺南<strong>新營、林鳳營</strong>，高雄<strong>左營、前鎮</strong>皆為屯田地名）。鄭經採陳永華建議建立全臺第一座<strong>孔廟</strong>，推廣漢人儒家文化與教育（亦在原住民部落設校教漢文），並與<strong>英國</strong>簽訂通商協議。`,
+              `<strong>大肚王國（跨部落聯盟）</strong>：以<strong>巴布拉族</strong>為主，勢力範圍涵蓋今<strong>臺中（大肚、沙鹿、清水）、彰化、南投</strong>一帶（不包括花蓮）。`,
+              `<strong>抗荷與抗鄭</strong>：大肚王曾抵抗荷蘭，鄭氏時期因積極往北屯田拓墾（如 1664–1670 年派<strong>劉國軒</strong>至半線、沙轆屯田）壓縮原住民空間並徵召搬運糧食勞役，引發大肚王強烈武力反抗。鄭軍埋伏襲殺與鎮壓後，大肚、沙轆、牛罵、大甲、竹塹諸社人口銳減，勢力逐漸式微。`
+            ],
+            trap: `【常考陷阱】問「大肚王」勢力範圍時，注意它在中臺灣（臺中、彰化），不包含東部花蓮；在荷蘭與鄭氏兩時期「均有反抗」的原住民勢力就是「大肚王」（新港社全程順從荷蘭、麻豆社僅在荷治初期反抗）。`,
+            quiz: {
+              q: `清代郁永河《裨海紀遊》記載：「〇〇繼荷而至，立法嚴格，殺戮不分男女老幼……今大肚、牛罵、大甲、竹塹諸社，土地荒廢不見一人。」文中的「〇〇」指下列何者？`,
+              options: [`西班牙人`, `鄭氏政權`, `日本幕府`, `清帝國官員`],
+              answer: 1,
+              explain: `「繼荷而至」且與大肚、沙轆、牛罵（清水）等中部部落衝突殺戮的政權即為鄭氏政權（將領劉國軒領軍鎮壓大肚王聯盟）。`
+            }
+          }
+        ]
+      },
+      {
+        id: 'u2',
+        num: '02',
+        era: '1683–1874前',
+        title: `清領初期：消極治臺與漢原隔離`,
+        subtitle: `臺灣棄留議、渡臺禁令、羅漢腳與劃界封山`,
+        shortDesc: `施琅留臺關鍵、渡臺證照、男女失衡、土牛紅線與藍線`,
+        topics: [
+          {
+            id: 'u2_t1',
+            code: '考點 2-1',
+            freq: '必考核心',
+            highFreq: true,
+            title: `臺灣棄留爭議與納入清朝版圖（1683–1684）`,
+            summary: `康熙原認臺灣為彈丸之地，施琅強調其「東南四省門戶」戰略價值，說服康熙設一府三縣。`,
+            points: [
+              `<strong>歷史背景</strong>：1683 年（康熙 22 年）施琅攻陷澎湖，鄭克塽降清。清廷內部出現棄留爭議：康熙曾說「臺灣僅彈丸之地，得之無所加，不得無所損」；另有官員認為治理耗費錢糧、不如將漢人遷回中國。`,
+              `<strong>施琅《恭陳臺灣棄留疏》</strong>：指出臺灣土地肥沃、物產豐富，更重要的是掌握中國<strong>東南沿海四省的門戶要害</strong>，且與澎湖相互支援，若放棄恐再淪為海盜或外人據點，<strong>戰略與國防價值極高</strong>。`,
+              `<strong>建置納入</strong>：1684 年（康熙 23 年）正式將臺灣納入版圖（中國歷代首度將臺灣納入版圖），隸屬<strong>福建省</strong>，設一府三縣（臺灣府；臺灣縣、鳳山縣、諸羅縣）。`
+            ],
+            trap: `【常考陷阱】康熙決定保留臺灣的「最主要考量」是施琅提出的「戰略國防地位重要（鞏固東南沿海安全）」，不要誤選成「文風鼎盛」、「礦產豐富」或「不增加財政負擔」。`,
+            quiz: {
+              q: `鄭氏降清後，清廷內部曾激烈爭論臺灣的棄留問題。最後康熙皇帝決定將臺灣納入版圖，最主要採納了施琅所強調的哪一項理由？`,
+              options: [`臺灣人口眾多且治安良好`, `臺灣文教興盛、人才輩出`, `臺灣戰略地位重要，可鞏固東南沿海門戶`, `保留臺灣能大幅節省朝廷軍費`],
+              answer: 2,
+              explain: `施琅在《恭陳臺灣棄留疏》中力陳臺灣為東南沿海四省屏障，戰略位置攸關邊防安全，說服康熙將臺灣納入版圖。`
+            }
+          },
+          {
+            id: 'u2_t2',
+            code: '考點 2-2',
+            freq: '高頻必考',
+            highFreq: true,
+            title: `「為防臺而治臺」與渡臺禁令、羅漢腳現象`,
+            summary: `嚴格審查渡臺證照並禁止攜眷，造成男女比例嚴重失衡與治安隱憂「羅漢腳」。`,
+            points: [
+              `<strong>基本方針</strong>：清領前期採取「<strong>為防臺而治臺</strong>」的消極政策，目的是防止臺灣成為反清復明或動亂的基地。`,
+              `<strong>渡臺禁令三大重點</strong>：① 來臺者須先在原籍申請<strong>渡臺證照</strong>並經稽查批准（不得事後補證）；② <strong>禁止攜帶家眷</strong>（尤嚴禁婦女渡臺，並非禁止客家人）；③ 執行時寬時嚴，導致<strong>偷渡情形非常普遍</strong>。`,
+              `<strong>社會後果</strong>：造成臺灣漢人社會<strong>男女比例嚴重失衡</strong>（「有唐山公，無唐山媽」、「一個某，恰贏三個天公祖」），出現大量無田宅、無妻子、單身遊食四方的「<strong>羅漢腳</strong>」，容易結黨滋事與械鬥。民間奉祀無主孤魂的「<strong>有應公／大眾爺</strong>」廟宇林立，亦反映當時移民單身無依與械鬥死亡的社會實態。`
+            ],
+            trap: `【常考陷阱】渡臺禁令「沒有」禁止客家人來臺（僅嚴格限制攜眷與未婚／已婚男子需申請證照）；另注意題目若考「歷史事實 vs 歷史解釋」，「從渡臺禁令可看出清朝早期統治政策相當消極」屬於「歷史解釋」。`,
+            quiz: {
+              q: `清代諺語「無某（妻）、無猴（子）、無厝（房）」以及民間「有應公／大眾爺」廟宇林立，主要反映清領前期哪一項政策所引發的社會現象？`,
+              options: [`海禁政策`, `渡臺禁令`, `劃界封山`, `開山撫番`],
+              answer: 1,
+              explain: `渡臺禁令禁止攜帶家眷，導致男多於女、單身無依的「羅漢腳」眾多，死後無人祭祀而形成有應公、大眾爺信仰。`
+            }
+          },
+          {
+            id: 'u2_t3',
+            code: '考點 2-3',
+            freq: '高頻必考',
+            highFreq: true,
+            title: `生熟番區分與「劃界封山」（土牛紅線／藍線）`,
+            summary: `以納稅服役區分生熟番，立碑挖「土牛溝」隔離漢原，卻因漢人越界墾殖使界線一再內移。`,
+            points: [
+              `<strong>生番與熟番的區分標準</strong>：清朝並非以居住地或語言區分，而是依據「<strong>是否有納稅、服勞役</strong>」（歸順官府教化程度）區分為<strong>熟番</strong>（多屬平埔族）與<strong>生番</strong>（多屬高山族）。`,
+              `<strong>劃界封山的目的</strong>：避免漢人越界侵墾原住民土地引發漢原衝突，乃在漢人與原住民活動交界處立碑（如「土牛民番地界碑」）、築土堆並挖深溝（<strong>土牛溝 / 土牛線</strong>，今臺中石岡「土牛國小」、新竹竹塹皆有遺跡）以隔離雙方。`,
+              `<strong>土牛紅線與藍線的推移</strong>：因漢人人口增加且屢次違規越界入山開墾，舊界址（<strong>土牛紅線</strong>）湮滅後，清廷只得多次重新勘定更往深山推移的新界（<strong>土牛藍線</strong>），顯示封山政策並未真正阻擋漢人開墾，反而壓縮原住民生活空間。`,
+              `<strong>只畫西半部的臺灣古地圖</strong>：1714 年（康熙 53 年）法國耶穌會士馮秉正奉命測繪《皇輿全覽圖》時，僅繪製臺灣西部（山脈以西），因當時清廷實質治理範圍尚未擴及東部。`
+            ],
+            trap: `【常考陷阱】清代的「番界／土牛溝」是隨開墾位置劃定的漢原隔離線，並「不是」直接以中央山脈作為固定分界線！土牛藍線往深山移動的原因是「漢人經常違反規定越界入山」，而非清朝主動鼓勵開墾（鼓勵入山是牡丹社事件後的事）。`,
+            quiz: {
+              q: `清代古地圖上常可見到「土牛紅線（舊界）」與更往深山推移的「土牛藍線（新界）」，這種界線往深山移動的主要原因為何？`,
+              options: [`清朝主動廢除劃界封山並鼓勵入山`, `漢人頻繁違反禁令越界入山開墾`, `清朝配合牡丹社事件推行開山撫番`, `原住民自願遷移至東部山區居住`],
+              answer: 1,
+              explain: `清領前期雖行劃界封山，但漢人越界入山開墾日益頻繁，導致原本的土牛紅線失效，官方只好將界線往深山重勘為土牛藍線。`
+            }
+          },
+          {
+            id: 'u2_t4',
+            code: '考點 2-4',
+            freq: '基礎要點',
+            highFreq: false,
+            title: `清領前期社會開發、水利與原鄉信仰`,
+            summary: `由南而北、由西向東開墾；合資興築水圳；三大族群的原鄉守護神與共同信仰。`,
+            points: [
+              `<strong>開墾方向與合資</strong>：漢人拓墾大致呈<strong>由南而北、由西向東</strong>發展。因開墾需龐大資金，常採「<strong>合資</strong>」方式（如新竹北埔閩南與客家人合資的「<strong>金廣福</strong>」）。`,
+              `<strong>三大水利設施</strong>：彰化<strong>八堡圳</strong>（清代規模最大、灌溉範圍最廣）、高雄<strong>曹公圳</strong>、臺北<strong>瑠公圳</strong>，以及臺中由漢人與原住民合作修築的<strong>貓霧捒圳</strong>。`,
+              `<strong>對外貿易正港</strong>：清領初期僅開放臺南<strong>鹿耳門</strong>為唯一合法對中國大陸貿易港口，後來商業重鎮擴大為「一府（臺南）二鹿（鹿港）三艋舺（萬華）」。`,
+              `<strong>原鄉與共同信仰</strong>：泉州人多拜保生大帝／清水祖師，漳州人拜開漳聖王，潮州客家人拜三山國王（多居丘陵地）；<strong>土地公、媽祖、有應公</strong>則是不分祖籍的共同信仰。教育方面設有教導原住民漢字與農耕的「<strong>社學</strong>」及照顧貧寒子弟的「<strong>義學</strong>」。`
+            ],
+            trap: `【常考陷阱】「漢人與原住民合作修築」的水圳是「貓霧捒圳」，規模最大的是「八堡圳」，別搞混！另外，客家人多居丘陵地，漳泉多居平原或沿海。`,
+            quiz: {
+              q: `新竹北埔一級古蹟「金廣福公館」是清代重要的土地開發組織辦事處，從其名稱「廣」、「福」可知該公司是由哪兩群人合資成立的？`,
+              options: [`漳州人與泉州人`, `客家人（廣東）與原住民`, `閩南人（福建）與客家人（廣東）`, `原住民與外國洋商`],
+              answer: 2,
+              explain: `「廣」指廣東籍（多為客家人）、「福」指福建籍（多為閩南人），金廣福為清代著名閩客合資墾號。`
+            }
+          }
+        ]
+      },
+      {
+        id: 'u3',
+        num: '03',
+        era: '1684–1862',
+        title: `行政區演變與民變動亂`,
+        subtitle: `一府三縣至一府四縣三廳、三大民變與械鬥`,
+        shortDesc: `諸羅縣改嘉義、彰化與淡水廳、噶瑪蘭廳增設、朱林戴三大民變`,
+        topics: [
+          {
+            id: 'u3_t1',
+            code: '考點 3-1',
+            freq: '必考時間軸',
+            highFreq: true,
+            title: `清領前期行政區演變（康熙 → 雍正 → 乾隆 → 嘉慶）`,
+            summary: `因人口拓墾增加、民變爆發及海盜侵擾而被動增設廳縣，呈現「由南而北、由西向東」擴張。`,
+            points: [
+              `<strong>康熙 23 年（1684）一府三縣</strong>：臺灣府；轄<strong>臺灣縣</strong>（今臺南）、<strong>鳳山縣</strong>（今高雄、屏東西子灣等）、<strong>諸羅縣</strong>（嘉義以北至全臺中北部）。`,
+              `<strong>雍正元年（1723）一府四縣二廳</strong>：因<strong>朱一貴事件</strong>爆發，幕僚藍鼎元建議加強中北部治理，劃諸羅縣虎尾溪以北增設<strong>彰化縣</strong>與<strong>淡水廳</strong>（涵蓋大甲溪以北至雞籠、桃園、新竹、臺北），並設<strong>澎湖廳</strong>（註：部分版本計為一府四縣二廳）。`,
+              `<strong>乾隆 53 年（1788）諸羅改名嘉義</strong>：因<strong>林爽文事件</strong>期間諸羅縣民死守城池，乾隆皇帝為嘉勉義行將諸羅縣改稱「<strong>嘉義縣</strong>」（赤崁樓旁立九座御龜碑，雲林「褒忠鄉」亦由此而來）。`,
+              `<strong>嘉慶 17 年（1812）一府四縣三廳</strong>：因吳沙入墾蛤仔難（宜蘭）且<strong>海盜蔡牽</strong>屢次窺伺侵擾，賽沖阿與方維甸奏請納入版圖並增設<strong>噶瑪蘭廳</strong>。`
+            ],
+            trap: `【常考陷阱】超級愛考「時光穿越路線題」！① 康熙年間雲林彰化歸「諸羅縣」、高雄西子灣歸「鳳山縣」；② 雍正五年新竹或臺北歸「淡水廳」、彰化歸「彰化縣」；③ 自康熙到嘉慶始終存在且未改名的行政區是「臺灣縣、鳳山縣」（諸羅已改名為嘉義）。`,
+            quiz: {
+              q: `清代臺灣行政區歷經多次調整，請問自「康熙到嘉慶年間」，下列哪一個行政區始終存在且名稱沒有改變？`,
+              options: [`諸羅縣`, `鳳山縣`, `彰化縣`, `噶瑪蘭廳`],
+              answer: 1,
+              explain: `鳳山縣自康熙 23 年設立以來一直存在；諸羅縣在乾隆年間改名為嘉義縣；彰化縣設於雍正、噶瑪蘭廳設於嘉慶。`
+            }
+          },
+          {
+            id: 'u3_t2',
+            code: '考點 3-2',
+            freq: '高頻必考',
+            highFreq: true,
+            title: `官逼民反：清代三大民變與平埔族抗官`,
+            summary: `吏治不良引發朱一貴、林爽文、戴潮春三大民變；大甲西社事件為清代最著名平埔族抗官。`,
+            points: [
+              `<strong>民變頻仍的主因</strong>：「三年一小反，五年一大亂」的根本原因在於<strong>清廷派駐官員素質欠佳、吏治不良（官逼民反）</strong>，加上羅漢腳眾多與會黨盛行。`,
+              `<strong>三大民變依序記憶</strong>：① <strong>康熙 60 年（1721）朱一貴事件</strong>（高雄內門起事，號稱鴨母王，波及全臺）→ 促成雍正增設彰化縣、淡水廳；② <strong>乾隆 51 年（1786）林爽文事件</strong>（中部天地會起義，<strong>規模最大</strong>，福康安率軍歷時 14 個月平定）→ 諸羅縣改名嘉義縣；③ <strong>同治元年（1862）戴潮春事件</strong>（中部八卦會，歷時最久）。`,
+              `<strong>平埔族抗官事件</strong>：雍正年間因官府課徵繁重勞役與欺壓，中部爆發<strong>大甲西社事件</strong>，為清領時期最著名的平埔族反抗事件。`
+            ],
+            trap: `【常考陷阱】務必記熟四次反抗事件先後順序：1652 郭懷一（抗荷）→ 1721 朱一貴 → 1786 林爽文 → 1862 戴潮春！看清楚題幹問的是「抗清」還是「反荷」，郭懷一發生在荷治時期、並非清代民變。`,
+            quiz: {
+              q: `若將臺灣史上的四大反抗事件：(甲)朱一貴事件 (乙)郭懷一事件 (丙)戴潮春事件 (丁)林爽文事件，依發生時間先後順序排列，下列何者正確？`,
+              options: [`甲→乙→丁→丙`, `乙→甲→丁→丙`, `乙→丁→甲→丙`, `甲→丁→乙→丙`],
+              answer: 1,
+              explain: `順序為：1652 郭懷一（乙，荷治）→ 1721 朱一貴（甲，康熙）→ 1786 林爽文（丁，乾隆）→ 1862 戴潮春（丙，同治）。`
+            }
+          },
+          {
+            id: 'u3_t3',
+            code: '考點 3-3',
+            freq: '中等頻率',
+            highFreq: false,
+            title: `清領前期分類械鬥成因分析`,
+            summary: `因商業利益、水源田地爭奪或語言文化隔閡，常糾集同祖籍（泉漳、閩粵）或同姓氏群眾械鬥。`,
+            points: [
+              `<strong>械鬥類型</strong>：以<strong>祖籍械鬥</strong>（閩粵械鬥、泉漳械鬥）最為常見，亦有姓氏械鬥、職業團體械鬥（如搶地盤、商業利益）。`,
+              `<strong>引發原因</strong>：爭奪土地與灌溉水源、商業利益衝突、以及不同族群語言習俗隔閡。`,
+              `<strong>與民變之區別</strong>：民變是人民反抗「政府官府」；械鬥則是民間「族群或地方團體之間」的武力衝突。`
+            ],
+            trap: `【常考陷阱】清代臺灣社會械鬥的原因「不包含」科舉當官名額的競爭（考試競爭並非民間械鬥主因），常考在「下列何者不是械鬥原因」選項中。`,
+            quiz: {
+              q: `清領前期臺灣地方械鬥頻繁，造成社會動盪。下列哪一項「不是」當時發生分類械鬥的主要原因？`,
+              options: [`爭奪灌溉水源與耕地`, `不同祖籍間的語言與利益隔閡`, `商業碼頭與地盤利益衝突`, `爭取科舉殿試的高官名額`],
+              answer: 3,
+              explain: `分類械鬥源於土地、水源、商業利益及祖籍語言隔閡，與科舉當官名額無關。`
+            }
+          },
+          {
+            id: 'u3_t4',
+            code: '考點 3-4',
+            freq: '跨題整合',
+            highFreq: false,
+            title: `歷史知識點綜合檢核：人物與時代配對`,
+            summary: `精準對應康熙、雍正、乾隆、嘉慶時期的歷史人物、地名與生活情境（常考穿越小說糾錯題）。`,
+            points: [
+              `<strong>郁永河《裨海紀遊》（1697 年康熙 36 年）</strong>：來臺至北投採硫磺，當時臺灣隸屬福建省，行政區仍只有一府三縣（北投屬諸羅縣，尚未設淡水廳或彰化縣，亦尚未有洋行與八通關古道）。`,
+              `<strong>嘉慶年間來臺小說糾錯</strong>：嘉慶年間可偷渡來臺、開墾臺北盆地或噶瑪蘭廳，但不可能遇到「朱一貴事件」（康熙）或「戴潮春事件」（同治），也不可能坐火車（光緒劉銘傳）。`,
+              `<strong>乾隆年間來臺小說糾錯</strong>：在臺北開墾可能遇到凱達格蘭族，但當時尚未建省，不可能遇見英法聯軍或修築鐵路。`
+            ],
+            trap: `【常考陷阱】段考極愛考「小說人物穿越情節哪一段不符合史實」，解題訣竅是先抓「皇帝年號」：康熙（施琅、郁永河、朱一貴）→ 雍正（彰化縣、淡水廳）→ 乾隆（林爽文、嘉義縣、土牛碑）→ 嘉慶（吳沙、噶瑪蘭廳）。`,
+            quiz: {
+              q: `清康熙 36 年，郁永河來臺至北投開採硫磺並寫下《裨海紀遊》。關於他當時在臺灣的經歷，下列何者符合史實？`,
+              options: [`當時全臺灣隸屬於福建省管轄`, `北投地區當時已隸屬於臺北府淡水縣`, `他可順道經由八通關古道前往花蓮`, `當時淡水已有英國領事館與洋行設立`],
+              answer: 0,
+              explain: `康熙 36 年（1697）全臺隸屬福建省（一府三縣），北投屬諸羅縣；八通關古道與洋行均為 19 世紀後期的事物。`
+            }
+          }
+        ]
+      },
+      {
+        id: 'u4',
+        num: '04',
+        era: '1858–1875',
+        title: `開港通商與牡丹社事件轉折`,
+        subtitle: `外力衝擊、茶樟腦外銷與沈葆楨「開山撫番」`,
+        shortDesc: `四大通商口岸、買辦與馬偕馬雅各、琉球漂民、廢渡臺禁令、億載金城`,
+        topics: [
+          {
+            id: 'u4_t1',
+            code: '考點 4-1',
+            freq: '必考核心',
+            highFreq: true,
+            title: `英法聯軍與臺灣開港通商（1858–1860 年代）`,
+            summary: `開放雞籠、淡水、安平、打狗四口岸；茶葉、樟腦帶動北部與客家人、買辦階級崛起。`,
+            points: [
+              `<strong>背景與四大通商口岸</strong>：清廷在<strong>英法聯軍之役</strong>戰敗後簽訂《天津條約》，臺灣於 1860 年代陸續開放四個通商口岸，由北而南為：<strong>雞籠（基隆）、淡水（滬尾）、安平（臺南）、打狗（高雄）</strong>。臺灣再度被納入國際貿易體系，進入「清領後期」。`,
+              `<strong>外商洋行與領事館</strong>：外商在港口設洋行貿易（如安平英商<strong>德記洋行</strong>、怡和洋行，北部寶順、美利士洋行），英國並在打狗設立<strong>領事館</strong>處理通商與外交事務。`,
+              `<strong>經濟重心北移與買辦興起</strong>：開港前出口以米、糖為主，開港後出口三大宗為<strong>茶葉、樟腦、蔗糖</strong>（進口以<strong>鴉片</strong>、紡織品為主）。因茶葉、樟腦主要產於中北部山區，帶動<strong>臺灣北部經濟超越臺南</strong>，亦提高北部客家人經濟地位，並孕育熟悉外貿的漢人「<strong>買辦</strong>」階級（如協助大稻埕建設的李春生）。`
+            ],
+            trap: `【常考陷阱】開港四口岸「沒有鹿港」（只有雞籠、淡水、安平、打狗）！另外「買辦」取代傳統郊商與地主成為新興領導階級；寶順、美利士等專營茶葉、樟腦與煤的洋行多設在北部（淡水、大稻埕）。`,
+            quiz: {
+              q: `臺灣開港通商後，帶動北部經濟地位急速躍升、甚至超越傳統中心臺南，並使居住北部的客家人經濟影響力提高，主要是仰賴哪兩項商品的大量出口？`,
+              options: [`稻米、鹿皮`, `茶葉、樟腦`, `蔗糖、軍火`, `鴉片、絲織品`],
+              answer: 1,
+              explain: `開港後茶葉與樟腦外銷需求大增，產區主要分布於臺灣中北部丘陵與山區，使北部與客家人經濟地位大幅提高。`
+            }
+          },
+          {
+            id: 'u4_t2',
+            code: '考點 4-2',
+            freq: '高頻必考',
+            highFreq: true,
+            title: `開港後的西方醫療傳教（馬偕與馬雅各）`,
+            summary: `西方文化再相遇：長老教會牧師在北馬偕（淡水）、南馬雅各（臺南）結合醫療與傳教。`,
+            points: [
+              `<strong>北部—馬偕（加拿大長老教會）</strong>：駐點<strong>淡水</strong>，在北部創設「滬尾偕醫館」、<strong>牛津學堂</strong>、淡水女學堂。以拔牙行醫結合傳教著稱（「左手聖經、右手鉗子」），曾目睹八庄大道公祭典。`,
+              `<strong>南部—馬雅各（英國長老教會）</strong>：駐點<strong>臺南（府城）</strong>，創辦全臺灣<strong>最早的西式醫院</strong>（看西街醫館，今新樓醫院前身）。`,
+              `<strong>共通影響</strong>：使西方科學知識與現代醫療深入臺灣民間，也為外籍自然史學者（如 1873 年來臺採集博物的歐洲學者）提供較安全開放的考察環境。`
+            ],
+            trap: `【常考陷阱】「全臺最早的西式醫院」是南部「馬雅各」在臺南創辦，不是北部的馬偕！考試常故意把馬偕的「左手聖經右手鉗子」跟「最早西式醫院」混在一起考糾錯。`,
+            quiz: {
+              q: `小傑參觀淡水古蹟時，聽導覽員介紹某位在清末來臺的長老會傳教士，曾創辦牛津學堂與淡水女學堂，並常幫民眾拔牙。請問下列關於這位傳教士的敘述何者「錯誤」？`,
+              options: [`他就是著名的馬偕牧師`, `他將醫療與基督教傳教工作結合`, `他在臺南創設了全臺灣最早的西式醫院`, `他在北部創設滬尾偕醫館造福民眾`],
+              answer: 2,
+              explain: `全臺最早的西式醫院是由英國長老教會的馬雅各牧師在臺南創設，並非北部的馬偕。`
+            }
+          },
+          {
+            id: 'u4_t3',
+            code: '考點 4-3',
+            freq: '必考大事件',
+            highFreq: true,
+            title: `牡丹社事件（1874 年同治年間）與琉球歸屬`,
+            summary: `日本以「懲辦兇手」出兵恆春，清廷承認「保民義舉」，使日本藉此展開對琉球的掌控。`,
+            points: [
+              `<strong>起因</strong>：1871 年琉球王國宮古島船民遇颱風漂流至屏東八瑤灣，54 人遭牡丹社、高士佛社排灣族殺害（日治時期設「大日本琉球藩民五十四名墓」）。`,
+              `<strong>日軍出兵與石門戰役（1874）</strong>：日本陸軍中將<strong>西鄉從道</strong>以「懲辦兇手」為由出兵南臺灣，排灣族在石門隘口英勇抵抗。`,
+              `<strong>外交交涉與影響</strong>：清廷派<strong>沈葆楨</strong>來臺督辦軍務；事後中日簽約，清廷給予遇難家屬撫卹與日軍費補償，並承認日本出兵為「<strong>保民義舉</strong>」，此舉無異於承認琉球人為日本屬民，使日本積極展開對<strong>琉球</strong>的併吞掌控。`
+            ],
+            trap: `【常考陷阱】清廷承認「保民義舉」讓日本得以名正言順掌控「琉球」（不是臺灣，割讓臺灣是 1895 甲午戰後）；另注意此戰發生在「南臺灣恆春屏東」，交戰雙方是日軍與排灣族，非基隆、淡水！`,
+            quiz: {
+              q: `動畫短片《百步蛇與太陽旗的戰爭》描述「甲：琉球人漂流南臺灣 → 乙：日本出兵與原住民激戰 → 丙：？ → 丁：清廷承認日本出兵為保民義舉」。劇中「丙場景」應為何者？`,
+              options: [`淡水與基隆為主要戰場，兩軍死傷無數`, `清廷派遣沈葆楨為欽差大臣來臺加強防務`, `原住民在南投山區抗日，日軍傷亡慘重`, `清廷戰敗後簽約將臺灣割讓給日本`],
+              answer: 1,
+              explain: `牡丹社事件（1874）期間，清廷派欽差大臣沈葆楨來臺辦理海防與交涉事宜。`
+            }
+          },
+          {
+            id: 'u4_t4',
+            code: '考點 4-4',
+            freq: '必考大事件',
+            highFreq: true,
+            title: `沈葆楨積極治臺：「開山撫番」與海防建設`,
+            summary: `廢除渡臺禁令與劃界封山、開闢北中南三條後山道路、建億載金城並奏設臺北府。`,
+            points: [
+              `<strong>治臺態度大轉折</strong>：牡丹社事件讓清廷體認臺灣海防重要性，徹底放棄「為防臺而治臺」的消極態度，轉為<strong>積極治臺</strong>。`,
+              `<strong>廢除舊禁與開山撫番</strong>：奏請全面<strong>廢除渡臺禁令與劃界封山政策</strong>，發給口糧、耕具與免費乘船鼓勵漢人移民開墾東部；同時實施「<strong>開山撫番</strong>」證明主權，開闢通往後山（東部）的北（蘇澳—花蓮）、中（竹山林圯埔—玉里，即<strong>八通關古道</strong>）、南（赤山—卑南，含阿朗壹古道前身）三條山路。`,
+              `<strong>海防、產業與建置臺北府</strong>：在臺南安平修建臺灣最早西式砲臺「<strong>億載金城（二鯤鯓砲臺）</strong>」、在基隆（雞籠）採用機器採煤；1875 年（光緒元年）奏請增設<strong>臺北府</strong>與恆春縣，全臺調整為<strong>二府八縣四廳</strong>（臺北府城於 1884 年完工）。`
+            ],
+            trap: `【常考陷阱】①「最早」進行開山撫番、廢渡臺禁令、建億載金城、設臺北府的是「沈葆楨」，不是劉銘傳！② 鐵路、郵局、電燈、電報學堂、西學堂、番學堂與「臺東直隸州」才是「劉銘傳」的建設！切勿張冠李戴！`,
+            quiz: {
+              q: `沈葆楨來臺後為了加強臺灣東部防務與統治，下列哪一項措施屬於他的政績？`,
+              options: [`完成基隆至臺北鐵路並題字「曠宇天開」`, `創設臺北郵政總局與發行龍馬郵票`, `廢除渡臺禁令並開闢北、中、南三條通往後山的道路`, `在臺北城內裝設電燈與開辦西學堂`],
+              answer: 2,
+              explain: `廢除渡臺禁令、開闢三條通往東部山路（含八通關古道）、建億載金城與奏設臺北府為沈葆楨政績；鐵路、郵局、電燈、西學堂為劉銘傳政績。`
+            }
+          }
+        ]
+      },
+      {
+        id: 'u5',
+        num: '05',
+        era: '1884–1895',
+        title: `清法戰爭、臺灣建省與現代化`,
+        subtitle: `劉銘傳督辦軍務、行政區劃三府與西化建設`,
+        shortDesc: `西仔反基隆淡水澎湖、臺灣建省首任巡撫、鐵路電報郵政電燈學堂`,
+        topics: [
+          {
+            id: 'u5_t1',
+            code: '考點 5-1',
+            freq: '必考大事件',
+            highFreq: true,
+            title: `清法戰爭（西仔反，1884–1885 年）`,
+            summary: `因越南問題引發，劉銘傳採陸戰策略守淡水，戰火波及基隆、淡水、澎湖三地，促成臺灣建省。`,
+            points: [
+              `<strong>戰役起因</strong>：1884 年（光緒 10 年）法國進攻清帝國藩屬<strong>越南</strong>，清法開戰，法軍轉而封鎖並進犯臺灣。`,
+              `<strong>戰場與作戰策略</strong>：清廷派<strong>劉銘傳</strong>來臺督辦軍務，考量缺乏抗衡法國艦隊之水師，採「誘之為陸戰」之策。法軍進攻並封鎖<strong>基隆（雞籠）、淡水（滬尾）</strong>，後並佔領<strong>澎湖</strong>（當時茶、樟腦出口受阻、物價高漲；<strong>未波及宜蘭</strong>）。`,
+              `<strong>歷史見證古蹟</strong>：基隆保留「<strong>法國公墓（中法墓園）</strong>」與題有「海門天險」的<strong>二沙灣砲臺</strong>；淡水則每年演出「西仔反傳說」紀念滬尾之役。`
+            ],
+            trap: `【常考陷阱】① 清法戰爭波及「基隆、淡水、澎湖」，沒有波及宜蘭或恆春；②「海門天險（基隆二沙灣砲臺）」見證清法戰爭，「億載金城（臺南）」見證牡丹社事件；③ 造成臺灣建省的戰爭是「清法戰爭」，不是牡丹社事件。`,
+            quiz: {
+              q: `基隆市推動古蹟導覽時，將「法國公墓」與題有「海門天險」的「二沙灣砲臺」列為重要站點。這兩處古蹟主要見證了哪一場歷史戰役？`,
+              options: [`英法聯軍之役`, `牡丹社事件`, `清法戰爭（西仔反）`, `甲午戰爭`],
+              answer: 2,
+              explain: `1884 年清法戰爭期間，法軍進犯基隆與淡水，戰後基隆留下法國公墓與二沙灣砲臺（海門天險）等史蹟。`
+            }
+          },
+          {
+            id: 'u5_t2',
+            code: '考點 5-2',
+            freq: '高頻必考',
+            highFreq: true,
+            title: `臺灣建省（1885）與三府一直隸州`,
+            summary: `1885 年宣布臺灣建省，劉銘傳任首任巡撫，行政區改為三府（臺北、臺灣、臺南）及臺東直隸州。`,
+            points: [
+              `<strong>宣布建省</strong>：清法戰爭後清廷深刻體認臺灣戰略地位關鍵，於 <strong>1885 年（光緒 11 年）</strong>宣布臺灣建省（脫離福建省），並由<strong>劉銘傳</strong>出任首任臺灣巡撫。`,
+              `<strong>行政區改為「三府一直隸州」</strong>：由北而南為<strong>臺北府</strong>、<strong>臺灣府</strong>（新設於中部臺中，原欲作為省會，後暫設臺北）、<strong>臺南府</strong>（原臺南的臺灣府改稱，下轄安平縣、鳳山縣等），並於東部新增<strong>臺東直隸州</strong>加強管理東部與原住民。`,
+              `<strong>科舉應試改變</strong>：建省後，臺灣秀才參加舉人考試（鄉試）時，得以就近在臺灣省應試，不再需要渡海遠赴福建省會福州。`
+            ],
+            trap: `【常考陷阱】行政區數目演變必考：「康熙一府（臺灣）→ 沈葆楨二府（臺北、臺灣）→ 劉銘傳建省三府（臺北、臺灣〔中部〕、臺南〔南部〕）＋ 臺東直隸州」！考題給安平縣、臺東直隸州的稅收表時，要能認出這就是劉銘傳建省後的時期（當時臺灣府在中部、已廢除劃界封山）。`,
+            quiz: {
+              q: `臺灣史料中有張土地稅收統計表，同時列出「鳳山縣」、「安平縣」與「臺東直隸州」。請問這份統計表最可能編製於下列哪一個時期？`,
+              options: [`清初康熙時期，仍厲行劃界封山`, `牡丹社事件後，全臺設為二府`, `清法戰爭後臺灣建省，臺灣府設於中部`, `日治初期進行土地調查時期`],
+              answer: 2,
+              explain: `「臺東直隸州」與「安平縣（臺南府轄）」出現於 1885 年臺灣建省後劉銘傳重劃行政區時期，當時全臺設為三府一直隸州，新設臺灣府位於中部。`
+            }
+          },
+          {
+            id: 'u5_t3',
+            code: '考點 5-3',
+            freq: '全卷超高頻',
+            highFreq: true,
+            title: `劉銘傳現代化建設（交通、電信、郵政與市政）`,
+            summary: `呼應清朝自強運動：建基隆—新竹鐵路（獅球嶺隧道）、購輪船、設郵政總局、電報與電燈。`,
+            points: [
+              `<strong>鐵路建設</strong>：修築臺灣第一條鐵路（完成<strong>基隆—臺北—新竹</strong>段，未能通到臺中或高雄），包含臺灣最早鐵路隧道「<strong>獅球嶺隧道</strong>」（出口題有劉銘傳「曠宇天開」四字）與最早蒸氣火車頭「<strong>騰雲號</strong>」（現陳列於臺北二二八和平公園）。`,
+              `<strong>航運與郵政</strong>：購買輪船航行於臺灣、中國大陸與東南亞之間；裁撤傳統驛站，設立<strong>大清臺灣郵政總局</strong>（發行「龍馬郵票」，早期亦兼作火車票），准許民間買票寄信。`,
+              `<strong>電報與電燈</strong>：架設連結臺北、臺南、安平並跨海至福州的電報線，並在臺北成立<strong>電報學堂</strong>；在省會臺北城首次裝設<strong>電燈</strong>照明（僅比倫敦、紐約、上海晚三年，比日本東京早兩年！）。`
+            ],
+            trap: `【常考陷阱】① 劉銘傳鐵路只通到「新竹」（基隆—臺北—新竹），所以選項出現「坐火車到臺中／宜蘭／高雄」都是錯的！② 「1888 年住在臺北的外國教師提及剛成立的電報學堂、郵局與鐵路專家」必定是指臺北！`,
+            quiz: {
+              q: `19 世紀末（約 1888 年前後）居住在臺北城區的年輕人阿榮，在日常生活中「不會」遇到下列哪一種情況？`,
+              options: [`在臺北城夜晚看見新裝設的電燈照明`, `到郵政總局買郵票寄信給親友`, `發電報聯絡住在福建福州的親戚`, `搭乘火車一路南下前往高雄找朋友`],
+              answer: 3,
+              explain: `劉銘傳時期完成的鐵路僅自基隆經臺北通往新竹，尚未通往中部或南部高雄（縱貫鐵路通車為日治時期建設）。`
+            }
+          },
+          {
+            id: 'u5_t4',
+            code: '考點 5-4',
+            freq: '對比要點',
+            highFreq: false,
+            title: `劉銘傳的文教新政：西學堂與番學堂`,
+            summary: `在臺北創辦西學堂培育近代科技與外語人才，設番學堂教育原住民子弟學習漢文與算術。`,
+            points: [
+              `<strong>西學堂（1887 年）</strong>：設於臺北，聘請外籍教師教授外文、數學、測繪與近代科學知識，培育現代化建設所需人才（對應清朝自強運動精神）。`,
+              `<strong>番學堂（1890 年）</strong>：設於臺北，招收原住民頭目子弟學習漢語、儒家倫理、算術與日常禮儀，為劉銘傳撫墾政策的一環。`,
+              `<strong>整體歷史定位</strong>：劉銘傳將清末自強運動的成果在臺灣積極實踐，使臺灣成為當時清帝國最現代化的省份之一，贏得現代化推手的評價。`
+            ],
+            trap: `【常考陷阱】別把「番學堂」（劉銘傳設於臺北）跟清領初期的「社學」或沈葆楨的「開山撫番三條道路」混在一起。`,
+            quiz: {
+              q: `下列關於沈葆楨與劉銘傳對原住民措施的比較，何者正確？`,
+              options: [`沈葆楨最早在臺北設立番學堂教育原住民`, `劉銘傳最早提出「開山撫番」並開闢八通關古道`, `劉銘傳設置臺東直隸州以加強對東部及原住民管理`, `沈葆楨在山區修築鐵路以強化對原住民治理`],
+              answer: 2,
+              explain: `開山撫番與八通關古道為沈葆楨所為；設立臺東直隸州與在臺北開辦番學堂則為劉銘傳建省後的措施。`
+            }
+          }
+        ]
+      }
+    ];
+
+    // Exam Topic Frequency Data (tallied from the 17 source midterm papers)
+    const FREQ_STATS = [
+      { label: `荷治傳教、新港文與族群`, count: 90, unitId: 'u1' },
+      { label: `清代行政區演變與拓墾`, count: 75, unitId: 'u3' },
+      { label: `牡丹社事件與沈葆楨建設`, count: 57, unitId: 'u4' },
+      { label: `清法戰爭與劉銘傳現代化`, count: 48, unitId: 'u5' },
+      { label: `渡臺禁令、羅漢腳與土牛線`, count: 47, unitId: 'u2' },
+      { label: `施琅留臺爭議與鄭氏大肚王`, count: 41, unitId: 'u1' },
+      { label: `開港通商與洋行醫療傳教`, count: 32, unitId: 'u4' },
+      { label: `三大民變與分類械鬥開發`, count: 31, unitId: 'u3' },
+      { label: `西班牙北臺統治與馬賽人`, count: 31, unitId: 'u1' }
+    ];
+
+    // =========================================================================
+    // 2. Application State & Persistence
+    // =========================================================================
+    const DEFAULT_STATE = {
+      activeUnitId: 'u1',
+      filterMode: 'all',
+      matrixTab: 'regime',
+      checkedTopics: [],
+      expandedTopics: ['u1_t1'],
+      quizAnswers: {} // { topicId: selectedOptionIndex }
+    };
+
+    let appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    let freqChartInstance = null;
+    let progressChartInstance = null;
+
+    function getToken(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (err) {
+        // Silently ignore in preview environments without host shim
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('status-toast');
+      if (!toast) return;
+      toast.textContent = msg;
+      setTimeout(() => {
+        const current = document.getElementById('status-toast');
+        if (current && current.textContent === msg) {
+          current.textContent = '';
+        }
+      }, 2600);
+    }
+
+    // =========================================================================
+    // 3. Hoisted Interactive Handlers
+    // =========================================================================
+    function selectUnit(unitId) {
+      appState.activeUnitId = unitId;
+      // Auto-expand first topic of newly selected unit if none expanded in that unit
+      const unit = UNITS.find(u => u.id === unitId);
+      if (unit) {
+        const hasExpanded = unit.topics.some(t => appState.expandedTopics.includes(t.id));
+        if (!hasExpanded && unit.topics.length > 0) {
+          appState.expandedTopics.push(unit.topics[0].id);
+        }
+      }
+      renderAll();
+      persistState();
+    }
+
+    function stepUnit(delta) {
+      const idx = UNITS.findIndex(u => u.id === appState.activeUnitId);
+      if (idx === -1) return;
+      const nextIdx = Math.max(0, Math.min(UNITS.length - 1, idx + delta));
+      if (nextIdx !== idx) {
+        selectUnit(UNITS[nextIdx].id);
+      }
+    }
+
+    function toggleCheck(topicId) {
+      const idx = appState.checkedTopics.indexOf(topicId);
+      if (idx === -1) {
+        appState.checkedTopics.push(topicId);
+        showToast(`已標記為完成並儲存進度`);
+      } else {
+        appState.checkedTopics.splice(idx, 1);
+      }
+      renderAll();
+      persistState();
+    }
+
+    function toggleExpand(topicId) {
+      const idx = appState.expandedTopics.indexOf(topicId);
+      if (idx === -1) {
+        appState.expandedTopics.push(topicId);
+      } else {
+        appState.expandedTopics.splice(idx, 1);
+      }
+      renderTopicList();
+      persistState();
+    }
+
+    function toggleAllExpand(expand) {
+      const unit = UNITS.find(u => u.id === appState.activeUnitId);
+      if (!unit) return;
+      const ids = unit.topics.map(t => t.id);
+      if (expand) {
+        ids.forEach(id => {
+          if (!appState.expandedTopics.includes(id)) {
+            appState.expandedTopics.push(id);
+          }
+        });
+      } else {
+        appState.expandedTopics = appState.expandedTopics.filter(id => !ids.includes(id));
+      }
+      renderTopicList();
+      persistState();
+    }
+
+    function setFilter(mode) {
+      appState.filterMode = mode;
+      renderFilterButtons();
+      renderTopicList();
+      persistState();
+    }
+
+    function answerQuiz(topicId, optionIndex) {
+      appState.quizAnswers[topicId] = optionIndex;
+      renderTopicList();
+      renderOverviewKPIs();
+      persistState();
+    }
+
+    function switchMatrix(tab) {
+      appState.matrixTab = tab;
+      renderMatrix();
+      persistState();
+    }
+
+    function resetProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.classList.add('btn-danger-armed');
+        btn.innerHTML = `<i data-lucide="alert-triangle" aria-hidden="true"></i> 再次點擊確認重設`;
+        if (window.lucide) window.lucide.createIcons();
+        setTimeout(() => {
+          if (btn.dataset.armed === 'true') {
+            btn.dataset.armed = 'false';
+            btn.classList.remove('btn-danger-armed');
+            btn.innerHTML = `<i data-lucide="rotate-ccw" aria-hidden="true"></i> 重設進度`;
+            if (window.lucide) window.lucide.createIcons();
+          }
+        }, 3500);
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.classList.remove('btn-danger-armed');
+      btn.innerHTML = `<i data-lucide="rotate-ccw" aria-hidden="true"></i> 重設進度`;
+      appState.checkedTopics = [];
+      appState.quizAnswers = {};
+      appState.filterMode = 'all';
+      renderAll();
+      persistState();
+      showToast(`已重設所有學習進度`);
+    }
+
+    function exportProgress() {
+      const totalTopics = UNITS.reduce((acc, u) => acc + u.topics.length, 0);
+      const doneCount = appState.checkedTopics.length;
+      const lines = [
+        `單元編號,單元名稱,考點編號,考點主題,學習進度,隨堂測驗狀態`
+      ];
+      UNITS.forEach(u => {
+        u.topics.forEach(t => {
+          const isDone = appState.checkedTopics.includes(t.id) ? `已完成` : `未完成`;
+          const ans = appState.quizAnswers[t.id];
+          let quizStat = `尚未作答`;
+          if (typeof ans === 'number') {
+            quizStat = ans === t.quiz.answer ? `答對` : `答錯`;
+          }
+          lines.push(`"${u.num}","${u.title}","${t.code}","${t.title}","${isDone}","${quizStat}"`);
+        });
+      });
+      lines.push(`"總計","已完成 ${doneCount}/${totalTopics} 項考點","","","",""`);
+      const csvContent = '\uFEFF' + lines.join('\n');
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === 'function') {
+        window.notebookAppApi.triggerFileDownload({
+          content: csvContent,
+          contentType: 'text/csv',
+          encoding: 'UTF-8',
+          filename: '七年級歷史第二次段考_學習進度報告.csv'
+        });
+        showToast(`已匯出 CSV 學習進度報告`);
+      } else {
+        showToast(`已完成 ${doneCount}/${totalTopics} 項考點`);
+      }
+    }
+
+    // =========================================================================
+    // 4. Render Functions
+    // =========================================================================
+    function renderOverviewKPIs() {
+      const totalTopics = UNITS.reduce((acc, u) => acc + u.topics.length, 0);
+      const doneCount = appState.checkedTopics.length;
+      const pct = totalTopics > 0 ? Math.round((doneCount / totalTopics) * 100) : 0;
+
+      const valEl = document.getElementById('kpi-progress-val');
+      const barEl = document.getElementById('kpi-progress-bar');
+      const subEl = document.getElementById('kpi-progress-sub');
+      if (valEl) valEl.textContent = `${doneCount} / ${totalTopics}`;
+      if (barEl) {
+        barEl.style.width = `${pct}%`;
+        if (pct === 100) barEl.classList.add('complete');
+        else barEl.classList.remove('complete');
+      }
+      if (subEl) subEl.textContent = `已完成 ${pct}% 核心考點（勾選下方卡片即可自動儲存）`;
+
+      // Units completion
+      let unitsDone = 0;
+      const dotsEl = document.getElementById('kpi-unit-dots');
+      const dotsHtml = UNITS.map(u => {
+        const uDone = u.topics.filter(t => appState.checkedTopics.includes(t.id)).length;
+        const uTotal = u.topics.length;
+        let cls = 'unit-dot';
+        if (uDone === uTotal && uTotal > 0) {
+          unitsDone += 1;
+          cls += ' done';
+        } else if (uDone > 0) {
+          cls += ' partial';
+        }
+        return `<span class="${cls}" title="${u.title}：${uDone}/${uTotal}"></span>`;
+      }).join('');
+      if (dotsEl) dotsEl.innerHTML = dotsHtml;
+
+      const unitsDoneEl = document.getElementById('kpi-units-done');
+      if (unitsDoneEl) unitsDoneEl.textContent = `${unitsDone} / ${UNITS.length} 關`;
+
+      // Active unit spotlight
+      const activeUnit = UNITS.find(u => u.id === appState.activeUnitId) || UNITS[0];
+      const activeDone = activeUnit.topics.filter(t => appState.checkedTopics.includes(t.id)).length;
+      const activeQuizOk = activeUnit.topics.filter(t => appState.quizAnswers[t.id] === t.quiz.answer).length;
+      const activeTitleEl = document.getElementById('kpi-active-title');
+      const activeSubEl = document.getElementById('kpi-active-sub');
+      if (activeTitleEl) activeTitleEl.textContent = `${activeUnit.num}・${activeUnit.title}`;
+      if (activeSubEl) activeSubEl.textContent = `本單元進度：${activeDone} / ${activeUnit.topics.length} 項完成・隨堂測驗 ${activeQuizOk} / ${activeUnit.topics.length} 題答對`;
+    }
+
+    function renderUnitSwitcher() {
+      const container = document.getElementById('unit-switcher');
+      if (!container) return;
+
+      container.innerHTML = UNITS.map(u => {
+        const isActive = u.id === appState.activeUnitId;
+        const done = u.topics.filter(t => appState.checkedTopics.includes(t.id)).length;
+        const total = u.topics.length;
+        const isAllDone = done === total && total > 0;
+        return `
+          <button
+            type="button"
+            role="tab"
+            aria-selected="${isActive ? 'true' : 'false'}"
+            class="unit-card ${isActive ? 'active' : ''}"
+            onclick="selectUnit('${u.id}')"
+          >
+            <div>
+              <div class="unit-card-top">
+                <span class="index-num">單元 ${u.num}</span>
+                <span class="era-tag">${u.era}</span>
+              </div>
+              <h3 class="unit-card-title" style="margin-top: var(--space-sm);">${u.title}</h3>
+              <p class="unit-card-desc" style="margin-top: var(--space-xs);">${u.shortDesc}</p>
+            </div>
+            <div class="unit-card-foot ${isAllDone ? 'done' : ''}">
+              <span>${isAllDone ? '本關卡已全部完成' : `進度 ${done} / ${total}`}</span>
+              <i data-lucide="${isAllDone ? 'check-circle-2' : 'chevron-right'}" aria-hidden="true"></i>
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderFilterButtons() {
+      const allBtn = document.getElementById('filter-all');
+      const todoBtn = document.getElementById('filter-todo');
+      if (allBtn) allBtn.classList.toggle('active', appState.filterMode === 'all');
+      if (todoBtn) todoBtn.classList.toggle('active', appState.filterMode === 'todo');
+    }
+
+    function renderTopicList() {
+      const unitIdx = UNITS.findIndex(u => u.id === appState.activeUnitId);
+      const unit = UNITS[unitIdx >= 0 ? unitIdx : 0];
+
+      const headEl = document.getElementById('active-unit-heading');
+      const subEl = document.getElementById('active-unit-subtitle');
+      if (headEl) headEl.textContent = `單元 ${unit.num}：${unit.title}`;
+      if (subEl) subEl.textContent = `${unit.era}・${unit.subtitle}`;
+
+      // Nav buttons
+      const prevBtn = document.getElementById('prev-unit-btn');
+      const nextBtn = document.getElementById('next-unit-btn');
+      const stepLabel = document.getElementById('unit-step-label');
+      if (prevBtn) prevBtn.disabled = unitIdx <= 0;
+      if (nextBtn) nextBtn.disabled = unitIdx >= UNITS.length - 1;
+      if (stepLabel) stepLabel.textContent = `關卡 ${unitIdx + 1} / ${UNITS.length}`;
+
+      const listEl = document.getElementById('topic-list');
+      if (!listEl) return;
+
+      const visibleTopics = unit.topics.filter(t => {
+        if (appState.filterMode === 'todo') {
+          return !appState.checkedTopics.includes(t.id);
+        }
+        return true;
+      });
+
+      if (visibleTopics.length === 0) {
+        listEl.innerHTML = `
+          <div class="empty-state">
+            <h4>太棒了！本關卡考點已全部勾選完成</h4>
+            <p>您已完成「${unit.title}」的所有核心重點，可切換為顯示全部以複習細節，或前往下一關卡。</p>
+            <button type="button" class="btn btn-sm" onclick="setFilter('all')">顯示本單元全部項目</button>
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = visibleTopics.map(t => {
+        const isChecked = appState.checkedTopics.includes(t.id);
+        const isExpanded = appState.expandedTopics.includes(t.id);
+        const userChoice = appState.quizAnswers[t.id];
+        const hasAnswered = typeof userChoice === 'number';
+        const isRight = hasAnswered && userChoice === t.quiz.answer;
+
+        const pointsHtml = t.points.map(p => `<li>${p}</li>`).join('');
+        const optionsHtml = t.quiz.options.map((opt, idx) => {
+          let cls = 'quiz-opt';
+          if (hasAnswered) {
+            if (idx === t.quiz.answer) cls += ' correct';
+            else if (idx === userChoice) cls += ' wrong';
+          }
+          const letter = ['A', 'B', 'C', 'D'][idx];
+          return `<button type="button" class="${cls}" onclick="answerQuiz('${t.id}', ${idx})">(${letter}) ${opt}</button>`;
+        }).join('');
+
+        return `
+          <article class="topic-card ${isChecked ? 'checked' : ''} ${isExpanded ? 'expanded' : ''}">
+            <div class="topic-header">
+              <button
+                type="button"
+                class="check-btn"
+                aria-label="${isChecked ? `取消勾選：${t.title}` : `標記完成：${t.title}`}"
+                aria-pressed="${isChecked ? 'true' : 'false'}"
+                onclick="toggleCheck('${t.id}')"
+              >
+                <span class="check-box-visual">
+                  ${isChecked ? '<i data-lucide="check" aria-hidden="true" style="width:14px;height:14px;"></i>' : ''}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                class="topic-trigger"
+                aria-expanded="${isExpanded ? 'true' : 'false'}"
+                onclick="toggleExpand('${t.id}')"
+              >
+                <div class="topic-head-main">
+                  <div class="topic-badges">
+                    <span class="topic-code">${t.code}</span>
+                    <span class="freq-chip ${t.highFreq ? 'high' : ''}">${t.freq}</span>
+                    ${isChecked ? '<span class="done-chip">已掌握</span>' : ''}
+                  </div>
+                  <div class="topic-title">${t.title}</div>
+                  <div class="topic-summary">${t.summary}</div>
+                </div>
+                <span class="expand-chevron" aria-hidden="true">
+                  <i data-lucide="chevron-down"></i>
+                </span>
+              </button>
+            </div>
+
+            <div class="topic-body">
+              <ul class="detail-points">${pointsHtml}</ul>
+
+              <div class="trap-box">
+                <span class="trap-label">
+                  <i data-lucide="alert-circle" aria-hidden="true" style="width:14px;height:14px;"></i>
+                  段考易錯陷阱辨析
+                </span>
+                <p class="trap-text">${t.trap}</p>
+              </div>
+
+              <div class="quiz-box">
+                <div class="quiz-head">
+                  <span class="quiz-badge">歷屆模擬隨堂測驗</span>
+                  <span class="dossier-meta">${hasAnswered ? (isRight ? '答對了！' : '再想一下解析') : '點擊選項即時對答案'}</span>
+                </div>
+                <p class="quiz-q">${t.quiz.q}</p>
+                <div class="quiz-options">${optionsHtml}</div>
+                <div class="quiz-feedback ${hasAnswered ? 'show ' + (isRight ? 'ok' : 'no') : ''}">
+                  <strong>${isRight ? '正確解析：' : '錯誤提醒：'}</strong>${t.quiz.explain}
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderMatrix() {
+      const container = document.getElementById('matrix-container');
+      const btnRegime = document.getElementById('matrix-btn-regime');
+      const btnAdmin = document.getElementById('matrix-btn-admin');
+      const btnLate = document.getElementById('matrix-btn-late');
+      if (btnRegime) btnRegime.classList.toggle('active', appState.matrixTab === 'regime');
+      if (btnAdmin) btnAdmin.classList.toggle('active', appState.matrixTab === 'admin');
+      if (btnLate) btnLate.classList.toggle('active', appState.matrixTab === 'late');
+      if (!container) return;
+
+      if (appState.matrixTab === 'regime') {
+        container.innerHTML = `
+          <table class="briefing-table">
+            <thead>
+              <tr>
+                <th>比較項目</th>
+                <th>荷蘭聯合東印度公司</th>
+                <th>西班牙</th>
+                <th>鄭氏政權</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-key">在臺時間 / 範圍</td>
+                <td>1624–1662・南部大員與西部平原（並赴東北部）</td>
+                <td>1626–1642・北臺灣雞籠、淡水、三貂角</td>
+                <td>1661–1683・以臺南承天府為中心拓墾至中北部</td>
+              </tr>
+              <tr>
+                <td class="td-key">代表城堡與總部</td>
+                <td>總部：印尼巴達維亞；臺灣：熱蘭遮城、普羅民遮城</td>
+                <td>總部：菲律賓馬尼拉；臺灣：聖薩爾瓦多城、紅毛城</td>
+                <td>最高中心：承天府（臺南）；行軍屯制度</td>
+              </tr>
+              <tr>
+                <td class="td-key">宗教與文字教育</td>
+                <td>基督教（新教）；創羅馬字母拼寫「新港文」設校</td>
+                <td>天主教；於基隆、淡水建教堂並傳授西方醫學</td>
+                <td>建全臺首座孔廟，推廣儒家教育與漢文，部落設校</td>
+              </tr>
+              <tr>
+                <td class="td-key">主要貿易商品</td>
+                <td>輸出鹿皮（銷日）、蔗糖、稻米；轉運絲綢瓷器</td>
+                <td>開採北部硫磺、尋訪東部金礦；與中國及日本貿易</td>
+                <td>對日、東南亞貿易，與英國簽通商協議；走私抗海禁</td>
+              </tr>
+              <tr>
+                <td class="td-key">原漢互動事件</td>
+                <td>地方會議間接統治；新港社結盟、麻豆社事件、烏鬼洞、郭懷一事件</td>
+                <td>仰賴馬賽人交易，重稅（二雞三甘當米）遭襲擊；因日本鎖國兵減敗給荷蘭</td>
+                <td>派劉國軒屯田與「大肚王國」爆發激烈衝突，大肚王勢力衰微</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+      } else if (appState.matrixTab === 'admin') {
+        container.innerHTML = `
+          <table class="briefing-table">
+            <thead>
+              <tr>
+                <th>時期 / 年份</th>
+                <th>行政層級建置</th>
+                <th>重要變化與代表地名</th>
+                <th>調整核心原因</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-key">康熙 23 年（1684）</td>
+                <td class="td-mono">一府三縣（隸屬福建）</td>
+                <td>臺灣府；臺灣縣（臺南）、鳳山縣（高屏）、諸羅縣（嘉南以北）</td>
+                <td>施琅《恭陳臺灣棄留疏》強調戰略地位，納入版圖</td>
+              </tr>
+              <tr>
+                <td class="td-key">雍正元年（1723）</td>
+                <td class="td-mono">一府四縣二廳</td>
+                <td>劃諸羅縣虎尾溪以北增設<strong>彰化縣</strong>、<strong>淡水廳</strong>，並設澎湖廳</td>
+                <td>朱一貴事件爆發，強化中北部漢人移墾區管理</td>
+              </tr>
+              <tr>
+                <td class="td-key">乾隆 53 年（1788）</td>
+                <td class="td-mono">一府四縣二廳</td>
+                <td><strong>諸羅縣</strong>改名為<strong>嘉義縣</strong>（赤崁樓立九座御龜碑）</td>
+                <td>嘉勉諸羅縣民在林爽文事件中死守城池之義行</td>
+              </tr>
+              <tr>
+                <td class="td-key">嘉慶 17 年（1812）</td>
+                <td class="td-mono">一府四縣三廳</td>
+                <td>蛤仔難納入版圖，增設<strong>噶瑪蘭廳</strong>（宜蘭）</td>
+                <td>吳沙入墾與防範海盜蔡牽窺伺侵擾</td>
+              </tr>
+              <tr>
+                <td class="td-key">光緒元年（1875）</td>
+                <td class="td-mono">二府八縣四廳</td>
+                <td>增設<strong>臺北府</strong>（臺北城 1884 年完工）與恆春縣等</td>
+                <td>牡丹社事件後，沈葆楨建議加強北部與南部防務</td>
+              </tr>
+              <tr>
+                <td class="td-key">光緒 11 年（1885）後</td>
+                <td class="td-mono">三府一直隸州</td>
+                <td>臺灣建省；臺北府、臺灣府（移至中部）、臺南府（南部）＋ <strong>臺東直隸州</strong></td>
+                <td>清法戰爭（西仔反）後體認海防重鎮，劉銘傳任首任巡撫</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+      } else {
+        container.innerHTML = `
+          <table class="briefing-table">
+            <thead>
+              <tr>
+                <th>比較面向</th>
+                <th>沈葆楨（1874 牡丹社事件後）</th>
+                <th>劉銘傳（1884 清法戰爭後）</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-key">來臺身分與背景</td>
+                <td>欽差大臣；同治 13 年日軍犯臺後赴臺督辦軍務</td>
+                <td>首任臺灣省巡撫；光緒 10 年法軍犯臺後督辦軍務並主持建省</td>
+              </tr>
+              <tr>
+                <td class="td-key">移民與原住民政策</td>
+                <td>廢除「渡臺禁令」與「劃界封山」；首推「開山撫番」闢北中南三路（含八通關古道）</td>
+                <td>設「臺東直隸州」強化東部治理；於臺北開辦「番學堂」教育原住民子弟</td>
+              </tr>
+              <tr>
+                <td class="td-key">軍事與行政區</td>
+                <td>安平建「億載金城（二鯤鯓砲臺）」；奏請增設臺北府（二府八縣四廳）</td>
+                <td>指揮滬尾、基隆抗法防務；臺灣建省重劃為三府一直隸州</td>
+              </tr>
+              <tr>
+                <td class="td-key">交通、產業與現代化</td>
+                <td>在基隆（雞籠）推動機器採煤</td>
+                <td>建基隆—臺北—新竹鐵路（獅球嶺隧道、騰雲號）、購輪船、設郵政總局（龍馬郵票）、電報線與電報學堂、臺北裝電燈、設西學堂</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+      }
+    }
+
+    function renderCharts() {
+      const c1 = getToken('--data-1');
+      const c2 = getToken('--data-2');
+      const c3 = getToken('--data-3');
+      const cContext = getToken('--data-context');
+      const cOutline = getToken('--outline-variant');
+      const cInk = getToken('--on-surface');
+      const cMuted = getToken('--on-surface-variant');
+      const fontBody = getToken('--font-body');
+      const fontLabel = getToken('--font-label');
+
+      // 1. Frequency Chart
+      const freqCanvas = document.getElementById('freqChart');
+      if (freqCanvas && window.Chart) {
+        const colors = FREQ_STATS.map(item => item.unitId === appState.activeUnitId ? c2 : c1);
+        if (freqChartInstance) {
+          freqChartInstance.data.datasets[0].backgroundColor = colors;
+          freqChartInstance.update();
+        } else {
+          freqChartInstance = new Chart(freqCanvas, {
+            type: 'bar',
+            data: {
+              labels: FREQ_STATS.map(d => d.label),
+              datasets: [{
+                label: '考點出現題次',
+                data: FREQ_STATS.map(d => d.count),
+                backgroundColor: colors,
+                borderRadius: 3,
+                barThickness: 16
+              }]
+            },
+            options: {
+              indexAxis: 'y',
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: cInk,
+                  titleFont: { family: fontBody, size: 12 },
+                  bodyFont: { family: fontLabel, size: 12 },
+                  callbacks: {
+                    label: function(ctx) {
+                      return ` 出現 ${ctx.raw} 題次（點擊長條可跳至對應單元）`;
+                    }
+                  }
+                }
+              },
+              onClick: function(evt, elements) {
+                if (elements && elements.length > 0) {
+                  const idx = elements[0].index;
+                  const target = FREQ_STATS[idx];
+                  if (target) selectUnit(target.unitId);
+                }
+              },
+              scales: {
+                x: {
+                  beginAtZero: true,
+                  grid: { color: cOutline },
+                  ticks: { color: cMuted, font: { family: fontLabel, size: 11 } }
+                },
+                y: {
+                  grid: { display: false },
+                  ticks: { color: cInk, font: { family: fontBody, size: 12, weight: '500' } }
+                }
+              }
+            }
+          });
+        }
+      }
+
+      // 2. Unit Progress Chart
+      const progCanvas = document.getElementById('progressChart');
+      if (progCanvas && window.Chart) {
+        const doneArr = UNITS.map(u => u.topics.filter(t => appState.checkedTopics.includes(t.id)).length);
+        const remArr = UNITS.map((u, i) => u.topics.length - doneArr[i]);
+        const labels = UNITS.map(u => `單元 ${u.num}`);
+
+        if (progressChartInstance) {
+          progressChartInstance.data.datasets[0].data = doneArr;
+          progressChartInstance.data.datasets[1].data = remArr;
+          progressChartInstance.update();
+        } else {
+          progressChartInstance = new Chart(progCanvas, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: '已掌握考點',
+                  data: doneArr,
+                  backgroundColor: c3,
+                  borderRadius: 3
+                },
+                {
+                  label: '待複習考點',
+                  data: remArr,
+                  backgroundColor: cContext,
+                  borderRadius: 3
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: 'bottom',
+                  labels: { color: cInk, font: { family: fontBody, size: 12 }, boxWidth: 12 }
+                }
+              },
+              scales: {
+                x: {
+                  stacked: true,
+                  grid: { display: false },
+                  ticks: { color: cInk, font: { family: fontLabel, size: 11 } }
+                },
+                y: {
+                  stacked: true,
+                  beginAtZero: true,
+                  max: 4,
+                  ticks: { stepSize: 1, color: cMuted, font: { family: fontLabel, size: 11 } },
+                  grid: { color: cOutline }
+                }
+              }
+            }
+          });
+        }
+      }
+    }
+
+    function renderAll() {
+      renderOverviewKPIs();
+      renderUnitSwitcher();
+      renderFilterButtons();
+      renderTopicList();
+      renderMatrix();
+      renderCharts();
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    // =========================================================================
+    // 5. Initialization with Gemini Notebook Shim API
+    // =========================================================================
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            if (saved.activeUnitId && UNITS.some(u => u.id === saved.activeUnitId)) {
+              appState.activeUnitId = saved.activeUnitId;
+            }
+            if (saved.filterMode === 'all' || saved.filterMode === 'todo') {
+              appState.filterMode = saved.filterMode;
+            }
+            if (saved.matrixTab === 'regime' || saved.matrixTab === 'admin' || saved.matrixTab === 'late') {
+              appState.matrixTab = saved.matrixTab;
+            }
+            if (Array.isArray(saved.checkedTopics)) {
+              appState.checkedTopics = saved.checkedTopics;
+            }
+            if (Array.isArray(saved.expandedTopics)) {
+              appState.expandedTopics = saved.expandedTopics;
+            }
+            if (saved.quizAnswers && typeof saved.quizAnswers === 'object') {
+              appState.quizAnswers = saved.quizAnswers;
+            }
+          }
+        }
+      } catch (err) {
+        // Fallback cleanly to default state
+      }
+
+      renderAll();
+
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+          window.notebookAppApi.notifyAppReady();
+        }
+      } catch (err) {
+        // Ignore outside host container
+      }
+    });
+  </script>
+</body>
+</html>

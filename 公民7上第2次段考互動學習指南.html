@@ -1,0 +1,2620 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="dashboard">
+  <meta name="design-style" content="haven">
+  <title>國中七年級公民科｜家庭、親屬與社會變遷互動學習指南</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Haven) */
+      --background: #f5f6f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #e3ebe2;
+      --surface-container-high: #dbe2dd;
+
+      /* Ink */
+      --on-surface: #23272a;
+      --on-surface-variant: #5c6468;
+
+      /* Rules */
+      --outline: #c9d0cc;
+      --outline-variant: #dde2df;
+
+      /* Accents */
+      --primary: #3c5a6e;
+      --primary-hover: #2f4858;
+      --on-primary: #ffffff;
+      --primary-container: #e2e9ee;
+      --on-primary-container: #2a4152;
+      --secondary: #4f6b53;
+      --tertiary: #5f7c63;
+      --error: #a63d32;
+      --error-container: #f7eae8;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #3c5a6e;
+      --data-2: #5f7c63;
+      --data-3: #a8694a;
+      --data-4: #8a7a68;
+      --data-context: #c3cac6;
+
+      /* Semantic */
+      --positive: #4f6b53;
+      --positive-container: #e3ebe2;
+      --warning: #a8694a;
+      --warning-container: #f5ece6;
+      --focus: #3c5a6e;
+
+      /* Fonts */
+      --font-headline: 'Noto Sans TC', 'Outfit', sans-serif;
+      --font-body: 'Noto Sans TC', 'Hanken Grotesk', sans-serif;
+      --font-label: 'Noto Sans TC', 'Outfit', sans-serif;
+
+      /* Shape */
+      --rounded: 0.375rem;
+      --rounded-lg: 0.5rem;
+      --rounded-full: 9999px;
+
+      /* Style effects */
+      --hairline: 1px solid var(--outline-variant);
+      --hairline-control: 1px solid var(--outline);
+      --hairline-active: 2px solid var(--primary);
+      --elevation: none;
+
+      /* Type scale (Dashboard / Study Explorer) */
+      --display-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.35rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.55vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.78rem;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      position: static !important;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .page-grid * {
+      min-width: 0;
+    }
+
+    /* Header */
+    .site-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+      padding-bottom: var(--space-lg);
+      border-bottom: var(--hairline);
+    }
+
+    .header-copy {
+      max-width: 68ch;
+    }
+
+    .label-kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--on-surface-variant);
+      margin: 0 0 var(--space-xs) 0;
+    }
+
+    .headline {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 400;
+      letter-spacing: 0;
+      line-height: 1.22;
+      color: var(--on-surface);
+      margin: 0;
+    }
+
+    .headline strong {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .caption-sage {
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      font-weight: 500;
+      color: var(--secondary);
+      margin: var(--space-sm) 0 0 0;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border: 1px solid var(--primary);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      border: var(--hairline-control);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--surface-container-high);
+    }
+
+    .btn-danger-arm {
+      background-color: var(--error-container);
+      color: var(--error);
+      border: 1px solid var(--error);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Panel (Haven hairline card) */
+    .panel {
+      background-color: var(--surface-container-low);
+      border: var(--hairline);
+      border-radius: var(--rounded-lg);
+      box-shadow: var(--elevation);
+      padding: var(--space-md) var(--space-lg);
+    }
+
+    /* Overview KPI Grid (Asymmetric 4-col) */
+    .overview-section {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr 1fr 1fr;
+      gap: var(--space-md);
+    }
+
+    .kpi-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    .kpi-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    .kpi-value {
+      font-family: var(--font-headline);
+      font-size: clamp(1.75rem, 1.3rem + 1.2vw, 2.25rem);
+      font-weight: 500;
+      line-height: 1.1;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-unit {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background-color: var(--surface-container-high);
+      border-radius: var(--rounded-full);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: var(--primary);
+      border-radius: var(--rounded-full);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    .progress-fill-sage {
+      background-color: var(--tertiary);
+    }
+
+    /* Tags */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: 0.2rem 0.65rem;
+      border-radius: var(--rounded-full);
+      background-color: var(--surface-container);
+      color: var(--secondary);
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 500;
+      border: 0;
+      white-space: nowrap;
+    }
+
+    .tag-slate {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+
+    .tag-warn {
+      background-color: var(--warning-container);
+      color: var(--warning);
+    }
+
+    .tag-error {
+      background-color: var(--error-container);
+      color: var(--error);
+    }
+
+    /* Section Headings */
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-xs);
+    }
+
+    .section-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--on-surface);
+      margin: 0;
+    }
+
+    .section-title strong {
+      font-weight: 600;
+    }
+
+    /* Stage / Chapter Cards Grid */
+    .chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    .chapter-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-md);
+      text-align: left;
+      width: 100%;
+      min-height: 148px;
+      padding: var(--space-md) var(--space-lg);
+      background-color: var(--surface-container-low);
+      border: var(--hairline);
+      border-radius: var(--rounded-lg);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+
+    .chapter-card:hover {
+      background-color: var(--surface-container-high);
+    }
+
+    .chapter-card.is-active {
+      background-color: var(--primary-container);
+      box-shadow: inset 0 0 0 2px var(--primary);
+    }
+
+    .chapter-card.is-active .chapter-desc,
+    .chapter-card.is-active .chapter-num {
+      color: var(--on-primary-container);
+    }
+
+    .chapter-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .chapter-num {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chapter-name {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      color: var(--on-surface);
+      margin: var(--space-xs) 0 0 0;
+      line-height: 1.3;
+    }
+
+    .chapter-desc {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      margin: var(--space-xs) 0 0 0;
+      line-height: 1.5;
+    }
+
+    .chapter-foot {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .chapter-progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Detail Workspace Panel */
+    .detail-panel {
+      padding: var(--space-lg) var(--space-xl);
+      animation: fadeUp var(--dur-short) var(--ease-out);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .detail-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-md);
+      padding-bottom: var(--space-lg);
+      border-bottom: var(--hairline);
+    }
+
+    .detail-header-text {
+      max-width: 65ch;
+    }
+
+    .detail-title {
+      font-family: var(--font-headline);
+      font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.75rem);
+      font-weight: 600;
+      margin: var(--space-xs) 0 0 0;
+      line-height: 1.25;
+      color: var(--on-surface);
+    }
+
+    .detail-nav-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    /* Detail Grid Inside Panel (no nested bordered cards!) */
+    .detail-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding-top: var(--space-lg);
+    }
+
+    .detail-subblock + .detail-subblock {
+      margin-top: var(--space-xl);
+      padding-top: var(--space-lg);
+      border-top: var(--hairline);
+    }
+
+    .subblock-heading {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-sm) 0;
+    }
+
+    .prose {
+      max-width: 65ch;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-md) 0;
+    }
+
+    .prose-muted {
+      color: var(--on-surface-variant);
+      font-size: 0.92rem;
+    }
+
+    /* Clean Haven Table (horizontal hairlines only, no zebra) */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .haven-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    .haven-table th {
+      text-align: left;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      color: var(--on-surface-variant);
+      padding: var(--space-sm) var(--space-sm);
+      border-bottom: 1px solid var(--outline);
+      white-space: nowrap;
+    }
+
+    .haven-table td {
+      padding: var(--space-sm) var(--space-sm);
+      border-bottom: var(--hairline);
+      vertical-align: top;
+      color: var(--on-surface);
+    }
+
+    .haven-table tbody tr:hover {
+      background-color: var(--surface-container-high);
+    }
+
+    .num-cell {
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    /* Callout band (single tinted sage-mist highlight) */
+    .callout-sage {
+      background-color: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+
+    .callout-sage-title {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--secondary);
+      margin: 0 0 var(--space-xs) 0;
+    }
+
+    .callout-sage p,
+    .callout-sage ul {
+      margin: 0;
+      color: var(--on-surface);
+      font-size: 0.92rem;
+    }
+
+    .callout-sage ul {
+      padding-left: 1.25rem;
+    }
+
+    .callout-sage li + li {
+      margin-top: var(--space-xs);
+    }
+
+    /* Rule List */
+    .rule-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    .rule-item {
+      padding: var(--space-sm) 0;
+      border-bottom: var(--hairline);
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: var(--space-sm);
+      align-items: start;
+    }
+
+    .rule-item:last-child {
+      border-bottom: 0;
+    }
+
+    .rule-badge {
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary);
+      background-color: var(--primary-container);
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--rounded);
+      font-variant-numeric: tabular-nums;
+      margin-top: 2px;
+    }
+
+    /* Study Progress Checklist */
+    .checklist-box {
+      background-color: var(--background);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+    }
+
+    .checklist-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+
+    .checklist-items {
+      display: grid;
+      gap: var(--space-xs);
+    }
+
+    .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+
+    .check-row:hover {
+      background-color: var(--surface-container-high);
+    }
+
+    .check-row input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin: 2px 0 0 0;
+      accent-color: var(--primary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .check-label-text {
+      font-size: 0.93rem;
+      color: var(--on-surface);
+      line-height: 1.5;
+    }
+
+    .check-row.is-checked .check-label-text {
+      color: var(--on-surface-variant);
+      text-decoration: line-through;
+    }
+
+    /* Chart Container */
+    .chart-block {
+      padding: var(--space-md) 0;
+    }
+
+    .chart-title {
+      font-family: var(--font-headline);
+      font-weight: 500;
+      font-size: 1rem;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-xs) 0;
+    }
+
+    .chart-canvas-wrap {
+      position: relative;
+      width: 100%;
+      height: 290px;
+      min-height: 280px;
+      margin-top: var(--space-sm);
+    }
+
+    /* Interactive Kinship Calculator & Filters */
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    .chip-btn {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      border: var(--hairline-control);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+
+    .chip-btn:hover {
+      background-color: var(--surface-container-high);
+    }
+
+    .chip-btn.is-active {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    .calc-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-md);
+      align-items: end;
+      margin-bottom: var(--space-md);
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .input-group label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      color: var(--on-surface-variant);
+    }
+
+    .haven-select {
+      min-height: 44px;
+      padding: var(--space-sm) 2.25rem var(--space-sm) var(--space-md);
+      border: var(--hairline-control);
+      border-radius: var(--rounded);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .calc-result-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+      padding: var(--space-md);
+      background-color: var(--background);
+      border-radius: var(--rounded);
+      margin-bottom: var(--space-md);
+    }
+
+    .calc-stat-label {
+      font-size: 0.78rem;
+      color: var(--on-surface-variant);
+      margin-bottom: 2px;
+    }
+
+    .calc-stat-val {
+      font-family: var(--font-headline);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .svg-diagram-wrap {
+      width: 100%;
+      overflow-x: auto;
+      padding: var(--space-sm) 0;
+    }
+
+    .svg-diagram-wrap svg {
+      display: block;
+      width: 100%;
+      max-width: 640px;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    /* Quiz Styling */
+    .quiz-item {
+      padding: var(--space-lg) 0;
+      border-bottom: var(--hairline);
+    }
+
+    .quiz-item:last-child {
+      border-bottom: 0;
+    }
+
+    .quiz-q-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-xs);
+    }
+
+    .quiz-q-text {
+      font-weight: 500;
+      margin: 0 0 var(--space-md) 0;
+      color: var(--on-surface);
+      max-width: 65ch;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+
+    .quiz-opt-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      text-align: left;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border: var(--hairline-control);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 0.9rem;
+      line-height: 1.45;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+
+    .quiz-opt-btn:hover {
+      background-color: var(--surface-container-high);
+    }
+
+    .quiz-opt-btn.is-correct {
+      background-color: var(--positive-container);
+      box-shadow: inset 0 0 0 2px var(--secondary);
+      color: var(--on-surface);
+    }
+
+    .quiz-opt-btn.is-wrong {
+      background-color: var(--error-container);
+      box-shadow: inset 0 0 0 2px var(--error);
+      color: var(--error);
+    }
+
+    .quiz-rationale {
+      margin-top: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background-color: var(--background);
+      border-radius: var(--rounded);
+      font-size: 0.88rem;
+      color: var(--on-surface-variant);
+    }
+
+    .quiz-rationale strong {
+      color: var(--on-surface);
+    }
+
+    /* Footer */
+    .site-footer {
+      border-top: var(--hairline);
+      padding-top: var(--space-lg);
+      margin-top: var(--space-md);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Container queries & responsive breakpoints */
+    .detail-container-wrap {
+      container-type: inline-size;
+    }
+
+    @container (max-width: 820px) {
+      .detail-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .chapters-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-md);
+      }
+      .kpi-grid,
+      .chapters-grid,
+      .quiz-options,
+      .calc-result-grid,
+      .calc-controls {
+        grid-template-columns: 1fr;
+      }
+      .detail-panel {
+        padding: var(--space-md);
+      }
+      body {
+        padding: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-grid">
+    <!-- Header -->
+    <header class="site-header">
+      <div class="header-copy">
+        <p class="label-kicker">七年級上學期・社會領域公民科（第三、四章段考核心整理）</p>
+        <h1 class="headline">家庭生活與社會變遷<strong>互動學習指南</strong></h1>
+        <p class="caption-sage">整合 109–112 學年度各校段考命題重點，依關卡切換複習家庭型態、親屬分類、親等計算、社會變遷與法律保障。</p>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn btn-secondary" id="btn-jump-quiz" onclick="selectChapter('quiz')">直接進入段考實戰</button>
+        <button type="button" class="btn btn-secondary" id="btn-reset-progress" onclick="handleResetProgress(this)">重設學習進度</button>
+      </div>
+    </header>
+
+    <!-- Top Overview KPI Cards -->
+    <section class="overview-section" aria-label="學習總覽卡片">
+      <div class="kpi-grid">
+        <div class="panel kpi-card">
+          <div>
+            <p class="label-kicker">整體學習掌握度</p>
+            <div class="kpi-value-row">
+              <span class="kpi-value" id="kpi-percent">0%</span>
+              <span class="kpi-unit" id="kpi-checks-count">已完成 0 / 22 項考點</span>
+            </div>
+          </div>
+          <div>
+            <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="kpi-progressbar">
+              <div class="progress-fill" id="kpi-progress-fill" style="width: 0%;"></div>
+            </div>
+            <p class="caption-sage" id="kpi-status-msg">請點選下方任一章節卡片，開始檢核你的複習進度。</p>
+          </div>
+        </div>
+
+        <div class="panel kpi-card">
+          <div>
+            <p class="label-kicker">關卡完熟數</p>
+            <div class="kpi-value-row">
+              <span class="kpi-value" id="kpi-chapters-done">0</span>
+              <span class="kpi-unit">/ 6 個章節</span>
+            </div>
+          </div>
+          <p class="caption-sage">單一章節內所有檢核點皆打勾即計為「已掌握」。</p>
+        </div>
+
+        <div class="panel kpi-card">
+          <div>
+            <p class="label-kicker">現代家庭縮影（核心趨勢）</p>
+            <div class="kpi-value-row">
+              <span class="kpi-value">82%</span>
+              <span class="kpi-unit">2–4人家庭</span>
+            </div>
+          </div>
+          <p class="caption-sage">祖父母輩僅 4% 為 2–4 人，過去 71% 超過 8 人。</p>
+        </div>
+
+        <div class="panel kpi-card">
+          <div>
+            <p class="label-kicker">段考實戰檢測</p>
+            <div class="kpi-value-row">
+              <span class="kpi-value" id="kpi-quiz-score">—</span>
+              <span class="kpi-unit" id="kpi-quiz-count">尚未作答（共 10 題）</span>
+            </div>
+          </div>
+          <p class="caption-sage">精選各校段考高頻易錯題，即時對照法條解析。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Middle Clickable Chapter / Stage Cards -->
+    <section aria-label="章節關卡選擇">
+      <div class="section-head">
+        <h2 class="section-title">選擇複習<strong>主題關卡</strong></h2>
+        <span class="label-kicker" id="active-chapter-indicator">目前檢視：關卡 01・家庭型態與現代多元樣貌</span>
+      </div>
+      <div class="chapters-grid" id="chapters-grid"></div>
+    </section>
+
+    <!-- Expanded Detail View -->
+    <section class="panel detail-panel detail-container-wrap" id="detail-panel" aria-live="polite"></section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <span>資料來源彙整：中山、中興、北興、同德、大樹、林園、民族、石門、埔心、埤頭、大同、福興等國中七年級公民科段考試題與統計表（翰林版七上第三、四章）。</span>
+      <span id="save-status-text">進度自動儲存中</span>
+    </footer>
+  </main>
+
+  <api-shim></api-shim>
+  <script>
+    /* =========================================================================
+       Data Model (100% grounded in source materials)
+       ========================================================================= */
+    const CHAPTERS = [
+      {
+        id: `types`,
+        num: `01`,
+        title: `家庭型態與現代多元樣貌`,
+        tag: `基本概念`,
+        summary: `比較小家庭、折衷家庭、大家庭優缺點，並辨識單親、隔代、重組、頂客、新住民與兩地家庭。`,
+        checklist: [
+          { id: `t1`, text: `能區分「小家庭（核心）」、「折衷家庭（主幹）」與「大家庭（擴展）」的成員組成` },
+          { id: `t2`, text: `理解「三代同鄰（一碗湯的距離）」如何兼顧照顧與個人空間` },
+          { id: `t3`, text: `能從情境判別單親、隔代教養、重組（繼親）、頂客（DINK）、新住民與兩地家庭` },
+          { id: `t4`, text: `能解讀祖父母輩與自己這代的家庭人數比例變化趨勢` }
+        ]
+      },
+      {
+        id: `kinship`,
+        num: `02`,
+        title: `親屬分類與民法定義`,
+        tag: `高頻必考`,
+        summary: `釐清配偶、自然血親、法定血親（收養）與三大姻親範圍，避開「親家、大嫂的弟妹」等無親屬陷阱。`,
+        checklist: [
+          { id: `k1`, text: `知道「配偶」既不是血親也不是姻親，須經結婚登記才生效` },
+          { id: `k2`, text: `能區分「自然血親（直系／旁系）」與「法定血親／擬制血親（須向法院聲請收養認可）」` },
+          { id: `k3`, text: `記熟《民法》三大類姻親：血親的配偶、配偶的血親、配偶的血親的配偶（妯娌、連襟）` },
+          { id: `k4`, text: `能立刻識別「血親的配偶的血親」（如親家、大嫂的弟弟、乾哥乾媽）在法律上無親屬關係` }
+        ]
+      },
+      {
+        id: `degree`,
+        num: `03`,
+        title: `親等計算與近親結婚限制`,
+        tag: `互動計算`,
+        summary: `圖解《民法》直系與旁系血親親等算法、姻親親等從配偶，以及近親禁婚之有效婚姻判斷。`,
+        checklist: [
+          { id: `d1`, text: `會計算「直系血親」親等（從己身上下數，一世代為一親等）` },
+          { id: `d2`, text: `會計算「旁系血親」親等（己身至同源祖先世代數 ＋ 同源祖先至該親屬世代數）` },
+          { id: `d3`, text: `知道姻親親等一律「從其配偶之親等」（如公婆為直系姻親1親等、妯娌連襟為旁系姻親2親等）` },
+          { id: `d4`, text: `熟記禁婚規定：直系血親及直系姻親、旁系血親6親等內、旁系姻親5親等內輩分不相同者不得結婚` }
+        ]
+      },
+      {
+        id: `functions`,
+        num: `04`,
+        title: `家庭功能與高齡少子變遷`,
+        tag: `圖表比例`,
+        summary: `掌握生育、經濟、教育、保護與照顧四大功能轉變，並解讀 7%/14%/20% 高齡指標與家務勞動價值。`,
+        checklist: [
+          { id: `f1`, text: `能從生活例子對應四大功能，並知道「親情間的保護與照顧」最無法被其他機構完全取代` },
+          { id: `f2`, text: `理解現代家庭經濟從「生產」轉為「消費」，教育與托育則有安親班、學校及媒體「輔助」` },
+          { id: `f3`, text: `熟記聯合國高齡指標：65歲以上占 7% 高齡化（1993）、14% 高齡（2018）、20% 超高齡（2026推估）` },
+          { id: `f4`, text: `理解少子化與高齡社會的對應政策（如公共托育、育嬰假、長照服務法與喘息服務）` }
+        ]
+      },
+      {
+        id: `rights`,
+        num: `05`,
+        title: `性別平權、親權與家暴防治`,
+        tag: `法規實務`,
+        summary: `比較《民法》、《性別工作平等法》與《家庭暴力防治法》，掌握最佳利益原則、免除扶養與保護令流程。`,
+        checklist: [
+          { id: `r1`, text: `能區分「性別角色」與「性別刻板印象」，並了解《民法》夫妻互為家務代理人、約定子女姓氏` },
+          { id: `r2`, text: `記住《性別工作平等法》育嬰假規定：任職滿 6 個月、子女滿 3 歲前、男女皆可請，最多 2 年` },
+          { id: `r3`, text: `知道親權爭議時依「子女最佳利益」由法院判決，若曾遭遺棄或家暴可向法院請求減免扶養義務` },
+          { id: `r4`, text: `掌握《家暴防治法》保護對象（含前配偶、同居人、目睹兒少）、113/110 求助與「地方法院」核發保護令` }
+        ]
+      },
+      {
+        id: `quiz`,
+        num: `06`,
+        title: `段考實戰演練與迷思檢測`,
+        tag: `10 題測驗`,
+        summary: `嚴選各校段考代表性試題，即時作答批改並附詳細法條解析，檢視是否避開所有命題陷阱。`,
+        checklist: [
+          { id: `q1`, text: `完成全部 10 題段考精選試題並檢視解析` },
+          { id: `q2`, text: `測驗正確率達到 80%（答對 8 題以上）` }
+        ]
+      }
+    ];
+
+    const FAMILY_TYPE_CARDS = [
+      {
+        category: `traditional`,
+        name: `小家庭（核心家庭）`,
+        members: `一對夫妻＋未婚子女`,
+        pros: `成員單純、磨合少、享有獨立自由空間；目前占我國家庭主流（51.15%），促使小坪數兩房建案增多。`,
+        cons: `雙薪家庭遇到颱風停課不停班或子女突發病假時，照護人力容易不足。`
+      },
+      {
+        category: `traditional`,
+        name: `折衷家庭（主幹家庭）`,
+        members: `祖父母＋父母＋未婚子女（三代同堂）`,
+        pros: `長輩與年幼孫子女皆可互相照應，減輕雙薪托育與長照壓力（占比約 14.56%）。`,
+        cons: `跨世代作息（早睡 vs 晚睡）、管教觀念或家中決定權容易產生衝突。衍生方案為「三代同鄰（一碗湯的距離）」。`
+      },
+      {
+        category: `traditional`,
+        name: `大家庭（擴展家庭）`,
+        members: `父母＋已婚兄弟姊妹及其配偶子女同住`,
+        pros: `成員間擁有更多經濟支援與情感連結，家庭熱鬧。`,
+        cons: `人際關係複雜、缺乏隱私，妯娌或親屬間常因輪流煮飯、打掃等家務分配產生摩擦。`
+      },
+      {
+        category: `modern`,
+        name: `單親家庭`,
+        members: `父或母單獨一人＋未婚子女`,
+        pros: `親子關係往往較緊密，決策直接。`,
+        cons: `唯一大人工作時子女乏人照料，請假照顧易影響全勤或收入。`
+      },
+      {
+        category: `modern`,
+        name: `隔代教養家庭`,
+        members: `（外）祖父母＋未婚孫子女`,
+        pros: `填補父母在外工作或離異時的照顧空缺。`,
+        cons: `年邁長輩在指導課業（如協助寫作業）或現代資訊溝通上可能較吃力。`
+      },
+      {
+        category: `modern`,
+        name: `重組家庭（繼親家庭）`,
+        members: `父母單方或雙方帶來前次婚姻子女再婚組成`,
+        pros: `重新建立雙親支持系統。`,
+        cons: `須注意「繼父母與繼子女」若未向法院辦理收養，法律上為姻親而非血親；不同手足間需時間磨合。`
+      },
+      {
+        category: `modern`,
+        name: `頂客家庭（DINK）`,
+        members: `Double Income No Kids（雙薪無子女夫妻）`,
+        pros: `經濟與時間彈性高，屬於小家庭的類型之一，常以飼養寵物作伴。`,
+        cons: `未發揮家庭生育功能，是造成社會少子化的現象之一。`
+      },
+      {
+        category: `modern`,
+        name: `新住民家庭（跨國婚姻）`,
+        members: `夫或妻為外籍人士所組成`,
+        pros: `促進多元文化交流（我國國中小每 10 名學生約有 1 人為新住民子女，總數約 21 萬人）。`,
+        cons: `初期可能面臨語言、飲食或文化適應需求，政府設有生活適應輔導班協助。`
+      },
+      {
+        category: `modern`,
+        name: `兩地家庭`,
+        members: `夫妻因工作分隔不同縣市或跨國居住`,
+        pros: `兼顧個人職涯與家庭經濟收入（如北漂、南漂、派駐外地）。`,
+        cons: `平時須靠視訊聯繫感情，僅週末或數月團聚一次，家庭照顧責任易集中於單方。`
+      }
+    ];
+
+    const KINSHIP_LOOKUP = [
+      { title: `爸爸、媽媽、外公、孫子女`, type: `直系血親（自然血親）`, path: `己身所從出或從己身所出，具有真實血緣關係。`, trap: `即使父母離婚，父母與子女的直系血親關係仍永遠存在。` },
+      { title: `伯叔、姑姑、舅舅、阿姨、堂／表兄弟姊妹`, type: `旁系血親（自然血親）`, path: `與己身出於同一祖先（祖父母或外祖父母），適合骨髓／器官配對優先對象。`, trap: `注意區分「姑姑（血親）」與「姑丈（姻親）」、「叔叔（血親）」與「嬸嬸（姻親）」。` },
+      { title: `養父母、養子女（經法院認可）`, type: `法定血親（擬制血親）`, path: `須符合《民法》要件並經「法院」裁定認可，方算完成收養程序。`, trap: `法律效力視同自然血親，享有繼承權與親權；不可向警察局、戶政或社福機構直接單獨完成。` },
+      { title: `公公、婆婆、岳父、岳母、小叔、未收養之繼子女`, type: `姻親（配偶的血親）`, path: `配偶自己的直系或旁系血親。`, trap: `繼父或繼母若「未收養」前次婚姻小孩，彼此為直系姻親（配偶的血親），不是法定血親。` },
+      { title: `伯母、嬸嬸、舅媽、姑丈、姨丈、嫂嫂、弟媳、妹婿`, type: `姻親（血親的配偶）`, path: `自己直系或旁系血親所娶或嫁的對象。`, trap: `骨髓移植找自然血親時，嬸嬸、伯母、姑丈皆屬姻親，不具自然血緣。` },
+      { title: `妯娌（兄弟之妻互稱）、連襟（姊妹之夫互稱）`, type: `姻親（配偶的血親的配偶）`, path: `例如：媽媽與嬸嬸（妯娌）；爸爸與姨丈（連襟）。`, trap: `高頻考點！連襟關係會隨著婚姻關係的終止（離婚）而消滅。` },
+      { title: `親家（雙方父母）、大嫂的弟弟、伯母的父親、乾哥／乾媽`, type: `無親屬關係`, path: `「血親的配偶的血親」或單純結拜義親，不在《民法》親屬定義內。`, trap: `大嫂的弟弟與自己「無親屬關係」，若登記結婚，其婚姻完全有效！` }
+    ];
+
+    const DEGREE_PRESETS = {
+      parent: {
+        label: `父母／子女`,
+        category: `直系血親`,
+        degree: `1 親等`,
+        formula: `己身(0) → 父母(1) ＝ 1 世代`,
+        marriage: `不得結婚（《民法》禁止直系血親結婚）`,
+        canMarry: false,
+        nodes: [
+          { id: `me`, text: `己身`, x: 110, y: 120, role: `me` },
+          { id: `p`, text: `父母／子女`, x: 320, y: 120, role: `target` }
+        ],
+        edges: [{ from: `me`, to: `p`, label: `1世代` }]
+      },
+      grandparent: {
+        label: `（外）祖父母／孫子女`,
+        category: `直系血親`,
+        degree: `2 親等`,
+        formula: `己身(0) → 父母(1) → 祖父母(2) ＝ 2 世代`,
+        marriage: `不得結婚（直系血親一律禁婚）`,
+        canMarry: false,
+        nodes: [
+          { id: `me`, text: `己身`, x: 80, y: 120, role: `me` },
+          { id: `p`, text: `父母`, x: 260, y: 120, role: `mid` },
+          { id: `gp`, text: `祖父母`, x: 440, y: 120, role: `target` }
+        ],
+        edges: [
+          { from: `me`, to: `p`, label: `1` },
+          { from: `p`, to: `gp`, label: `2` }
+        ]
+      },
+      sibling: {
+        label: `兄弟姊妹`,
+        category: `旁系血親`,
+        degree: `2 親等`,
+        formula: `己身 → 父母(1) ＋ 父母 → 兄弟姊妹(1) ＝ 2 親等`,
+        marriage: `不得結婚（旁系血親 6 親等以內禁婚）`,
+        canMarry: false,
+        nodes: [
+          { id: `gp`, text: `共同祖先：父母`, x: 280, y: 42, role: `anchor` },
+          { id: `me`, text: `己身`, x: 140, y: 150, role: `me` },
+          { id: `sib`, text: `兄弟姊妹`, x: 420, y: 150, role: `target` }
+        ],
+        edges: [
+          { from: `me`, to: `gp`, label: `上數1` },
+          { from: `gp`, to: `sib`, label: `下數1` }
+        ]
+      },
+      uncle_aunt: {
+        label: `伯叔姑／舅姨／哥哥的養子女`,
+        category: `旁系血親（含法定）`,
+        degree: `3 親等`,
+        formula: `己身 → 父母(1) → 祖父母(2) ＋ 祖父母 → 伯叔姑(3) ＝ 3 親等（哥哥的養子女亦為旁系法定血親 3 親等）`,
+        marriage: `不得結婚（旁系血親 6 親等以內禁婚，法定血親視同自然血親）`,
+        canMarry: false,
+        nodes: [
+          { id: `gp`, text: `同源祖先：祖父母（或父母）`, x: 280, y: 38, role: `anchor` },
+          { id: `p`, text: `父母（或哥哥）`, x: 155, y: 100, role: `mid` },
+          { id: `me`, text: `己身`, x: 110, y: 165, role: `me` },
+          { id: `u`, text: `伯叔姑／哥之養子`, x: 430, y: 120, role: `target` }
+        ],
+        edges: [
+          { from: `me`, to: `p`, label: `1` },
+          { from: `p`, to: `gp`, label: `2` },
+          { from: `gp`, to: `u`, label: `+1 (共3)` }
+        ]
+      },
+      cousin: {
+        label: `堂兄弟姊妹／表兄弟姊妹`,
+        category: `旁系血親`,
+        degree: `4 親等`,
+        formula: `己身 → 父母(1) → 祖父母(2) ＋ 祖父母 → 伯叔姑(3) → 堂表親(4) ＝ 4 親等`,
+        marriage: `不得結婚（旁系血親 6 親等以內禁婚，例：與伯父兒子或姑姑兒子不得結婚）`,
+        canMarry: false,
+        nodes: [
+          { id: `gp`, text: `共同祖先：祖父母`, x: 280, y: 36, role: `anchor` },
+          { id: `p`, text: `父母`, x: 160, y: 98, role: `mid` },
+          { id: `u`, text: `伯叔姑舅姨`, x: 400, y: 98, role: `mid` },
+          { id: `me`, text: `己身`, x: 110, y: 168, role: `me` },
+          { id: `c`, text: `堂／表兄弟姊妹`, x: 450, y: 168, role: `target` }
+        ],
+        edges: [
+          { from: `me`, to: `p`, label: `1` },
+          { from: `p`, to: `gp`, label: `2` },
+          { from: `gp`, to: `u`, label: `3` },
+          { from: `u`, to: `c`, label: `4` }
+        ]
+      },
+      inlaw_parents: {
+        label: `公婆／岳父母`,
+        category: `直系姻親（配偶之血親）`,
+        degree: `1 親等`,
+        formula: `依「配偶」與公婆／岳父母的親等計算 ＝ 直系姻親 1 親等`,
+        marriage: `不得結婚（直系姻親禁婚，即使婚姻消滅後亦同）`,
+        canMarry: false,
+        nodes: [
+          { id: `me`, text: `己身`, x: 100, y: 120, role: `me` },
+          { id: `sp`, text: `配偶`, x: 270, y: 120, role: `mid` },
+          { id: `il`, text: `公婆／岳父母`, x: 450, y: 120, role: `target` }
+        ],
+        edges: [
+          { from: `me`, to: `sp`, label: `婚姻` },
+          { from: `sp`, to: `il`, label: `1親等` }
+        ]
+      },
+      zhouli_lianjin: {
+        label: `妯娌／連襟`,
+        category: `旁系姻親（配偶之血親之配偶）`,
+        degree: `2 親等`,
+        formula: `「配偶的兄弟姊妹」為2親等，其配偶亦從配偶之親等 ＝ 旁系姻親 2 親等`,
+        marriage: `不得結婚（旁系姻親 5 親等內禁婚需看輩分；妯娌／連襟為同輩但實務上仍受倫理規範，且婚姻關係存續中為重婚）`,
+        canMarry: false,
+        nodes: [
+          { id: `me`, text: `己身`, x: 80, y: 130, role: `me` },
+          { id: `sp`, text: `配偶`, x: 205, y: 130, role: `mid` },
+          { id: `sb`, text: `配偶手足`, x: 340, y: 70, role: `mid` },
+          { id: `tg`, text: `妯娌／連襟`, x: 475, y: 130, role: `target` }
+        ],
+        edges: [
+          { from: `me`, to: `sp`, label: `婚姻` },
+          { from: `sp`, to: `sb`, label: `2親等` },
+          { from: `sb`, to: `tg`, label: `婚姻` }
+        ]
+      },
+      no_relation: {
+        label: `大嫂的弟弟／親家／乾哥`,
+        category: `無親屬關係（血親的配偶的血親）`,
+        degree: `無親等`,
+        formula: `《民法》未將「血親的配偶的血親」列為姻親 → 雙方無法律親屬關係`,
+        marriage: `可以合法登記結婚！（段考最常出現的有效婚姻正確選項）`,
+        canMarry: true,
+        nodes: [
+          { id: `me`, text: `己身`, x: 75, y: 125, role: `me` },
+          { id: `bro`, text: `哥哥（血親）`, x: 205, y: 125, role: `mid` },
+          { id: `sil`, text: `大嫂（姻親）`, x: 345, y: 125, role: `mid` },
+          { id: `none`, text: `大嫂的弟弟（無關係）`, x: 495, y: 125, role: `safe` }
+        ],
+        edges: [
+          { from: `me`, to: `bro`, label: `血親` },
+          { from: `bro`, to: `sil`, label: `婚姻` },
+          { from: `sil`, to: `none`, label: `不延伸！` }
+        ]
+      }
+    };
+
+    const QUIZ_BANK = [
+      {
+        id: `q1`,
+        chapterTag: `親屬與收養`,
+        question: `帥氣的呂姓老師想收養品卉，除了符合法律所規定的收養條件外，還須經哪一單位的核可，才算完成收養程序？`,
+        options: [`(A) 戶政事務所`, `(B) 縣市政府社會局`, `(C) 行政院`, `(D) 法院`],
+        answerIndex: 3,
+        rationale: `依我國《民法》規定，收養子女須透過正式法律程序，向「法院」提出聲請並經法院認可，才算完成收養；不可只向社會局、警察局或戶政事務所辦理。`
+      },
+      {
+        id: `q2`,
+        chapterTag: `近親結婚限制`,
+        question: `基於家庭倫理及優生學考量，我國《民法》規定近親間不得結婚。下列何種組合若登記結婚，其婚姻最可能是有效的？`,
+        options: [`(A) 芷宸與哥哥的養子`, `(B) 暄涵與伯父的兒子`, `(C) 庭瑄與大嫂的弟弟`, `(D) 安好與姑姑的兒子`],
+        answerIndex: 2,
+        rationale: `「大嫂的弟弟」屬於「血親的配偶的血親」，在我國《民法》上無親屬關係，因此結婚有效。哥哥的養子（旁系法定血親3親等）、伯父的兒子（堂兄弟，旁系4親等）、姑姑的兒子（表兄弟，旁系4親等）皆在6親等內禁婚範圍。`
+      },
+      {
+        id: `q3`,
+        chapterTag: `自然血親與姻親`,
+        question: `罹癌的偉奇須做骨髓移植，醫生說與偉奇有「自然血親」關係的親屬較容易配對成功。下列哪一位親人最符合條件？`,
+        options: [`(A) 偉奇的乾哥`, `(B) 偉奇的嬸嬸`, `(C) 偉奇的姑丈`, `(D) 偉奇的舅舅`],
+        answerIndex: 3,
+        rationale: `舅舅（媽媽的兄弟）與偉奇具有共同的外祖父母血緣，為旁系自然血親。乾哥無法律親屬關係；嬸嬸與姑丈皆為「血親的配偶」，屬於姻親。`
+      },
+      {
+        id: `q4`,
+        chapterTag: `親屬稱謂判斷`,
+        question: `新婚的阿清和依玲與阿清的大哥、大嫂、公婆住在一起。下列敘述何者正確？(甲)阿清和依玲互為配偶 (乙)依玲與阿清的大嫂互為妯娌 (丙)他們組成的家庭為折衷家庭 (丁)依玲和阿清的父母是姻親`,
+        options: [`(A) 甲乙丙`, `(B) 乙丙丁`, `(C) 甲丙丁`, `(D) 甲乙丁`],
+        answerIndex: 3,
+        rationale: `阿清夫婦、大哥夫婦（兩組已婚小家庭）與公婆同住，屬於「大家庭（擴展家庭）」，非折衷家庭，故(丙)錯誤。(甲)(乙)(丁)皆正確。`
+      },
+      {
+        id: `q5`,
+        chapterTag: `家庭型態演變`,
+        question: `灰姑娘母親過世後，父親再婚娶了帶有兩名女兒的寡婦崔梅恩夫人（未辦理收養）。請問：依我國《民法》規定，灰姑娘與後母以及後母的兩名女兒分別為何種關係？`,
+        options: [`(A) 法定血親；旁系血親`, `(B) 姻親；無親屬關係`, `(C) 直系血親；姻親`, `(D) 姻親；姻親`],
+        answerIndex: 1,
+        rationale: `後母為父親的配偶（父之配偶＝血親的配偶），故灰姑娘與後母為「姻親」；而後母與前夫所生的兩名女兒，對灰姑娘而言是「血親的配偶的血親」，依法無親屬關係。`
+      },
+      {
+        id: `q6`,
+        chapterTag: `親家與連襟`,
+        question: `小宛與阿寧兩人結婚，雙方父母親互稱「親家」；另外小惠與小麗兩姊妹同日舉辦婚禮，兩位新婚丈夫互稱「連襟」。請問「親家」與「連襟」在我國《民法》分別屬於何種關係？`,
+        options: [`(A) 皆為姻親`, `(B) 無親屬關係；姻親`, `(C) 姻親；旁系血親`, `(D) 無親屬關係；無親屬關係`],
+        answerIndex: 1,
+        rationale: `「親家」是子女配偶的父母（血親的配偶的血親），依法無親屬關係；「連襟」是配偶的姊妹的丈夫（配偶的血親的配偶），屬於旁系姻親（2親等）。`
+      },
+      {
+        id: `q7`,
+        chapterTag: `家庭功能與變遷`,
+        question: `小烈聽奶奶說早期家裡種田養雞吃自己種養的食材，搬到北部後食材都必須去外面購買；另外政府開放高中生可申請「在家自學」。這兩件事分別反映家庭哪兩項功能的變化？`,
+        options: [`(A) 經濟功能轉變；教育功能更具自主性`, `(B) 生育功能減弱；保護照顧功能被取代`, `(C) 經濟功能消失；教育功能完全被學校取代`, `(D) 保護照顧功能轉變；生育功能增強`],
+        answerIndex: 0,
+        rationale: `自給自足轉為向外購買食材，顯示家庭「經濟功能」從生產單位轉為消費單位；開放「在家自學」則使家庭的「教育功能」更具自主性。`
+      },
+      {
+        id: `q8`,
+        chapterTag: `高齡指標與政策`,
+        question: `根據聯合國訂定標準，我國於民國107年（2018年）65歲以上老年人口超越總人口的 14%，成為「高齡社會」。下列何者「不會」是政府因應高齡社會的政策？`,
+        options: [`(A) 建構完善的長期照護制度與喘息服務`, `(B) 推動老人日間照顧中心與共餐服務`, `(C) 設立外籍配偶生活適應輔導班`, `(D) 規劃高齡友善無障礙就醫門診`],
+        answerIndex: 2,
+        rationale: `設立外籍配偶生活輔導班是針對「新住民家庭」的文化與生活適應政策，而非直接因應高齡社會老人照護問題的政策。`
+      },
+      {
+        id: `q9`,
+        chapterTag: `育嬰假與家庭平權`,
+        question: `一名雇主不准男性員工申請育嬰假且威脅辭退該員工，經勞工局認定違法後予以開罰。請問：勞工局所根據的法律與申請條件下列何者正確？`,
+        options: [`(A) 《民法》；僅限已婚女性`, `(B) 《性別平等教育法》；子女滿5歲前`, `(C) 《性別工作平等法》；任職滿6個月、子女滿3歲前`, `(D) 《勞動基準法》；任職滿1年即可`],
+        answerIndex: 2,
+        rationale: `育嬰假與家庭照顧假規定於《性別工作平等法》（現稱性別平等工作法），受僱者不分性別，只要任職滿 6 個月後，在子女滿 3 歲前皆可申請，最長 2 年並可請領育嬰津貼。`
+      },
+      {
+        id: `q10`,
+        chapterTag: `親權與保護令`,
+        question: `阿倫酒後毆打妻子與就讀國一的兒子，並自稱是行使管教權。下列關於我國法律處理的敘述，何者正確？`,
+        options: [`(A) 保護令由當地警察局或社會局直接核發`, `(B) 法院可依《民法》宣告限制或禁止阿倫行使親權`, `(C) 家庭暴力僅包含肢體毆打，不含言語精神威脅`, `(D) 子女成年後即使曾遭長期家暴，仍絕對不得請求減免扶養義務`],
+        answerIndex: 1,
+        rationale: `保護令須向「地方法院」聲請並由法院核發（非警局或社會局核發）；家暴包含身體與精神言語傷害；不適任父母可由法院限制或禁止行使親權；子女若曾遭父母遺棄或家暴，成年後可向法院請求減輕或免除扶養義務。`
+      }
+    ];
+
+    /* =========================================================================
+       App State & Persistence (notebookAppApi)
+       ========================================================================= */
+    let appState = {
+      activeChapterId: `types`,
+      checkedItems: {},
+      quizAnswers: {},
+      familyCategoryFilter: `all`,
+      degreePreset: `cousin`,
+      quizFilter: `all`
+    };
+
+    let activeCharts = [];
+
+    function getCssToken(tokenName) {
+      return getComputedStyle(document.documentElement).getPropertyValue(tokenName).trim();
+    }
+
+    async function persistState() {
+      const saveEl = document.getElementById(`save-status-text`);
+      if (saveEl) saveEl.textContent = `儲存進度中…`;
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState(appState);
+        }
+        if (saveEl) saveEl.textContent = `學習進度已同步儲存`;
+      } catch (err) {
+        if (saveEl) saveEl.textContent = `本機暫存狀態中`;
+      }
+    }
+
+    async function loadInitialState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            appState = {
+              activeChapterId: saved.activeChapterId || `types`,
+              checkedItems: saved.checkedItems || {},
+              quizAnswers: saved.quizAnswers || {},
+              familyCategoryFilter: saved.familyCategoryFilter || `all`,
+              degreePreset: saved.degreePreset || `cousin`,
+              quizFilter: saved.quizFilter || `all`
+            };
+          }
+        }
+      } catch (err) {
+        // Fallback silently to default state
+      }
+    }
+
+    /* =========================================================================
+       Overview KPI Calculations & Renderers
+       ========================================================================= */
+    function updateOverviewKpis() {
+      let totalChecks = 0;
+      let doneChecks = 0;
+      let chaptersDone = 0;
+
+      CHAPTERS.forEach(function (ch) {
+        let chDone = 0;
+        ch.checklist.forEach(function (item) {
+          totalChecks += 1;
+          if (appState.checkedItems[item.id]) {
+            doneChecks += 1;
+            chDone += 1;
+          }
+        });
+        if (chDone === ch.checklist.length && ch.checklist.length > 0) {
+          chaptersDone += 1;
+        }
+      });
+
+      const pct = totalChecks > 0 ? Math.round((doneChecks / totalChecks) * 100) : 0;
+
+      const pctEl = document.getElementById(`kpi-percent`);
+      const countEl = document.getElementById(`kpi-checks-count`);
+      const barEl = document.getElementById(`kpi-progressbar`);
+      const fillEl = document.getElementById(`kpi-progress-fill`);
+      const msgEl = document.getElementById(`kpi-status-msg`);
+      const chDoneEl = document.getElementById(`kpi-chapters-done`);
+
+      if (pctEl) pctEl.textContent = `${pct}%`;
+      if (countEl) countEl.textContent = `已完成 ${doneChecks} / ${totalChecks} 項考點`;
+      if (barEl) barEl.setAttribute(`aria-valuenow`, String(pct));
+      if (fillEl) fillEl.style.width = `${pct}%`;
+      if (chDoneEl) chDoneEl.textContent = String(chaptersDone);
+
+      if (msgEl) {
+        if (doneChecks === 0) {
+          msgEl.textContent = `點選任一張章節卡片並勾選下方考點，追蹤你的段考準備度。`;
+        } else if (pct < 50) {
+          msgEl.textContent = `已完成初步複習，建議優先強化「親屬分類」與「親等計算」。`;
+        } else if (pct < 100) {
+          msgEl.textContent = `進度過半！別忘了完成最後的 10 題段考實戰檢測。`;
+        } else {
+          msgEl.textContent = `太棒了！全部考點均已檢核完成，段考準備就緒。`;
+        }
+      }
+
+      // Quiz KPI
+      const answeredKeys = Object.keys(appState.quizAnswers);
+      let correctCount = 0;
+      QUIZ_BANK.forEach(function (q) {
+        if (appState.quizAnswers[q.id] === q.answerIndex) {
+          correctCount += 1;
+        }
+      });
+
+      const qScoreEl = document.getElementById(`kpi-quiz-score`);
+      const qCountEl = document.getElementById(`kpi-quiz-count`);
+      if (qScoreEl && qCountEl) {
+        if (answeredKeys.length === 0) {
+          qScoreEl.textContent = `—`;
+          qCountEl.textContent = `尚未作答（共 ${QUIZ_BANK.length} 題）`;
+        } else {
+          const scorePct = Math.round((correctCount / answeredKeys.length) * 100);
+          qScoreEl.textContent = `${scorePct}%`;
+          qCountEl.textContent = `已作答 ${answeredKeys.length} / ${QUIZ_BANK.length} 題（對 ${correctCount} 題）`;
+        }
+      }
+    }
+
+    function renderChapterCards() {
+      const grid = document.getElementById(`chapters-grid`);
+      if (!grid) return;
+
+      grid.innerHTML = CHAPTERS.map(function (ch) {
+        const isActive = ch.id === appState.activeChapterId;
+        const total = ch.checklist.length;
+        const done = ch.checklist.filter(function (i) { return Boolean(appState.checkedItems[i.id]); }).length;
+        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+        const isDone = done === total;
+
+        const badgeClass = isDone ? `tag` : (isActive ? `tag tag-slate` : `tag`);
+        const badgeText = isDone ? `已掌握` : ch.tag;
+
+        return `
+          <button type="button"
+                  class="chapter-card ${isActive ? `is-active` : ``}"
+                  onclick="selectChapter('${ch.id}')"
+                  aria-pressed="${isActive ? `true` : `false`}">
+            <div>
+              <div class="chapter-top">
+                <span class="chapter-num">關卡 ${ch.num}</span>
+                <span class="${badgeClass}">${badgeText}</span>
+              </div>
+              <h3 class="chapter-name">${ch.title}</h3>
+              <p class="chapter-desc">${ch.summary}</p>
+            </div>
+            <div class="chapter-foot">
+              <div class="chapter-progress-meta">
+                <span>考點檢核進度</span>
+                <span>${done} / ${total}</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill ${isDone ? `progress-fill-sage` : ``}" style="width: ${pct}%;"></div>
+              </div>
+            </div>
+          </button>
+        `;
+      }).join(``);
+
+      const currentCh = CHAPTERS.find(function (c) { return c.id === appState.activeChapterId; });
+      const indEl = document.getElementById(`active-chapter-indicator`);
+      if (indEl && currentCh) {
+        indEl.textContent = `目前檢視：關卡 ${currentCh.num}・${currentCh.title}`;
+      }
+    }
+
+    /* =========================================================================
+       Detail View Rendering per Chapter
+       ========================================================================= */
+    function destroyActiveCharts() {
+      activeCharts.forEach(function (chart) {
+        if (chart && typeof chart.destroy === `function`) {
+          chart.destroy();
+        }
+      });
+      activeCharts = [];
+    }
+
+    function buildChecklistHtml(ch) {
+      const total = ch.checklist.length;
+      const done = ch.checklist.filter(function (i) { return Boolean(appState.checkedItems[i.id]); }).length;
+      const allDone = done === total;
+
+      const itemsHtml = ch.checklist.map(function (item) {
+        const checked = Boolean(appState.checkedItems[item.id]);
+        return `
+          <label class="check-row ${checked ? `is-checked` : ``}">
+            <input type="checkbox"
+                   ${checked ? `checked` : ``}
+                   onchange="toggleChecklistItem('${item.id}', this.checked)">
+            <span class="check-label-text">${item.text}</span>
+          </label>
+        `;
+      }).join(``);
+
+      return `
+        <div class="checklist-box">
+          <div class="checklist-header">
+            <div>
+              <h3 class="subblock-heading" style="margin: 0;">本章學習進度追蹤（${done} / ${total}）</h3>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="toggleChapterAll('${ch.id}')">
+              ${allDone ? `取消全選` : `標記本章完成`}
+            </button>
+          </div>
+          <div class="checklist-items">${itemsHtml}</div>
+        </div>
+      `;
+    }
+
+    function renderChapterDetail() {
+      const panel = document.getElementById(`detail-panel`);
+      if (!panel) return;
+
+      destroyActiveCharts();
+
+      const chIdx = CHAPTERS.findIndex(function (c) { return c.id === appState.activeChapterId; });
+      const ch = CHAPTERS[chIdx >= 0 ? chIdx : 0];
+      const prevCh = chIdx > 0 ? CHAPTERS[chIdx - 1] : null;
+      const nextCh = chIdx < CHAPTERS.length - 1 ? CHAPTERS[chIdx + 1] : null;
+
+      let bodyHtml = ``;
+      if (ch.id === `types`) bodyHtml = renderTypesBody(ch);
+      else if (ch.id === `kinship`) bodyHtml = renderKinshipBody(ch);
+      else if (ch.id === `degree`) bodyHtml = renderDegreeBody(ch);
+      else if (ch.id === `functions`) bodyHtml = renderFunctionsBody(ch);
+      else if (ch.id === `rights`) bodyHtml = renderRightsBody(ch);
+      else if (ch.id === `quiz`) bodyHtml = renderQuizBody(ch);
+
+      panel.innerHTML = `
+        <div class="detail-header">
+          <div class="detail-header-text">
+            <span class="tag tag-slate">關卡 ${ch.num}・${ch.tag}</span>
+            <h2 class="detail-title">${ch.title}</h2>
+            <p class="caption-sage">${ch.summary}</p>
+          </div>
+          <div class="detail-nav-actions">
+            ${prevCh ? `<button type="button" class="btn btn-secondary" onclick="selectChapter('${prevCh.id}')">← 上一關</button>` : ``}
+            ${nextCh ? `<button type="button" class="btn btn-primary" onclick="selectChapter('${nextCh.id}')">下一關：${nextCh.num} →</button>` : ``}
+          </div>
+        </div>
+        ${bodyHtml}
+      `;
+
+      // Initialize charts if present in current view
+      if (ch.id === `types`) initTypesCharts();
+      else if (ch.id === `functions`) initFunctionsCharts();
+    }
+
+    /* -------------------------------------------------------------------------
+       Chapter 01: Family Types
+       ------------------------------------------------------------------------- */
+    function renderTypesBody(ch) {
+      const filter = appState.familyCategoryFilter || `all`;
+      const filtered = FAMILY_TYPE_CARDS.filter(function (f) {
+        return filter === `all` || f.category === filter;
+      });
+
+      const rowsHtml = filtered.map(function (item) {
+        const badge = item.category === `traditional` ? `<span class="tag tag-slate">傳統三大類</span>` : `<span class="tag">現代多元</span>`;
+        return `
+          <tr>
+            <td><strong>${item.name}</strong><br>${badge}</td>
+            <td>${item.members}</td>
+            <td>${item.pros}</td>
+            <td>${item.cons}</td>
+          </tr>
+        `;
+      }).join(``);
+
+      return `
+        <div class="detail-layout">
+          <div>
+            <div class="detail-subblock">
+              <h3 class="subblock-heading">家庭型態分類對照表</h3>
+              <p class="prose prose-muted">依家庭成員組成可分為傳統三大基本型態，隨社會與婚姻觀念轉變，亦延伸出多種現代生活模式。點擊下方分類可快速篩選。</p>
+              <div class="filter-row" role="group" aria-label="家庭型態篩選">
+                <button type="button" class="chip-btn ${filter === `all` ? `is-active` : ``}" onclick="setFamilyFilter('all')">全部型態（9種）</button>
+                <button type="button" class="chip-btn ${filter === `traditional` ? `is-active` : ``}" onclick="setFamilyFilter('traditional')">傳統三大基本型態</button>
+                <button type="button" class="chip-btn ${filter === `modern` ? `is-active` : ``}" onclick="setFamilyFilter('modern')">現代多元型態與模式</button>
+              </div>
+              <div class="table-wrap">
+                <table class="haven-table">
+                  <thead>
+                    <tr>
+                      <th>型態名稱</th>
+                      <th>核心組成</th>
+                      <th>主要優點與現況</th>
+                      <th>常見難題與考點</th>
+                    </tr>
+                  </thead>
+                  <tbody>${rowsHtml}</tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="detail-subblock">
+              <div class="callout-sage">
+                <p class="callout-sage-title">段考高頻辨析：如何分辨「折衷」與「大家庭」？</p>
+                <ul>
+                  <li><strong>看已婚兄弟姊妹是否同住：</strong>只有「祖父母＋父母＋自己（單一核心）」三代直線同住為<strong>折衷（主幹）家庭</strong>（例：小丸子家有爺奶、爸媽、姊姊和自己）。</li>
+                  <li>若出現<strong>伯父一家人、叔叔一家人或已婚姑姑</strong>同住（即兩個以上有血緣的小家庭合併，常見關鍵字「妯娌輪流煮飯、堂哥堂妹」），則是<strong>大家庭（擴展家庭）</strong>！</li>
+                  <li><strong>三代同鄰（一碗湯的距離）：</strong>長輩與子女住得很近但不同戶，既可就近照護又能保有獨立生活空間，可化解同堂磨合。</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="detail-subblock">
+              <div class="chart-block">
+                <h3 class="chart-title">跨世代家庭成員人數比例變遷</h3>
+                <p class="prose-muted" style="margin:0;">來源：國中公民班級家庭調查統計表（祖父母輩 vs. 自己這代）</p>
+                <div class="chart-canvas-wrap">
+                  <canvas id="chart-family-size"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-subblock">
+              <div class="chart-block">
+                <h3 class="chart-title">我國現代家庭類型戶數比例分布</h3>
+                <p class="prose-muted" style="margin:0;">來源：行政院主計總處社會發展趨勢調查</p>
+                <div class="chart-canvas-wrap">
+                  <canvas id="chart-family-dist"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-subblock">
+              ${buildChecklistHtml(ch)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function initTypesCharts() {
+      const c1 = getCssToken(`--data-1`);
+      const c2 = getCssToken(`--data-2`);
+      const cCtx = getCssToken(`--data-context`);
+      const textCol = getCssToken(`--on-surface-variant`);
+      const gridCol = getCssToken(`--outline-variant`);
+
+      const elSize = document.getElementById(`chart-family-size`);
+      if (elSize && typeof Chart !== `undefined`) {
+        activeCharts.push(new Chart(elSize, {
+          type: `bar`,
+          data: {
+            labels: [`2–4 人`, `5–8 人`, `超過 8 人`],
+            datasets: [
+              {
+                label: `自己這代 (%)`,
+                data: [82, 13, 5],
+                backgroundColor: c1,
+                borderRadius: 2
+              },
+              {
+                label: `(外)祖父母輩 (%)`,
+                data: [4, 25, 71],
+                backgroundColor: cCtx,
+                borderRadius: 2
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: `top`, labels: { color: textCol, boxWidth: 12 } }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100,
+                ticks: { color: textCol, callback: function (v) { return v + `%`; } },
+                grid: { color: gridCol }
+              },
+              x: {
+                ticks: { color: textCol },
+                grid: { display: false }
+              }
+            }
+          }
+        }));
+      }
+
+      const elDist = document.getElementById(`chart-family-dist`);
+      if (elDist && typeof Chart !== `undefined`) {
+        activeCharts.push(new Chart(elDist, {
+          type: `bar`,
+          data: {
+            labels: [`夫婦及未婚子女(核心)`, `祖父母父母及未婚子女`, `單身戶`, `僅夫婦兩人`, `單親家庭`, `其他類型`, `父母及已婚子女`, `隔代教養`],
+            datasets: [
+              {
+                label: `戶數比例 (%)`,
+                data: [51.15, 14.56, 11.49, 8.34, 7.72, 3.94, 2.16, 0.64],
+                backgroundColor: [c1, c2, cCtx, cCtx, c2, cCtx, cCtx, cCtx],
+                borderRadius: 2
+              }
+            ]
+          },
+          options: {
+            indexAxis: `y`,
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              x: {
+                beginAtZero: true,
+                max: 60,
+                ticks: { color: textCol, callback: function (v) { return v + `%`; } },
+                grid: { color: gridCol }
+              },
+              y: {
+                ticks: { color: textCol },
+                grid: { display: false }
+              }
+            }
+          }
+        }));
+      }
+    }
+
+    /* -------------------------------------------------------------------------
+       Chapter 02: Kinship & Law
+       ------------------------------------------------------------------------- */
+    function renderKinshipBody(ch) {
+      const rowsHtml = KINSHIP_LOOKUP.map(function (row) {
+        const isNone = row.type.indexOf(`無親屬`) >= 0;
+        return `
+          <tr>
+            <td><strong>${row.title}</strong></td>
+            <td><span class="tag ${isNone ? `tag-error` : `tag-slate`}">${row.type}</span></td>
+            <td>${row.path}</td>
+            <td>${row.trap}</td>
+          </tr>
+        `;
+      }).join(``);
+
+      return `
+        <div class="detail-layout">
+          <div>
+            <div class="detail-subblock">
+              <h3 class="subblock-heading">《民法》親屬關係四大速查表</h3>
+              <p class="prose prose-muted">我國《民法》將親屬分為<strong>配偶、血親（自然血親與法定血親）、姻親</strong>三大類。考題最常在「姻親是否再延伸」設下陷阱。</p>
+              <div class="table-wrap">
+                <table class="haven-table">
+                  <thead>
+                    <tr>
+                      <th>常見稱謂舉例</th>
+                      <th>法定分類</th>
+                      <th>認定依據</th>
+                      <th>段考陷阱提醒</th>
+                    </tr>
+                  </thead>
+                  <tbody>${rowsHtml}</tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="detail-subblock">
+              <h3 class="subblock-heading">三大核心法則（必背！）</h3>
+              <ul class="rule-list">
+                <li class="rule-item">
+                  <span class="rule-badge">規則 01</span>
+                  <div><strong>配偶是婚姻結合，非血親也非姻親：</strong>包含同性合法結婚登記之伴侶。未辦結婚登記僅舉行儀式或同居，在法律上不成為配偶。</div>
+                </li>
+                <li class="rule-item">
+                  <span class="rule-badge">規則 02</span>
+                  <div><strong>收養程序須經「法院」認可：</strong>經法院認可後成立「法定血親（擬制血親）」，權利義務與婚生子女相同（含繼承權、親權）。單純認「乾媽、乾哥、義子」無任何法律親屬關係。</div>
+                </li>
+                <li class="rule-item">
+                  <span class="rule-badge">規則 03</span>
+                  <div><strong>姻親只延伸一層，絕不到「血親的配偶的血親」：</strong>因此「親家（雙方父母）」、「大嫂的弟弟／妹妹」、「姑丈與前妻生的女兒」、「伯母的父母」皆與自己無親屬關係。</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div>
+            <div class="detail-subblock">
+              <h3 class="subblock-heading">親屬延伸關係架構圖</h3>
+              <div class="svg-diagram-wrap">
+                <svg viewBox="0 0 560 300" aria-hidden="true">
+                  <!-- Connecting lines -->
+                  <line x1="165" y1="75" x2="295" y2="75" stroke="var(--outline)" stroke-width="2" />
+                  <line x1="95" y1="100" x2="95" y2="175" stroke="var(--outline)" stroke-width="2" />
+                  <line x1="375" y1="100" x2="375" y2="175" stroke="var(--outline)" stroke-width="2" />
+                  <line x1="175" y1="205" x2="295" y2="205" stroke="var(--outline)" stroke-width="2" />
+                  <line x1="455" y1="205" x2="495" y2="205" stroke="var(--error)" stroke-width="2" stroke-dasharray="5 4" />
+
+                  <!-- Boxes -->
+                  <rect x="20" y="45" width="145" height="56" rx="8" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="1.5" />
+                  <text x="92" y="69" text-anchor="middle" fill="var(--on-primary-container)" font-size="14" font-weight="600">己身（我）</text>
+                  <text x="92" y="88" text-anchor="middle" fill="var(--on-primary-container)" font-size="11">中心基準點</text>
+
+                  <rect x="295" y="45" width="160" height="56" rx="8" fill="var(--surface-container-low)" stroke="var(--outline)" stroke-width="1.5" />
+                  <text x="375" y="69" text-anchor="middle" fill="var(--on-surface)" font-size="14" font-weight="600">配偶（非血非姻）</text>
+                  <text x="375" y="88" text-anchor="middle" fill="var(--on-surface-variant)" font-size="11">經結婚登記成立</text>
+
+                  <rect x="20" y="175" width="155" height="62" rx="8" fill="var(--surface-container)" stroke="var(--secondary)" stroke-width="1.5" />
+                  <text x="97" y="200" text-anchor="middle" fill="var(--secondary)" font-size="13" font-weight="600">血親（自然／法定）</text>
+                  <text x="97" y="220" text-anchor="middle" fill="var(--on-surface-variant)" font-size="11">例：父母、哥哥、養子</text>
+
+                  <rect x="295" y="175" width="160" height="62" rx="8" fill="var(--surface-container-low)" stroke="var(--outline)" stroke-width="1.5" />
+                  <text x="375" y="200" text-anchor="middle" fill="var(--on-surface)" font-size="13" font-weight="600">姻親（僅三類）</text>
+                  <text x="375" y="220" text-anchor="middle" fill="var(--on-surface-variant)" font-size="11">例：大嫂、公婆、妯娌連襟</text>
+
+                  <rect x="470" y="175" width="82" height="62" rx="8" fill="var(--error-container)" stroke="var(--error)" stroke-width="1.5" />
+                  <text x="511" y="200" text-anchor="middle" fill="var(--error)" font-size="12" font-weight="600">無關係</text>
+                  <text x="511" y="218" text-anchor="middle" fill="var(--error)" font-size="10">大嫂的弟</text>
+                  <text x="511" y="230" text-anchor="middle" fill="var(--error)" font-size="10">親家雙方</text>
+
+                  <!-- Labels on edges -->
+                  <text x="230" y="65" text-anchor="middle" fill="var(--primary)" font-size="11" font-weight="600">婚姻</text>
+                  <text x="235" y="196" text-anchor="middle" fill="var(--primary)" font-size="11" font-weight="600">血親之配偶</text>
+                  <text x="415" y="142" text-anchor="middle" fill="var(--primary)" font-size="11" font-weight="600">配偶之血親</text>
+                </svg>
+              </div>
+              <div class="callout-sage">
+                <p class="callout-sage-title">生活案例對照</p>
+                <p>報稅扶養「年滿70歲直系血親尊親屬」免稅額：<strong>與80歲奶奶同住</strong>符合條件；姊姊（旁系血親）、姑姑（旁系血親）、丈夫（配偶）皆不屬直系血親尊親屬。</p>
+              </div>
+            </div>
+
+            <div class="detail-subblock">
+              ${buildChecklistHtml(ch)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* -------------------------------------------------------------------------
+       Chapter 03: Degree Calculation & Marriage Restrictions
+       ------------------------------------------------------------------------- */
+    function renderDegreeSvg(preset) {
+      const nodesMap = {};
+      preset.nodes.forEach(function (n) { nodesMap[n.id] = n; });
+
+      const edgesSvg = preset.edges.map(function (e) {
+        const a = nodesMap[e.from];
+        const b = nodesMap[e.to];
+        if (!a || !b) return ``;
+        const mx = (a.x + b.x) / 2;
+        const my = (a.y + b.y) / 2 - 8;
+        const isSafe = preset.canMarry && b.role === `safe`;
+        const strokeCol = isSafe ? `var(--secondary)` : `var(--primary)`;
+        return `
+          <line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${strokeCol}" stroke-width="2" ${isSafe ? `stroke-dasharray="5 4"` : ``} />
+          <rect x="${mx - 24}" y="${my - 10}" width="48" height="18" rx="4" fill="var(--surface-container-low)" />
+          <text x="${mx}" y="${my + 3}" text-anchor="middle" fill="${strokeCol}" font-size="11" font-weight="600">${e.label}</text>
+        `;
+      }).join(``);
+
+      const nodesSvg = preset.nodes.map(function (n) {
+        let fill = `var(--surface-container-low)`;
+        let stroke = `var(--outline)`;
+        let txt = `var(--on-surface)`;
+        if (n.role === `me`) {
+          fill = `var(--primary-container)`;
+          stroke = `var(--primary)`;
+          txt = `var(--on-primary-container)`;
+        } else if (n.role === `target`) {
+          fill = `var(--error-container)`;
+          stroke = `var(--error)`;
+          txt = `var(--error)`;
+        } else if (n.role === `safe`) {
+          fill = `var(--surface-container)`;
+          stroke = `var(--secondary)`;
+          txt = `var(--secondary)`;
+        } else if (n.role === `anchor`) {
+          fill = `var(--surface-container)`;
+          stroke = `var(--secondary)`;
+          txt = `var(--secondary)`;
+        }
+        return `
+          <rect x="${n.x - 68}" y="${n.y - 22}" width="136" height="44" rx="8" fill="${fill}" stroke="${stroke}" stroke-width="1.5" />
+          <text x="${n.x}" y="${n.y + 4}" text-anchor="middle" fill="${txt}" font-size="12" font-weight="600">${n.text}</text>
+        `;
+      }).join(``);
+
+      return `
+        <svg viewBox="0 0 580 210" aria-hidden="true">
+          ${edgesSvg}
+          ${nodesSvg}
+        </svg>
+      `;
+    }
+
+    function renderDegreeBody(ch) {
+      const presetKey = appState.degreePreset || `cousin`;
+      const preset = DEGREE_PRESETS[presetKey] || DEGREE_PRESETS.cousin;
+
+      const optionsHtml = Object.keys(DEGREE_PRESETS).map(function (key) {
+        return `<option value="${key}" ${key === presetKey ? `selected` : ``}>${DEGREE_PRESETS[key].label}</option>`;
+      }).join(``);
+
+      return `
+        <div class="detail-layout">
+          <div>
+            <div class="detail-subblock">
+              <h3 class="subblock-heading">互動親等與婚姻效力計算機</h3>
+              <p class="prose prose-muted">選取你想查詢的親屬對象，系統將自動顯示親屬類別、羅馬法親等世代計算路徑，以及依《民法》能否結婚的判決結果。</p>
+
+              <div class="calc-controls">
+                <div class="input-group">
+                  <label for="degree-preset-select">選擇親屬對象（與己身關係）</label>
+                  <select id="degree-preset-select" class="haven-select" onchange="setDegreePreset(this.value)">
+                    ${optionsHtml}
+                  </select>
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="setDegreePreset('no_relation')">看有效婚姻考題陷阱</button>
+              </div>
+
+              <div class="calc-result-grid">
+                <div>
+                  <div class="calc-stat-label">親屬類別</div>
+                  <div class="calc-stat-val">${preset.category}</div>
+                </div>
+                <div>
+                  <div class="calc-stat-label">親等計算結果</div>
+                  <div class="calc-stat-val">${preset.degree}</div>
+                </div>
+                <div>
+                  <div class="calc-stat-label">結婚效力判斷</div>
+                  <div class="calc-stat-val" style="color: ${preset.canMarry ? `var(--secondary)` : `var(--error)`};">
+                    ${preset.canMarry ? `可合法結婚` : `近親禁止結婚`}
+                  </div>
+                </div>
+              </div>
+
+              <p class="prose"><strong>計算過程：</strong>${preset.formula}</p>
+              <p class="prose"><strong>法律依據：</strong>${preset.marriage}</p>
+
+              <div class="svg-diagram-wrap">
+                ${renderDegreeSvg(preset)}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="detail-subblock">
+              <h3 class="subblock-heading">《民法》親等與禁婚重點規則</h3>
+              <ul class="rule-list">
+                <li class="rule-item">
+                  <span class="rule-badge">算法 1</span>
+                  <div><strong>直系血親：</strong>從己身上下數，<strong>一世代為一親等</strong>（父母1親等、祖父母與孫子女2親等、外曾祖父母與外曾孫3親等）。</div>
+                </li>
+                <li class="rule-item">
+                  <span class="rule-badge">算法 2</span>
+                  <div><strong>旁系血親：</strong>從己身數至<strong>同源之直系血親</strong>，再由同源直系血親數至該親屬，將世代數相加（手足2親等、伯叔姑舅姨3親等、堂表兄弟姊妹4親等）。</div>
+                </li>
+                <li class="rule-item">
+                  <span class="rule-badge">算法 3</span>
+                  <div><strong>姻親親等：</strong>從其配偶之親等（如夫與父為1親等，故妻與公公為<strong>直系姻親1親等</strong>；大嫂為哥之配偶，故為<strong>旁系姻親2親等</strong>）。</div>
+                </li>
+                <li class="rule-item">
+                  <span class="rule-badge">禁婚線</span>
+                  <div><strong>不可結婚的近親：</strong>①直系血親及直系姻親 ②旁系血親 <strong>6 親等以內</strong> ③旁系姻親 <strong>5 親等以內，輩分不相同者</strong>（註：哥哥的養子／養女屬旁系法定血親 3 親等，亦不可結婚）。</div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="detail-subblock">
+              ${buildChecklistHtml(ch)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* -------------------------------------------------------------------------
+       Chapter 04: Family Functions & Social Change
+       ------------------------------------------------------------------------- */
+    function renderFunctionsBody(ch) {
+      return `
+        <div class="detail-layout">
+          <div>
+            <div class="detail-subblock">
+              <h3 class="subblock-heading">四大核心家庭功能與現代轉變</h3>
+              <div class="table-wrap">
+                <table class="haven-table">
+                  <thead>
+                    <tr>
+                      <th>家庭功能</th>
+                      <th>核心內涵與諺語／案例</th>
+                      <th>現代社會轉變與政府協助</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>生育功能</strong></td>
+                      <td>生兒育女、傳承血緣（「早生貴子」、「不孝有三，無後為大」、作試管嬰兒）。</td>
+                      <td><strong>明顯減弱：</strong>晚婚、不婚、房貸物價壓力造成<strong>少子化</strong>（寵物數超越0–6歲嬰幼兒）。政府推生育補助、公共托育中心、育嬰假。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>經濟功能</strong></td>
+                      <td>養家糊口、負擔開銷（「巧婦難為無米之炊」、努力賺奶粉錢、半工半讀）。</td>
+                      <td>從農業社會「<strong>生產</strong>」自給自足轉變為現代「<strong>消費</strong>」單位（食材向外購買）。政府提供微型創業貸款、「以房養老」政策。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>教育功能</strong></td>
+                      <td>家庭是個人<strong>最早社會化</strong>的團體（「身教重於言教」、「細漢偷挽瓠，大漢偷牽牛」、醃鹹菜傳承惜物）。</td>
+                      <td>學校、安親班與媒體（兒童臺節目）擔任<strong>輔助角色</strong>（非完全取代）；開放高中「在家自學」增進教育自主性。</td>
+                    </tr>
+                    <tr>
+                      <td><strong>保護與照顧功能</strong></td>
+                      <td>生理與心理支持（「暴風雨中的避風港」、坐月子照護、親情陪伴度難關）。</td>
+                      <td><strong>親情之愛無法被取代</strong>；實務照護則由托育中心、專業安養與長照機構分擔協助。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="detail-subblock">
+              <div class="callout-sage">
+                <p class="callout-sage-title">聯合國高齡指標與臺灣人口結構轉型</p>
+                <ul>
+                  <li><strong>高齡化社會（65歲以上 ≥ 7%）：</strong>臺灣於 <strong>1993 年</strong>邁入。</li>
+                  <li><strong>高齡社會（65歲以上 ≥ 14%）：</strong>臺灣於 <strong>2018 年（民國107年）</strong>正式跨越。</li>
+                  <li><strong>超高齡社會（65歲以上 ≥ 20%）：</strong>推估於 <strong>2026 年</strong>邁入。</li>
+                  <li><strong>政府因應長照政策：</strong>施行《長期照顧服務法》（2017上路，含居家式、社區式、機構與<strong>喘息服務</strong>）、推動老人共餐、高齡友善門診及日間照顧中心。</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="detail-subblock">
+              <div class="chart-block">
+                <h3 class="chart-title">臺灣 65 歲以上人口比例趨勢與門檻</h3>
+                <p class="prose-muted" style="margin:0;">來源：行政院國家發展委員會統計與推估數據（含7%、14%、20%階段）</p>
+                <div class="chart-canvas-wrap">
+                  <canvas id="chart-aging-trend"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-subblock">
+              <div class="chart-block">
+                <h3 class="chart-title">家務勞動價值評估比例（換算月薪 45,958 元）</h3>
+                <p class="prose-muted" style="margin:0;">凸顯全職家務勞動具備明確經濟價值，女性目前仍承擔較多比例</p>
+                <div class="chart-canvas-wrap">
+                  <canvas id="chart-housework-value"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-subblock">
+              ${buildChecklistHtml(ch)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function initFunctionsCharts() {
+      const c1 = getCssToken(`--data-1`);
+      const c2 = getCssToken(`--data-2`);
+      const c3 = getCssToken(`--data-3`);
+      const c4 = getCssToken(`--data-4`);
+      const cCtx = getCssToken(`--data-context`);
+      const textCol = getCssToken(`--on-surface-variant`);
+      const gridCol = getCssToken(`--outline-variant`);
+
+      const elAging = document.getElementById(`chart-aging-trend`);
+      if (elAging && typeof Chart !== `undefined`) {
+        activeCharts.push(new Chart(elAging, {
+          type: `line`,
+          data: {
+            labels: [`1993年(高齡化)`, `2014年`, `2018年(高齡)`, `2020年`, `2026年(超高齡推估)`],
+            datasets: [
+              {
+                label: `65歲以上人口占比 (%)`,
+                data: [7, 10, 14, 14, 20],
+                borderColor: c1,
+                backgroundColor: c1,
+                borderWidth: 2.5,
+                pointRadius: 5,
+                tension: 0.2
+              },
+              {
+                label: `高齡社會基準線 (14%)`,
+                data: [14, 14, 14, 14, 14],
+                borderColor: c3,
+                borderDash: [5, 4],
+                borderWidth: 1.5,
+                pointRadius: 0
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: `top`, labels: { color: textCol, boxWidth: 12 } }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 24,
+                ticks: { color: textCol, callback: function (v) { return v + `%`; } },
+                grid: { color: gridCol }
+              },
+              x: {
+                ticks: { color: textCol },
+                grid: { display: false }
+              }
+            }
+          }
+        }));
+      }
+
+      const elHouse = document.getElementById(`chart-housework-value`);
+      if (elHouse && typeof Chart !== `undefined`) {
+        activeCharts.push(new Chart(elHouse, {
+          type: `doughnut`,
+          data: {
+            labels: [`煮飯做菜 (25%)`, `採買與日常管理/CEO (25%)`, `打掃清潔 (12.5%)`, `洗衣服 (12.5%)`, `照顧小孩 (12.5%)`, `心理支持與司機等 (12.5%)`],
+            datasets: [
+              {
+                data: [25, 25, 12.5, 12.5, 12.5, 12.5],
+                backgroundColor: [c1, c2, c3, c4, cCtx, c1],
+                borderWidth: 1,
+                borderColor: getCssToken(`--surface-container-low`)
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: `right`, labels: { color: textCol, boxWidth: 12, font: { size: 11 } } }
+            }
+          }
+        }));
+      }
+    }
+
+    /* -------------------------------------------------------------------------
+       Chapter 05: Gender Equality, Parental Rights, DV Prevention
+       ------------------------------------------------------------------------- */
+    function renderRightsBody(ch) {
+      return `
+        <div class="detail-layout">
+          <div>
+            <div class="detail-subblock">
+              <h3 class="subblock-heading">家庭相關三大重要法律對照</h3>
+              <div class="table-wrap">
+                <table class="haven-table">
+                  <thead>
+                    <tr>
+                      <th>法規名稱</th>
+                      <th>核心規範內容</th>
+                      <th>段考常見易錯點</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>《民法》</strong></td>
+                      <td>
+                        • 日常家務夫妻互為代理人，經濟能力共同分擔生活費。<br>
+                        • 子女姓氏由父母共同協議；財產與遺產繼承男女平等。<br>
+                        • <strong>親權：</strong>父母對未成年子女保護與教養之權利義務（意見不合時由法院依<strong>子女最佳利益</strong>決定）。<br>
+                        • <strong>減免扶養：</strong>曾遭父母遺棄或家暴，可向<strong>法院</strong>請求減輕或免除扶養義務。
+                      </td>
+                      <td>
+                        ✕ 錯：離婚監護權依收入高者或母方為主。<br>
+                        ✓ 正：依「子女最佳利益」。<br>
+                        ✕ 錯：只規定從父姓或僅兒子能繼承。
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>《性別工作平等法》</strong><br><span class="prose-muted">(性別平等工作法)</span></td>
+                      <td>
+                        • <strong>育嬰假：</strong>任職滿 <strong>6 個月</strong>後、子女滿 <strong>3 歲</strong>前皆可申請（最多2年，可領育嬰津貼）。<br>
+                        • <strong>家庭照顧假：</strong>受僱者<strong>不分性別</strong>皆可申請，雇主不得歧視或拒絕男性申請育嬰假、出差權。
+                      </td>
+                      <td>
+                        ✕ 錯：規定在《民法》或《性別平等教育法》或《勞基法》。<br>
+                        ✕ 錯：限已婚女性或子女滿5歲前申請。
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>《家庭暴力防治法》</strong></td>
+                      <td>
+                        • 保護對象包含配偶、<strong>前配偶</strong>、<strong>同居人</strong>、親屬、<strong>目睹家暴兒少</strong>。<br>
+                        • 包含身體暴力及<strong>精神、言語威脅</strong>。<br>
+                        • 求助專線：<strong>113</strong>（保護專線）與 <strong>110</strong>（報警）。
+                      </td>
+                      <td>
+                        ✕ 錯：保護令由「警察局」或「社會局」核發。<br>
+                        ✓ 正：保護令一律向<strong>「地方法院」</strong>聲請並由地方法院核發。
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="detail-subblock">
+              <h3 class="subblock-heading">保護令聲請與核發流程圖</h3>
+              <div class="svg-diagram-wrap">
+                <svg viewBox="0 0 580 155" aria-hidden="true">
+                  <line x1="160" y1="75" x2="225" y2="75" stroke="var(--primary)" stroke-width="2" />
+                  <line x1="365" y1="75" x2="425" y2="75" stroke="var(--primary)" stroke-width="2" />
+
+                  <rect x="10" y="25" width="150" height="100" rx="8" fill="var(--surface-container-low)" stroke="var(--outline)" stroke-width="1.5" />
+                  <text x="85" y="50" text-anchor="middle" fill="var(--on-surface)" font-size="13" font-weight="600">提出聲請單位</text>
+                  <text x="85" y="72" text-anchor="middle" fill="var(--on-surface-variant)" font-size="11">被害人（未成年由親屬代）</text>
+                  <text x="85" y="90" text-anchor="middle" fill="var(--on-surface-variant)" font-size="11">警察局／檢察官</text>
+                  <text x="85" y="108" text-anchor="middle" fill="var(--on-surface-variant)" font-size="11">縣(市)政府社會局(處)</text>
+
+                  <rect x="225" y="35" width="140" height="80" rx="8" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="2" />
+                  <text x="295" y="68" text-anchor="middle" fill="var(--on-primary-container)" font-size="14" font-weight="600">地方法院</text>
+                  <text x="295" y="90" text-anchor="middle" fill="var(--on-primary-container)" font-size="11">審理並唯一有權核發</text>
+
+                  <rect x="425" y="25" width="145" height="100" rx="8" fill="var(--surface-container)" stroke="var(--secondary)" stroke-width="1.5" />
+                  <text x="497" y="50" text-anchor="middle" fill="var(--secondary)" font-size="13" font-weight="600">三類保護令</text>
+                  <text x="497" y="72" text-anchor="middle" fill="var(--on-surface)" font-size="11">• 緊急保護令</text>
+                  <text x="497" y="90" text-anchor="middle" fill="var(--on-surface)" font-size="11">• 暫時保護令</text>
+                  <text x="497" y="108" text-anchor="middle" fill="var(--on-surface)" font-size="11">• 通常保護令</text>
+
+                  <text x="192" y="66" text-anchor="middle" fill="var(--primary)" font-size="11" font-weight="600">聲請</text>
+                  <text x="395" y="66" text-anchor="middle" fill="var(--primary)" font-size="11" font-weight="600">核發</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="detail-subblock">
+              <h3 class="subblock-heading">平權家庭與不適任親權辨析</h3>
+              <ul class="rule-list">
+                <li class="rule-item">
+                  <span class="rule-badge">迷思 1</span>
+                  <div><strong>性別角色 vs. 性別刻板印象：</strong>「男主外、女主內」、洗衣機命名「媽媽樂」、清潔劑叫「妙管家」、兒歌「爸爸去打仗」皆隱含<strong>性別刻板印象</strong>。突破刻板印象（如男性護理師、日本超級奶爸）才符合性別平權。</div>
+                </li>
+                <li class="rule-item">
+                  <span class="rule-badge">迷思 2</span>
+                  <div><strong>「法不入家門」已過時：</strong>1993 年鄧如雯案催生台灣成為亞洲第一個施行《家庭暴力防治法》的國家。鄰居聽到施暴應立即撥打 110 或 113，展現家暴防治意識。</div>
+                </li>
+                <li class="rule-item">
+                  <span class="rule-badge">迷思 3</span>
+                  <div><strong>親權非絕對支配權：</strong>父母不可將子女視為財產。若父母教唆兒童乞討、酒後毆打或偷竊，法院（非警察或社會局）可限制或禁止父母行使親權。但注意：法院<strong>不能宣告終止自然親子血緣關係</strong>（僅能限制/停止親權）。</div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="detail-subblock">
+              ${buildChecklistHtml(ch)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* -------------------------------------------------------------------------
+       Chapter 06: Interactive Practice Quiz
+       ------------------------------------------------------------------------- */
+    function renderQuizBody(ch) {
+      const qFilter = appState.quizFilter || `all`;
+      const visibleQuestions = QUIZ_BANK.filter(function (q) {
+        const userAns = appState.quizAnswers[q.id];
+        if (qFilter === `unanswered`) return userAns === undefined;
+        if (qFilter === `wrong`) return userAns !== undefined && userAns !== q.answerIndex;
+        return true;
+      });
+
+      const questionsHtml = visibleQuestions.length === 0
+        ? `<div class="callout-sage"><p class="callout-sage-title">沒有符合此篩選條件的題目</p><p>請切換回「全部 10 題」檢視所有題目與解析。</p></div>`
+        : visibleQuestions.map(function (q, idx) {
+            const qNum = QUIZ_BANK.findIndex(function (item) { return item.id === q.id; }) + 1;
+            const selectedIdx = appState.quizAnswers[q.id];
+            const hasAnswered = selectedIdx !== undefined;
+
+            const optsHtml = q.options.map(function (optText, optIdx) {
+              let cls = `quiz-opt-btn`;
+              if (hasAnswered) {
+                if (optIdx === q.answerIndex) cls += ` is-correct`;
+                else if (optIdx === selectedIdx) cls += ` is-wrong`;
+              }
+              return `
+                <button type="button" class="${cls}" onclick="answerQuiz('${q.id}', ${optIdx})">
+                  <span>${optText}</span>
+                </button>
+              `;
+            }).join(``);
+
+            const rationaleHtml = hasAnswered
+              ? `<div class="quiz-rationale"><strong>${selectedIdx === q.answerIndex ? `答對了！` : `再確認一下：`}</strong>${q.rationale}</div>`
+              : ``;
+
+            return `
+              <div class="quiz-item">
+                <div class="quiz-q-head">
+                  <span class="rule-badge">第 ${qNum} 題</span>
+                  <span class="tag">${q.chapterTag}</span>
+                </div>
+                <p class="quiz-q-text">${q.question}</p>
+                <div class="quiz-options">${optsHtml}</div>
+                ${rationaleHtml}
+              </div>
+            `;
+          }).join(``);
+
+      return `
+        <div class="detail-layout">
+          <div>
+            <div class="detail-subblock">
+              <div class="section-head">
+                <h3 class="subblock-heading" style="margin:0;">精選各校段考實戰演練（共 10 題）</h3>
+                <button type="button" class="btn btn-secondary" onclick="clearQuizAnswers(this)">清除作答紀錄</button>
+              </div>
+              <p class="prose prose-muted">點選任一選項後，立即顯示正確答案與法條解析。測驗成績會即時同步至上方總覽卡片。</p>
+              <div class="filter-row" role="group" aria-label="題目篩選">
+                <button type="button" class="chip-btn ${qFilter === `all` ? `is-active` : ``}" onclick="setQuizFilter('all')">全部題目（10）</button>
+                <button type="button" class="chip-btn ${qFilter === `unanswered` ? `is-active` : ``}" onclick="setQuizFilter('unanswered')">只看未作答</button>
+                <button type="button" class="chip-btn ${qFilter === `wrong` ? `is-active` : ``}" onclick="setQuizFilter('wrong')">錯題複習</button>
+              </div>
+              <div>${questionsHtml}</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="detail-subblock">
+              <div class="callout-sage">
+                <p class="callout-sage-title">考前最後 30 秒掃雷提醒</p>
+                <ul>
+                  <li>看到「大嫂的弟弟／親家／姑丈與前妻女兒」→ <strong>無親屬關係</strong>，可結婚！</li>
+                  <li>看到「收養認可、禁止親權、免除扶養義務、核發保護令」→ 權責單位一律是<strong>法院（地方法院）</strong>！</li>
+                  <li>看到「育嬰假、家庭照顧假」→ 依據<strong>《性別工作平等法》</strong>（任職滿6月、子女滿3歲前，男女皆可）。</li>
+                  <li>看到「7%、14%、20%」→ 分別對應高齡化、高齡、超高齡社會。</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="detail-subblock">
+              ${buildChecklistHtml(ch)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* =========================================================================
+       Hoisted Interactive Event Handlers (required for inline onclick/onchange)
+       ========================================================================= */
+    function selectChapter(chapterId) {
+      appState.activeChapterId = chapterId;
+      renderChapterCards();
+      renderChapterDetail();
+      persistState();
+      const detailEl = document.getElementById(`detail-panel`);
+      if (detailEl) {
+        detailEl.scrollIntoView({ behavior: `smooth`, block: `nearest` });
+      }
+    }
+
+    function toggleChecklistItem(itemId, isChecked) {
+      appState.checkedItems[itemId] = Boolean(isChecked);
+      updateOverviewKpis();
+      renderChapterCards();
+      renderChapterDetail();
+      persistState();
+    }
+
+    function toggleChapterAll(chapterId) {
+      const ch = CHAPTERS.find(function (c) { return c.id === chapterId; });
+      if (!ch) return;
+      const allDone = ch.checklist.every(function (i) { return Boolean(appState.checkedItems[i.id]); });
+      ch.checklist.forEach(function (i) {
+        appState.checkedItems[i.id] = !allDone;
+      });
+      updateOverviewKpis();
+      renderChapterCards();
+      renderChapterDetail();
+      persistState();
+    }
+
+    function setFamilyFilter(category) {
+      appState.familyCategoryFilter = category;
+      renderChapterDetail();
+      persistState();
+    }
+
+    function setDegreePreset(presetKey) {
+      appState.degreePreset = presetKey;
+      renderChapterDetail();
+      persistState();
+    }
+
+    function answerQuiz(questionId, optionIndex) {
+      appState.quizAnswers[questionId] = optionIndex;
+
+      // Auto-update quiz checklist milestones
+      const answeredCount = Object.keys(appState.quizAnswers).length;
+      if (answeredCount === QUIZ_BANK.length) {
+        appState.checkedItems.q1 = true;
+      }
+      let correctCount = 0;
+      QUIZ_BANK.forEach(function (q) {
+        if (appState.quizAnswers[q.id] === q.answerIndex) correctCount += 1;
+      });
+      if (correctCount >= 8) {
+        appState.checkedItems.q2 = true;
+      }
+
+      updateOverviewKpis();
+      renderChapterCards();
+      renderChapterDetail();
+      persistState();
+    }
+
+    function setQuizFilter(filterMode) {
+      appState.quizFilter = filterMode;
+      renderChapterDetail();
+      persistState();
+    }
+
+    function clearQuizAnswers(btn) {
+      if (btn && btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `再點一次確認清除`;
+        btn.classList.add(`btn-danger-arm`);
+        return;
+      }
+      appState.quizAnswers = {};
+      appState.checkedItems.q1 = false;
+      appState.checkedItems.q2 = false;
+      updateOverviewKpis();
+      renderChapterCards();
+      renderChapterDetail();
+      persistState();
+    }
+
+    function handleResetProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `確定重設全部進度？再點一次`;
+        btn.classList.add(`btn-danger-arm`);
+        setTimeout(function () {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.textContent = `重設學習進度`;
+            btn.classList.remove(`btn-danger-arm`);
+          }
+        }, 4000);
+        return;
+      }
+
+      btn.dataset.armed = `false`;
+      btn.textContent = `重設學習進度`;
+      btn.classList.remove(`btn-danger-arm`);
+
+      appState = {
+        activeChapterId: `types`,
+        checkedItems: {},
+        quizAnswers: {},
+        familyCategoryFilter: `all`,
+        degreePreset: `cousin`,
+        quizFilter: `all`
+      };
+
+      updateOverviewKpis();
+      renderChapterCards();
+      renderChapterDetail();
+      persistState();
+    }
+
+    /* =========================================================================
+       Boot
+       ========================================================================= */
+    async function initApp() {
+      await loadInitialState();
+      updateOverviewKpis();
+      renderChapterCards();
+      renderChapterDetail();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>

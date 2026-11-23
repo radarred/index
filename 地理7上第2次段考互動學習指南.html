@@ -1,0 +1,2406 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="vitals">
+  <title>國中七年級地理段考互動測驗｜臺灣的地形、海岸與島嶼</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Figtree:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Vitals) */
+      --background: #ffffff;
+      --surface-container-low: #f1f7f8;
+      --surface-container: #e3f1f3;
+      --surface-container-high: #d5e9ec;
+
+      /* Text */
+      --on-surface: #1b2b33;
+      --on-surface-variant: #46585f;
+
+      /* Rules */
+      --outline: #7b9198;
+      --outline-variant: #d5e3e5;
+
+      /* Accents */
+      --primary: #0f7c8a;
+      --primary-hover: #0b636f;
+      --on-primary: #ffffff;
+      --primary-container: #e3f1f3;
+      --on-primary-container: #0a5560;
+      --secondary: #1d5e3a;
+      --tertiary: #2e7d4f;
+      --error: #b3261e;
+      --on-error: #ffffff;
+
+      /* Semantic */
+      --positive: #2e7d4f;
+      --positive-bg: #e7f3ec;
+      --error-bg: #fceceb;
+      --warning: #b86e00;
+      --warning-bg: #fdf3e3;
+      --focus: #0f7c8a;
+
+      /* Data series */
+      --data-1: #0f7c8a;
+      --data-2: #2e7d4f;
+      --data-3: #b86e00;
+      --data-4: #5c5fb0;
+      --data-context: #b8c7ca;
+
+      /* Fonts (Noto Sans TC first for zh-TW) */
+      --font-headline: 'Noto Sans TC', 'Figtree', sans-serif;
+      --font-body: 'Noto Sans TC', 'Atkinson Hyperlegible', sans-serif;
+      --font-label: 'Noto Sans TC', 'Figtree', sans-serif;
+
+      /* Shape */
+      --rounded: 0.625rem;
+      --rounded-lg: 0.875rem;
+      --rounded-full: 9999px;
+
+      /* Style effects */
+      --top-bar: 6px solid var(--primary);
+      --status-bar-width: 4px;
+      --card-border: 1px solid var(--outline-variant);
+      --card-lift: 0 1px 2px rgb(27 43 51 / 0.05), 0 6px 16px rgb(27 43 51 / 0.05);
+
+      /* Type scale (Focused Tool) */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.95rem, 0.92rem + 0.15vw, 1.03125rem);
+      --label-size: 0.78rem;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { overflow-x: clip; margin: 0; padding: 0; }
+    header { position: static !important; }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      color: var(--on-surface);
+      background-color: var(--surface-container-low);
+      border-top: var(--top-bar);
+      min-height: 100vh;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+      letter-spacing: 0;
+    }
+
+    button:focus-visible,
+    select:focus-visible,
+    input:focus-visible,
+    [tabindex]:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Header */
+    .hero-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    .hero-copy {
+      max-width: 64ch;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-primary-container);
+      background-color: var(--primary-container);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      margin-bottom: var(--space-sm);
+    }
+
+    .title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 800;
+      line-height: 1.15;
+      margin: 0;
+      color: var(--on-surface);
+    }
+
+    .lede {
+      font-size: 1.02rem;
+      line-height: 1.6;
+      color: var(--on-surface-variant);
+      max-width: 60ch;
+      margin: var(--space-sm) 0 0 0;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  transform var(--dur-micro) var(--ease-out);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-outline {
+      background-color: var(--background);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-outline:hover:not(:disabled) {
+      background-color: var(--surface-container-low);
+    }
+
+    .btn-subtle {
+      background-color: var(--background);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    .btn-subtle:hover:not(:disabled) {
+      background-color: var(--surface-container);
+    }
+
+    .btn-danger-armed {
+      background-color: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* Scoreboard KPI Row */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    .status-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      box-shadow: var(--card-lift);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-xs);
+    }
+    .status-card[data-status="ok"] { border-left-color: var(--tertiary); }
+    .status-card[data-status="alert"] { border-left-color: var(--error); }
+    .status-card[data-status="warn"] { border-left-color: var(--warning); }
+
+    .kpi-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+    }
+
+    .kpi-value {
+      font-family: var(--font-headline);
+      font-size: clamp(1.5rem, 1.25rem + 0.8vw, 1.95rem);
+      font-weight: 800;
+      line-height: 1.15;
+      font-variant-numeric: tabular-nums;
+      color: var(--on-surface);
+    }
+
+    .kpi-caption {
+      font-size: 0.84rem;
+      color: var(--on-surface-variant);
+    }
+    .kpi-caption[data-tone="ok"] { color: var(--secondary); font-weight: 600; }
+    .kpi-caption[data-tone="alert"] { color: var(--error); font-weight: 600; }
+
+    /* Score Meter with Target Band (Vitals treatment #5) */
+    .meter-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .meter-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .meter-title {
+      font-family: var(--font-label);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+
+    .meter-track {
+      position: relative;
+      height: 18px;
+      border-radius: var(--rounded-full);
+      background-color: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      overflow: hidden;
+    }
+
+    .meter-target-band {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 60%;
+      right: 0;
+      background-color: var(--positive-bg);
+      border-left: 2px dashed var(--tertiary);
+    }
+
+    .meter-fill {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      width: 0%;
+      background-color: var(--primary);
+      border-radius: var(--rounded-full);
+      transition: width var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+    }
+    .meter-fill[data-status="ok"] { background-color: var(--tertiary); }
+    .meter-fill[data-status="alert"] { background-color: var(--error); }
+
+    .meter-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--on-surface-variant);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Main Workspace Layout: Question Selector (left/aside on desktop) + Active Question (right/main) */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--card-lift);
+    }
+
+    .panel-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      margin: 0 0 var(--space-sm) 0;
+      color: var(--on-surface);
+    }
+
+    .controls-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .field-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+
+    .select-input {
+      width: 100%;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-xl) var(--space-sm) var(--space-md);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-weight: 600;
+      cursor: pointer;
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, var(--on-surface) 50%),
+                        linear-gradient(135deg, var(--on-surface) 50%, transparent 50%);
+      background-position: calc(100% - 18px) 50%, calc(100% - 12px) 50%;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+    }
+    .select-input:focus {
+      border-color: var(--primary);
+    }
+
+    .mode-pills {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-sm);
+    }
+
+    .mode-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-align: left;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .mode-btn:hover:not(:disabled) {
+      background-color: var(--surface-container-low);
+    }
+    .mode-btn[aria-pressed="true"] {
+      background-color: var(--surface-container);
+      border-color: var(--primary);
+      color: var(--on-primary-container);
+      box-shadow: inset 3px 0 0 var(--primary);
+    }
+    .mode-btn:disabled {
+      opacity: 0.48;
+      cursor: not-allowed;
+    }
+
+    /* Question Navigator Grid */
+    .nav-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      font-size: 0.78rem;
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-sm);
+    }
+
+    .legend-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      margin-right: var(--space-xs);
+      vertical-align: middle;
+    }
+    .legend-dot[data-state="idle"] { background-color: var(--surface-container-low); border: 1px solid var(--outline-variant); }
+    .legend-dot[data-state="ok"] { background-color: var(--tertiary); }
+    .legend-dot[data-state="wrong"] { background-color: var(--error); }
+
+    .q-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+
+    .q-num-btn {
+      min-height: 44px;
+      padding: var(--space-xs);
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.875rem;
+      font-variant-numeric: tabular-nums;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out),
+                  transform var(--dur-micro) var(--ease-out);
+    }
+    .q-num-btn:hover {
+      background-color: var(--surface-container);
+    }
+    .q-num-btn[data-state="ok"] {
+      background-color: var(--positive-bg);
+      color: var(--secondary);
+      border-color: var(--tertiary);
+    }
+    .q-num-btn[data-state="wrong"] {
+      background-color: var(--error-bg);
+      color: var(--error);
+      border-color: var(--error);
+    }
+    .q-num-btn[aria-current="true"] {
+      box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--primary);
+      border-color: var(--primary);
+    }
+
+    /* Active Question Stage */
+    .question-stage {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    .meta-left {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .q-badge {
+      font-family: var(--font-label);
+      font-weight: 800;
+      font-size: 0.875rem;
+      color: var(--on-primary);
+      background-color: var(--primary);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .chip[data-status="ok"] {
+      background-color: var(--positive-bg);
+      color: var(--secondary);
+    }
+    .chip[data-status="alert"] {
+      background-color: var(--error-bg);
+      color: var(--error);
+    }
+
+    .question-stem {
+      font-family: var(--font-body);
+      font-size: 1.125rem;
+      font-weight: 700;
+      line-height: 1.65;
+      color: var(--on-surface);
+      margin: 0;
+    }
+
+    /* Inline SVG Diagram Box */
+    .diagram-box {
+      background-color: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .diagram-box svg {
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+      display: block;
+    }
+    .diagram-caption {
+      font-size: 0.82rem;
+      color: var(--on-surface-variant);
+      text-align: center;
+    }
+
+    /* Options List */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .option-btn {
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: var(--space-md);
+      width: 100%;
+      min-height: 52px;
+      padding: var(--space-md);
+      border: 1px solid var(--outline-variant);
+      border-left: var(--status-bar-width) solid var(--outline-variant);
+      border-radius: var(--rounded);
+      background-color: var(--background);
+      color: var(--on-surface);
+      text-align: left;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background-color: var(--surface-container-low);
+      border-color: var(--primary);
+      border-left-color: var(--primary);
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+    }
+
+    .option-letter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: var(--rounded);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .option-text {
+      font-size: 1rem;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .option-state-tag {
+      font-family: var(--font-label);
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .option-btn[data-result="correct"] {
+      background-color: var(--positive-bg);
+      border-color: var(--tertiary);
+      border-left-color: var(--tertiary);
+    }
+    .option-btn[data-result="correct"] .option-letter {
+      background-color: var(--tertiary);
+      color: var(--on-primary);
+    }
+    .option-btn[data-result="correct"] .option-state-tag {
+      color: var(--secondary);
+    }
+
+    .option-btn[data-result="wrong"] {
+      background-color: var(--error-bg);
+      border-color: var(--error);
+      border-left-color: var(--error);
+    }
+    .option-btn[data-result="wrong"] .option-letter {
+      background-color: var(--error);
+      color: var(--on-error);
+    }
+    .option-btn[data-result="wrong"] .option-state-tag {
+      color: var(--error);
+    }
+
+    .option-btn[data-result="muted"] {
+      opacity: 0.72;
+    }
+
+    /* Instant Explanation Callout */
+    .explanation-box {
+      border-radius: var(--rounded-lg);
+      border: 1px solid var(--outline-variant);
+      border-left: var(--status-bar-width) solid var(--primary);
+      background-color: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      animation: fadeSlideIn var(--dur-short) var(--ease-out);
+    }
+    .explanation-box[data-status="ok"] {
+      border-left-color: var(--tertiary);
+      background-color: var(--positive-bg);
+    }
+    .explanation-box[data-status="alert"] {
+      border-left-color: var(--error);
+      background-color: var(--error-bg);
+    }
+
+    .explanation-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .explanation-title {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--on-surface);
+    }
+    .explanation-box[data-status="ok"] .explanation-title { color: var(--secondary); }
+    .explanation-box[data-status="alert"] .explanation-title { color: var(--error); }
+
+    .explanation-body {
+      margin: 0;
+      color: var(--on-surface);
+      font-size: 0.96rem;
+      line-height: 1.65;
+    }
+
+    .explanation-source {
+      font-size: 0.82rem;
+      color: var(--on-surface-variant);
+      padding-top: var(--space-xs);
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    /* Navigation Row */
+    .stage-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    .nav-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: left;
+      padding: var(--space-xl);
+      background-color: var(--surface-container-low);
+      border: 1px dashed var(--outline);
+      border-radius: var(--rounded-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-md);
+    }
+    .empty-state h3 {
+      margin: 0;
+      font-family: var(--font-headline);
+      font-size: 1.15rem;
+    }
+    .empty-state p {
+      margin: 0;
+      color: var(--on-surface-variant);
+    }
+
+    /* Topic Performance Breakdown Table */
+    .breakdown-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .breakdown-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .topic-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+    }
+
+    .topic-table th {
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface-variant);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    .topic-table td {
+      padding: var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: middle;
+    }
+
+    .topic-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .num-col {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .mini-bar {
+      width: 120px;
+      height: 10px;
+      border-radius: var(--rounded-full);
+      background-color: var(--surface-container-low);
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: var(--space-sm);
+    }
+
+    .mini-bar-fill {
+      height: 100%;
+      background-color: var(--primary);
+      border-radius: var(--rounded-full);
+    }
+    .mini-bar-fill[data-status="ok"] { background-color: var(--tertiary); }
+    .mini-bar-fill[data-status="alert"] { background-color: var(--error); }
+
+    .source-footer {
+      font-size: 0.84rem;
+      color: var(--on-surface-variant);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--outline-variant);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    .inline-status-msg {
+      font-size: 0.85rem;
+      color: var(--on-primary-container);
+      font-weight: 600;
+      min-height: 1.2em;
+    }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-md);
+      }
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      .panel {
+        padding: var(--space-md);
+      }
+      .q-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+      .option-btn {
+        grid-template-columns: 32px minmax(0, 1fr);
+      }
+      .option-state-tag {
+        grid-column: 2;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-grid">
+    <!-- Top Header -->
+    <header class="hero-header">
+      <div class="hero-copy">
+        <span class="kicker">國中七年級上學期・第二次段考地理科</span>
+        <h1 class="title">臺灣的地形、海岸與島嶼｜即時評分互動測驗</h1>
+        <p class="lede">精選多所國中段考經典試題，含自製地形與離島圖表判讀。支援單元篩選、隨機模擬考與錯題重練，作答後立即批改計分並顯示詳細解析。</p>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn btn-outline" id="btn-export" onclick="exportScoreReport()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          匯出成績單
+        </button>
+        <button type="button" class="btn btn-subtle" id="btn-reset" data-armed="false" onclick="handleResetQuiz(this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          重新作答
+        </button>
+      </div>
+    </header>
+
+    <!-- Live Scoreboard KPI Strip -->
+    <section aria-label="即時測驗成績統計">
+      <div class="kpi-grid">
+        <div class="status-card" id="card-score" data-status="info">
+          <span class="kpi-label">即時百分制得分</span>
+          <span class="kpi-value" id="kpi-score">0 分</span>
+          <span class="kpi-caption" id="kpi-score-note">滿分 100 分（60 分及格）</span>
+        </div>
+        <div class="status-card" id="card-progress" data-status="info">
+          <span class="kpi-label">本回作答進度</span>
+          <span class="kpi-value" id="kpi-progress">0 / 30</span>
+          <span class="kpi-caption" id="kpi-progress-note">點選選項立即批改</span>
+        </div>
+        <div class="status-card" id="card-tally" data-status="ok">
+          <span class="kpi-label">答對 / 答錯題數</span>
+          <span class="kpi-value" id="kpi-tally">0 對 · 0 錯</span>
+          <span class="kpi-caption" id="kpi-tally-note">尚無錯題紀錄</span>
+        </div>
+        <div class="status-card" id="card-accuracy" data-status="info">
+          <span class="kpi-label">已作答正確率</span>
+          <span class="kpi-value" id="kpi-accuracy">--%</span>
+          <span class="kpi-caption" id="kpi-accuracy-note">作答後即時計算</span>
+        </div>
+      </div>
+
+      <!-- Target Range Progress Meter -->
+      <div class="meter-card" style="margin-top: var(--space-md);">
+        <div class="meter-header">
+          <span class="meter-title">段考及格基準線量尺（綠色虛線右側為 60 分以上及格區）</span>
+          <span class="chip" id="meter-status-chip" data-status="info">等待作答中</span>
+        </div>
+        <div class="meter-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="score-progressbar" aria-label="測驗得分進度">
+          <div class="meter-target-band" title="60 分以上及格目標區"></div>
+          <div class="meter-fill" id="score-meter-fill"></div>
+        </div>
+        <div class="meter-ticks">
+          <span>0 分</span>
+          <span>30 分</span>
+          <span>60 分（及格線）</span>
+          <span>80 分（精熟）</span>
+          <span>100 分</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Interactive Workspace -->
+    <section class="workspace-grid" aria-label="題目選擇與測驗作答區">
+      <!-- Left Column: Question Selection & Navigator -->
+      <aside class="panel controls-stack" aria-label="題目篩選與題號選擇">
+        <div>
+          <h2 class="panel-title">題目選擇與篩選</h2>
+          <div class="inline-status-msg" id="action-status-msg" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="topic-select">依地理單元篩選</label>
+          <select id="topic-select" class="select-input" onchange="changeTopicFilter(this.value)">
+            <option value="all">全部單元（共 30 題）</option>
+            <option value="landforms">1. 地形作用力與五大地形（6 題）</option>
+            <option value="maps">2. 地形表示法與等高線（6 題）</option>
+            <option value="mountains">3. 臺灣山脈、板塊與地質（6 題）</option>
+            <option value="coasts">4. 臺灣四段海岸與產業（6 題）</option>
+            <option value="islands">5. 臺灣周邊離島與成因（6 題）</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <span class="field-label">出題模式選擇</span>
+          <div class="mode-pills" role="group" aria-label="出題模式">
+            <button type="button" class="mode-btn" id="mode-all" aria-pressed="true" onclick="changeQuizMode('all')">
+              <span>完整練習（依單元全部題目）</span>
+              <span id="mode-all-count">30 題</span>
+            </button>
+            <button type="button" class="mode-btn" id="mode-random10" aria-pressed="false" onclick="changeQuizMode('random10')">
+              <span>段考模擬抽測（隨機 10 題）</span>
+              <span>10 題</span>
+            </button>
+            <button type="button" class="mode-btn" id="mode-wrong" aria-pressed="false" onclick="changeQuizMode('wrong')">
+              <span>錯題集中複習（只練錯題）</span>
+              <span id="mode-wrong-count">0 題</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <span class="field-label">快速跳轉題號</span>
+          <div class="nav-legend">
+            <span><span class="legend-dot" data-state="idle"></span>未作答</span>
+            <span><span class="legend-dot" data-state="ok"></span>答對</span>
+            <span><span class="legend-dot" data-state="wrong"></span>答錯</span>
+          </div>
+          <div class="q-grid" id="question-nav-grid" role="navigation" aria-label="題號選擇器"></div>
+        </div>
+      </aside>
+
+      <!-- Right Column: Active Question Card -->
+      <div class="panel question-stage" id="question-stage" aria-live="polite">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- Topic Breakdown & Study Diagnostic -->
+    <section class="panel breakdown-section" aria-label="各單元得分與弱點診斷">
+      <div class="breakdown-header">
+        <div>
+          <h2 class="panel-title" style="margin-bottom: var(--space-xs);">各單元作答表現與弱點診斷</h2>
+          <p class="lede" style="margin: 0; font-size: 0.92rem;">系統會即時統計五大段考單元的答對率，協助你找出最需要加強複習的地理觀念。</p>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-review-wrong" onclick="changeQuizMode('wrong')" disabled>
+          集中複習目前錯題（0 題）
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="topic-table">
+          <thead>
+            <tr>
+              <th>段考單元</th>
+              <th class="num-col">題庫數</th>
+              <th class="num-col">已作答</th>
+              <th class="num-col">答對數</th>
+              <th class="num-col">單元正確率</th>
+              <th class="num-col">掌握狀態</th>
+            </tr>
+          </thead>
+          <tbody id="topic-breakdown-body">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="source-footer">
+      <span>試題內容整理自臺北市仁愛國中、桃園市中興／同德／石門國中、嘉義市北興國中、彰化縣和美／埔心／埤頭／溪湖／福興國中、高雄市大樹／林園國中及臺北市民族實中等七年級上學期第二次段考地理試卷。</span>
+      <span>本測驗支援自動存檔，重新開啟頁面將保留您的作答進度。</span>
+    </footer>
+  </main>
+
+  <api-shim></api-shim>
+  <script>
+    const TOPIC_META = [
+      { id: `landforms`, name: `1. 地形作用力與五大地形` },
+      { id: `maps`, name: `2. 地形表示法與等高線` },
+      { id: `mountains`, name: `3. 臺灣山脈、板塊與地質` },
+      { id: `coasts`, name: `4. 臺灣四段海岸與產業` },
+      { id: `islands`, name: `5. 臺灣周邊離島與成因` }
+    ];
+
+    const QUESTIONS = [
+      // ===== 1. 地形作用力與五大地形 =====
+      {
+        id: 1,
+        topic: `landforms`,
+        stem: `改變地表形貌的力量可分為內營力與外營力。請問下列哪一種臺灣地形景觀，主要是由「內營力」作用所造成？`,
+        options: [
+          `花蓮的太魯閣峽谷`,
+          `新北野柳的女王頭`,
+          `澎湖的柱狀玄武岩`,
+          `恆春海邊的風吹沙`
+        ],
+        answer: 2,
+        explanation: `內營力來自地球內部的能量（如板塊擠壓、火山活動、斷層與地震）。澎湖的「柱狀玄武岩」是海底火山噴發的熔岩冷卻收縮形成，屬於內營力；太魯閣峽谷為河水侵蝕、野柳女王頭為風化與差異侵蝕、風吹沙為風力搬運堆積，皆屬於外營力作用。`,
+        source: `臺北市仁愛國中、桃園市同德國中段考題型`
+      },
+      {
+        id: 2,
+        topic: `landforms`,
+        stem: `地表地形依海拔高度與起伏特徵可分為山地、高原、丘陵、台地、平原、盆地等類型。臺灣島地形多樣豐富，唯獨缺乏下列哪一類地形？`,
+        options: [
+          `盆地`,
+          `高原`,
+          `台地`,
+          `丘陵`
+        ],
+        answer: 1,
+        explanation: `臺灣因島嶼面積較小、且位於板塊劇烈擠壓與河川強烈切割的環境，缺乏面積廣大、海拔高且頂部開闊平坦的「高原」地形（如青藏高原）。臺灣的五大基本地形為山地、丘陵、台地、平原與盆地。`,
+        source: `桃園市中興國中、彰化縣埔心國中段考題型`
+      },
+      {
+        id: 3,
+        topic: `landforms`,
+        stem: `地理課時，老師請四位同學上臺介紹臺灣的地形特色，請問下列哪一位同學的敘述「有誤」？`,
+        options: [
+          `步美：臺灣面積最大的平原位於西部（嘉南平原）`,
+          `光彥：臺灣的主要山脈大致呈現南北走向`,
+          `小哀：台地是由古代河川沖積扇受地殼抬升所形成`,
+          `柯南：盆地為四周地勢低、中間地勢高的地形`
+        ],
+        answer: 3,
+        explanation: `盆地是指「四周高、中間低」的地形（如臺北盆地、臺中盆地、埔里盆地）；四周低、中間高的是山地、丘陵或台地。其餘三位同學的敘述皆正確。`,
+        source: `臺北市仁愛國中、高雄市林園國中段考題型`
+      },
+      {
+        id: 4,
+        topic: `landforms`,
+        stem: `「桃園台地是大漢溪早期流出山地時堆積出的大沖積扇，後來受造山運動影響地殼抬升，經河川切割形成現今頂部平坦的高地。」請問上述形成過程的地表作用力順序，以及當地自古最主要的農田灌溉蓄水設施分別為何？`,
+        options: [
+          `先內營力、後外營力；鑿井取水`,
+          `先外營力、後內營力；開闢埤塘`,
+          `皆為內營力作用；興建大型水庫`,
+          `皆為外營力作用；引接高山雪水`
+        ],
+        answer: 1,
+        explanation: `河川堆積沖積扇屬於「外營力」，後續地殼受擠壓抬升則屬於「內營力」。因台地地勢較高且大河切割較深不易直接引水，桃園先民遂挖掘大量「埤塘」蓄存雨水供農田灌溉，使桃園有「千塘鄉」之稱。`,
+        source: `桃園市石門國中、嘉義市北興國中段考題型`
+      },
+      {
+        id: 5,
+        topic: `landforms`,
+        stem: `浪漫台三線沿線經過桃園、新竹、苗栗一帶的客家山城，海拔高度多在 100 至 1,000 公尺之間、坡度較緩，適合開闢茶園與果園。請問此路段主要屬於何種地形？而全臺灣人口最密集的精華區又主要分布在哪些地形？`,
+        options: [
+          `丘陵；平原與盆地`,
+          `台地；山地與丘陵`,
+          `山地；平原與台地`,
+          `盆地；丘陵與盆地`
+        ],
+        answer: 0,
+        explanation: `海拔約 100～1,000 公尺、坡度平緩的山丘為「丘陵」（如竹東丘陵、苗栗丘陵），常開闢為茶園、果園或梯田。而臺灣人口最集中的精華區則位於地勢低平、交通與水源便利的「平原」與「盆地」。`,
+        source: `桃園市中興國中、嘉義市北興國中段考題型`
+      },
+      {
+        id: 6,
+        topic: `landforms`,
+        stem: `臺灣西側分布多處居高臨下且頂部平坦的台地。若從臺灣北部一路往南部旅行，沿途經過以下四大台地的正確順序應為何？`,
+        options: [
+          `林口台地 → 桃園台地 → 大肚台地 → 八卦台地`,
+          `桃園台地 → 林口台地 → 八卦台地 → 大肚台地`,
+          `林口台地 → 大肚台地 → 桃園台地 → 八卦台地`,
+          `八卦台地 → 大肚台地 → 桃園台地 → 林口台地`
+        ],
+        answer: 0,
+        explanation: `臺灣西部四大台地由北至南依序為：新北與桃園交界的「林口台地」→ 桃園市的「桃園台地」→ 臺中市的「大肚台地」→ 彰化縣的「八卦台地」。`,
+        source: `桃園市石門國中、高雄市大樹國中段考題型`
+      },
+
+      // ===== 2. 地形表示法與等高線 =====
+      {
+        id: 7,
+        topic: `maps`,
+        stem: `臺灣山林廣大巡查不易，曾出現違法開發山林的事件。政府若要快速比對不同時間的地表實際狀況，找出可能遭到大範圍違法伐林的地點，使用下列哪一種地圖最適合？`,
+        options: [
+          `分層設色圖`,
+          `地形剖面圖`,
+          `衛星影像圖`,
+          `等高線地形圖`
+        ],
+        answer: 2,
+        explanation: `衛星影像圖能真實且即時地呈現地球表面的植被覆蓋、土地利用與開發痕跡，適合比對前後不同時期的地表變化；等高線地形圖、分層設色圖與剖面圖主要用於判讀海拔高度與地形起伏。`,
+        source: `臺北市仁愛國中、桃園市石門國中段考題型`
+      },
+      {
+        id: 8,
+        topic: `maps`,
+        stem: `婷婷在筆記本上整理「地形剖面圖」的標準繪製步驟，請問下列哪一個步驟的敘述有誤、需要修正？`,
+        options: [
+          `甲：先在等高線地形圖上畫出一條剖面線`,
+          `乙：在剖面線下方繪製一個「垂直軸為距離、水平軸為高度」的高度表`,
+          `丙：沿著剖面線和等高線的各個交會點，畫垂直線標記到對應高度上`,
+          `丁：將這些對應的標點連成一條平滑曲線`
+        ],
+        answer: 1,
+        explanation: `繪製地形剖面圖時，「垂直軸（縱軸）」代表海拔高度，「水平軸（橫軸）」代表兩地之間的水平距離。步驟（乙）將縱軸與橫軸所代表的意義寫顛倒了。`,
+        source: `臺北市仁愛國中、嘉義市北興國中段考題型`
+      },
+      {
+        id: 9,
+        topic: `maps`,
+        stem: `小華正在繪製臺灣地形分層設色圖，他發現某一個縣市幾乎全境都塗上了「綠色」顏料。請問分層設色圖中不同的顏色代表什麼意義？該縣市最可能是下列何者？`,
+        options: [
+          `氣溫高低；花蓮縣`,
+          `海拔高度；彰化縣`,
+          `年降雨量；南投縣`,
+          `人口密度；基隆市`
+        ],
+        answer: 1,
+        explanation: `分層設色圖是在等高線之間塗上不同顏色來代表「海拔高度」的差異，通常綠色代表海拔最低的平原地形（約 0～200 公尺）。彰化縣全境以彰化平原為主（東側僅有八卦台地），因此幾乎全境塗成綠色。`,
+        source: `臺北市仁愛國中、彰化縣埔心國中段考題型`
+      },
+      {
+        id: 10,
+        topic: `maps`,
+        stem: `觀察下方的山區等高線地形圖（單位：公尺）。若全家人帶著長輩打算「輕鬆上山」健行，應選擇哪一條路線最恰當？且該山區最高點的海拔高度「最可能」為多少公尺？`,
+        diagram: `contour_slope`,
+        diagramCaption: `某山區等高線地形圖（單位：公尺，▲ 為最高點）`,
+        options: [
+          `甲路線（等高線密集）；800 公尺`,
+          `甲路線（等高線密集）；1,050 公尺`,
+          `乙路線（等高線稀疏）；950 公尺`,
+          `乙路線（等高線稀疏）；1,150 公尺`
+        ],
+        answer: 2,
+        explanation: `等高線愈「稀疏」表示高度變化慢、坡度愈平緩，適合長輩與親子輕鬆健行（乙路線）；愈密集則坡度愈陡峭（甲路線）。圖中等高線間距為 200 公尺（200、400、600、800），最高圈標示 800 公尺且未畫出 1,000 公尺等高線，故最高點介於 801～999 公尺之間，950 公尺最合理。`,
+        source: `臺北市仁愛國中、嘉義市北興國中段考題型`
+      },
+      {
+        id: 11,
+        topic: `maps`,
+        stem: `根據下方的局部等高線地形圖（數值單位：公尺），關於圖中甲、乙兩處的地形型態判讀，下列何者正確？`,
+        diagram: `contour_valley`,
+        diagramCaption: `局部山坡等高線圖（數值由上往下遞減）`,
+        options: [
+          `甲處等高線呈 V 字型且尖端朝向高處，為河谷地形，可能有溪流經過`,
+          `甲處等高線呈 V 字型且尖端朝向高處，為山脊地形，視野最為遼闊`,
+          `乙處等高線尖端朝向低處，為河谷地形，適合舉辦溯溪活動`,
+          `甲、乙兩處皆位於封閉盆地底部，豪雨時最容易積水`
+        ],
+        answer: 0,
+        explanation: `判讀等高線彎曲處的口訣：等高線彎曲呈 V 字型，「尖端指向高處（數值大）」為「河谷／溪谷」，水流會沿此匯集（如甲處）；「尖端指向低處（數值小）」為「山脊／稜線」，地勢相對突露且視野開闊（如乙處）。`,
+        source: `嘉義市北興國中、彰化縣埔心國中段考題型`
+      },
+      {
+        id: 12,
+        topic: `maps`,
+        stem: `下圖為沿著「北回歸線（23.5°N）」所繪製的臺灣地形剖面圖。請根據由西向東的地形排列順序，判斷下列敘述何者「正確」？`,
+        diagram: `profile_235n`,
+        diagramCaption: `沿北回歸線（23.5°N）繪製之臺灣東西向地形剖面示意圖`,
+        options: [
+          `甲為宜蘭平原，丁山脈屬於歐亞板塊`,
+          `乙山脈有「臺灣脊梁」之稱，是東、西部河川的主要分水嶺`,
+          `丙為屏東平原，是由濁水溪沖積而成`,
+          `玉山山脈（3,952 公尺）位於花東縱谷平原的東側`
+        ],
+        answer: 1,
+        explanation: `沿北回歸線（23.5°N）由西往東的地形依序為：嘉南平原（甲）→ 阿里山山脈 → 玉山山脈（3,952 公尺）→ 中央山脈（乙，貫穿南北，為「臺灣脊梁」與東西河川主要分水嶺）→ 花東縱谷平原（丙）→ 海岸山脈（丁，屬於菲律賓海板塊）。`,
+        source: `臺北市仁愛國中、桃園市中興國中段考題型`
+      },
+
+      // ===== 3. 臺灣山脈、板塊與地質 =====
+      {
+        id: 13,
+        topic: `mountains`,
+        stem: `臺灣位處兩大板塊的交界地帶，東西向的擠壓造就了獨特的自然環境。請問臺灣位處哪兩個板塊交界？下列哪一項環境特色與此種板塊位置「最沒有」關係？`,
+        options: [
+          `歐亞板塊與菲律賓海板塊；多地震與火山溫泉`,
+          `歐亞板塊與菲律賓海板塊；夏秋季節常有颱風襲臺`,
+          `歐亞板塊與太平洋板塊；主要山脈大致呈南北走向`,
+          `菲律賓海板塊與印澳板塊；3,000 公尺以上高山林立`
+        ],
+        answer: 1,
+        explanation: `臺灣位於「歐亞板塊」與「菲律賓海板塊」接觸帶上，受東西向碰撞擠壓，造成地震頻繁、火山溫泉分布（如陽明山、綠島）、山多平原少且山脈呈南北走向。「夏秋常有颱風」屬於副熱帶海洋季風氣候特徵，與板塊位置無關。`,
+        source: `臺北市仁愛國中、嘉義市北興國中段考題型`
+      },
+      {
+        id: 14,
+        topic: `mountains`,
+        stem: `「玉富自行車道」跨越秀姑巒溪上的玉里大橋，是亞洲唯一橫跨兩個板塊的自行車道，橋面東側甚至以每年約 2～3 公分的速度「長高」。請問這座車道位於哪一個地形區？左右兩側夾峙的山脈分別為何？`,
+        options: [
+          `宜蘭平原；雪山山脈與中央山脈`,
+          `埔里盆地；玉山山脈與阿里山山脈`,
+          `花東縱谷平原；西側為中央山脈、東側為海岸山脈`,
+          `臺中盆地；大肚台地與八卦台地`
+        ],
+        answer: 2,
+        explanation: `歐亞板塊與菲律賓海板塊的交界縫合線就在「花東縱谷平原」，谷地西側為中央山脈（歐亞板塊），東側為海岸山脈（菲律賓海板塊）。因板塊持續推擠抬升，使玉里大橋成為活的地理教室。`,
+        source: `臺北市仁愛國中、彰化縣埤頭國中段考題型`
+      },
+      {
+        id: 15,
+        topic: `mountains`,
+        stem: `觀察下方的臺灣五大山脈分布示意圖。連接臺北與宜蘭的「國道五號（蔣渭水高速公路）」建有全臺最長的雪山隧道，請問該隧道穿越圖中哪一座山脈？而嘉義著名的高山森林鐵路與日出景觀又位於哪一座山脈？`,
+        diagram: `taiwan_mountains`,
+        diagramCaption: `臺灣五大山脈分布位置示意圖`,
+        options: [
+          `甲（雪山山脈）；丁（阿里山山脈）`,
+          `乙（中央山脈）；丙（玉山山脈）`,
+          `甲（雪山山脈）；丙（玉山山脈）`,
+          `戊（海岸山脈）；丁（阿里山山脈）`
+        ],
+        answer: 0,
+        explanation: `圖中五大山脈分別為：甲＝雪山山脈（國道五號穿越）、乙＝中央山脈（臺灣脊梁，蘇花改與南迴公路穿越）、丙＝玉山山脈（臺灣最高峰所在地）、丁＝阿里山山脈（嘉義高山森林小火車、日出、雲海）、戊＝海岸山脈（位於花東縱谷東側）。`,
+        source: `嘉義市北興國中、桃園市同德國中段考題型`
+      },
+      {
+        id: 16,
+        topic: `mountains`,
+        stem: `「台 11 線」又稱花東海岸公路，沿著太平洋沿岸聯絡花蓮與臺東。如果小明從「花蓮」出發，沿台 11 線往南騎單車前往「臺東」，在他的「左側」與「右側」將分別觀賞到哪些景觀？`,
+        options: [
+          `左側：海岸山脈、右側：太平洋`,
+          `左側：太平洋、右側：海岸山脈`,
+          `左側：中央山脈、右側：太平洋`,
+          `左側：太平洋、右側：中央山脈`
+        ],
+        answer: 1,
+        explanation: `由花蓮往南騎向臺東時，行進方向朝「南」，此時左手邊是「東方」、右手邊是「西方」。台 11 線東臨太平洋、西靠海岸山脈，因此左側是太平洋、右側是海岸山脈（若由臺東往北行駛則左右相反）。`,
+        source: `嘉義市北興國中、彰化縣大同國中段考題型`
+      },
+      {
+        id: 17,
+        topic: `mountains`,
+        stem: `臺灣豐富多樣的地形塑造了各地截然不同的自然環境與人類活動。請問下列關於臺灣地形與環境影響的敘述，何者「正確」？`,
+        options: [
+          `臺灣水庫淤積嚴重，主要原因為西部平原過於寬廣平坦`,
+          `臺北盆地與臺中盆地夏季較容易悶熱，是因四周山地環繞、熱氣不易散逸`,
+          `陽明山國家公園擁有豐富的地熱與硫磺溫泉，主要是河川長期侵蝕陷落所致`,
+          `屏東恆春半島冬季的「落山風」，是東北季風翻越海岸山脈下滑形成`
+        ],
+        answer: 1,
+        explanation: `盆地四周高、中間低，空氣對流與通風較差，因此臺北、臺中、埔里等盆地夏季容易感覺悶熱。水庫淤積主因是河川上游坡度陡峭、泥沙含量大；陽明山地熱因位處板塊交界火山帶；恆春落山風則是東北季風翻越「中央山脈」南端形成。`,
+        source: `桃園市中興國中、嘉義市北興國中段考題型`
+      },
+      {
+        id: 18,
+        topic: `mountains`,
+        stem: `當太平洋（臺灣東北方或東方外海）發生規模 8 以上的強烈海底地震並引發海嘯時，臺灣氣象單位會密切發布警報。從臺灣本島的地形與位置判斷，下列哪一個縣市受東部太平洋海嘯直接波及的可能性「最低」？`,
+        options: [
+          `宜蘭縣`,
+          `花蓮縣`,
+          `臺東縣`,
+          `雲林縣`
+        ],
+        answer: 3,
+        explanation: `源自太平洋的海嘯主要直擊面對太平洋的東北部與東部沿海（宜蘭、花蓮、臺東等），而中央山脈與臺灣本島陸塊阻擋了東部外海的能量，使得位於西部臺灣海峽沿岸的雲林縣受影響程度最低。`,
+        source: `桃園市中興國中、彰化縣埤頭國中段考題型`
+      },
+
+      // ===== 4. 臺灣四段海岸與產業 =====
+      {
+        id: 19,
+        topic: `coasts`,
+        stem: `觀察下方的臺灣四段海岸分布圖。關於甲、乙、丙、丁各段海岸的地形分類與特色配對，下列何者「正確」？`,
+        diagram: `taiwan_coasts`,
+        diagramCaption: `臺灣四段海岸分布與界線示意圖`,
+        options: [
+          `甲段—沙岸；多潟湖、沙洲與養殖魚塭`,
+          `乙段—岬灣海岸；常見野柳女王頭與鼻頭角`,
+          `丙段—珊瑚礁海岸；海水清澈溫暖，為墾丁國家公園所在`,
+          `丁段—珊瑚礁海岸；港灣眾多分歧，適合闢建大型天然商港`
+        ],
+        answer: 2,
+        explanation: `臺灣四段海岸分別為：甲（北部：淡水河口至三貂角）為「岬灣海岸」（岩岸），著名景觀有野柳、鼻頭角；乙（西部：淡水河口至楓港）為「沙岸」，多沙洲與潟湖；丙（南部：楓港至旭海）為「珊瑚礁海岸」（墾丁）；丁（東部：三貂角至旭海）為「斷層海岸」（清水斷崖）。`,
+        source: `嘉義市北興國中、彰化縣溪湖國中段考題型`
+      },
+      {
+        id: 20,
+        topic: `coasts`,
+        stem: `臺灣海岸線依「構成物質」可分為沙岸與岩岸。下列關於臺灣各段海岸特徵與港口發展條件的比較，何者「正確」？`,
+        options: [
+          `北部岩岸因海岸線曲折、海水較深且丘陵逼近海洋，適合興建基隆港等天然良港`,
+          `東部斷層海岸雖有深水條件，但海灣數量全臺最多，故漁港與商港密度最高`,
+          `西部沙岸海岸線平直、沿海水深大，利於大型遠洋貨輪直接停靠`,
+          `海岸分為沙岸與岩岸，主要依據是「沿岸氣溫與潮差大小」`
+        ],
+        answer: 0,
+        explanation: `北部為軟硬岩層差異侵蝕形成的「岬灣岩岸」，海岸線曲折、海灣避風且海水較深，有利興建基隆港等天然良港。東部雖水深但海岸陡直為懸崖峭壁、缺乏避風灣澳，故港口稀少；西部沙岸水淺易泥沙淤積（如臺中港、高雄港須疏濬或利用潟湖沙洲築港）。`,
+        source: `臺北市仁愛國中、高雄市大樹國中段考題型`
+      },
+      {
+        id: 21,
+        topic: `coasts`,
+        stem: `在臺灣西南沿海的古地圖與地方誌中，常可見到「台江內海」與「鯤鯓」（如南鯤鯓、二鯤鯓）等地名；今日彰化芳苑一帶則保留了獨特的「海牛採蚵」無形文化資產。請問「台江內海」與「鯤鯓」分別是指哪兩種海岸地形？當地常見的產業為何？`,
+        options: [
+          `海灣、岬角；遠洋捕撈漁業與貨櫃航運`,
+          `潟湖、沙洲；養殖漁業（魚塭、牡蠣養殖）與昔日的曬鹽業`,
+          `海蝕洞、海蝕門；海底珊瑚浮潛觀光`,
+          `斷崖、海蝕平臺；石灰岩礦業開採`
+        ],
+        answer: 1,
+        explanation: `西部沙岸由河川泥沙堆積而成，「內海」（如台江內海、大鵬灣）指被濱外沙洲圍繞、水域平穩的「潟湖」；「鯤鯓」原指海面上如鯨魚脊背隆起的沙丘，即「沙洲」。當地因水域平淺、冬半年少雨日照強，盛行牡蠣（蚵）養殖、魚塭養殖與昔日曬鹽業。`,
+        source: `臺北市仁愛國中、桃園市石門國中段考題型`
+      },
+      {
+        id: 22,
+        topic: `coasts`,
+        stem: `墾丁國家公園以豐富的珊瑚礁景觀與熱帶魚類生態聞名。請問下列哪些環境條件有助於珊瑚蟲生育並累積成廣大的珊瑚礁地形？（甲）水溫常年維持在 20°C 以上的暖海（乙）大河入海口附近、泥沙含量豐富（丙）海水澄淨清澈、光線充足的淺海（丁）寒流強盛、水溫低於 15°C 的深海`,
+        options: [
+          `甲乙`,
+          `甲丙`,
+          `乙丁`,
+          `丙丁`
+        ],
+        answer: 1,
+        explanation: `珊瑚蟲是極為挑剔的生物，需生長在熱帶／副熱帶海域（水溫 20～28°C）、海水澄淨清澈無過多沉積物或汙染物、且陽光能穿透的淺海環境（甲、丙）。大河出海口泥沙混濁會阻礙珊瑚呼吸與行光合作用。`,
+        source: `臺北市仁愛國中、彰化縣溪湖國中段考題型`
+      },
+      {
+        id: 23,
+        topic: `coasts`,
+        stem: `為了改善東部聯外交通，「蘇花公路改善工程（蘇花改）」大量開鑿隧道穿越山脈，取代過去蜿蜒險峻的臨海山路。請問蘇花改的隧道主要穿越哪一座山脈？該路段鄰近的海岸有何顯著景觀？`,
+        options: [
+          `海岸山脈；沙洲與潟湖遍布`,
+          `雪山山脈；岬角與海灣相間`,
+          `中央山脈；陡直峭壁緊臨太平洋（斷層海岸）`,
+          `玉山山脈；大片熱帶珊瑚礁群生`
+        ],
+        answer: 2,
+        explanation: `蘇澳到花蓮崇德一帶（包含著名的清水斷崖）是「中央山脈」北段以斷層峭壁緊臨太平洋，形成高山與深海相鄰、岩壁陡直的斷層海岸。蘇花改隧道主要便是穿越中央山脈山區。`,
+        source: `臺北市仁愛國中、嘉義市北興國中段考題型`
+      },
+      {
+        id: 24,
+        topic: `coasts`,
+        stem: `阿恭在暑假期間騎單車進行海岸生態旅行，他從「嘉義縣東石鄉」出發，沿濱海公路向南經屏東恆春半島，再轉往北抵達「臺東縣臺東市」。請問他沿途依序會經歷哪些海岸類型的變化？`,
+        options: [
+          `岬灣海岸 → 沙岸 → 斷層海岸`,
+          `沙岸 → 珊瑚礁海岸 → 斷層海岸`,
+          `珊瑚礁海岸 → 沙岸 → 岬灣海岸`,
+          `斷層海岸 → 珊瑚礁海岸 → 沙岸`
+        ],
+        answer: 1,
+        explanation: `嘉義東石屬於「西部沙岸」；向南繞過屏東楓港進入恆春半島（墾丁至旭海）為「南部珊瑚礁海岸」；轉往東北沿太平洋岸抵達臺東市一帶，則屬於「東部斷層海岸」。`,
+        source: `彰化縣溪湖國中、高雄市林園國中段考題型`
+      },
+
+      // ===== 5. 臺灣周邊離島與成因 =====
+      {
+        id: 25,
+        topic: `islands`,
+        stem: `參考下方的臺灣周邊主要離島分布圖。地理系學生想規劃一條「同時包含大陸島、火山島與珊瑚礁島三種不同成因類型」的跳島考察路線，請問下列哪一個組合最適合？`,
+        diagram: `taiwan_islands`,
+        diagramCaption: `臺灣周邊主要離島位置分布圖（甲～辛）`,
+        options: [
+          `丙（澎湖）、己（龜山島）、庚（綠島）`,
+          `甲（馬祖）、乙（金門）、丁（琉球嶼）`,
+          `甲（馬祖）、丙（澎湖）、丁（琉球嶼）`,
+          `戊（釣魚臺）、庚（綠島）、辛（蘭嶼）`
+        ],
+        answer: 2,
+        explanation: `臺灣離島依成因可分為三大類：\n① 大陸島：甲（馬祖列嶼）、乙（金門列嶼）\n② 火山島：丙（澎湖群島）、戊（釣魚臺列嶼）、己（龜山島）、庚（綠島）、辛（蘭嶼）\n③ 珊瑚礁島：丁（琉球嶼）、以及南海的東沙島與太平島。\n只有選項 (C) 同時涵蓋三種不同成因的島嶼。`,
+        source: `臺北市仁愛國中、嘉義市北興國中段考題型`
+      },
+      {
+        id: 26,
+        topic: `islands`,
+        stem: `觀察下方的島嶼成因示意圖：原為中國東南沿海的丘陵地區，因海水面上升、低窪谷地沒入海中，較高的山頭露出海面成為島嶼。請問下列哪一組臺灣離島的成因與此圖相同，且保留了戰地古蹟與閩南／閩東聚落文化？`,
+        diagram: `continental_island`,
+        diagramCaption: `某類型島嶼形成過程示意圖`,
+        options: [
+          `澎湖群島、龜山島`,
+          `金門列嶼、馬祖列嶼`,
+          `綠島、蘭嶼`,
+          `琉球嶼、東沙島`
+        ],
+        answer: 1,
+        explanation: `本圖為「大陸島」的成因示意圖。位於中國福建外海的「金門列嶼」與「馬祖列嶼」地質上皆屬中國東南沿海丘陵的延伸，因海水面上升與大陸隔絕成島，近代更因戰地政務保留大量軍事遺跡，以及金門風獅爺、馬祖藍眼淚等特色文化。`,
+        source: `桃園市中興國中、彰化縣和美高中段考題型`
+      },
+      {
+        id: 27,
+        topic: `islands`,
+        stem: `臺灣因位處板塊交界帶，周邊有許多火山活動形成的「火山島」。下列關於臺灣各火山島的自然與人文特色配對，何者敘述「錯誤」？`,
+        options: [
+          `澎湖群島：有北回歸線通過，具有壯觀的柱狀玄武岩地形`,
+          `綠島：位於臺東外海，擁有珍貴的「朝日」海底溫泉`,
+          `蘭嶼：位於臺東東南外海，島上有火山口湖大天池，為達悟族傳統生活領域`,
+          `龜山島：位於屏東東港外海，是著名的珊瑚礁與綠蠵龜觀光島嶼`
+        ],
+        answer: 3,
+        explanation: `龜山島位於「宜蘭縣頭城外海」，為火山島，周邊海底仍有火山氣體與熱泉噴發；位於屏東東港西南方外海、以珊瑚礁地形與綠蠵龜聞名的是「琉球嶼（小琉球）」，並非龜山島。`,
+        source: `臺北市仁愛國中、彰化縣埤頭國中段考題型`
+      },
+      {
+        id: 28,
+        topic: `islands`,
+        stem: `某座臺灣離島約位於北緯 22.3°、東經 120.3°，隸屬於屏東縣管轄，島上遍布崎嶇的珊瑚礁與海蝕岩洞（如烏鬼洞）。此外，遠在南海的「太平島」與「東沙島」亦同為珊瑚礁島，我國仍派員駐守這些面積極小的島嶼，最主要的實質誘因為何？`,
+        options: [
+          `該島為龜山島；利於島上大規模開採煤礦與鐵礦`,
+          `該島為琉球嶼；可主張廣大的經濟海域與漁業、海底資源`,
+          `該島為馬祖列嶼；具備充沛淡水與廣大水稻平原`,
+          `該島為澎湖群島；方便興建國際遠洋深水貨櫃港`
+        ],
+        answer: 1,
+        explanation: `22.3°N、120.3°E 位於屏東東港西南方海域，是珊瑚礁島「琉球嶼（小琉球）」。南海的東沙島與太平島同樣是珊瑚礁島，雖然陸地面積狹小、缺乏淡水不利農耕，但掌握主權即可主張周邊 200 海浬的「經濟海域」，擁有極高的漁業與海底礦產開發價值。`,
+        source: `臺北市仁愛國中、桃園市中興國中段考題型`
+      },
+      {
+        id: 29,
+        topic: `islands`,
+        stem: `「該列嶼目前為無人島，位於臺灣本島東北方的東海海域，行政上隸屬於宜蘭縣頭城鎮管轄，近年因周邊海域資源引發臺灣、日本與中國的主權爭議。」請問上述列嶼的名稱與島嶼成因類型分別為何？`,
+        options: [
+          `釣魚臺列嶼；火山島`,
+          `澎湖群島；大陸島`,
+          `東沙群島；珊瑚礁島`,
+          `馬祖列嶼；火山島`
+        ],
+        answer: 0,
+        explanation: `釣魚臺列嶼位於臺灣本島東北方東海海域（宜蘭縣管轄），是板塊接觸帶海底火山噴發形成的「火山島」，因周圍大陸棚漁業與油氣資源豐富而具主權爭議。`,
+        source: `臺北市仁愛國中、彰化縣福興國中段考題型`
+      },
+      {
+        id: 30,
+        topic: `islands`,
+        stem: `臺灣本島的經緯度大約在 22°N～25°N、120°E～122°E 之間。若某離島位於「26°14'N、120°E」附近，春季夜晚常見「藍眼淚」發光現象；另從「臺北」搭飛機前往北回歸線通過的「澎湖馬公」，飛機大致應朝哪一個方向飛行？`,
+        options: [
+          `馬祖列嶼；往西南方飛行`,
+          `金門列嶼；往東南方飛行`,
+          `馬祖列嶼；往東北方飛行`,
+          `琉球嶼；往西北方飛行`
+        ],
+        answer: 0,
+        explanation: `26°14'N、120°E 位於臺灣本島西北方、福建省閩江口外，正是以「藍眼淚」聞名的「馬祖列嶼」。而澎湖（約 23.5°N、119.5°E）相對於臺北（約 25°N、121.5°E）位於「西南方」，因此客機應朝西南方向飛行。`,
+        source: `嘉義市北興國中、彰化縣福興國中段考題型`
+      }
+    ];
+
+    // SVG diagram generators (strictly using CSS variables from :root)
+    function renderDiagramSvg(type) {
+      if (type === `contour_slope`) {
+        return `<svg viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="等高線疏密與坡度示意圖">
+          <rect x="0" y="0" width="480" height="270" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1"/>
+          <g fill="none" stroke="var(--on-surface-variant)" stroke-width="1.6">
+            <path d="M 85 145 C 85 55, 420 45, 425 145 C 430 235, 85 235, 85 145 Z"/>
+            <path d="M 105 145 C 105 72, 370 66, 375 145 C 380 218, 105 218, 105 145 Z"/>
+            <path d="M 124 145 C 124 90, 315 88, 320 145 C 324 198, 124 200, 124 145 Z"/>
+            <path d="M 143 145 C 143 108, 250 108, 255 145 C 258 180, 143 182, 143 145 Z"/>
+          </g>
+          <polygon points="184,136 191,150 177,150" fill="var(--on-surface)"/>
+          <text x="184" y="166" text-anchor="middle" font-size="11" font-weight="700" fill="var(--on-surface)">山頂 ▲</text>
+          <!-- Labels on contours -->
+          <text x="415" y="212" font-size="11" font-weight="700" fill="var(--on-surface-variant)">200m</text>
+          <text x="364" y="198" font-size="11" font-weight="700" fill="var(--on-surface-variant)">400m</text>
+          <text x="312" y="182" font-size="11" font-weight="700" fill="var(--on-surface-variant)">600m</text>
+          <text x="248" y="168" font-size="11" font-weight="700" fill="var(--on-surface-variant)">800m</text>
+          <!-- Route 甲 (steep/dense left) -->
+          <line x1="65" y1="145" x2="168" y2="145" stroke="var(--data-3)" stroke-width="3" stroke-dasharray="5,3"/>
+          <polygon points="172,145 162,140 162,150" fill="var(--data-3)"/>
+          <rect x="24" y="131" width="38" height="24" rx="4" fill="var(--data-3)"/>
+          <text x="43" y="147" text-anchor="middle" font-size="12" font-weight="800" fill="var(--on-primary)">甲</text>
+          <!-- Route 乙 (gentle/sparse right) -->
+          <line x1="442" y1="122" x2="210" y2="142" stroke="var(--primary)" stroke-width="3" stroke-dasharray="6,3"/>
+          <polygon points="203,143 214,137 215,147" fill="var(--primary)"/>
+          <rect x="430" y="100" width="38" height="24" rx="4" fill="var(--primary)"/>
+          <text x="449" y="116" text-anchor="middle" font-size="12" font-weight="800" fill="var(--on-primary)">乙</text>
+          <text x="24" y="24" font-size="11" font-weight="700" fill="var(--on-surface-variant)">等高線間距：200 公尺</text>
+        </svg>`;
+      }
+      if (type === `contour_valley`) {
+        return `<svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="河谷與山脊等高線判讀圖">
+          <rect x="0" y="0" width="480" height="260" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1"/>
+          <g fill="none" stroke="var(--on-surface-variant)" stroke-width="2">
+            <!-- 800m top -->
+            <path d="M 35 65 Q 105 65 145 30 Q 185 65 250 65 Q 315 65 345 92 Q 375 65 445 65"/>
+            <!-- 600m -->
+            <path d="M 35 110 Q 105 110 145 68 Q 185 110 250 110 Q 315 110 345 140 Q 375 110 445 110"/>
+            <!-- 400m -->
+            <path d="M 35 158 Q 105 158 145 112 Q 185 158 250 158 Q 315 158 345 190 Q 375 158 445 158"/>
+            <!-- 200m bottom -->
+            <path d="M 35 206 Q 105 206 145 158 Q 185 206 250 206 Q 315 206 345 238 Q 375 206 445 206"/>
+          </g>
+          <!-- Elevation labels -->
+          <text x="25" y="68" font-size="11" font-weight="700" fill="var(--on-surface-variant)" text-anchor="end">800</text>
+          <text x="25" y="114" font-size="11" font-weight="700" fill="var(--on-surface-variant)" text-anchor="end">600</text>
+          <text x="25" y="162" font-size="11" font-weight="700" fill="var(--on-surface-variant)" text-anchor="end">400</text>
+          <text x="25" y="210" font-size="11" font-weight="700" fill="var(--on-surface-variant)" text-anchor="end">200</text>
+          <text x="455" y="210" font-size="11" font-weight="700" fill="var(--on-surface-variant)">200m</text>
+          <text x="455" y="68" font-size="11" font-weight="700" fill="var(--on-surface-variant)">800m</text>
+          <!-- Point 甲 (V pointing up toward 800m = Valley) -->
+          <line x1="145" y1="30" x2="145" y2="210" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="4,4"/>
+          <circle cx="145" cy="112" r="14" fill="var(--primary)"/>
+          <text x="145" y="117" text-anchor="middle" font-size="13" font-weight="800" fill="var(--on-primary)">甲</text>
+          <!-- Point 乙 (V pointing down toward 200m = Ridge) -->
+          <line x1="345" y1="50" x2="345" y2="238" stroke="var(--data-3)" stroke-width="1.5" stroke-dasharray="4,4"/>
+          <circle cx="345" cy="140" r="14" fill="var(--data-3)"/>
+          <text x="345" y="145" text-anchor="middle" font-size="13" font-weight="800" fill="var(--on-primary)">乙</text>
+          <!-- High/Low arrows -->
+          <text x="245" y="25" text-anchor="middle" font-size="11" font-weight="700" fill="var(--on-surface)">▲ 海拔較高處（山頂方向）</text>
+          <text x="245" y="250" text-anchor="middle" font-size="11" font-weight="700" fill="var(--on-surface-variant)">▼ 海拔較低處（山麓方向）</text>
+        </svg>`;
+      }
+      if (type === `profile_235n`) {
+        return `<svg viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="北回歸線臺灣地形剖面圖">
+          <rect x="0" y="0" width="500" height="250" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1"/>
+          <!-- Gridlines -->
+          <g stroke="var(--outline-variant)" stroke-width="1" stroke-dasharray="3,3">
+            <line x1="55" y1="45" x2="475" y2="45"/>
+            <line x1="55" y1="85" x2="475" y2="85"/>
+            <line x1="55" y1="125" x2="475" y2="125"/>
+            <line x1="55" y1="165" x2="475" y2="165"/>
+          </g>
+          <!-- Axis -->
+          <line x1="55" y1="35" x2="55" y2="205" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <line x1="55" y1="205" x2="475" y2="205" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <!-- Y Labels -->
+          <g font-size="10" font-weight="600" fill="var(--on-surface-variant)" text-anchor="end">
+            <text x="48" y="49">4000m</text>
+            <text x="48" y="89">3000m</text>
+            <text x="48" y="129">2000m</text>
+            <text x="48" y="169">1000m</text>
+            <text x="48" y="208">0m</text>
+          </g>
+          <!-- Profile shape -->
+          <path d="M 55 205 L 65 203 L 155 201 L 195 140 L 215 152 L 245 48 L 265 110 L 315 68 L 355 125 L 385 196 L 402 196 L 425 148 L 448 205 L 475 205 Z"
+                fill="var(--surface-container)" stroke="var(--primary)" stroke-width="2.5" stroke-linejoin="round"/>
+          <!-- Sea fill -->
+          <rect x="448" y="205" width="27" height="10" fill="var(--primary-container)"/>
+          <!-- Labels -->
+          <text x="65" y="226" font-size="11" font-weight="700" fill="var(--on-surface)">西（東石）</text>
+          <text x="468" y="226" text-anchor="end" font-size="11" font-weight="700" fill="var(--on-surface)">東（大港口・太平洋）</text>
+          <text x="112" y="192" text-anchor="middle" font-size="12" font-weight="800" fill="var(--primary)">甲 平原</text>
+          <text x="195" y="130" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--on-surface)">阿里山</text>
+          <text x="245" y="34" text-anchor="middle" font-size="11" font-weight="800" fill="var(--data-3)">玉山 3952m</text>
+          <text x="315" y="56" text-anchor="middle" font-size="12" font-weight="800" fill="var(--primary)">乙 山脈</text>
+          <text x="394" y="185" text-anchor="middle" font-size="11" font-weight="800" fill="var(--secondary)">丙</text>
+          <text x="430" y="138" text-anchor="middle" font-size="12" font-weight="800" fill="var(--primary)">丁</text>
+        </svg>`;
+      }
+      if (type === `taiwan_mountains`) {
+        return `<svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="臺灣五大山脈分布示意圖">
+          <rect x="0" y="0" width="360" height="360" rx="10" fill="var(--surface-container-low)" stroke="var(--outline-variant)" stroke-width="1"/>
+          <!-- Compass -->
+          <g transform="translate(42,42)">
+            <circle cx="0" cy="0" r="16" fill="var(--background)" stroke="var(--outline-variant)"/>
+            <path d="M 0 -11 L 4 3 L 0 0 L -4 3 Z" fill="var(--primary)"/>
+            <text x="0" y="-19" text-anchor="middle" font-size="11" font-weight="800" fill="var(--on-surface)">N</text>
+          </g>
+          <!-- Taiwan Island Outline -->
+          <path d="M 218 42 C 236 44, 248 56, 246 72 C 238 96, 224 114, 220 148 C 216 184, 204 228, 186 270 C 176 294, 174 322, 166 326 C 156 322, 150 296, 136 270 C 118 240, 108 212, 114 176 C 122 138, 146 92, 178 58 C 192 44, 206 41, 218 42 Z"
+                fill="var(--background)" stroke="var(--outline)" stroke-width="2"/>
+          <!-- 甲 雪山山脈 -->
+          <path d="M 212 62 L 182 118" stroke="var(--data-4)" stroke-width="7" stroke-linecap="round"/>
+          <!-- 乙 中央山脈 -->
+          <path d="M 225 82 L 166 286" stroke="var(--primary)" stroke-width="9" stroke-linecap="round"/>
+          <!-- 丙 玉山山脈 -->
+          <path d="M 176 155 L 154 218" stroke="var(--data-3)" stroke-width="7" stroke-linecap="round"/>
+          <!-- 丁 阿里山山脈 -->
+          <path d="M 156 174 L 138 228" stroke="var(--tertiary)" stroke-width="6" stroke-linecap="round"/>
+          <!-- 戊 海岸山脈 -->
+          <path d="M 212 162 L 194 242" stroke="var(--error)" stroke-width="6" stroke-linecap="round"/>
+          <!-- Callout badges -->
+          <g font-size="12" font-weight="800">
+            <line x1="196" y1="88" x2="145" y2="75" stroke="var(--data-4)" stroke-width="1.5"/>
+            <circle cx="132" cy="75" r="13" fill="var(--data-4)"/><text x="132" y="79" text-anchor="middle" fill="var(--on-primary)">甲</text>
+
+            <line x1="196" y1="138" x2="265" y2="112" stroke="var(--primary)" stroke-width="1.5"/>
+            <circle cx="278" cy="112" r="13" fill="var(--primary)"/><text x="278" y="116" text-anchor="middle" fill="var(--on-primary)">乙</text>
+
+            <line x1="164" y1="180" x2="88" y2="164" stroke="var(--data-3)" stroke-width="1.5"/>
+            <circle cx="74" cy="164" r="13" fill="var(--data-3)"/><text x="74" y="168" text-anchor="middle" fill="var(--on-primary)">丙</text>
+
+            <line x1="145" y1="210" x2="88" y2="228" stroke="var(--tertiary)" stroke-width="1.5"/>
+            <circle cx="74" cy="228" r="13" fill="var(--tertiary)"/><text x="74" y="232" text-anchor="middle" fill="var(--on-primary)">丁</text>
+
+            <line x1="205" y1="202" x2="265" y2="215" stroke="var(--error)" stroke-width="1.5"/>
+            <circle cx="278" cy="215" r="13" fill="var(--error)"/><text x="278" y="219" text-anchor="middle" fill="var(--on-primary)">戊</text>
+          </g>
+          <text x="180" y="348" text-anchor="middle" font-size="11" font-weight="700" fill="var(--on-surface-variant)">太平洋（東）　／　臺灣海峽（西）</text>
+        </svg>`;
+      }
+      if (type === `taiwan_coasts`) {
+        return `<svg viewBox="0 0 380 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="臺灣四段海岸分布示意圖">
+          <rect x="0" y="0" width="380" height="360" rx="10" fill="var(--surface-container-low)" stroke="var(--outline-variant)" stroke-width="1"/>
+          <path d="M 218 42 C 236 44, 248 56, 246 72 C 238 96, 224 114, 220 148 C 216 184, 204 228, 186 270 C 176 294, 174 322, 166 326 C 156 322, 150 296, 136 270 C 118 240, 108 212, 114 176 C 122 138, 146 92, 178 58 C 192 44, 206 41, 218 42 Z"
+                fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+          <!-- 甲 北部海岸: 淡水河口(188,52) to 三貂角(246,66) -->
+          <path d="M 188 52 C 204 41, 232 42, 246 66" fill="none" stroke="var(--data-4)" stroke-width="6" stroke-linecap="round"/>
+          <!-- 乙 西部海岸: 淡水河口(188,52) down to 楓港(152,298) -->
+          <path d="M 188 52 C 154 78, 124 134, 114 176 C 108 212, 118 240, 136 270 C 144 282, 148 292, 152 298" fill="none" stroke="var(--data-3)" stroke-width="6" stroke-linecap="round"/>
+          <!-- 丙 南部海岸: 楓港(152,298) around tip to 旭海(178,288) -->
+          <path d="M 152 298 C 158 316, 162 325, 166 326 C 172 324, 175 304, 178 288" fill="none" stroke="var(--tertiary)" stroke-width="6" stroke-linecap="round"/>
+          <!-- 丁 東部海岸: 三貂角(246,66) down to 旭海(178,288) -->
+          <path d="M 246 66 C 238 96, 224 114, 220 148 C 216 184, 204 228, 186 270 L 178 288" fill="none" stroke="var(--primary)" stroke-width="6" stroke-linecap="round"/>
+          <!-- Boundary nodes -->
+          <g fill="var(--on-surface)" stroke="var(--background)" stroke-width="1.5">
+            <circle cx="188" cy="52" r="4.5"/>
+            <circle cx="246" cy="66" r="4.5"/>
+            <circle cx="152" cy="298" r="4.5"/>
+            <circle cx="178" cy="288" r="4.5"/>
+          </g>
+          <g font-size="11" font-weight="700" fill="var(--on-surface)">
+            <text x="176" y="42" text-anchor="end">淡水河口</text>
+            <text x="256" y="66">三貂角</text>
+            <text x="142" y="302" text-anchor="end">楓港</text>
+            <text x="188" y="294">旭海</text>
+          </g>
+          <!-- Section Badges -->
+          <g font-size="12" font-weight="800">
+            <circle cx="218" cy="26" r="13" fill="var(--data-4)"/><text x="218" y="30" text-anchor="middle" fill="var(--on-primary)">甲</text>
+            <circle cx="80" cy="186" r="13" fill="var(--data-3)"/><text x="80" y="190" text-anchor="middle" fill="var(--on-primary)">乙</text>
+            <circle cx="166" cy="346" r="13" fill="var(--tertiary)"/><text x="166" y="350" text-anchor="middle" fill="var(--on-primary)">丙</text>
+            <circle cx="262" cy="176" r="13" fill="var(--primary)"/><text x="262" y="180" text-anchor="middle" fill="var(--on-primary)">丁</text>
+          </g>
+          <text x="320" y="150" font-size="11" font-weight="700" fill="var(--on-surface-variant)">太平洋</text>
+          <text x="45" y="110" font-size="11" font-weight="700" fill="var(--on-surface-variant)">臺灣海峽</text>
+        </svg>`;
+      }
+      if (type === `taiwan_islands`) {
+        return `<svg viewBox="0 0 460 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="臺灣周邊離島分布圖">
+          <rect x="0" y="0" width="460" height="360" rx="10" fill="var(--surface-container-low)" stroke="var(--outline-variant)" stroke-width="1"/>
+          <!-- Latitude/Longitude lines -->
+          <g stroke="var(--outline-variant)" stroke-width="1" stroke-dasharray="4,4">
+            <line x1="15" y1="95" x2="445" y2="95"/>
+            <line x1="15" y1="205" x2="445" y2="205"/>
+            <line x1="15" y1="295" x2="445" y2="295"/>
+          </g>
+          <!-- Tropic of Cancer -->
+          <line x1="15" y1="205" x2="445" y2="205" stroke="var(--error)" stroke-width="1.2" stroke-dasharray="6,3"/>
+          <text x="440" y="199" text-anchor="end" font-size="10" font-weight="700" fill="var(--error)">北回歸線 23.5°N</text>
+          <text x="22" y="90" font-size="10" font-weight="600" fill="var(--on-surface-variant)">25°N</text>
+          <text x="22" y="290" font-size="10" font-weight="600" fill="var(--on-surface-variant)">22°N</text>
+          <!-- Mainland China coast hint -->
+          <path d="M 15 20 L 145 20 C 138 58, 112 95, 88 135 C 62 175, 42 205, 15 235 Z" fill="var(--surface-container)" stroke="var(--outline-variant)" stroke-width="1"/>
+          <text x="58" y="88" font-size="11" font-weight="700" fill="var(--on-surface-variant)">中國大陸</text>
+          <!-- Taiwan Main Island -->
+          <path d="M 294 86 C 310 88, 320 98, 318 112 C 310 132, 298 148, 294 176 C 290 206, 280 242, 265 276 C 258 296, 256 318, 248 320 C 240 318, 236 296, 224 276 C 208 250, 200 226, 206 196 C 212 164, 232 126, 260 98 C 272 86, 284 85, 294 86 Z"
+                fill="var(--background)" stroke="var(--outline)" stroke-width="1.8"/>
+          <text x="256" y="218" text-anchor="middle" font-size="11" font-weight="700" fill="var(--on-surface)">臺灣本島</text>
+          <!-- Islands -->
+          <!-- 甲 馬祖 -->
+          <circle cx="152" cy="52" r="11" fill="var(--data-4)"/><text x="152" y="56" text-anchor="middle" font-size="11" font-weight="800" fill="var(--on-primary)">甲</text>
+          <!-- 乙 金門 -->
+          <circle cx="96" cy="148" r="11" fill="var(--data-4)"/><text x="96" y="152" text-anchor="middle" font-size="11" font-weight="800" fill="var(--on-primary)">乙</text>
+          <!-- 丙 澎湖 -->
+          <circle cx="176" cy="206" r="11" fill="var(--data-3)"/><text x="176" y="210" text-anchor="middle" font-size="11" font-weight="800" fill="var(--on-primary)">丙</text>
+          <!-- 丁 琉球嶼 -->
+          <circle cx="212" cy="296" r="11" fill="var(--tertiary)"/><text x="212" y="300" text-anchor="middle" font-size="11" font-weight="800" fill="var(--on-primary)">丁</text>
+          <!-- 戊 釣魚臺 -->
+          <circle cx="386" cy="48" r="11" fill="var(--data-3)"/><text x="386" y="52" text-anchor="middle" font-size="11" font-weight="800" fill="var(--on-primary)">戊</text>
+          <!-- 己 龜山島 -->
+          <circle cx="348" cy="108" r="11" fill="var(--data-3)"/><text x="348" y="112" text-anchor="middle" font-size="11" font-weight="800" fill="var(--on-primary)">己</text>
+          <!-- 庚 綠島 -->
+          <circle cx="322" cy="252" r="11" fill="var(--data-3)"/><text x="322" y="256" text-anchor="middle" font-size="11" font-weight="800" fill="var(--on-primary)">庚</text>
+          <!-- 辛 蘭嶼 -->
+          <circle cx="318" cy="306" r="11" fill="var(--data-3)"/><text x="318" y="310" text-anchor="middle" font-size="11" font-weight="800" fill="var(--on-primary)">辛</text>
+          <!-- Labels -->
+          <g font-size="10" font-weight="700" fill="var(--on-surface)">
+            <text x="168" y="56">馬祖</text>
+            <text x="112" y="152">金門</text>
+            <text x="160" y="228" text-anchor="middle">澎湖</text>
+            <text x="195" y="300" text-anchor="end">琉球嶼</text>
+            <text x="402" y="52">釣魚臺</text>
+            <text x="364" y="112">龜山島</text>
+            <text x="338" y="256">綠島</text>
+            <text x="334" y="310">蘭嶼</text>
+          </g>
+        </svg>`;
+      }
+      if (type === `continental_island`) {
+        return `<svg viewBox="0 0 460 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="大陸島形成過程示意圖">
+          <rect x="0" y="0" width="460" height="220" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1"/>
+          <!-- Sea level after rising -->
+          <rect x="190" y="96" width="250" height="94" fill="var(--primary-container)"/>
+          <!-- Terrain silhouette -->
+          <path d="M 20 190 L 20 75 L 155 75 C 185 75, 210 138, 245 142 C 275 145, 295 72, 322 72 C 348 72, 368 148, 398 148 L 440 155 L 440 190 Z"
+                fill="var(--surface-container-high)" stroke="var(--on-surface)" stroke-width="2" stroke-linejoin="round"/>
+          <!-- Original lower sea level -->
+          <line x1="205" y1="158" x2="440" y2="158" stroke="var(--on-surface-variant)" stroke-width="1.5" stroke-dasharray="5,4"/>
+          <!-- New higher sea level -->
+          <line x1="190" y1="96" x2="440" y2="96" stroke="var(--primary)" stroke-width="2"/>
+          <!-- Arrow showing sea level rise -->
+          <line x1="252" y1="152" x2="252" y2="104" stroke="var(--primary)" stroke-width="2.5"/>
+          <polygon points="252,98 247,108 257,108" fill="var(--primary)"/>
+          <text x="90" y="135" text-anchor="middle" font-size="12" font-weight="800" fill="var(--on-surface)">大陸陸地</text>
+          <text x="322" y="60" text-anchor="middle" font-size="12" font-weight="800" fill="var(--primary)">較高處露出成為島嶼</text>
+          <text x="432" y="88" text-anchor="end" font-size="11" font-weight="700" fill="var(--primary)">海平面上升後</text>
+          <text x="432" y="176" text-anchor="end" font-size="11" font-weight="700" fill="var(--on-surface-variant)">原海水面</text>
+          <text x="252" y="132" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--on-primary-container)">海水淹沒谷地</text>
+        </svg>`;
+      }
+      return ``;
+    }
+
+    // Application state
+    const appState = {
+      topic: `all`,
+      mode: `all`,
+      activeIds: QUESTIONS.map(q => q.id),
+      currentIndex: 0,
+      answers: {} // { [questionId]: selectedOptionIndex }
+    };
+
+    const OPTION_LABELS = [`A`, `B`, `C`, `D`];
+
+    function getWrongQuestionIds() {
+      return QUESTIONS.filter(q => {
+        const chosen = appState.answers[q.id];
+        return typeof chosen === `number` && chosen !== q.answer;
+      }).map(q => q.id);
+    }
+
+    function getFilteredPool(topicId) {
+      if (topicId === `all`) return QUESTIONS;
+      return QUESTIONS.filter(q => q.topic === topicId);
+    }
+
+    function rebuildActiveIds(preserveCurrent) {
+      const pool = getFilteredPool(appState.topic);
+      if (appState.mode === `all`) {
+        appState.activeIds = pool.map(q => q.id);
+      } else if (appState.mode === `random10`) {
+        const ids = pool.map(q => q.id);
+        for (let i = ids.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const temp = ids[i];
+          ids[i] = ids[j];
+          ids[j] = temp;
+        }
+        appState.activeIds = ids.slice(0, Math.min(10, ids.length));
+      } else if (appState.mode === `wrong`) {
+        const wrongSet = new Set(getWrongQuestionIds());
+        appState.activeIds = pool.filter(q => wrongSet.has(q.id)).map(q => q.id);
+      }
+      if (!preserveCurrent) {
+        appState.currentIndex = 0;
+      } else if (appState.currentIndex >= appState.activeIds.length) {
+        appState.currentIndex = Math.max(0, appState.activeIds.length - 1);
+      }
+    }
+
+    function computeScoreMetrics() {
+      const totalInRun = appState.activeIds.length;
+      let answeredCount = 0;
+      let correctCount = 0;
+      let wrongCount = 0;
+
+      appState.activeIds.forEach(id => {
+        const q = QUESTIONS.find(item => item.id === id);
+        if (!q) return;
+        const chosen = appState.answers[id];
+        if (typeof chosen === `number`) {
+          answeredCount++;
+          if (chosen === q.answer) {
+            correctCount++;
+          } else {
+            wrongCount++;
+          }
+        }
+      });
+
+      const score = totalInRun > 0 ? Math.round((correctCount / totalInRun) * 100) : 0;
+      const accuracy = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : null;
+      return { totalInRun, answeredCount, correctCount, wrongCount, score, accuracy };
+    }
+
+    function showStatusMsg(text) {
+      const el = document.getElementById(`action-status-msg`);
+      if (el) el.textContent = text;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, `&amp;`)
+        .replace(/</g, `&lt;`)
+        .replace(/>/g, `&gt;`)
+        .replace(/"/g, `&quot;`);
+    }
+
+    function renderAll() {
+      renderControls();
+      renderScoreboard();
+      renderQuestionNavigator();
+      renderActiveQuestion();
+      renderTopicBreakdown();
+    }
+
+    function renderControls() {
+      const topicSelect = document.getElementById(`topic-select`);
+      if (topicSelect) topicSelect.value = appState.topic;
+
+      const poolCount = getFilteredPool(appState.topic).length;
+      const allCountEl = document.getElementById(`mode-all-count`);
+      if (allCountEl) allCountEl.textContent = `${poolCount} 題`;
+
+      const wrongIds = getWrongQuestionIds();
+      const poolWrongCount = getFilteredPool(appState.topic).filter(q => wrongIds.includes(q.id)).length;
+      const wrongCountEl = document.getElementById(`mode-wrong-count`);
+      if (wrongCountEl) wrongCountEl.textContent = `${poolWrongCount} 題`;
+
+      const modeAllBtn = document.getElementById(`mode-all`);
+      const modeRandBtn = document.getElementById(`mode-random10`);
+      const modeWrongBtn = document.getElementById(`mode-wrong`);
+      if (modeAllBtn) modeAllBtn.setAttribute(`aria-pressed`, appState.mode === `all` ? `true` : `false`);
+      if (modeRandBtn) modeRandBtn.setAttribute(`aria-pressed`, appState.mode === `random10` ? `true` : `false`);
+      if (modeWrongBtn) {
+        modeWrongBtn.setAttribute(`aria-pressed`, appState.mode === `wrong` ? `true` : `false`);
+        modeWrongBtn.disabled = poolWrongCount === 0 && appState.mode !== `wrong`;
+      }
+
+      const reviewWrongBtn = document.getElementById(`btn-review-wrong`);
+      if (reviewWrongBtn) {
+        reviewWrongBtn.textContent = `集中複習目前錯題（${wrongIds.length} 題）`;
+        reviewWrongBtn.disabled = wrongIds.length === 0;
+      }
+    }
+
+    function renderScoreboard() {
+      const m = computeScoreMetrics();
+      const scoreEl = document.getElementById(`kpi-score`);
+      const scoreCard = document.getElementById(`card-score`);
+      const scoreNote = document.getElementById(`kpi-score-note`);
+      const progEl = document.getElementById(`kpi-progress`);
+      const progNote = document.getElementById(`kpi-progress-note`);
+      const tallyEl = document.getElementById(`kpi-tally`);
+      const tallyCard = document.getElementById(`card-tally`);
+      const tallyNote = document.getElementById(`kpi-tally-note`);
+      const accEl = document.getElementById(`kpi-accuracy`);
+      const accCard = document.getElementById(`card-accuracy`);
+      const accNote = document.getElementById(`kpi-accuracy-note`);
+
+      if (scoreEl) scoreEl.textContent = `${m.score} 分`;
+      if (scoreCard && scoreNote) {
+        if (m.answeredCount === 0) {
+          scoreCard.dataset.status = `info`;
+          scoreNote.textContent = `滿分 100 分（60 分及格）`;
+          scoreNote.dataset.tone = ``;
+        } else if (m.score >= 60) {
+          scoreCard.dataset.status = `ok`;
+          scoreNote.textContent = m.score >= 80 ? `表現優異，達精熟水準！` : `已達 60 分及格基準！`;
+          scoreNote.dataset.tone = `ok`;
+        } else {
+          scoreCard.dataset.status = `alert`;
+          scoreNote.textContent = `目前低於 60 分，繼續作答累積分數`;
+          scoreNote.dataset.tone = `alert`;
+        }
+      }
+
+      if (progEl) progEl.textContent = `${m.answeredCount} / ${m.totalInRun}`;
+      if (progNote) {
+        progNote.textContent = m.totalInRun > 0 && m.answeredCount === m.totalInRun
+          ? `本回全部題目已批改完成`
+          : `點擊選項立即計算得分`;
+      }
+
+      if (tallyEl) tallyEl.textContent = `${m.correctCount} 對 · ${m.wrongCount} 錯`;
+      if (tallyCard && tallyNote) {
+        if (m.wrongCount > 0) {
+          tallyCard.dataset.status = `warn`;
+          tallyNote.textContent = `有 ${m.wrongCount} 題可加入錯題複習`;
+          tallyNote.dataset.tone = `alert`;
+        } else if (m.correctCount > 0) {
+          tallyCard.dataset.status = `ok`;
+          tallyNote.textContent = `目前維持全對紀錄！`;
+          tallyNote.dataset.tone = `ok`;
+        } else {
+          tallyCard.dataset.status = `ok`;
+          tallyNote.textContent = `尚無錯題紀錄`;
+          tallyNote.dataset.tone = ``;
+        }
+      }
+
+      if (accEl) accEl.textContent = m.accuracy === null ? `--%` : `${m.accuracy}%`;
+      if (accCard && accNote) {
+        if (m.accuracy === null) {
+          accCard.dataset.status = `info`;
+          accNote.textContent = `作答後即時計算`;
+          accNote.dataset.tone = ``;
+        } else if (m.accuracy >= 60) {
+          accCard.dataset.status = `ok`;
+          accNote.textContent = `已答題目表現穩定`;
+          accNote.dataset.tone = `ok`;
+        } else {
+          accCard.dataset.status = `alert`;
+          accNote.textContent = `建議詳閱錯題解析`;
+          accNote.dataset.tone = `alert`;
+        }
+      }
+
+      const meterFill = document.getElementById(`score-meter-fill`);
+      const progressBar = document.getElementById(`score-progressbar`);
+      const chip = document.getElementById(`meter-status-chip`);
+      if (meterFill) {
+        meterFill.style.width = `${m.score}%`;
+        meterFill.dataset.status = m.answeredCount === 0 ? `info` : (m.score >= 60 ? `ok` : `alert`);
+      }
+      if (progressBar) progressBar.setAttribute(`aria-valuenow`, String(m.score));
+      if (chip) {
+        if (m.answeredCount === 0) {
+          chip.dataset.status = `info`;
+          chip.textContent = `等待作答中`;
+        } else if (m.score >= 80) {
+          chip.dataset.status = `ok`;
+          chip.textContent = `精熟達標（${m.score} 分）`;
+        } else if (m.score >= 60) {
+          chip.dataset.status = `ok`;
+          chip.textContent = `及格通過（${m.score} 分）`;
+        } else {
+          chip.dataset.status = `alert`;
+          chip.textContent = `尚需努力（${m.score} 分）`;
+        }
+      }
+    }
+
+    function renderQuestionNavigator() {
+      const grid = document.getElementById(`question-nav-grid`);
+      if (!grid) return;
+
+      if (appState.activeIds.length === 0) {
+        grid.innerHTML = `<span style="grid-column: 1 / -1; color: var(--on-surface-variant); font-size: 0.85rem;">此條件下目前沒有題目。</span>`;
+        return;
+      }
+
+      grid.innerHTML = appState.activeIds.map((id, idx) => {
+        const q = QUESTIONS.find(item => item.id === id);
+        const chosen = appState.answers[id];
+        let state = `idle`;
+        if (typeof chosen === `number` && q) {
+          state = chosen === q.answer ? `ok` : `wrong`;
+        }
+        const isCurrent = idx === appState.currentIndex;
+        return `<button type="button" class="q-num-btn" data-state="${state}" aria-current="${isCurrent ? `true` : `false`}" aria-label="前往第 ${idx + 1} 題" onclick="jumpToQuestion(${idx})">${idx + 1}</button>`;
+      }).join(``);
+    }
+
+    function renderActiveQuestion() {
+      const stage = document.getElementById(`question-stage`);
+      if (!stage) return;
+
+      if (appState.activeIds.length === 0) {
+        stage.innerHTML = `
+          <div class="empty-state">
+            <h3>目前沒有符合條件的錯題需要練習</h3>
+            <p>太棒了！您在目前篩選的單元內尚未出現錯題，或已將所有錯題訂正完畢。請切換回完整題庫或挑戰隨機 10 題段考模擬。</p>
+            <button type="button" class="btn btn-primary" onclick="changeQuizMode('all')">回到完整練習模式</button>
+          </div>
+        `;
+        return;
+      }
+
+      const qId = appState.activeIds[appState.currentIndex];
+      const q = QUESTIONS.find(item => item.id === qId);
+      if (!q) return;
+
+      const topicObj = TOPIC_META.find(t => t.id === q.topic);
+      const topicName = topicObj ? topicObj.name : ``;
+      const chosen = appState.answers[q.id];
+      const hasAnswered = typeof chosen === `number`;
+      const isCorrect = hasAnswered && chosen === q.answer;
+      const ptsPerQ = (100 / appState.activeIds.length).toFixed(1).replace(/\.0$/, ``);
+
+      let statusChipHtml = `<span class="chip" data-status="info">尚未作答 · 配分約 ${ptsPerQ} 分</span>`;
+      if (hasAnswered) {
+        statusChipHtml = isCorrect
+          ? `<span class="chip" data-status="ok">✓ 已作答 · 答對（+${ptsPerQ} 分）</span>`
+          : `<span class="chip" data-status="alert">✕ 已作答 · 答錯（正解為 ${OPTION_LABELS[q.answer]}）</span>`;
+      }
+
+      const diagramHtml = q.diagram
+        ? `<div class="diagram-box">${renderDiagramSvg(q.diagram)}<span class="diagram-caption">${escapeHtml(q.diagramCaption || ``)}</span></div>`
+        : ``;
+
+      const optionsHtml = q.options.map((optText, idx) => {
+        let resultAttr = ``;
+        let stateTag = ``;
+        if (hasAnswered) {
+          if (idx === q.answer) {
+            resultAttr = `data-result="correct"`;
+            stateTag = idx === chosen ? `✓ 你的選擇（正確）` : `✓ 正確答案`;
+          } else if (idx === chosen) {
+            resultAttr = `data-result="wrong"`;
+            stateTag = `✕ 你的選擇（錯誤）`;
+          } else {
+            resultAttr = `data-result="muted"`;
+          }
+        }
+        return `
+          <button type="button" class="option-btn" ${resultAttr} ${hasAnswered ? `disabled` : ``} onclick="selectOption(${q.id}, ${idx})">
+            <span class="option-letter">${OPTION_LABELS[idx]}</span>
+            <span class="option-text">${escapeHtml(optText)}</span>
+            ${stateTag ? `<span class="option-state-tag">${stateTag}</span>` : `<span></span>`}
+          </button>
+        `;
+      }).join(``);
+
+      const explanationHtml = hasAnswered
+        ? `
+          <div class="explanation-box" data-status="${isCorrect ? `ok` : `alert`}">
+            <div class="explanation-head">
+              <span class="explanation-title">
+                ${isCorrect ? `✓ 回答正確！觀念非常清楚` : `✕ 答錯了！正確答案是 (${OPTION_LABELS[q.answer]})`}
+              </span>
+              <span class="chip" data-status="${isCorrect ? `ok` : `alert`}">${isCorrect ? `得分納入總分` : `已列入錯題統計`}</span>
+            </div>
+            <p class="explanation-body">${escapeHtml(q.explanation).replace(/\n/g, `<br>`)}</p>
+            <div class="explanation-source">段考命題重點來源：${escapeHtml(q.source)}（題庫編號 #${q.id}）</div>
+          </div>
+        `
+        : ``;
+
+      const isFirst = appState.currentIndex === 0;
+      const isLast = appState.currentIndex === appState.activeIds.length - 1;
+
+      stage.innerHTML = `
+        <div class="question-meta">
+          <div class="meta-left">
+            <span class="q-badge">第 ${appState.currentIndex + 1} / ${appState.activeIds.length} 題</span>
+            <span class="chip">${escapeHtml(topicName)}</span>
+          </div>
+          ${statusChipHtml}
+        </div>
+
+        <p class="question-stem">${escapeHtml(q.stem)}</p>
+
+        ${diagramHtml}
+
+        <div class="options-list" role="group" aria-label="作答選項">
+          ${optionsHtml}
+        </div>
+
+        ${explanationHtml}
+
+        <div class="stage-footer">
+          <div class="nav-group">
+            <button type="button" class="btn btn-subtle" ${isFirst ? `disabled` : ``} onclick="prevQuestion()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+              上一題
+            </button>
+            <button type="button" class="btn btn-primary" ${isLast ? `disabled` : ``} onclick="nextQuestion()">
+              下一題
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+          <button type="button" class="btn btn-outline" onclick="jumpToNextUnanswered()">
+            跳至下一未作答題
+          </button>
+        </div>
+      `;
+    }
+
+    function renderTopicBreakdown() {
+      const tbody = document.getElementById(`topic-breakdown-body`);
+      if (!tbody) return;
+
+      tbody.innerHTML = TOPIC_META.map(t => {
+        const list = QUESTIONS.filter(q => q.topic === t.id);
+        let answered = 0;
+        let correct = 0;
+        list.forEach(q => {
+          const chosen = appState.answers[q.id];
+          if (typeof chosen === `number`) {
+            answered++;
+            if (chosen === q.answer) correct++;
+          }
+        });
+        const acc = answered > 0 ? Math.round((correct / answered) * 100) : null;
+        let statusChip = `<span class="chip" data-status="info">尚未測驗</span>`;
+        let barStatus = `info`;
+        if (acc !== null) {
+          if (acc >= 80) {
+            statusChip = `<span class="chip" data-status="ok">精熟</span>`;
+            barStatus = `ok`;
+          } else if (acc >= 60) {
+            statusChip = `<span class="chip" data-status="ok">達標</span>`;
+            barStatus = `ok`;
+          } else {
+            statusChip = `<span class="chip" data-status="alert">待加強</span>`;
+            barStatus = `alert`;
+          }
+        }
+        return `
+          <tr>
+            <td><strong>${escapeHtml(t.name)}</strong></td>
+            <td class="num-col">${list.length} 題</td>
+            <td class="num-col">${answered} 題</td>
+            <td class="num-col">${correct} 題</td>
+            <td class="num-col">
+              <span class="mini-bar" aria-hidden="true"><span class="mini-bar-fill" data-status="${barStatus}" style="width: ${acc === null ? 0 : acc}%;"></span></span>
+              <span>${acc === null ? `--` : `${acc}%`}</span>
+            </td>
+            <td class="num-col">${statusChip}</td>
+          </tr>
+        `;
+      }).join(``);
+    }
+
+    // Event handlers (hoisted function declarations)
+    async function persistState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+        try {
+          await window.notebookAppApi.setAppState({
+            topic: appState.topic,
+            mode: appState.mode,
+            activeIds: appState.activeIds,
+            currentIndex: appState.currentIndex,
+            answers: appState.answers
+          });
+        } catch (err) {
+          // Ignore transient host storage error
+        }
+      }
+    }
+
+    async function selectOption(questionId, optionIdx) {
+      if (typeof appState.answers[questionId] === `number`) return;
+      appState.answers[questionId] = optionIdx;
+      renderAll();
+      await persistState();
+    }
+
+    async function jumpToQuestion(idx) {
+      if (idx < 0 || idx >= appState.activeIds.length) return;
+      appState.currentIndex = idx;
+      renderQuestionNavigator();
+      renderActiveQuestion();
+      await persistState();
+    }
+
+    async function prevQuestion() {
+      if (appState.currentIndex > 0) {
+        appState.currentIndex--;
+        renderQuestionNavigator();
+        renderActiveQuestion();
+        await persistState();
+      }
+    }
+
+    async function nextQuestion() {
+      if (appState.currentIndex < appState.activeIds.length - 1) {
+        appState.currentIndex++;
+        renderQuestionNavigator();
+        renderActiveQuestion();
+        await persistState();
+      }
+    }
+
+    async function jumpToNextUnanswered() {
+      if (appState.activeIds.length === 0) return;
+      for (let offset = 1; offset <= appState.activeIds.length; offset++) {
+        const idx = (appState.currentIndex + offset) % appState.activeIds.length;
+        const id = appState.activeIds[idx];
+        if (typeof appState.answers[id] !== `number`) {
+          appState.currentIndex = idx;
+          renderQuestionNavigator();
+          renderActiveQuestion();
+          showStatusMsg(`已跳轉至第 ${idx + 1} 題（未作答）`);
+          await persistState();
+          return;
+        }
+      }
+      showStatusMsg(`本回所有題目皆已完成作答！`);
+    }
+
+    async function changeTopicFilter(topicId) {
+      appState.topic = topicId;
+      if (appState.mode === `wrong`) {
+        const wrongSet = new Set(getWrongQuestionIds());
+        const hasWrongInTopic = getFilteredPool(topicId).some(q => wrongSet.has(q.id));
+        if (!hasWrongInTopic) {
+          appState.mode = `all`;
+        }
+      }
+      rebuildActiveIds(false);
+      showStatusMsg(`已切換單元篩選`);
+      renderAll();
+      await persistState();
+    }
+
+    async function changeQuizMode(mode) {
+      if (mode === `wrong`) {
+        const wrongSet = new Set(getWrongQuestionIds());
+        const wrongInTopic = getFilteredPool(appState.topic).filter(q => wrongSet.has(q.id));
+        if (wrongInTopic.length === 0 && wrongSet.size > 0) {
+          appState.topic = `all`;
+        }
+      }
+      appState.mode = mode;
+      rebuildActiveIds(false);
+      const labelMap = {
+        all: `已切換為「完整練習模式」`,
+        random10: `已抽出「隨機 10 題段考模擬」`,
+        wrong: `已切換為「錯題集中複習」`
+      };
+      showStatusMsg(labelMap[mode] || ``);
+      renderAll();
+      await persistState();
+    }
+
+    async function handleResetQuiz(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.classList.remove(`btn-subtle`);
+        btn.classList.add(`btn-danger-armed`);
+        btn.textContent = `再點一次確認清空所有作答`;
+        showStatusMsg(`請於需要清空作答紀錄時再點擊一次「確認清空」`);
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.classList.remove(`btn-danger-armed`);
+      btn.classList.add(`btn-subtle`);
+      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> 重新作答`;
+      appState.answers = {};
+      if (appState.mode === `wrong`) {
+        appState.mode = `all`;
+      }
+      rebuildActiveIds(false);
+      showStatusMsg(`已清空全部作答紀錄，可重新開始測驗`);
+      renderAll();
+      await persistState();
+    }
+
+    function exportScoreReport() {
+      const m = computeScoreMetrics();
+      const lines = [
+        `國中七年級上學期第二次段考地理科｜互動測驗成績單`,
+        `==================================================`,
+        `本回題數：${m.totalInRun} 題`,
+        `已作答題數：${m.answeredCount} 題`,
+        `答對題數：${m.correctCount} 題`,
+        `答錯題數：${m.wrongCount} 題`,
+        `百分制即時得分：${m.score} 分`,
+        `正確率：${m.accuracy === null ? `--` : `${m.accuracy}%`}`,
+        ``,
+        `各單元掌握度統計：`,
+        ...TOPIC_META.map(t => {
+          const list = QUESTIONS.filter(q => q.topic === t.id);
+          let ans = 0;
+          let ok = 0;
+          list.forEach(q => {
+            if (typeof appState.answers[q.id] === `number`) {
+              ans++;
+              if (appState.answers[q.id] === q.answer) ok++;
+            }
+          });
+          const pct = ans > 0 ? `${Math.round((ok / ans) * 100)}%` : `未作答`;
+          return `- ${t.name}：已答 ${ans}/${list.length} 題，答對 ${ok} 題（正確率 ${pct}）`;
+        }),
+        ``,
+        `錯題明細：`,
+        ...QUESTIONS.filter(q => typeof appState.answers[q.id] === `number` && appState.answers[q.id] !== q.answer)
+          .map(q => `[#${q.id}] ${q.stem}\n  你的答案：(${OPTION_LABELS[appState.answers[q.id]]})｜正解：(${OPTION_LABELS[q.answer]}) ${q.options[q.answer]}\n  解析：${q.explanation.replace(/\n/g, ` `)}`)
+      ];
+      const reportText = lines.join(`\n`);
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: reportText,
+          contentType: `text/plain`,
+          encoding: `UTF-8`,
+          filename: `七年級地理段考測驗成績單.txt`
+        });
+        showStatusMsg(`成績單已匯出下載`);
+      } else {
+        showStatusMsg(`已完成成績統計整理`);
+      }
+    }
+
+    // Initialization
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            if (typeof saved.topic === `string`) appState.topic = saved.topic;
+            if (typeof saved.mode === `string`) appState.mode = saved.mode;
+            if (Array.isArray(saved.activeIds) && saved.activeIds.length > 0) {
+              const validSet = new Set(QUESTIONS.map(q => q.id));
+              const filteredIds = saved.activeIds.filter(id => validSet.has(id));
+              if (filteredIds.length > 0) appState.activeIds = filteredIds;
+            }
+            if (typeof saved.currentIndex === `number`) {
+              appState.currentIndex = Math.max(0, Math.min(saved.currentIndex, Math.max(0, appState.activeIds.length - 1)));
+            }
+            if (saved.answers && typeof saved.answers === `object`) {
+              appState.answers = saved.answers;
+            }
+          }
+        } catch (err) {
+          // Fallback to clean state
+        }
+      }
+
+      renderAll();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
