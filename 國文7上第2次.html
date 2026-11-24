@@ -1,0 +1,2794 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="briefing">
+  <title>七年級國文第二次段考｜即時評分互動測驗</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Briefing style tokens */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --secondary-soft: #eaf1f4;
+      --tertiary: #785008;
+      --tertiary-soft: #f5e6c4;
+      --error: #b42318;
+      --on-error: #ffffff;
+      --error-soft: #fdeceb;
+
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* Shared semantic & foundation tokens */
+      --positive: #2b6e52;
+      --positive-soft: #e6f2ec;
+      --warning: #8a5300;
+      --warning-soft: #fdf3dc;
+      --focus: #1f4e5f;
+
+      /* Fonts (Chinese families prioritized appropriately) */
+      --font-headline: 'Source Serif 4', 'Noto Serif TC', serif;
+      --font-body: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+      --font-label: 'Geist Mono', 'Noto Sans TC', monospace;
+
+      /* Shape */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+
+      /* Style effects */
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --badge-radius: 2px;
+      --heading-tracking: -0.02em;
+      --label-tracking: 0.08em;
+
+      /* Type scale (Focused Tool) */
+      --display-size: clamp(1.625rem, 1.35rem + 1.1vw, 2.25rem);
+      --headline-size: clamp(1.2rem, 1.08rem + 0.45vw, 1.45rem);
+      --subhead-size: clamp(1.02rem, 0.96rem + 0.2vw, 1.125rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale (4pt base) */
+      --space-2xs: 0.125rem;
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+    button, input, select, textarea { font-family: inherit; }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1180px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Dossier Header Bar */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-meta-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: var(--label-size);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      display: inline-flex;
+      align-items: center;
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .save-status {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--positive);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* Header Layout */
+    .hero-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-lg);
+      align-items: end;
+    }
+    .hero-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--display-size);
+      line-height: 1.15;
+      letter-spacing: var(--heading-tracking);
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .hero-standfirst {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: var(--subhead-size);
+      color: var(--secondary);
+      margin: var(--space-sm) 0 0;
+      max-width: 65ch;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out),
+                  transform var(--dur-micro) var(--ease-out);
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+    .btn-secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--surface-container);
+      border-color: var(--on-surface-variant);
+    }
+    .btn-danger-armed {
+      background: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+    .btn-sm {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      font-size: 0.8125rem;
+    }
+
+    /* Export Drawer */
+    .export-tray {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      border-radius: 0 0 var(--rounded-lg) var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: none;
+      gap: var(--space-md);
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .export-tray.is-open { display: flex; }
+    .export-tray-info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2xs);
+    }
+    .export-tray-title {
+      font-weight: 700;
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+    }
+    .export-tray-desc {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+    }
+    .export-tray-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    /* Section Headers */
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-xs);
+      margin-bottom: var(--space-md);
+    }
+    .section-head-left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .index-num {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--secondary);
+      background: var(--surface-container);
+      padding: var(--space-2xs) var(--space-xs);
+      border-radius: var(--badge-radius);
+    }
+    .section-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--headline-size);
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .section-sub {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-xs);
+    }
+    .kpi-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xs);
+    }
+    .kpi-value {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: clamp(1.5rem, 1.3rem + 0.9vw, 2rem);
+      line-height: 1.15;
+      font-variant-numeric: lining-nums tabular-nums;
+      color: var(--on-surface);
+    }
+    .kpi-sub {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+    }
+    .kpi-bar-track {
+      width: 100%;
+      height: 6px;
+      background: var(--surface-container);
+      border-radius: var(--badge-radius);
+      overflow: hidden;
+      margin-top: var(--space-xs);
+    }
+    .kpi-bar-fill {
+      height: 100%;
+      background: var(--secondary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--space-2xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      font-size: var(--label-size);
+      font-weight: 600;
+      font-family: var(--font-body);
+    }
+    .chip-neutral { background: var(--surface-container); color: var(--on-surface-variant); }
+    .chip-positive { background: var(--positive-soft); color: var(--positive); }
+    .chip-warning { background: var(--warning-soft); color: var(--warning); }
+    .chip-error { background: var(--error-soft); color: var(--error); }
+    .chip-gold { background: var(--tertiary-soft); color: var(--tertiary); }
+
+    /* Benchmark Gauge Ruler */
+    .gauge-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .gauge-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+    .gauge-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2xs);
+    }
+    .gauge-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--on-surface);
+    }
+    .gauge-caption {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+    }
+    .gauge-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      font-size: var(--label-size);
+      font-family: var(--font-label);
+      color: var(--on-surface-variant);
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: var(--badge-radius);
+      display: inline-block;
+    }
+    .swatch-pass-line {
+      width: 2px;
+      height: 14px;
+      border-left: 2px dashed var(--positive);
+    }
+    .gauge-wrap {
+      position: relative;
+      padding: var(--space-xl) 0 var(--space-lg);
+    }
+    .gauge-pointer {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: left var(--dur-short) var(--ease-out);
+      z-index: 3;
+      pointer-events: none;
+    }
+    .gauge-pointer-badge {
+      background: var(--primary);
+      color: var(--on-primary);
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: var(--space-2xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .gauge-pointer-stem {
+      width: 2px;
+      height: 10px;
+      background: var(--primary);
+    }
+    .gauge-track {
+      position: relative;
+      height: 22px;
+      border-radius: var(--badge-radius);
+      background: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      display: flex;
+      overflow: hidden;
+    }
+    .gauge-zone-low {
+      width: 60%;
+      height: 100%;
+      background: var(--error-soft);
+      border-right: 1px solid var(--outline-variant);
+    }
+    .gauge-zone-pass {
+      width: 20%;
+      height: 100%;
+      background: var(--tertiary-soft);
+      border-right: 1px solid var(--outline-variant);
+    }
+    .gauge-zone-mastery {
+      width: 20%;
+      height: 100%;
+      background: var(--positive-soft);
+    }
+    .gauge-progress-overlay {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background: var(--secondary);
+      opacity: 0.25;
+      transition: width var(--dur-short) var(--ease-out);
+      pointer-events: none;
+    }
+    .gauge-pass-line {
+      position: absolute;
+      left: 60%;
+      top: -8px;
+      bottom: -8px;
+      border-left: 2.5px dashed var(--positive);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .gauge-mastery-line {
+      position: absolute;
+      left: 80%;
+      top: -4px;
+      bottom: -4px;
+      border-left: 1.5px solid var(--secondary);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .gauge-ticks {
+      position: relative;
+      height: 36px;
+      margin-top: var(--space-xs);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .gauge-tick {
+      position: absolute;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      white-space: nowrap;
+    }
+    .gauge-tick.tick-start { transform: translateX(0); align-items: flex-start; }
+    .gauge-tick.tick-end { transform: translateX(-100%); align-items: flex-end; }
+    .tick-pass { color: var(--positive); font-weight: 700; }
+    .tick-mastery { color: var(--secondary); font-weight: 700; }
+
+    /* Control Workspace: Filter + Mode + Jump Grid */
+    .controls-panel {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .controls-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .control-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .filter-pill {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out);
+    }
+    .filter-pill:hover {
+      background: var(--surface-container);
+    }
+    .filter-pill.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+      font-weight: 600;
+    }
+    .filter-pill .pill-count {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      opacity: 0.85;
+    }
+    .mode-pill.is-active {
+      background: var(--secondary);
+      border-color: var(--secondary);
+      color: var(--on-primary);
+    }
+
+    /* Quick Jump Grid */
+    .jump-section {
+      border-top: 1px solid var(--outline-variant);
+      padding-top: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .jump-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .jump-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .jump-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+      gap: var(--space-sm);
+    }
+    .jump-btn {
+      min-height: 44px;
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  transform var(--dur-micro) var(--ease-out);
+    }
+    .jump-btn:hover { background: var(--surface-container); transform: translateY(-1px); }
+    .jump-btn.is-correct {
+      background: var(--positive-soft);
+      border-color: var(--positive);
+      color: var(--positive);
+    }
+    .jump-btn.is-wrong {
+      background: var(--error-soft);
+      border-color: var(--error);
+      color: var(--error);
+    }
+
+    /* Question Cards */
+    .quiz-list {
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .question-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+      transition: box-shadow var(--dur-short) var(--ease-out);
+      scroll-margin-top: var(--space-lg);
+    }
+    .question-card.is-highlighted {
+      box-shadow: 0 0 0 2px var(--primary-container);
+    }
+    .q-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+      padding-bottom: var(--space-sm);
+    }
+    .q-tags {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .q-num-badge {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.8125rem;
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-2xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+    }
+    .q-unit-tag {
+      background: var(--secondary-soft);
+      color: var(--secondary);
+      font-size: var(--label-size);
+      font-weight: 600;
+      padding: var(--space-2xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+    }
+    .q-source-tag {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--tertiary);
+      background: var(--tertiary-soft);
+      padding: var(--space-2xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+    }
+    .q-prompt {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      line-height: 1.65;
+      color: var(--on-surface);
+      margin: 0;
+      max-width: 72ch;
+    }
+    .q-passage {
+      background: var(--surface-container);
+      border-left: 3px solid var(--secondary);
+      padding: var(--space-md);
+      border-radius: 0 var(--rounded) var(--rounded) 0;
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      color: var(--on-surface);
+      max-width: 72ch;
+    }
+
+    /* Embedded SVG Figure Box */
+    .svg-figure {
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .svg-figure-caption {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .svg-figure svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Options Grid */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+    .option-btn {
+      min-height: 48px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      text-align: left;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .option-btn:hover:not(:disabled) {
+      background: var(--surface-container);
+      box-shadow: 0 0 0 1px var(--secondary);
+    }
+    .option-btn:disabled {
+      cursor: default;
+    }
+    .opt-letter {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.8125rem;
+      min-width: 26px;
+      height: 26px;
+      border-radius: var(--badge-radius);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .opt-text {
+      flex: 1;
+    }
+    .opt-badge {
+      font-size: var(--label-size);
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: var(--badge-radius);
+      flex-shrink: 0;
+      align-self: center;
+    }
+    .option-btn.is-correct-choice {
+      background: var(--positive-soft);
+      box-shadow: 0 0 0 1.5px var(--positive);
+    }
+    .option-btn.is-correct-choice .opt-letter {
+      background: var(--positive);
+      color: var(--on-error);
+    }
+    .option-btn.is-correct-choice .opt-badge {
+      background: var(--positive);
+      color: var(--on-error);
+    }
+    .option-btn.is-wrong-choice {
+      background: var(--error-soft);
+      box-shadow: 0 0 0 1.5px var(--error);
+    }
+    .option-btn.is-wrong-choice .opt-letter {
+      background: var(--error);
+      color: var(--on-error);
+    }
+    .option-btn.is-wrong-choice .opt-badge {
+      background: var(--error);
+      color: var(--on-error);
+    }
+
+    /* Explanation Box */
+    .explanation-panel {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      border-radius: 0 0 var(--rounded) var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+      animation: fadeSlideIn var(--dur-short) var(--ease-out);
+    }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .exp-verdict-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .exp-verdict {
+      font-weight: 700;
+      font-size: 0.9375rem;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .exp-verdict.verdict-right { color: var(--positive); }
+    .exp-verdict.verdict-wrong { color: var(--error); }
+    .exp-text {
+      margin: 0;
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      color: var(--on-surface);
+      max-width: 72ch;
+    }
+    .exp-takeaway {
+      background: var(--surface-container-low);
+      border-left: 3px solid var(--primary-container);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.875rem;
+      color: var(--on-surface);
+    }
+
+    /* Empty State */
+    .empty-state {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-2xl) var(--space-lg);
+      text-align: center;
+      display: grid;
+      gap: var(--space-md);
+      justify-items: center;
+    }
+    .empty-state h3 {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      margin: 0;
+    }
+    .empty-state p {
+      margin: 0;
+      color: var(--on-surface-variant);
+      max-width: 52ch;
+    }
+
+    /* Diagnostic Summary & Table */
+    .diagnostic-callout {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: 0 0 var(--rounded) var(--rounded);
+      margin-bottom: var(--space-md);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .diagnostic-text {
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+      max-width: 70ch;
+    }
+    .table-wrap {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      overflow-x: auto;
+    }
+    .diag-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9375rem;
+    }
+    .diag-table th {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      padding: var(--space-md);
+      border-bottom: var(--section-rule);
+      background: var(--surface-container-low);
+      white-space: nowrap;
+    }
+    .diag-table td {
+      padding: var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: middle;
+    }
+    .diag-table tr:last-child td { border-bottom: none; }
+    .num-cell {
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .mini-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      min-width: 120px;
+    }
+    .mini-bar-track {
+      flex: 1;
+      height: 8px;
+      background: var(--surface-container);
+      border-radius: var(--badge-radius);
+      overflow: hidden;
+    }
+    .mini-bar-fill {
+      height: 100%;
+      border-radius: var(--badge-radius);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Footer Sources Note */
+    .sources-footer {
+      border-top: 1px solid var(--outline-variant);
+      padding-top: var(--space-md);
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .controls-top { grid-template-columns: 1fr; }
+      .hero-header { grid-template-columns: 1fr; }
+      .hero-actions { justify-content: flex-start; }
+    }
+    @media (max-width: 640px) {
+      .page-grid { padding: var(--space-md); gap: var(--space-md); }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .options-grid { grid-template-columns: 1fr; }
+      .figure-card, .gauge-card, .controls-panel, .question-card { padding: var(--space-md); }
+      .gauge-legend { gap: var(--space-sm); }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Print Stylesheet */
+    @media print {
+      body { background: var(--surface-container-low); }
+      .hero-actions, .export-tray, .controls-panel, .jump-section, .no-print { display: none !important; }
+      .page-grid { max-width: 100%; padding: 0; }
+      .question-card { break-inside: avoid; border: 1px solid var(--outline-variant); }
+      .table-wrap { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-grid">
+    <!-- Top Info & Action Bar -->
+    <header>
+      <div class="dossier-bar">
+        <div class="dossier-meta-group">
+          <span class="dossier-pill">國文 7上・第二次段考</span>
+          <span class="dossier-meta">翰林版範疇｜字音字形・論語選・背影・心囚・修辭・素養閱讀</span>
+        </div>
+        <span class="save-status" id="save-status" aria-live="polite">自動存檔已啟用</span>
+      </div>
+
+      <div class="hero-header">
+        <div>
+          <h1 class="hero-title">七年級國文第二次段考｜即時評分互動測驗</h1>
+          <p class="hero-standfirst">精選陽明、土城、仁愛、大灣等國中歷屆段考真題共 30 題，提供即時批改、SVG 圖解與各單元弱點診斷。</p>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn btn-primary" id="btn-toggle-export" onclick="toggleExportTray()">
+            匯出成績單
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-reset-quiz" onclick="handleResetQuiz(this)">
+            重新作答
+          </button>
+        </div>
+      </div>
+
+      <div class="export-tray" id="export-tray" aria-label="匯出成績單選項">
+        <div class="export-tray-info">
+          <span class="export-tray-title">成績單匯出與列印</span>
+          <span class="export-tray-desc" id="export-summary-preview">可將目前的即時得分、各單元掌握率與錯題解析下載為文字報告，或直接列印／另存為 PDF。</span>
+        </div>
+        <div class="export-tray-actions">
+          <button type="button" class="btn btn-primary btn-sm" onclick="downloadScoreReport()">下載成績單 (.txt)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="printScoreReport()">列印或另存 PDF</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="toggleExportTray()">收合</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 4 KPI Cards -->
+    <section aria-label="即時數據看板">
+      <div class="section-head">
+        <div class="section-head-left">
+          <span class="index-num">01</span>
+          <h2 class="section-title">即時數據看板</h2>
+        </div>
+        <span class="section-sub" id="kpi-mode-label">目前模式：完整練習</span>
+      </div>
+
+      <div class="kpi-grid">
+        <article class="figure-card">
+          <div class="kpi-label">
+            <span>即時得分（滿分 100）</span>
+            <span class="status-chip chip-neutral" id="kpi-pass-badge">尚未作答</span>
+          </div>
+          <div class="kpi-value" id="kpi-score">0 分</div>
+          <div class="kpi-sub">60 分及格｜80 分精熟</div>
+        </article>
+
+        <article class="figure-card">
+          <div class="kpi-label">
+            <span>本回作答進度</span>
+            <span class="kpi-sub" id="kpi-progress-pct">0%</span>
+          </div>
+          <div class="kpi-value" id="kpi-progress">0 / 30 題</div>
+          <div class="kpi-bar-track" aria-hidden="true">
+            <div class="kpi-bar-fill" id="kpi-progress-bar" style="width: 0%;"></div>
+          </div>
+        </article>
+
+        <article class="figure-card">
+          <div class="kpi-label">
+            <span>答對 ／ 答錯題數</span>
+            <span class="kpi-sub">即時批改</span>
+          </div>
+          <div class="kpi-value" id="kpi-rw">0 對 ／ 0 錯</div>
+          <div class="kpi-sub" id="kpi-rw-note">點擊任一選項立即顯示解析</div>
+        </article>
+
+        <article class="figure-card">
+          <div class="kpi-label">
+            <span>已作答正確率</span>
+            <span class="kpi-sub">依本回已答計算</span>
+          </div>
+          <div class="kpi-value" id="kpi-accuracy">—</div>
+          <div class="kpi-sub" id="kpi-accuracy-note">待完成第一題後統計</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Benchmark Ruler -->
+    <section aria-label="段考及格基準線量尺">
+      <article class="gauge-card">
+        <div class="gauge-header">
+          <div class="gauge-title-group">
+            <span class="gauge-title">段考及格基準線量尺</span>
+            <span class="gauge-caption" id="gauge-status-text">目前累積 0 分，距離 60 分及格基準線尚差 60 分。</span>
+          </div>
+          <div class="gauge-legend">
+            <span class="legend-item"><span class="legend-swatch" style="background: var(--error-soft); border: 1px solid var(--error);"></span>待加強 (&lt;60)</span>
+            <span class="legend-item"><span class="swatch-pass-line"></span>60 分及格線</span>
+            <span class="legend-item"><span class="legend-swatch" style="background: var(--positive-soft); border: 1px solid var(--positive);"></span>精熟 (≥80)</span>
+          </div>
+        </div>
+
+        <div class="gauge-wrap">
+          <div class="gauge-pointer" id="gauge-pointer" style="left: 0%;">
+            <span class="gauge-pointer-badge" id="gauge-pointer-label">0 分</span>
+            <span class="gauge-pointer-stem"></span>
+          </div>
+          <div class="gauge-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="gauge-progressbar">
+            <div class="gauge-zone-low"></div>
+            <div class="gauge-zone-pass"></div>
+            <div class="gauge-zone-mastery"></div>
+            <div class="gauge-progress-overlay" id="gauge-overlay" style="width: 0%;"></div>
+            <div class="gauge-pass-line" title="60分及格基準線"></div>
+            <div class="gauge-mastery-line" title="80分精熟基準線"></div>
+          </div>
+          <div class="gauge-ticks" aria-hidden="true">
+            <div class="gauge-tick tick-start" style="left: 0%;"><span>0</span></div>
+            <div class="gauge-tick" style="left: 30%;"><span>30</span></div>
+            <div class="gauge-tick tick-pass" style="left: 60%;"><span>60 及格</span></div>
+            <div class="gauge-tick tick-mastery" style="left: 80%;"><span>80 精熟</span></div>
+            <div class="gauge-tick tick-end" style="left: 100%;"><span>100</span></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Filtering, Modes & Question Jump Grid -->
+    <section aria-label="題目篩選與出題模式">
+      <div class="section-head">
+        <div class="section-head-left">
+          <span class="index-num">02</span>
+          <h2 class="section-title">題目篩選與出題模式</h2>
+        </div>
+        <span class="section-sub" id="active-filter-summary">顯示全部單元・共 30 題</span>
+      </div>
+
+      <div class="controls-panel">
+        <div class="controls-top">
+          <div class="control-group">
+            <span class="control-label">依單元／課別篩選</span>
+            <div class="pill-row" id="unit-filter-pills"></div>
+          </div>
+
+          <div class="control-group">
+            <div class="control-label">
+              <span>出題模式選擇</span>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-redraw-mock" style="display: none;" onclick="redrawMockExam()">
+                重新抽 10 題
+              </button>
+            </div>
+            <div class="pill-row" id="mode-pills">
+              <button type="button" class="filter-pill mode-pill is-active" data-mode="all" onclick="setQuizMode('all')">
+                完整練習
+              </button>
+              <button type="button" class="filter-pill mode-pill" data-mode="mock" onclick="setQuizMode('mock')">
+                段考模擬抽測（隨機 10 題）
+              </button>
+              <button type="button" class="filter-pill mode-pill" data-mode="wrong" onclick="setQuizMode('wrong')">
+                錯題集中複習 <span class="pill-count" id="wrong-count-badge">(0)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="jump-section">
+          <div class="jump-header">
+            <span class="control-label">題號快速跳轉網格（點擊題號捲動至該題）</span>
+            <div class="jump-legend">
+              <span>未作答：白底</span>
+              <span style="color: var(--positive); font-weight: 600;">✓ 答對：綠框</span>
+              <span style="color: var(--error); font-weight: 600;">✕ 答錯：紅框</span>
+            </div>
+          </div>
+          <div class="jump-grid" id="jump-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quiz Question List -->
+    <section aria-label="測驗作答區">
+      <div class="section-head">
+        <div class="section-head-left">
+          <span class="index-num">03</span>
+          <h2 class="section-title">試題作答與即時詳解</h2>
+        </div>
+        <span class="section-sub" id="quiz-section-count">共 30 題</span>
+      </div>
+
+      <div class="quiz-list" id="quiz-list"></div>
+    </section>
+
+    <!-- Unit Performance & Weakness Diagnostic Table -->
+    <section aria-label="各單元作答表現與弱點診斷表">
+      <div class="section-head">
+        <div class="section-head-left">
+          <span class="index-num">04</span>
+          <h2 class="section-title">各單元作答表現與弱點診斷</h2>
+        </div>
+        <span class="section-sub">即時統計各課別掌握度</span>
+      </div>
+
+      <div class="diagnostic-callout" id="diagnostic-callout">
+        <div class="diagnostic-text" id="diagnostic-summary">
+          尚未開始作答。完成任一單元試題後，系統將自動為您分析各課強項與優先補強建議。
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm no-print" id="btn-focus-wrong" onclick="setQuizMode('wrong')" style="display: none;">
+          前往錯題集中複習
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="diag-table">
+          <thead>
+            <tr>
+              <th>單元／課別</th>
+              <th>總題數</th>
+              <th>已作答</th>
+              <th>答對 ／ 答錯</th>
+              <th>單元正確率</th>
+              <th>掌握狀態</th>
+              <th class="no-print">練習操作</th>
+            </tr>
+          </thead>
+          <tbody id="diag-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="sources-footer">
+      <span>題庫來源：高雄市立陽明國中（111）、新北市立土城國中（112、113）、臺北市立仁愛國中（112）、高雄市立大灣國中（111）七年級上學期第二次段考國文科試題及官方解答。</span>
+      <span>翰林版 7上第二次段考複習專用</span>
+    </footer>
+  </main>
+
+  <api-shim></api-shim>
+  <script>
+    const UNITS = [
+      { id: `u1`, name: `字音字形與詞義` },
+      { id: `u2`, name: `《論語選》與儒家典籍` },
+      { id: `u3`, name: `〈背影〉與親情象徵` },
+      { id: `u4`, name: `〈心囚〉與正向思考` },
+      { id: `u5`, name: `修辭文法與語文常識` },
+      { id: `u6`, name: `素養閱讀與圖表判讀` }
+    ];
+
+    /* Inline SVG helper strings using CSS design tokens only */
+    const SVG_DIAGRAMS = {
+      posMatrix: {
+        caption: `圖解｜一字多義與詞性辨析對照矩陣`,
+        svg: `<svg viewBox="0 0 680 185" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="一字多義詞性辨析圖">
+          <rect x="2" y="2" width="676" height="181" rx="6" fill="var(--surface-container-low)" stroke="var(--outline-variant)"/>
+          <line x1="2" y1="42" x2="678" y2="42" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="170" y1="2" x2="170" y2="183" stroke="var(--outline-variant)"/>
+          <line x1="340" y1="2" x2="340" y2="183" stroke="var(--outline-variant)"/>
+          <line x1="510" y1="2" x2="510" y2="183" stroke="var(--outline-variant)"/>
+          <text x="86" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="var(--secondary)">詞字</text>
+          <text x="255" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="var(--secondary)">組一（課文例句）</text>
+          <text x="425" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="var(--secondary)">組二（比較例句）</text>
+          <text x="594" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="var(--secondary)">詞性判斷</text>
+          <text x="86" y="74" text-anchor="middle" font-size="14" font-weight="700" fill="var(--on-surface)">省 (ㄒㄧㄥˇ)</text>
+          <text x="255" y="74" text-anchor="middle" font-size="13" fill="var(--on-surface)">三「省」吾身（反省）</text>
+          <text x="425" y="74" text-anchor="middle" font-size="13" fill="var(--on-surface)">晨昏定「省」（問候）</text>
+          <rect x="536" y="56" width="116" height="26" rx="4" fill="var(--positive-soft)"/>
+          <text x="594" y="74" text-anchor="middle" font-size="12" font-weight="700" fill="var(--positive)">皆為動詞 ✓</text>
+          <line x1="2" y1="95" x2="678" y2="95" stroke="var(--outline-variant)"/>
+          <text x="86" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="var(--on-surface)">平</text>
+          <text x="255" y="124" text-anchor="middle" font-size="13" fill="var(--on-surface)">譬如「平」地（填平）</text>
+          <text x="425" y="124" text-anchor="middle" font-size="13" fill="var(--on-surface)">夷為「平」地（平坦）</text>
+          <text x="594" y="124" text-anchor="middle" font-size="12" fill="var(--error)">動詞 ≠ 形容詞</text>
+          <line x1="2" y1="140" x2="678" y2="140" stroke="var(--outline-variant)"/>
+          <text x="86" y="167" text-anchor="middle" font-size="14" font-weight="700" fill="var(--on-surface)">質 ／ 望</text>
+          <text x="255" y="167" text-anchor="middle" font-size="13" fill="var(--on-surface)">典「質」(動)／「望」回(介)</text>
+          <text x="425" y="167" text-anchor="middle" font-size="13" fill="var(--on-surface)">人「質」(名)／「望」梅(動)</text>
+          <text x="594" y="167" text-anchor="middle" font-size="12" fill="var(--error)">前後詞性不同</text>
+        </svg>`
+      },
+      filialLevels: {
+        caption: `圖解｜〈子游問孝〉孝道層次對比圖`,
+        svg: `<svg viewBox="0 0 680 175" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="子游問孝層次對比">
+          <rect x="20" y="20" width="275" height="135" rx="6" fill="var(--surface-container-low)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+          <text x="157" y="48" text-anchor="middle" font-size="14" font-weight="700" fill="var(--on-surface-variant)">世俗認知：今之孝者，是謂能養</text>
+          <rect x="48" y="68" width="218" height="42" rx="4" fill="var(--surface-container)"/>
+          <text x="157" y="94" text-anchor="middle" font-size="13" font-weight="600" fill="var(--on-surface)">僅供給衣食溫飽（物質層面）</text>
+          <text x="157" y="135" text-anchor="middle" font-size="12" fill="var(--error)">若缺敬意 → 與「犬馬皆能有養」無異</text>
+          <path d="M 308 87 L 368 87" stroke="var(--secondary)" stroke-width="2.5" stroke-dasharray="4 3"/>
+          <polygon points="366,81 378,87 366,93" fill="var(--secondary)"/>
+          <text x="342" y="75" text-anchor="middle" font-size="12" font-weight="700" fill="var(--secondary)">關鍵昇華</text>
+          <rect x="385" y="20" width="275" height="135" rx="6" fill="var(--positive-soft)" stroke="var(--positive)" stroke-width="1.5"/>
+          <text x="522" y="48" text-anchor="middle" font-size="14" font-weight="700" fill="var(--positive)">孔子真諦：色難＋發自內心的「敬」</text>
+          <rect x="413" y="68" width="218" height="42" rx="4" fill="var(--surface-container-low)"/>
+          <text x="522" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="var(--on-surface)">物質奉養 ＋ 誠敬關懷・和顏悅色</text>
+          <text x="522" y="135" text-anchor="middle" font-size="12" font-weight="600" fill="var(--positive)">✓ 不敬，何以別乎？（孝之核心）</text>
+        </svg>`
+      },
+      mountainVsGround: {
+        caption: `圖解｜〈譬如為山〉對比與比喻結構圖`,
+        svg: `<svg viewBox="0 0 680 185" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="譬如為山與譬如平地對比">
+          <rect x="16" y="14" width="312" height="156" rx="6" fill="var(--error-soft)" stroke="var(--error)" stroke-width="1.2"/>
+          <text x="172" y="40" text-anchor="middle" font-size="14" font-weight="700" fill="var(--error)">為山九仞・未成一簣（止）</text>
+          <polygon points="60,136 165,58 270,136" fill="var(--surface-container-low)" stroke="var(--on-surface-variant)" stroke-width="1.5"/>
+          <polygon points="150,70 165,58 180,70" fill="var(--error-soft)" stroke="var(--error)" stroke-dasharray="3 2"/>
+          <text x="236" y="75" font-size="12" font-weight="700" fill="var(--error)">只差最後一筐</text>
+          <text x="172" y="156" text-anchor="middle" font-size="12" font-weight="600" fill="var(--on-surface)">止，吾止也 → 半途而廢（功虧一簣）</text>
+          <rect x="352" y="14" width="312" height="156" rx="6" fill="var(--positive-soft)" stroke="var(--positive)" stroke-width="1.2"/>
+          <text x="508" y="40" text-anchor="middle" font-size="14" font-weight="700" fill="var(--positive)">譬如平地・雖覆一簣（進）</text>
+          <line x1="396" y1="136" x2="620" y2="136" stroke="var(--on-surface)" stroke-width="2"/>
+          <rect x="440" y="120" width="28" height="16" fill="var(--positive)"/>
+          <rect x="476" y="106" width="28" height="30" fill="var(--positive)" opacity="0.85"/>
+          <rect x="512" y="88" width="28" height="48" fill="var(--positive)" opacity="0.7"/>
+          <rect x="548" y="68" width="28" height="68" fill="var(--positive)" opacity="0.55"/>
+          <text x="508" y="156" text-anchor="middle" font-size="12" font-weight="600" fill="var(--on-surface)">進，吾往也 → 持之以恆（積少成多）</text>
+        </svg>`
+      },
+      beijingArc: {
+        caption: `圖解｜朱自清〈背影〉時間軸・四次背影與情感轉折曲線`,
+        svg: `<svg viewBox="0 0 680 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="背影情感轉折曲線圖">
+          <line x1="55" y1="145" x2="640" y2="145" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="55" y1="30" x2="55" y2="145" stroke="var(--outline)" stroke-width="1.5"/>
+          <text x="45" y="45" text-anchor="end" font-size="11" fill="var(--positive)">感動深刻</text>
+          <text x="45" y="142" text-anchor="end" font-size="11" fill="var(--error)">悲傷排斥</text>
+          <path d="M 105 130 Q 190 120 265 110 T 435 42 Q 520 62 595 72" fill="none" stroke="var(--data-1)" stroke-width="3"/>
+          <circle cx="105" cy="130" r="6" fill="var(--data-4)"/>
+          <circle cx="265" cy="110" r="6" fill="var(--data-2)"/>
+          <circle cx="435" cy="42" r="7" fill="var(--data-3)"/>
+          <circle cx="595" cy="72" r="6" fill="var(--data-1)"/>
+          <text x="105" y="165" text-anchor="middle" font-size="12" font-weight="700" fill="var(--on-surface)">① 徐州奔喪</text>
+          <text x="105" y="182" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">家境慘澹・悲傷落淚</text>
+          <text x="265" y="165" text-anchor="middle" font-size="12" font-weight="700" fill="var(--on-surface)">② 浦口照看</text>
+          <text x="265" y="182" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">暗笑父親迂・不以為然</text>
+          <text x="435" y="25" text-anchor="middle" font-size="12" font-weight="700" fill="var(--positive)">★ 轉折核心（第二次淚）</text>
+          <text x="435" y="165" text-anchor="middle" font-size="12" font-weight="700" fill="var(--positive)">③ 攀月台買橘</text>
+          <text x="435" y="182" text-anchor="middle" font-size="11" fill="var(--positive)">體會父愛・感動愧疚落淚</text>
+          <text x="595" y="165" text-anchor="middle" font-size="12" font-weight="700" fill="var(--on-surface)">④ 離別與讀信</text>
+          <text x="595" y="182" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">第三／四次悵然思念落淚</text>
+        </svg>`
+      },
+      xinqiuMatrix: {
+        caption: `圖解｜杏林子〈心囚〉雙維度對照圖`,
+        svg: `<svg viewBox="0 0 680 185" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="心囚雙維度對照">
+          <line x1="340" y1="16" x2="340" y2="170" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="60" y1="93" x2="620" y2="93" stroke="var(--outline)" stroke-width="1.5"/>
+          <text x="340" y="12" text-anchor="middle" font-size="12" font-weight="700" fill="var(--positive)">心靈自由・希望樂觀</text>
+          <text x="340" y="182" text-anchor="middle" font-size="12" font-weight="700" fill="var(--error)">心靈受囚・悲觀迷失</text>
+          <text x="48" y="97" text-anchor="end" font-size="12" font-weight="700" fill="var(--on-surface-variant)">身體病痛</text>
+          <text x="632" y="97" text-anchor="start" font-size="12" font-weight="700" fill="var(--on-surface-variant)">身體健康</text>
+          <rect x="75" y="26" width="245" height="54" rx="5" fill="var(--positive-soft)" stroke="var(--positive)"/>
+          <text x="197" y="49" text-anchor="middle" font-size="13" font-weight="700" fill="var(--positive)">杏林子的生命態度 ✓</text>
+          <text x="197" y="68" text-anchor="middle" font-size="12" fill="var(--on-surface)">身體雖病，本心自在寬廣</text>
+          <rect x="360" y="106" width="245" height="54" rx="5" fill="var(--error-soft)" stroke="var(--error)"/>
+          <text x="482" y="129" text-anchor="middle" font-size="13" font-weight="700" fill="var(--error)">現代「心囚」寫照 ✕</text>
+          <text x="482" y="148" text-anchor="middle" font-size="12" fill="var(--on-surface)">行動自如，卻受名利慾望囚禁</text>
+          <rect x="360" y="26" width="245" height="54" rx="5" fill="var(--surface-container-low)" stroke="var(--outline-variant)"/>
+          <text x="482" y="57" text-anchor="middle" font-size="12" fill="var(--on-surface-variant)">身心俱健・正向追夢（如體壇選手）</text>
+        </svg>`
+      },
+      ageRuler: {
+        caption: `圖解｜中國古典「年齡代稱」時間軸量尺`,
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="古典年齡代稱量尺">
+          <line x1="40" y1="70" x2="640" y2="70" stroke="var(--outline)" stroke-width="2.5"/>
+          <circle cx="65" cy="70" r="5" fill="var(--secondary)"/>
+          <text x="65" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="var(--secondary)">7-8歲</text>
+          <text x="65" y="96" text-anchor="middle" font-size="12" fill="var(--on-surface)">始齔</text>
+          <circle cx="150" cy="70" r="6" fill="var(--primary-container)" stroke="var(--outline)" stroke-width="1.5"/>
+          <text x="150" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="var(--tertiary)">15歲</text>
+          <text x="150" y="96" text-anchor="middle" font-size="12" font-weight="700" fill="var(--on-surface)">志學</text>
+          <circle cx="220" cy="70" r="5" fill="var(--secondary)"/>
+          <text x="220" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="var(--secondary)">16歲</text>
+          <text x="220" y="96" text-anchor="middle" font-size="12" fill="var(--on-surface)">二八(女)</text>
+          <circle cx="295" cy="70" r="5" fill="var(--secondary)"/>
+          <text x="295" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="var(--secondary)">20歲</text>
+          <text x="295" y="96" text-anchor="middle" font-size="12" fill="var(--on-surface)">弱冠(男)</text>
+          <circle cx="370" cy="70" r="5" fill="var(--secondary)"/>
+          <text x="370" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="var(--secondary)">30歲</text>
+          <text x="370" y="96" text-anchor="middle" font-size="12" fill="var(--on-surface)">而立</text>
+          <circle cx="445" cy="70" r="5" fill="var(--secondary)"/>
+          <text x="445" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="var(--secondary)">40歲</text>
+          <text x="445" y="96" text-anchor="middle" font-size="12" fill="var(--on-surface)">不惑</text>
+          <circle cx="515" cy="70" r="5" fill="var(--secondary)"/>
+          <text x="515" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="var(--secondary)">50歲</text>
+          <text x="515" y="96" text-anchor="middle" font-size="12" fill="var(--on-surface)">知天命</text>
+          <circle cx="578" cy="70" r="6" fill="var(--primary-container)" stroke="var(--outline)" stroke-width="1.5"/>
+          <text x="578" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="var(--tertiary)">60歲</text>
+          <text x="578" y="96" text-anchor="middle" font-size="12" font-weight="700" fill="var(--on-surface)">耳順</text>
+          <circle cx="635" cy="70" r="5" fill="var(--secondary)"/>
+          <text x="635" y="52" text-anchor="middle" font-size="12" font-weight="700" fill="var(--secondary)">70歲</text>
+          <text x="635" y="96" text-anchor="middle" font-size="12" fill="var(--on-surface)">從心/古稀</text>
+          <text x="340" y="126" text-anchor="middle" font-size="12" font-weight="700" fill="var(--positive)">計算：耳順 (60) ＋ 志學 (15) ＝ 75 歲</text>
+        </svg>`
+      },
+      riceChartOptions: {
+        caption: `判讀圖表｜X軸：人的內涵程度 ｜ Y軸：人的身段高度`,
+        svg: `<svg viewBox="0 0 680 175" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="內涵程度與身段高度四選項比較圖">
+          <!-- (A) -->
+          <rect x="10" y="10" width="154" height="154" rx="5" fill="var(--surface-container-low)" stroke="var(--outline-variant)"/>
+          <text x="24" y="32" font-size="13" font-weight="700" fill="var(--secondary)">(A)</text>
+          <line x1="32" y1="42" x2="32" y2="132" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="32" y1="132" x2="146" y2="132" stroke="var(--outline)" stroke-width="1.5"/>
+          <path d="M 38 124 L 138 50" stroke="var(--data-1)" stroke-width="3" fill="none"/>
+          <text x="89" y="152" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">內涵↑ 身段↑</text>
+          <!-- (B) -->
+          <rect x="178" y="10" width="154" height="154" rx="5" fill="var(--surface-container-low)" stroke="var(--outline-variant)"/>
+          <text x="192" y="32" font-size="13" font-weight="700" fill="var(--secondary)">(B)</text>
+          <line x1="200" y1="42" x2="200" y2="132" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="200" y1="132" x2="314" y2="132" stroke="var(--outline)" stroke-width="1.5"/>
+          <path d="M 206 50 Q 258 84 306 124" stroke="var(--data-1)" stroke-width="3" fill="none"/>
+          <text x="257" y="152" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">內涵↑ 身段↓</text>
+          <!-- (C) -->
+          <rect x="346" y="10" width="154" height="154" rx="5" fill="var(--surface-container-low)" stroke="var(--outline-variant)"/>
+          <text x="360" y="32" font-size="13" font-weight="700" fill="var(--secondary)">(C)</text>
+          <line x1="368" y1="42" x2="368" y2="132" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="368" y1="132" x2="482" y2="132" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="374" y1="86" x2="474" y2="86" stroke="var(--data-1)" stroke-width="3"/>
+          <text x="425" y="152" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">身段恆定不變</text>
+          <!-- (D) -->
+          <rect x="514" y="10" width="154" height="154" rx="5" fill="var(--surface-container-low)" stroke="var(--outline-variant)"/>
+          <text x="528" y="32" font-size="13" font-weight="700" fill="var(--secondary)">(D)</text>
+          <line x1="536" y1="42" x2="536" y2="132" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="536" y1="132" x2="650" y2="132" stroke="var(--outline)" stroke-width="1.5"/>
+          <path d="M 542 124 Q 593 40 644 124" stroke="var(--data-1)" stroke-width="3" fill="none"/>
+          <text x="593" y="152" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">先升後降弧線</text>
+        </svg>`
+      },
+      atomicHabits: {
+        caption: `圖表判讀｜《原子習慣》日常微小改變的時間複利效應`,
+        svg: `<svg viewBox="0 0 680 195" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="原子習慣每天進步1%與退步1%曲線圖">
+          <line x1="65" y1="165" x2="635" y2="165" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="65" y1="22" x2="65" y2="165" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="65" y1="115" x2="635" y2="115" stroke="var(--data-context)" stroke-dasharray="5 4" stroke-width="1.5"/>
+          <text x="56" y="119" text-anchor="end" font-size="11" fill="var(--on-surface-variant)">起點 1.0</text>
+          <path d="M 70 115 Q 310 105 530 28" stroke="var(--positive)" stroke-width="3" fill="none"/>
+          <path d="M 70 115 Q 310 132 530 156" stroke="var(--error)" stroke-width="3" fill="none"/>
+          <circle cx="530" cy="28" r="5" fill="var(--positive)"/>
+          <circle cx="530" cy="156" r="5" fill="var(--error)"/>
+          <text x="542" y="32" font-size="12" font-weight="700" fill="var(--positive)">每天進步 1% → 37.78 倍</text>
+          <text x="542" y="160" font-size="12" font-weight="700" fill="var(--error)">每天退步 1% → 0.03 倍</text>
+          <text x="345" y="185" text-anchor="middle" font-size="12" font-weight="600" fill="var(--on-surface-variant)">時間累積（持之以恆放大差距）</text>
+        </svg>`
+      },
+      satireComics: {
+        caption: `圖解｜約翰・霍爾克羅夫特四幅現代社會諷刺插畫示意`,
+        svg: `<svg viewBox="0 0 680 175" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="四幅諷刺漫畫概念示意圖">
+          <!-- Panel A -->
+          <rect x="10" y="10" width="154" height="154" rx="5" fill="var(--surface-container-low)" stroke="var(--outline-variant)"/>
+          <text x="22" y="30" font-size="12" font-weight="700" fill="var(--secondary)">圖(A) 藥丸罐</text>
+          <rect x="58" y="48" width="58" height="72" rx="6" fill="var(--secondary-soft)" stroke="var(--secondary)" stroke-width="1.5"/>
+          <rect x="66" y="38" width="42" height="12" rx="2" fill="var(--secondary)"/>
+          <text x="87" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="var(--secondary)">社群按讚</text>
+          <text x="87" y="144" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">當作心靈藥丸吞服</text>
+          <!-- Panel B -->
+          <rect x="178" y="10" width="154" height="154" rx="5" fill="var(--surface-container-low)" stroke="var(--outline-variant)"/>
+          <text x="190" y="30" font-size="12" font-weight="700" fill="var(--secondary)">圖(B) 烏雲編織</text>
+          <ellipse cx="255" cy="60" rx="44" ry="18" fill="var(--data-context)"/>
+          <path d="M 225 112 Q 255 82 285 112" stroke="var(--positive)" stroke-width="4" fill="none"/>
+          <path d="M 232 118 Q 255 94 278 118" stroke="var(--data-2)" stroke-width="4" fill="none"/>
+          <text x="255" y="144" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">逆境中仍織出彩虹</text>
+          <!-- Panel C -->
+          <rect x="346" y="10" width="154" height="154" rx="5" fill="var(--surface-container-low)" stroke="var(--outline-variant)"/>
+          <text x="358" y="30" font-size="12" font-weight="700" fill="var(--secondary)">圖(C) 手機藤蔓</text>
+          <rect x="404" y="48" width="38" height="62" rx="5" fill="var(--surface-container)" stroke="var(--outline)" stroke-width="1.5"/>
+          <path d="M 388 106 Q 423 86 458 96 Q 423 70 390 66 Q 423 50 456 56" stroke="var(--positive)" stroke-width="3" fill="none"/>
+          <text x="423" y="144" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">藤蔓纏身難以脫困</text>
+          <!-- Panel D -->
+          <rect x="514" y="10" width="154" height="154" rx="5" fill="var(--surface-container-low)" stroke="var(--outline-variant)"/>
+          <text x="526" y="30" font-size="12" font-weight="700" fill="var(--secondary)">圖(D) 撬開按鍵</text>
+          <rect x="556" y="64" width="70" height="46" rx="5" fill="var(--primary-container)" stroke="var(--outline)" stroke-width="1.5"/>
+          <text x="591" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="var(--on-primary-container)">ESC</text>
+          <text x="591" y="144" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">跳脫枷鎖與繁瑣</text>
+        </svg>`
+      },
+      rethinkModes: {
+        caption: `圖解｜《逆思維》四種思考心態比較圖`,
+        svg: `<svg viewBox="0 0 680 175" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="思考的四種職業心態比較圖">
+          <rect x="14" y="14" width="318" height="148" rx="6" fill="var(--surface-container)" stroke="var(--outline-variant)"/>
+          <text x="173" y="38" text-anchor="middle" font-size="13" font-weight="700" fill="var(--error)">三種封閉防禦心態（忘了重新思考）</text>
+          <rect x="30" y="52" width="90" height="92" rx="4" fill="var(--surface-container-low)" stroke="var(--outline-variant)"/>
+          <text x="75" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="var(--on-surface)">傳教士</text>
+          <text x="75" y="102" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">深信信仰</text>
+          <text x="75" y="120" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">宣揚布道</text>
+          <rect x="128" y="52" width="90" height="92" rx="4" fill="var(--surface-container-low)" stroke="var(--outline-variant)"/>
+          <text x="173" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="var(--on-surface)">檢察官</text>
+          <text x="173" y="102" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">挑剔瑕疵</text>
+          <text x="173" y="120" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">擊敗對方</text>
+          <rect x="226" y="52" width="90" height="92" rx="4" fill="var(--surface-container-low)" stroke="var(--outline-variant)"/>
+          <text x="271" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="var(--on-surface)">政治人物</text>
+          <text x="271" y="102" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">拉攏認同</text>
+          <text x="271" y="120" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">遊說支持</text>
+          <rect x="348" y="14" width="318" height="148" rx="6" fill="var(--positive-soft)" stroke="var(--positive)"/>
+          <text x="507" y="38" text-anchor="middle" font-size="13" font-weight="700" fill="var(--positive)">第四種開放心態：科學家實驗循環 ✓</text>
+          <rect x="372" y="58" width="116" height="36" rx="4" fill="var(--surface-container-low)" stroke="var(--positive)"/>
+          <text x="430" y="81" text-anchor="middle" font-size="12" font-weight="700" fill="var(--on-surface)">1. 提出念頭假設</text>
+          <rect x="526" y="58" width="116" height="36" rx="4" fill="var(--surface-container-low)" stroke="var(--positive)"/>
+          <text x="584" y="81" text-anchor="middle" font-size="12" font-weight="700" fill="var(--on-surface)">2. 質疑自己論點</text>
+          <rect x="448" y="112" width="118" height="36" rx="4" fill="var(--surface-container-low)" stroke="var(--positive)"/>
+          <text x="507" y="135" text-anchor="middle" font-size="12" font-weight="700" fill="var(--positive)">3. 依證據更新信念</text>
+          <path d="M 488 76 L 524 76" stroke="var(--positive)" stroke-width="2"/>
+        </svg>`
+      },
+      double11Chart: {
+        caption: `圖表判讀｜雙十一各類商品退貨率與平日比較`,
+        svg: `<svg viewBox="0 0 680 175" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="雙十一退貨率對比長條圖">
+          <line x1="140" y1="20" x2="140" y2="145" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="140" y1="145" x2="630" y2="145" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="230" y1="20" x2="230" y2="145" stroke="var(--data-context)" stroke-dasharray="4 3" stroke-width="1.5"/>
+          <text x="230" y="162" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">平日基準 10%</text>
+          <text x="410" y="162" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">雙十一整體平均 30%</text>
+          <text x="130" y="45" text-anchor="end" font-size="12" font-weight="700" fill="var(--on-surface)">時尚服飾鞋帽</text>
+          <rect x="141" y="30" width="380" height="22" rx="3" fill="var(--data-4)"/>
+          <text x="530" y="45" font-size="12" font-weight="700" fill="var(--data-4)">40%~50%（最高）</text>
+          <text x="130" y="85" text-anchor="end" font-size="12" font-weight="700" fill="var(--on-surface)">雙十一整體平均</text>
+          <rect x="141" y="70" width="270" height="22" rx="3" fill="var(--data-2)"/>
+          <text x="420" y="85" font-size="12" font-weight="700" fill="var(--tertiary)">30%（平日3倍）</text>
+          <text x="130" y="125" text-anchor="end" font-size="12" font-weight="700" fill="var(--on-surface)">玩具與保養品</text>
+          <rect x="141" y="110" width="90" height="22" rx="3" fill="var(--data-1)"/>
+          <text x="240" y="125" font-size="12" font-weight="700" fill="var(--data-1)">相對較低（約10%）</text>
+        </svg>`
+      }
+    };
+
+    const QUESTIONS = [
+      // Unit 1: 字音字形與詞義
+      {
+        id: 1,
+        unit: `u1`,
+        source: `111 高雄陽明國中`,
+        prompt: `下列「 」中注音寫成國字，何者前後相同？`,
+        options: [
+          `道德「ㄌㄨㄣˊ」喪 ／ 無與「ㄌㄨㄣˊ」比`,
+          `高瞻遠「ㄓㄨˇ」 ／ 千叮萬「ㄓㄨˇ」`,
+          `「ㄆㄨ」設鐵路 ／ 「ㄆㄨ」天蓋地`,
+          `心力交「ㄘㄨㄟˋ」 ／ 面容憔「ㄘㄨㄟˋ」`
+        ],
+        answer: 2,
+        explanation: `正確選項為 (C)，兩者皆為「鋪」字（鋪設／鋪天蓋地）。(A) 道德「淪」喪／無與「倫」比；(B) 高瞻遠「矚」／千叮萬「囑」；(D) 心力交「瘁」／面容憔「悴」。`,
+        takeaway: `區分形似聲符字：心勞為「瘁」（交瘁），面色為「悴」（憔悴）；水沉為「淪」，人理為「倫」。`
+      },
+      {
+        id: 2,
+        unit: `u1`,
+        source: `111 高雄陽明國中`,
+        prompt: `下列「 」中的字，何組字音前後相同？`,
+        options: [
+          `「載」歌載舞 ／ 詳實記「載」`,
+          `「差」強人意 ／ 參「差」不齊`,
+          `「養」育之恩 ／ 奉「養」父母`,
+          `「傳」而不習 ／ 不見經「傳」`
+        ],
+        answer: 0,
+        explanation: `正確選項為 (A)，「載」歌載舞（又、且）與記「載」皆讀作「ㄗㄞˋ」。(B) 「差」強人意讀 ㄔㄚ／參「差」不齊讀 ㄘ；(C) 「養」育讀 ㄧㄤˇ／奉「養」讀 ㄧㄤˋ；(D) 「傳」而不習讀 ㄔㄨㄢˊ／不見經「傳」讀 ㄓㄨㄢˋ。`,
+        takeaway: `〈論語選〉必考多音字：「傳不習乎」（ㄔㄨㄢˊ）與「自傳／經傳」（ㄓㄨㄢˋ）；「養育」（ㄧㄤˇ）與「奉養」（ㄧㄤˋ）。`
+      },
+      {
+        id: 3,
+        unit: `u1`,
+        source: `112 新北土城國中`,
+        prompt: `下列「 」中的形似字，哪一組讀音「不同」？`,
+        options: [
+          `「匱」乏 ／ 崩「潰」`,
+          `慘「澹」 ／ 重「擔」`,
+          `禁「錮」 ／ 桎「梏」`,
+          `「播」放 ／ 「剝」奪`
+        ],
+        answer: 3,
+        explanation: `正確選項為 (D)，「播」放讀「ㄅㄛˋ」，「剝」奪讀「ㄅㄛ」（語音偶讀 ㄅㄠ）。(A) 皆讀「ㄎㄨㄟˋ」；(B) 皆讀「ㄉㄢˋ」；(C) 皆讀「ㄍㄨˋ」。`,
+        takeaway: `注意「慘澹」之「澹」讀作 ㄉㄢˋ，與「重擔」同音，切勿誤讀為 ㄉㄢˇ。`
+      },
+      {
+        id: 4,
+        unit: `u1`,
+        source: `113 新北土城國中`,
+        prompt: `下列各「 」中的注音寫成國字後，何者字形相同？`,
+        options: [
+          `「ㄒㄧㄚˊ」疵 ／ 閒「ㄒㄧㄚˊ」`,
+          `沉「ㄋㄧˋ」 ／ 「ㄋㄧˋ」名`,
+          `禁「ㄍㄨˋ」 ／ 桎「ㄍㄨˋ」`,
+          `晨昏定「ㄒㄧㄥˇ」 ／ 不「ㄒㄧㄥˇ」人事`
+        ],
+        answer: 3,
+        explanation: `正確選項為 (D)，兩者皆為「省」字（ㄒㄧㄥˇ）。(A) 「瑕」疵（玉部）／閒「暇」（日部）；(B) 沉「溺」／「匿」名；(C) 禁「錮」（金部）／桎「梏」（木部）。`,
+        takeaway: `「省」讀 ㄒㄧㄥˇ 時有探望（定省）、反省（三省）、知覺（不省人事）之義；讀 ㄕㄥˇ 則為節省、行政區。`
+      },
+      {
+        id: 5,
+        unit: `u1`,
+        source: `111 高雄陽明國中`,
+        prompt: `下列何組「 」中的字詞性前後相同？`,
+        options: [
+          `譬如「平」地 ／ 夷為「平」地`,
+          `三「省」吾身 ／ 晨昏定「省」`,
+          `財物典「質」 ／ 淪為人「質」`,
+          `「望」回走了 ／ 「望」梅止渴`
+        ],
+        answer: 1,
+        explanation: `正確選項為 (B)，「三省吾身」的「省」（反省）與「晨昏定省」的「省」（問候探望）皆為「動詞」。(A) 填平（動詞）／平坦的（形容詞）；(C) 抵押（動詞）／抵押的人（名詞）；(D) 向、朝（介詞）／遠看（動詞）。`,
+        takeaway: `判斷古漢語詞性需依句中語法位置：「譬如平地」之「平」後接名詞「地」，表「把地填平」，作動詞用。`,
+        diagramKey: `posMatrix`
+      },
+
+      // Unit 2: 《論語選》與儒家典籍
+      {
+        id: 6,
+        unit: `u2`,
+        source: `111 高雄陽明國中`,
+        prompt: `《論語・為政》中，子游問孝，孔子曰：「今之孝者，是謂能養。……不敬，何以別乎？」下列選項何者最符合孔子所強調的重點？`,
+        options: [
+          `為了讓父母安享晚年，胖虎每天準備饌玉炊金來奉養父母`,
+          `新婚的大雄慎防無後為大的不孝，儘早生子為讓父母歡欣`,
+          `靜香雖然沒有家財萬貫，但仍天天晨昏定省的問候父母親`,
+          `事業有成的小夫，因父母被人看不起，決定靠自己爭取榮耀`
+        ],
+        answer: 2,
+        explanation: `正確選項為 (C)。孔子指出若只提供物質飲食（「能養」）卻缺少敬愛之心（「不敬」），就與飼養犬馬沒有分別。靜香雖無家財萬貫，仍天天晨昏定省、發自內心尊敬關懷父母，最契合「敬親」核心。`,
+        takeaway: `〈子游問孝〉核心關鍵字就是「敬」字，強調態度真誠敬愛遠勝於單純的物質供養。`,
+        diagramKey: `filialLevels`
+      },
+      {
+        id: 7,
+        unit: `u2`,
+        source: `111 高雄陽明國中`,
+        prompt: `《論語・子罕》中，子曰：「譬如平地，雖覆一簣，進，吾往也。」其表達的含意與下列成語何者「最不相關」？`,
+        options: [
+          `鐵杵成針`,
+          `淺嘗輒止`,
+          `滴水穿石`,
+          `駑馬十駕`
+        ],
+        answer: 1,
+        explanation: `正確選項為 (B)。「譬如平地，雖覆一簣，進，吾往也」比喻只要堅持不懈、一點一滴累積，就能成就學業；「淺嘗輒止」指略微嘗試就停止，與「持之以恆」意旨相反。(A)(C)(D) 皆強調持續努力不放棄。`,
+        takeaway: `「為山（止）」對應「功虧一簣」；「平地（進）」對應「積少成多、鍥而不捨」。`,
+        diagramKey: `mountainVsGround`
+      },
+      {
+        id: 8,
+        unit: `u2`,
+        source: `111 高雄陽明國中`,
+        prompt: `《論語・學而》中，曾子曰：「吾日三省吾身：為人謀而不忠乎？與朋友交而不信乎？傳不習乎？」曾子每天自省的三件事，「不包含」下列哪一項？`,
+        options: [
+          `每天所學的知識，不可怠惰荒廢，必須時時溫習`,
+          `替人辦事或擔任公職時，不可敷衍塞責，必須恪盡職守`,
+          `奉養父母時，態度不可輕慢無禮，必須隨侍在側`,
+          `與朋友交往時，不可心懷欺瞞，必須開誠布公且言而有信`
+        ],
+        answer: 2,
+        explanation: `正確選項為 (C)。曾子三省的面向分別為：「處事盡忠」（為人謀而不忠乎）、「待友誠信」（與朋友交而不信乎）、「學習溫習」（傳不習乎）。奉養父母的態度屬於〈子游問孝〉，不包含在此三省內。`,
+        takeaway: `曾子三省三大面向：處事（忠）、待人（信）、為學（習）。`
+      },
+      {
+        id: 9,
+        unit: `u2`,
+        source: `111 高雄陽明國中`,
+        prompt: `閱讀完《論語》大致篇章並初步認識孔子後，四位同學分享自己的筆記，請問哪位同學的說明「錯誤」？`,
+        options: [
+          `甄聰明：「《論語》以語錄體的方式記載，大多是孔子與弟子及時人的應答。」`,
+          `賈學霸：「我們可以從孔子著述的《論語》中，了解孔子的智慧與人格。」`,
+          `郝用功：「孔子提倡有教無類、因材施教，更強調學習要能舉一反三。」`,
+          `艾玩樂：「孔子首開私人講學之風，認為學習不再是貴族子弟的專利。」`
+        ],
+        answer: 1,
+        explanation: `正確選項為 (B)。《論語》並非孔子本人親手著述，而是由「孔子的弟子與再傳弟子」記錄整理、編輯而成的語錄體典籍。`,
+        takeaway: `《論語》四大考點：語錄體、弟子與再傳弟子編輯、全書二十篇取首章二三字為篇名（多與全篇主旨無關）、四書之一。`
+      },
+      {
+        id: 10,
+        unit: `u2`,
+        source: `112 新北土城國中`,
+        prompt: `《論語・公冶長》：「顏淵、季路侍。子曰：『盍各言爾志？』子路曰：『願車、馬、衣、裘，與朋友共，敝之而無憾。』顏淵曰：『願無伐善，無施勞。』子曰：『老者安之，朋友信之，少者懷之。』」下列敘述何者正確？`,
+        options: [
+          `子路的志向展現他好勇鬥狠、鋪張浪費的性格`,
+          `顏淵說「無伐善」是指每天從早到晚辛苦勞動`,
+          `孔子的志向流露出「老安少懷、天下為公」的仁愛胸襟`,
+          `顏淵在孔門四科中，以「政事」科的表現最為傑出`
+        ],
+        answer: 2,
+        explanation: `正確選項為 (C)。孔子希望使年長者安逸、朋友信任、少年人懷念歸附，展現博大仁愛胸襟。(A) 子路展現重視朋友情義；(B) 「伐善」是誇耀自己的優點長處；(D) 顏淵屬「德行」科（政事科為冉有、季路）。`,
+        takeaway: `孔門四科十哲：德行（顏淵、閔子騫、冉伯牛、仲弓）、言語（宰我、子貢）、政事（冉有、季路）、文學（子游、子夏）。`
+      },
+
+      // Unit 3: 〈背影〉與親情象徵
+      {
+        id: 11,
+        unit: `u3`,
+        source: `111 高雄陽明國中`,
+        prompt: `關於朱自清〈背影〉一文的文意解讀，下列何者正確？`,
+        options: [
+          `文中作者對父親的情感變化依序為「不以為然」、「感動懊悔」、「破涕為笑」`,
+          `從父親來信所言，看出他既希望兒子知情又輕描淡寫病情，可能是怕兒子擔憂`,
+          `「現在想想，那時真是太聰明了」表示作者當時獨立自主，認為父愛很多餘`,
+          `連用三個「終於」（終於不放心、終於自己送、終於講定價錢），表現作者讚賞父親辦事果斷`
+        ],
+        answer: 1,
+        explanation: `正確選項為 (B)。父親年邁體衰卻在信中寫「大約大去之期不遠矣」，既吐露真實思念又怕兒子過度掛心。(A) 後段情感是「思念感傷」而非破涕為笑；(C) 「太聰明了」為倒反修辭，自責當時不懂父愛；(D) 三個「終於」呈現父親內心不捨與不放心的躊躇。`,
+        takeaway: `〈背影〉的「不以為然」→「感動愧疚」→「追憶思念」，反映少年自以為是到成年後真正理解父愛的成長歷程。`
+      },
+      {
+        id: 12,
+        unit: `u3`,
+        source: `111 高雄陽明國中`,
+        prompt: `關於朱自清在〈背影〉一文中「四次落淚」的心境，何者敘述「錯誤」？`,
+        options: [
+          `看見父親的狼狽，想起祖母過世，對家裡的景況感到不耐煩、生氣而落淚`,
+          `看到父親艱難買橘子的背影而落淚，是因為真正體會父親關愛而感動流淚`,
+          `父親送行離去時，背影混入人群直到看不見，作者不由得感到悵然落淚`,
+          `收到父親來信中提及身體狀況，心想不知何時能再相見，不由得感傷落淚`
+        ],
+        answer: 0,
+        explanation: `正確選項為 (A)。第一次「不禁簌簌地流下眼淚」是因為祖母過世、父親失業、滿院狼藉，對家庭變故感到「悲傷難過」，並非出於「不耐煩、生氣」。`,
+        takeaway: `四次落淚整理：一淚「悲傷家境慘澹」、二淚「感動父愛深沉」、三淚「惜別悵然不捨」、四淚「讀信感傷思念」。`,
+        diagramKey: `beijingArc`
+      },
+      {
+        id: 13,
+        unit: `u3`,
+        source: `111 高雄陽明國中`,
+        prompt: `關於〈背影〉一文的寫作手法，下列何者正確？`,
+        options: [
+          `作者觀察父親一言一行，著重細節描述，但對父親每一個背影則是簡筆帶過`,
+          `父親親力親為為作者打理搭車北上事宜，此段為作者體會父親關愛的轉折處`,
+          `全文使用順敘法，依照車站送行的背景、開始、經過、結束作為敘述順序`,
+          `末段藉由閱讀父親家書而回憶起父親的背影，與首段提及的背影形成前後呼應`
+        ],
+        answer: 3,
+        explanation: `正確選項為 (D)。首段「我最不能忘記的是他的背影」與末段「在晶瑩的淚光中，又看見那肥胖的……背影」首尾呼應，形成「現在→過去→現在」的倒敘（鏡框式）結構。(A) 買橘子的背影為極細膩的詳寫；(B) 轉折處在父親翻越月台買橘子。`,
+        takeaway: `〈背影〉不直接寫「愛」，而是透過「揀定座位、囑咐茶房、鋪紫毛大衣、買朱紅橘子」等具體行動烘托父愛。`
+      },
+      {
+        id: 14,
+        unit: `u3`,
+        source: `111 高雄陽明國中`,
+        prompt: `「象徵」是使用具體意象表達抽象觀念或情感的修辭。根據前後文意判斷，下列何者象徵意涵「正確」？`,
+        options: [
+          `這時我看見父親的「背影」，我的淚很快地流下來了——象徵「父親的狼狽」`,
+          `「紅豆」生南國，春來發幾枝。願君多採擷，此物最相思——象徵「深閨的詛咒」`,
+          `我將他給我做的「紫毛大衣」鋪好座位——象徵「父愛的溫暖」`,
+          `誰言「寸草心」，報得三春暉——象徵「母愛的無盡」`
+        ],
+        answer: 2,
+        explanation: `正確選項為 (C)。父親為作者定做的紫毛大衣象徵「父愛的溫暖庇護」。(A) 背影象徵父愛與親情的不捨；(B) 紅豆象徵相思；(D) 「寸草心」象徵子女微薄的孝心，「三春暉」才是象徵母愛的溫暖無私。`,
+        takeaway: `〈背影〉三大核心象徵：黑布衣服（家境愁苦）、紫毛大衣（父愛溫暖）、朱紅橘子（父愛熱情與牽掛）。`
+      },
+      {
+        id: 15,
+        unit: `u3`,
+        source: `112 新北土城國中`,
+        prompt: `古今詞語與職業稱呼隨著時代演變而有所不同，下列古今職業配對，何者「錯誤」？`,
+        options: [
+          `百里侯：古代地方的縣長（縣令）`,
+          `茶房：旅館、輪船或火車上的服務生`,
+          `腳夫：舊時專門替人挑運貨物行李的工人`,
+          `仵作：古代負責刺探敵情的間諜`
+        ],
+        answer: 3,
+        explanation: `正確選項為 (D)。「仵作」是古代官府中負責檢驗屍體死因的「驗屍官」（法醫），專門刺探敵情的間諜稱為「細作」。(A)(B)(C) 皆正確。`,
+        takeaway: `常考古今職業對照：仵作（驗屍官）、細作（間諜）、腳夫（搬運工）、茶房（服務生）、西席／夫子（老師）、俳優（演員）。`
+      },
+
+      // Unit 4: 〈心囚〉與正向思考
+      {
+        id: 16,
+        unit: `u4`,
+        source: `111 高雄陽明國中`,
+        prompt: `杏林子說：「因為我了解真正能夠囚住我的，不是身體上的疾病，而是心理上失望、悲觀、頹喪、憤怒、憂慮，築成了一面看不見的網，隨時準備將我陷在中間。」這段話真正要表達的涵義為何？`,
+        options: [
+          `人只要身上有病痛必定會一蹶不振，所以最好保重身體不要生病`,
+          `看不見的網很危險，會讓人不小心陷入其中，所以走路要很小心`,
+          `心病會讓人陷入苦難之中，因此要慎選一位心理醫生來開導自己`,
+          `一切根源在於心，心理健康的人不會因為身體的病痛而身陷其中`
+        ],
+        answer: 3,
+        explanation: `正確選項為 (D)。杏林子以自身罹患類風溼關節炎的經驗告訴讀者：人生光明或黯淡、自由或受囚，關鍵完全取決於自己的「本心」能否保持樂觀與希望。`,
+        takeaway: `〈心囚〉主旨：身體的病痛限制不了自由的靈魂；唯有內心的悲觀、怨懟與名利執著，才會成為真正的「心靈監獄」。`,
+        diagramKey: `xinqiuMatrix`
+      },
+      {
+        id: 17,
+        unit: `u4`,
+        source: `111 高雄陽明國中`,
+        prompt: `讀完杏林子的〈心囚〉後，請問下列選項中的何種人「不是」作者所謂的「心囚」？`,
+        options: [
+          `盲目追求流行事物而少了個人風格的人`,
+          `喜愛運動而想在體壇大放異彩的人`,
+          `一心想發財而天天沉迷投注樂透彩的人`,
+          `熱衷光鮮亮麗外表而不斷盲目整形的人`
+        ],
+        answer: 1,
+        explanation: `正確選項為 (B)。喜愛運動並立志在體壇發光發熱，屬於擁有明確目標、積極向上的健康心態；其餘三項皆因迷失於虛榮、貪念或從眾而自我囚禁。`,
+        takeaway: `區辨「心囚」與「追夢者」：前者被慾望與虛榮牽著走，後者擁有清晰自我價值與正向行動力。`
+      },
+      {
+        id: 18,
+        unit: `u4`,
+        source: `112 新北土城國中`,
+        prompt: `杏林子因罹患類風溼關節炎而中輟學業，但她不屈不撓自學成為作家，曾說過：「感謝玫瑰有刺。」這句話的涵義與下列何者最接近？`,
+        options: [
+          `稻穗結得越飽滿，越往下垂`,
+          `沒有礁岩，怎能激起美麗的浪花`,
+          `勿以善小而不為，勿以惡小而為之`,
+          `讚美如花香，芬芳而怡人；助人如冬陽，適時而溫暖`
+        ],
+        answer: 1,
+        explanation: `正確選項為 (B)。「玫瑰有刺」與「海中的礁岩」皆比喻生命中的挫折與苦痛；正是因為這些磨難與考驗，才激發出更璀璨堅毅的生命光彩。(A) 喻謙虛；(C) 喻行善去惡；(D) 喻讚美與助人的美好。`,
+        takeaway: `面對苦痛的價值觀：「寶劍鋒從磨礪出，梅花香自苦寒來」、「感謝玫瑰有刺」。`
+      },
+      {
+        id: 19,
+        unit: `u4`,
+        source: `111 高雄大灣國中`,
+        prompt: `「枷」是加在犯人頸上的木製刑具，「鎖」是栓在腳踝的鐵鍊，「枷鎖」由具體物品引申為「束縛」的意思。下列「 」中的字詞，何者「不是」運用這種構詞方式？`,
+        options: [
+          `「憤怒」有如火山，一旦爆發會造成大傷害`,
+          `說話常常自相「矛盾」的人，往往無法說服他人`,
+          `全身關節腫脹，有如戴上一道道無形的「鐐銬」`,
+          `遵守學校既定的「規矩」，是學生的本分`
+        ],
+        answer: 0,
+        explanation: `正確選項為 (A)。「憤怒」原本就是抽象情緒詞彙，並非由具體器物引申而來。(B) 「矛」與「盾」為兵器，引申為言語前後抵觸；(C) 「鐐」與「銬」為刑具，引申為束縛；(D) 「規」（圓規）與「矩」（曲尺）為木工器具，引申為法度準則。`,
+        takeaway: `具象→抽象引申詞必考：枷鎖、鐐銬（束縛）；規矩、準繩（法度）；針砭、砥礪（勸戒磨練）；矛盾（抵觸）。`
+      },
+      {
+        id: 20,
+        unit: `u4`,
+        source: `112 新北土城國中`,
+        prompt: `「正向思考」是讓我們在面對挫折時，不過分陷溺於焦慮、沮喪的情緒中。下列選項何者最符合真正的「正向思考」？`,
+        options: [
+          `只要我喜歡，沒有什麼不可以`,
+          `假裝困難不存在，只要想開一點就好了`,
+          `遭遇失敗時告訴自己：「路是人走出來的」`,
+          `買了幾十張彩券沒中獎，深信「下一個大獎一定是我」`
+        ],
+        answer: 2,
+        explanation: `正確選項為 (C)。真正的正向思考不是盲目樂觀或逃避現實，而是先看清現實困境，同時保持希望、培養解決問題與開創新路的行動力。`,
+        takeaway: `正向思考三步驟：接納情緒 → 看清現實 → 尋找可行轉機。`
+      },
+
+      // Unit 5: 修辭文法與語文常識
+      {
+        id: 21,
+        unit: `u5`,
+        source: `111 高雄陽明國中`,
+        prompt: `故意使用與言辭表面相反的詞語或句子來表達本意，稱為「倒反」修辭（如〈背影〉：「那時真是太聰明了」）。下列何者也使用了這種手法？`,
+        options: [
+          `媽媽拿起「愛的小手」對做錯事的弟弟，用力「獎賞」一番`,
+          `人和豬的區別在於：豬一直是豬，而人有時候卻不是人`,
+          `千萬別動！你的左腦是水，右腦是麵粉，一動全是漿糊`,
+          `人家有的是背景，而我有的只是背影，令人不勝唏噓啊`
+        ],
+        answer: 0,
+        explanation: `正確選項為 (A)。媽媽明明是要處罰做錯事的弟弟，卻說成「愛的小手」與「獎賞」，以正話反說來增加幽默感，屬於「倒反」修辭。(B) 映襯；(C) 譬喻（暗喻）；(D) 諧音雙關兼映襯。`,
+        takeaway: `辨別「倒反」訣竅：言詞表面字義與實際情境完全相反（如考試不及格卻說「真是鴻運當頭」）。`
+      },
+      {
+        id: 22,
+        unit: `u5`,
+        source: `111 高雄陽明國中`,
+        prompt: `說話或作文時不直講本意，只用委婉含蓄的言詞暗示本意，叫做「婉曲」。下列文句何者「未使用」婉曲說法？`,
+        options: [
+          `哥哥最近賦閒在家，正在準備公職考試`,
+          `師父本閉關修行，最後在打坐中圓寂了`,
+          `高齡的爺爺慢慢失智，讓家人感到難過`,
+          `小強近來發福明顯，就快追趕上肥貓了`
+        ],
+        answer: 2,
+        explanation: `正確選項為 (C)。「失智」是直接描述病症名稱，未使用委婉修飾。(A) 「賦閒」委婉指失業無職；(B) 「圓寂」委婉指僧尼逝世（如〈背影〉之「大去」）；(D) 「發福」委婉指身材發胖。`,
+        takeaway: `國文常見婉曲詞彙：大去／往生／圓寂／駕崩（死亡）、賦閒（失業）、發福（變胖）、不便（如廁）。`
+      },
+      {
+        id: 23,
+        unit: `u5`,
+        source: `112 新北土城國中`,
+        prompt: `孔子說：「吾十有五而志於學，三十而立，四十而不惑，五十而知天命，六十而耳順，七十而從心所欲，不踰矩。」根據年齡代稱判斷，「耳順之年」加上「志學之年」，合計為幾歲？`,
+        options: [
+          `75 歲`,
+          `85 歲`,
+          `90 歲`,
+          `65 歲`
+        ],
+        answer: 0,
+        explanation: `正確選項為 (A)。「耳順之年」指 60 歲，「志學之年」指 15 歲，60 + 15 = 75 歲。另如：始齔（7-8歲）、二八年華（16歲）、弱冠（20歲）、而立（30歲）、不惑（40歲）、知天命（50歲）、古稀／從心之年（70歲）。`,
+        takeaway: `年齡代稱口訣：志學十五、二八十六、弱冠二十、而立三十、不惑四十、知命五十、耳順六十、古稀從心七十。`,
+        diagramKey: `ageRuler`
+      },
+      {
+        id: 24,
+        unit: `u5`,
+        source: `112 台北仁愛國中`,
+        prompt: `中文裡有些數字只代表多數或長久，不代表確切數量，稱為「虛數」。下列「 」中的詞語數字，何者為「虛指」？`,
+        options: [
+          `孟母「三」遷都是為了兒子的教育`,
+          `劉備「三」顧茅廬，終於請得孔明出馬`,
+          `我對妳的思念之情，好比一日「三」秋`,
+          `無事不登「三」寶殿，有何要求請直言`
+        ],
+        answer: 2,
+        explanation: `正確選項為 (C)。「一日三秋」形容思念心切，一天不見就好像過了三年（多個秋季），此處的「三」為虛指（多、久）。(A) 孟母確實搬家三次；(B) 劉備確實拜訪諸葛亮三次；(D) 「三寶」實指佛、法、僧，皆為實數。`,
+        takeaway: `常見虛指數字：「吾日三省吾身」、「三思而後行」、「七竅生煙」、「百花齊放」，「三、九、百、千、萬」常表極多。`
+      },
+      {
+        id: 25,
+        unit: `u5`,
+        source: `111 高雄陽明國中`,
+        prompt: `生活中有許多成語出自《論語》，下列「 」內出自《論語》的成語，何者使用「正確」？`,
+        options: [
+          `身為班長，將秩序管理好且當同學的榜樣，對小新來說，是件「當仁不讓」的事`,
+          `現代父母已擺脫過去權威形象，一發現有錯，必會「不恥下問」的向孩子道歉`,
+          `在登山迷路時找到正確方向後，務必謹守「既往不咎」的原則，否則又會再走失`,
+          `化裝舞會上，每個女孩處處表現得「巧言令色」，令在場男士們感受賓至如歸`
+        ],
+        answer: 0,
+        explanation: `正確選項為 (A)。「當仁不讓」指遇到應該做的事積極主動承擔、不推辭。(B) 「不恥下問」指虛心向學問或地位不如自己的人請教，非道歉；(C) 「既往不咎」指過去的過錯不再追究；(D) 「巧言令色」為貶義詞，指用花言巧語和討好的臉色取悅他人。`,
+        takeaway: `注意成語褒貶與適用對象：「巧言令色」含貶義，「不恥下問」用於請教學習，「既往不咎」用於寬恕過錯。`
+      },
+
+      // Unit 6: 素養閱讀與圖表判讀
+      {
+        id: 26,
+        unit: `u6`,
+        source: `111 高雄大灣國中`,
+        prompt: `「當一個人內涵程度越高，身段放得越低；如同稻穗越豐實，稻子便垂得越低。」若將橫軸（X軸）設為「人的內涵程度」，縱軸（Y軸）設為「人的身段高度」，下方哪一張圖表最能正確表示這句話的涵義？`,
+        questionDiagramKey: `riceChartOptions`,
+        options: [
+          `圖 (A)：內涵程度越高，身段高度也隨之升高`,
+          `圖 (B)：內涵程度越高，身段高度逐漸降低`,
+          `圖 (C)：無論內涵如何改變，身段高度維持不變`,
+          `圖 (D)：內涵越高，身段先升高後降低`
+        ],
+        answer: 1,
+        explanation: `正確選項為 (B)。題幹說明「內涵程度」與「身段高度」呈反向關係（負相關）：當 X 軸「人的內涵程度」向右增加時，Y 軸「人的身段高度」應向下遞減，因此圖 (B) 下降曲線最恰當。`,
+        takeaway: `圖表判讀第一步：先確認 X 軸（自變項）與 Y 軸（應變項）的名稱，再判斷兩者為正相關、負相關或無關。`
+      },
+      {
+        id: 27,
+        unit: `u6`,
+        source: `112 台北仁愛國中`,
+        prompt: `請觀察下方改繪自詹姆斯・克利爾《原子習慣》的曲線圖，結合儒家經典與圖表意涵，下列敘述何者「錯誤」？`,
+        questionDiagramKey: `atomicHabits`,
+        options: [
+          `時間加上持之以恆，會大幅放大成功與失敗之間的差距`,
+          `巨大的成功只來自一次性重大行動，不必高估每天小改變的價值`,
+          `《論語》「譬如平地，雖覆一簣，進，吾往也」與圖中上方上升曲線意涵相符`,
+          `荀子「不積跬步，無以致千里；不積小流，無以成江海」同樣強調日常累積的重要`
+        ],
+        answer: 1,
+        explanation: `正確選項為 (B)。《原子習慣》的核心正是強調「造就巨大成功的是日復一日的微小習慣」，每天進步 1% 一年後可成長為 37.78 倍，絕不可輕視微小改變的複利價值。`,
+        takeaway: `跨文本整合：現代《原子習慣》的「時間複利」正呼應古代儒家〈譬如為山〉與〈勸學〉的「累積與恆心」。`
+      },
+      {
+        id: 28,
+        unit: `u6`,
+        source: `111 高雄陽明國中`,
+        prompt: `英國插畫師約翰・霍爾克羅夫特善於以幽默反諷的插畫針砭社會現象。請對照下方四幅插畫概念示意圖，下列關於漫畫的解讀何者「錯誤」？`,
+        questionDiagramKey: `satireComics`,
+        options: [
+          `圖 (A) 說明只要多使用社群軟體並按讚，就能真正治癒現實中的人際疏離`,
+          `圖 (B) 表現縱然在烏雲罩頂的糟糕困境下，我們依然能為自己編織美好事物`,
+          `圖 (C) 諷刺長時間滑手機就像被藤蔓逐漸纏繞，讓人沉溺其中而難以脫身`,
+          `圖 (D) 鼓勵人們適時按下「ESC」鍵，放下枷鎖、適度逃離各種繁瑣工作的壓迫`
+        ],
+        answer: 0,
+        explanation: `正確選項為 (A)。圖 (A) 將社群軟體的「按讚」畫成藥罐裡的藥丸，正是「反諷」現代人沉迷虛擬按讚以逃避孤獨，事實上並無法真正治癒現實生活中的人際疏離。`,
+        takeaway: `解讀諷刺插畫的關鍵：看懂畫面背後的「反諷與反思」，而非照字面將批判對象當成正面推薦。`
+      },
+      {
+        id: 29,
+        unit: `u6`,
+        source: `111 高雄陽明國中`,
+        prompt: `閱讀《逆思維》摘要：一般人思考與談話常陷入「傳教士」（護衛信仰並布道）、「檢察官」（挑剔別人瑕疵求勝訴）、「政治人物」（遊說拉攏群眾）三種模式；作者建議改採「科學家」心態：將念頭視為假設、勇於質疑自己並依新證據更新信念。請判斷下列四人的思考模式，何者符合「科學家」心態？`,
+        questionDiagramKey: `rethinkModes`,
+        options: [
+          `風間眼中只有完美的偶像信仰，無法接受批評並急著向同學說明偶像的好處`,
+          `妮妮為了獲得支持，四處遊說同學喜歡自己的劇本並加入真實扮家家酒`,
+          `小新懷疑原本被告知的知識，對未知保持好奇，並根據新證據更新自己的觀點`,
+          `正男面對不同意見時，企圖找出有利的論點與漏洞來說服並擊敗對方`
+        ],
+        answer: 2,
+        explanation: `正確選項為 (C)。小新主動懷疑既有認知、保持好奇並依新證據修正觀點，完全符合「科學家」思考模式。(A) 風間為「傳教士」；(B) 妮妮為「政治人物」；(D) 正男為「檢察官」。`,
+        takeaway: `《逆思維》核心：學習的目的不是為了「證明舊信念一定對」，而是勇於探尋「自己哪裡可能錯」，讓信念進化。`
+      },
+      {
+        id: 30,
+        unit: `u6`,
+        source: `111 高雄大灣國中`,
+        prompt: `《雙十一後遺症》指出：雙十一期間整體退貨率達 30%（為平日 10% 的 3 倍），其中服裝、鞋帽、時尚飾品退貨率最高（可飆至 40%～50%），玩具、保養品等則相對較低。電商除了前期行銷與價格戰，大促後消費者還需要約一個月的購買力恢復期。根據文本與下方統計圖，何者正確？`,
+        questionDiagramKey: `double11Chart`,
+        options: [
+          `雙十一購物節是振興電商業績的萬靈丹，完全沒有潛在風險`,
+          `在雙十一所有品項中，以「兒童玩具」與「美妝保養」的退貨率最高`,
+          `雙十一購物節結束後，消費者的購買力仍能持續延燒一個月以上`,
+          `前期投入的行銷資源及衝動購買後的退貨率，皆應納入電商的成本考量`
+        ],
+        answer: 3,
+        explanation: `正確選項為 (D)。雙十一並非萬靈丹，業者不僅要投入前期行銷與下殺成本，還得承擔高達 30% 以上的退貨人力、倉儲、物流與客服成本，因此必須將退貨率納入實際營收計算。(B) 退貨率最高的是時尚服飾；(C) 消費者需約一個月恢復期。`,
+        takeaway: `閱讀資訊類文本時，留意「百分比倍數比較」、「最高／最低品項分類」與作者對現象的「總結評價」。`
+      }
+    ];
+
+    /* Persistent application state */
+    let appState = {
+      answers: {},       // { [qId]: selectedIndex } for full/unit practice
+      mockAnswers: {},   // { [qId]: selectedIndex } for 10-question mock mode
+      reviewAnswers: {}, // { [qId]: selectedIndex } used during wrong-question review
+      wrongIds: [],      // array of qIds missed by the user
+      mode: `all`,       // 'all' | 'mock' | 'wrong'
+      unitFilter: `all`, // 'all' | 'u1'...'u6'
+      mockIds: []        // array of 10 random qIds
+    };
+
+    let highlightedQId = null;
+    let exportTrayOpen = false;
+    let resetTimer = null;
+
+    function getUnitName(unitId) {
+      const found = UNITS.find(function (u) { return u.id === unitId; });
+      return found ? found.name : `未分類`;
+    }
+
+    function shuffleArray(arr) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = copy[i];
+        copy[i] = copy[j];
+        copy[j] = tmp;
+      }
+      return copy;
+    }
+
+    function getFilteredByUnit(list) {
+      if (appState.unitFilter === `all`) return list;
+      return list.filter(function (q) { return q.unit === appState.unitFilter; });
+    }
+
+    function getActiveQuestions() {
+      if (appState.mode === `mock`) {
+        if (!Array.isArray(appState.mockIds) || appState.mockIds.length === 0) {
+          generateMockIds();
+        }
+        const map = {};
+        QUESTIONS.forEach(function (q) { map[q.id] = q; });
+        const mockList = appState.mockIds
+          .map(function (id) { return map[id]; })
+          .filter(Boolean);
+        return getFilteredByUnit(mockList);
+      }
+      if (appState.mode === `wrong`) {
+        const wrongSet = new Set(appState.wrongIds || []);
+        const wrongList = QUESTIONS.filter(function (q) { return wrongSet.has(q.id); });
+        return getFilteredByUnit(wrongList);
+      }
+      return getFilteredByUnit(QUESTIONS);
+    }
+
+    function generateMockIds() {
+      const pool = getFilteredByUnit(QUESTIONS);
+      const sourcePool = pool.length >= 10 ? pool : QUESTIONS;
+      const picked = shuffleArray(sourcePool).slice(0, Math.min(10, sourcePool.length));
+      appState.mockIds = picked.map(function (q) { return q.id; });
+    }
+
+    function getAnswerMapForCurrentMode() {
+      if (appState.mode === `wrong`) return appState.reviewAnswers;
+      if (appState.mode === `mock`) return appState.mockAnswers;
+      return appState.answers;
+    }
+
+    async function persistState() {
+      const statusEl = document.getElementById(`save-status`);
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState(appState);
+          if (statusEl) statusEl.textContent = `進度已自動存檔`;
+        }
+      } catch (err) {
+        if (statusEl) statusEl.textContent = `暫存模式（離線預覽）`;
+      }
+    }
+
+    function getAnswerForQ(ansMap, qId) {
+      if (!ansMap) return undefined;
+      if (ansMap[qId] !== undefined) return ansMap[qId];
+      if (ansMap[String(qId)] !== undefined) return ansMap[String(qId)];
+      return undefined;
+    }
+
+    function computeStats(activeList) {
+      const ansMap = getAnswerMapForCurrentMode();
+      const total = activeList.length;
+      let answered = 0;
+      let correct = 0;
+      let wrong = 0;
+      activeList.forEach(function (q) {
+        const val = getAnswerForQ(ansMap, q.id);
+        if (val !== undefined) {
+          answered++;
+          if (val === q.answer) correct++;
+          else wrong++;
+        }
+      });
+      const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+      const progressPct = total > 0 ? Math.round((answered / total) * 100) : 0;
+      const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : null;
+      return { total, answered, correct, wrong, score, progressPct, accuracy };
+    }
+
+    function renderKPIs(activeList) {
+      const stats = computeStats(activeList);
+      const scoreEl = document.getElementById(`kpi-score`);
+      const passBadge = document.getElementById(`kpi-pass-badge`);
+      const progEl = document.getElementById(`kpi-progress`);
+      const progPctEl = document.getElementById(`kpi-progress-pct`);
+      const progBarEl = document.getElementById(`kpi-progress-bar`);
+      const rwEl = document.getElementById(`kpi-rw`);
+      const rwNoteEl = document.getElementById(`kpi-rw-note`);
+      const accEl = document.getElementById(`kpi-accuracy`);
+      const accNoteEl = document.getElementById(`kpi-accuracy-note`);
+      const modeLabelEl = document.getElementById(`kpi-mode-label`);
+
+      const modeNames = {
+        all: `目前模式：完整練習`,
+        mock: `目前模式：段考模擬抽測（隨機 10 題）`,
+        wrong: `目前模式：錯題集中複習`
+      };
+      if (modeLabelEl) modeLabelEl.textContent = modeNames[appState.mode] || modeNames.all;
+
+      if (scoreEl) scoreEl.textContent = `${stats.score} 分`;
+      if (passBadge) {
+        if (stats.answered === 0) {
+          passBadge.className = `status-chip chip-neutral`;
+          passBadge.textContent = `尚未作答`;
+        } else if (stats.score >= 80) {
+          passBadge.className = `status-chip chip-positive`;
+          passBadge.textContent = `表現精熟`;
+        } else if (stats.score >= 60) {
+          passBadge.className = `status-chip chip-gold`;
+          passBadge.textContent = `已達及格`;
+        } else {
+          passBadge.className = `status-chip chip-error`;
+          passBadge.textContent = `努力邁向 60 分`;
+        }
+      }
+
+      if (progEl) progEl.textContent = `${stats.answered} / ${stats.total} 題`;
+      if (progPctEl) progPctEl.textContent = `${stats.progressPct}%`;
+      if (progBarEl) progBarEl.style.width = `${stats.progressPct}%`;
+
+      if (rwEl) rwEl.textContent = `${stats.correct} 對 ／ ${stats.wrong} 錯`;
+      if (rwNoteEl) {
+        rwNoteEl.textContent = stats.total === 0
+          ? `目前清單無題目`
+          : stats.answered === stats.total
+            ? `本回已全數作答完畢`
+            : `尚有 ${stats.total - stats.answered} 題未作答`;
+      }
+
+      if (accEl) accEl.textContent = stats.accuracy === null ? `—` : `${stats.accuracy}%`;
+      if (accNoteEl) {
+        accNoteEl.textContent = stats.accuracy === null
+          ? `待完成第一題後統計`
+          : `已答 ${stats.answered} 題中答對 ${stats.correct} 題`;
+      }
+
+      // Benchmark Ruler
+      const pointer = document.getElementById(`gauge-pointer`);
+      const pointerLabel = document.getElementById(`gauge-pointer-label`);
+      const overlay = document.getElementById(`gauge-overlay`);
+      const progressbar = document.getElementById(`gauge-progressbar`);
+      const gaugeText = document.getElementById(`gauge-status-text`);
+
+      const clampedScore = Math.max(0, Math.min(100, stats.score));
+      if (pointer) pointer.style.left = `${clampedScore}%`;
+      if (pointerLabel) pointerLabel.textContent = `${clampedScore} 分`;
+      if (overlay) overlay.style.width = `${clampedScore}%`;
+      if (progressbar) progressbar.setAttribute(`aria-valuenow`, String(clampedScore));
+      if (gaugeText) {
+        if (stats.total === 0) {
+          gaugeText.textContent = `目前篩選條件下沒有題目，請切換單元或出題模式。`;
+        } else if (clampedScore < 60) {
+          gaugeText.textContent = `目前累積 ${clampedScore} 分，距離 60 分綠色及格基準線尚差 ${60 - clampedScore} 分。`;
+        } else if (clampedScore < 80) {
+          gaugeText.textContent = `目前累積 ${clampedScore} 分，已通過 60 分及格線！距離 80 分精熟線尚差 ${80 - clampedScore} 分。`;
+        } else {
+          gaugeText.textContent = `目前累積 ${clampedScore} 分，已跨越 80 分精熟水準！繼續保持高正確率。`;
+        }
+      }
+    }
+
+    function renderFilterControls(activeList) {
+      const unitWrap = document.getElementById(`unit-filter-pills`);
+      if (unitWrap) {
+        const allCount = QUESTIONS.length;
+        let html = `<button type="button" class="filter-pill ${appState.unitFilter === `all` ? `is-active` : ``}" onclick="setUnitFilter('all')">全部單元 <span class="pill-count">(${allCount})</span></button>`;
+        UNITS.forEach(function (u) {
+          const cnt = QUESTIONS.filter(function (q) { return q.unit === u.id; }).length;
+          html += `<button type="button" class="filter-pill ${appState.unitFilter === u.id ? `is-active` : ``}" onclick="setUnitFilter('${u.id}')">${u.name} <span class="pill-count">(${cnt})</span></button>`;
+        });
+        unitWrap.innerHTML = html;
+      }
+
+      const modeButtons = document.querySelectorAll(`#mode-pills .mode-pill`);
+      modeButtons.forEach(function (btn) {
+        const m = btn.getAttribute(`data-mode`);
+        if (m === appState.mode) btn.classList.add(`is-active`);
+        else btn.classList.remove(`is-active`);
+      });
+
+      const redrawBtn = document.getElementById(`btn-redraw-mock`);
+      if (redrawBtn) {
+        redrawBtn.style.display = appState.mode === `mock` ? `inline-flex` : `none`;
+      }
+
+      const wrongBadge = document.getElementById(`wrong-count-badge`);
+      if (wrongBadge) {
+        wrongBadge.textContent = `(${(appState.wrongIds || []).length})`;
+      }
+
+      const summaryEl = document.getElementById(`active-filter-summary`);
+      const unitLabel = appState.unitFilter === `all` ? `全部單元` : getUnitName(appState.unitFilter);
+      if (summaryEl) {
+        summaryEl.textContent = `目前篩選：${unitLabel}・共 ${activeList.length} 題`;
+      }
+    }
+
+    function renderJumpGrid(activeList) {
+      const grid = document.getElementById(`jump-grid`);
+      if (!grid) return;
+      if (activeList.length === 0) {
+        grid.innerHTML = `<span class="kpi-sub">目前無題目可跳轉</span>`;
+        return;
+      }
+      const ansMap = getAnswerMapForCurrentMode();
+      let html = ``;
+      activeList.forEach(function (q, idx) {
+        const numStr = String(idx + 1).padStart(2, `0`);
+        const userAns = getAnswerForQ(ansMap, q.id);
+        let cls = ``;
+        let mark = ``;
+        if (userAns !== undefined) {
+          if (userAns === q.answer) {
+            cls = `is-correct`;
+            mark = `✓`;
+          } else {
+            cls = `is-wrong`;
+            mark = `✕`;
+          }
+        }
+        html += `<button type="button" class="jump-btn ${cls}" onclick="jumpToQuestion(${q.id})" title="跳至第 ${idx + 1} 題">${numStr}${mark ? `<span>${mark}</span>` : ``}</button>`;
+      });
+      grid.innerHTML = html;
+    }
+
+    function renderQuestionCards(activeList) {
+      const container = document.getElementById(`quiz-list`);
+      const countEl = document.getElementById(`quiz-section-count`);
+      if (countEl) countEl.textContent = `顯示 ${activeList.length} 題`;
+      if (!container) return;
+
+      if (activeList.length === 0) {
+        if (appState.mode === `wrong`) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <h3>目前沒有答錯的題目</h3>
+              <p>您在「完整練習」或「段考模擬抽測」中答錯的題目會自動收錄於此。現在錯題本是空的，代表目前掌握良好！</p>
+              <button type="button" class="btn btn-primary" onclick="setQuizMode('all')">切換回完整練習</button>
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="empty-state">
+              <h3>此篩選條件下沒有符合的試題</h3>
+              <p>請嘗試選擇「全部單元」，或切換回「完整練習」模式。</p>
+              <button type="button" class="btn btn-primary" onclick="resetFiltersToAll()">顯示全部試題</button>
+            </div>
+          `;
+        }
+        return;
+      }
+
+      const ansMap = getAnswerMapForCurrentMode();
+      const letters = [`A`, `B`, `C`, `D`];
+      let html = ``;
+
+      activeList.forEach(function (q, idx) {
+        const userAns = getAnswerForQ(ansMap, q.id);
+        const isAnswered = userAns !== undefined;
+        const isCorrect = isAnswered && userAns === q.answer;
+        const numStr = String(idx + 1).padStart(2, `0`);
+        const isHL = highlightedQId === q.id ? `is-highlighted` : ``;
+
+        html += `<article class="question-card ${isHL}" id="question-card-${q.id}">`;
+        html += `
+          <div class="q-meta-row">
+            <div class="q-tags">
+              <span class="q-num-badge">第 ${numStr} 題</span>
+              <span class="q-unit-tag">${getUnitName(q.unit)}</span>
+            </div>
+            <span class="q-source-tag">出處：${q.source}</span>
+          </div>
+        `;
+        html += `<p class="q-prompt">${q.prompt}</p>`;
+
+        if (q.questionDiagramKey && SVG_DIAGRAMS[q.questionDiagramKey]) {
+          const diag = SVG_DIAGRAMS[q.questionDiagramKey];
+          html += `
+            <figure class="svg-figure" style="margin: 0;">
+              <figcaption class="svg-figure-caption">
+                <span>${diag.caption}</span>
+                <span>SVG 視覺判讀圖</span>
+              </figcaption>
+              ${diag.svg}
+            </figure>
+          `;
+        }
+
+        html += `<div class="options-grid">`;
+        q.options.forEach(function (optText, optIdx) {
+          let btnCls = `option-btn`;
+          let badgeHtml = ``;
+          if (isAnswered) {
+            if (optIdx === q.answer) {
+              btnCls += ` is-correct-choice`;
+              badgeHtml = `<span class="opt-badge">正解 ✓</span>`;
+            } else if (optIdx === userAns) {
+              btnCls += ` is-wrong-choice`;
+              badgeHtml = `<span class="opt-badge">你的答案 ✕</span>`;
+            }
+          }
+          const disabledAttr = isAnswered ? `disabled` : ``;
+          html += `
+            <button type="button" class="${btnCls}" ${disabledAttr} onclick="selectOption(${q.id}, ${optIdx})">
+              <span class="opt-letter">${letters[optIdx]}</span>
+              <span class="opt-text">${optText}</span>
+              ${badgeHtml}
+            </button>
+          `;
+        });
+        html += `</div>`;
+
+        if (isAnswered) {
+          const verdictCls = isCorrect ? `verdict-right` : `verdict-wrong`;
+          const verdictText = isCorrect
+            ? `✓ 答對了！正確答案為 (${letters[q.answer]})`
+            : `✕ 答錯了！你選了 (${letters[userAns]})，正確答案應為 (${letters[q.answer]})`;
+
+          let actionHtml = ``;
+          if (appState.mode === `wrong` && isCorrect && (appState.wrongIds || []).includes(q.id)) {
+            actionHtml = `<button type="button" class="btn btn-secondary btn-sm" onclick="clearFromWrongBook(${q.id})">✓ 已訂正，移出錯題本</button>`;
+          }
+
+          html += `
+            <div class="explanation-panel">
+              <div class="exp-verdict-row">
+                <span class="exp-verdict ${verdictCls}">${verdictText}</span>
+                ${actionHtml}
+              </div>
+              <p class="exp-text"><strong>詳細解析：</strong>${q.explanation}</p>
+              <div class="exp-takeaway"><strong>段考重點筆記：</strong>${q.takeaway}</div>
+          `;
+          if (q.diagramKey && SVG_DIAGRAMS[q.diagramKey]) {
+            const expDiag = SVG_DIAGRAMS[q.diagramKey];
+            html += `
+              <figure class="svg-figure" style="margin: 0;">
+                <figcaption class="svg-figure-caption">
+                  <span>${expDiag.caption}</span>
+                  <span>結構圖解</span>
+                </figcaption>
+                ${expDiag.svg}
+              </figure>
+            `;
+          }
+          html += `</div>`;
+        }
+
+        html += `</article>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function renderDiagnosticTable() {
+      const tbody = document.getElementById(`diag-tbody`);
+      const summaryEl = document.getElementById(`diagnostic-summary`);
+      const focusWrongBtn = document.getElementById(`btn-focus-wrong`);
+      if (!tbody) return;
+
+      let rowsHtml = ``;
+      let totalAnsweredAll = 0;
+      let weakestUnit = null;
+      let strongestUnit = null;
+
+      UNITS.forEach(function (u) {
+        const unitQs = QUESTIONS.filter(function (q) { return q.unit === u.id; });
+        const total = unitQs.length;
+        let answered = 0;
+        let correct = 0;
+        let wrong = 0;
+
+        unitQs.forEach(function (q) {
+          const val = getAnswerForQ(appState.answers, q.id);
+          if (val !== undefined) {
+            answered++;
+            if (val === q.answer) correct++;
+            else wrong++;
+          }
+        });
+        totalAnsweredAll += answered;
+
+        const acc = answered > 0 ? Math.round((correct / answered) * 100) : null;
+        if (acc !== null) {
+          if (!weakestUnit || acc < weakestUnit.acc) weakestUnit = { name: u.name, acc: acc, id: u.id };
+          if (!strongestUnit || acc > strongestUnit.acc) strongestUnit = { name: u.name, acc: acc, id: u.id };
+        }
+
+        let statusChip = `<span class="status-chip chip-neutral">尚未作答</span>`;
+        let barColor = `var(--data-context)`;
+        let barWidth = acc !== null ? acc : 0;
+
+        if (acc !== null) {
+          if (acc >= 80) {
+            statusChip = `<span class="status-chip chip-positive">精熟掌握</span>`;
+            barColor = `var(--positive)`;
+          } else if (acc >= 60) {
+            statusChip = `<span class="status-chip chip-gold">尚可穩步</span>`;
+            barColor = `var(--data-2)`;
+          } else {
+            statusChip = `<span class="status-chip chip-error">待加強</span>`;
+            barColor = `var(--error)`;
+          }
+        }
+
+        rowsHtml += `
+          <tr>
+            <td><strong>${u.name}</strong></td>
+            <td class="num-cell">${total} 題</td>
+            <td class="num-cell">${answered} / ${total}</td>
+            <td class="num-cell">${correct} 對 ／ ${wrong} 錯</td>
+            <td>
+              <div class="mini-bar-wrap">
+                <div class="mini-bar-track" aria-hidden="true">
+                  <div class="mini-bar-fill" style="width: ${barWidth}%; background: ${barColor};"></div>
+                </div>
+                <span class="num-cell">${acc === null ? `—` : `${acc}%`}</span>
+              </div>
+            </td>
+            <td>${statusChip}</td>
+            <td class="no-print">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="focusUnit('${u.id}')">練習此單元</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = rowsHtml;
+
+      if (summaryEl) {
+        if (totalAnsweredAll === 0) {
+          summaryEl.textContent = `尚未有正式作答紀錄。請開始作答題目，系統將即時追蹤各單元正確率並標示弱點課別。`;
+        } else {
+          const wrongLen = (appState.wrongIds || []).length;
+          let msg = `已完成 ${totalAnsweredAll} / ${QUESTIONS.length} 題。`;
+          if (strongestUnit) msg += `目前表現最佳單元為「${strongestUnit.name}」（正確率 ${strongestUnit.acc}%）`;
+          if (weakestUnit && weakestUnit.acc < 80) {
+            msg += `；建議優先複習「${weakestUnit.name}」（目前正確率 ${weakestUnit.acc}%）。`;
+          } else if (weakestUnit) {
+            msg += `，各已測單元皆達 80% 精熟水準！`;
+          }
+          if (wrongLen > 0) msg += ` 目前錯題本共收錄 ${wrongLen} 題待複習。`;
+          summaryEl.textContent = msg;
+        }
+      }
+
+      if (focusWrongBtn) {
+        focusWrongBtn.style.display = (appState.wrongIds || []).length > 0 ? `inline-flex` : `none`;
+      }
+    }
+
+    function updateExportPreview(activeList) {
+      const preview = document.getElementById(`export-summary-preview`);
+      if (!preview) return;
+      const stats = computeStats(activeList);
+      preview.textContent = `目前紀錄：得分 ${stats.score} 分（${stats.correct} 對／${stats.wrong} 錯，已答 ${stats.answered} / ${stats.total} 題），錯題本共 ${(appState.wrongIds || []).length} 題。`;
+    }
+
+    function renderAll() {
+      const activeList = getActiveQuestions();
+      renderFilterControls(activeList);
+      renderKPIs(activeList);
+      renderJumpGrid(activeList);
+      renderQuestionCards(activeList);
+      renderDiagnosticTable();
+      updateExportPreview(activeList);
+    }
+
+    /* Interactive Handlers (hoisted function declarations) */
+    async function selectOption(qId, optIdx) {
+      const q = QUESTIONS.find(function (item) { return item.id === qId; });
+      if (!q) return;
+
+      if (appState.mode === `wrong`) {
+        appState.reviewAnswers[qId] = optIdx;
+        if (optIdx === q.answer) {
+          appState.answers[qId] = optIdx;
+        }
+      } else if (appState.mode === `mock`) {
+        appState.mockAnswers[qId] = optIdx;
+        if (getAnswerForQ(appState.answers, qId) === undefined) {
+          appState.answers[qId] = optIdx;
+        }
+        if (optIdx !== q.answer && !appState.wrongIds.includes(qId)) {
+          appState.wrongIds.push(qId);
+        }
+      } else {
+        appState.answers[qId] = optIdx;
+        if (optIdx !== q.answer && !appState.wrongIds.includes(qId)) {
+          appState.wrongIds.push(qId);
+        }
+      }
+
+      renderAll();
+      await persistState();
+    }
+
+    async function clearFromWrongBook(qId) {
+      appState.wrongIds = (appState.wrongIds || []).filter(function (id) { return id !== qId; });
+      delete appState.reviewAnswers[qId];
+      renderAll();
+      await persistState();
+    }
+
+    async function setUnitFilter(unitId) {
+      appState.unitFilter = unitId;
+      if (appState.mode === `mock`) {
+        appState.mockAnswers = {};
+        generateMockIds();
+      }
+      highlightedQId = null;
+      renderAll();
+      await persistState();
+    }
+
+    async function focusUnit(unitId) {
+      appState.mode = `all`;
+      appState.unitFilter = unitId;
+      highlightedQId = null;
+      renderAll();
+      await persistState();
+      const target = document.getElementById(`quiz-list`);
+      if (target) target.scrollIntoView({ behavior: `smooth`, block: `start` });
+    }
+
+    async function setQuizMode(mode) {
+      appState.mode = mode;
+      if (mode === `mock` && (!Array.isArray(appState.mockIds) || appState.mockIds.length === 0)) {
+        appState.mockAnswers = {};
+        generateMockIds();
+      }
+      if (mode === `wrong`) {
+        appState.reviewAnswers = {};
+      }
+      highlightedQId = null;
+      renderAll();
+      await persistState();
+    }
+
+    async function redrawMockExam() {
+      appState.mockAnswers = {};
+      generateMockIds();
+      highlightedQId = null;
+      renderAll();
+      await persistState();
+    }
+
+    async function resetFiltersToAll() {
+      appState.mode = `all`;
+      appState.unitFilter = `all`;
+      renderAll();
+      await persistState();
+    }
+
+    function jumpToQuestion(qId) {
+      highlightedQId = qId;
+      const cards = document.querySelectorAll(`.question-card`);
+      cards.forEach(function (c) { c.classList.remove(`is-highlighted`); });
+      const target = document.getElementById(`question-card-${qId}`);
+      if (target) {
+        target.classList.add(`is-highlighted`);
+        target.scrollIntoView({ behavior: `smooth`, block: `center` });
+      }
+    }
+
+    function toggleExportTray() {
+      const tray = document.getElementById(`export-tray`);
+      if (!tray) return;
+      exportTrayOpen = !exportTrayOpen;
+      if (exportTrayOpen) tray.classList.add(`is-open`);
+      else tray.classList.remove(`is-open`);
+    }
+
+    function buildTextReport() {
+      const activeList = getActiveQuestions();
+      const stats = computeStats(activeList);
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, `0`)}/${String(now.getDate()).padStart(2, `0`)} ${String(now.getHours()).padStart(2, `0`)}:${String(now.getMinutes()).padStart(2, `0`)}`;
+      const modeNames = { all: `完整練習`, mock: `段考模擬抽測（隨機 10 題）`, wrong: `錯題集中複習` };
+
+      let lines = [
+        `==================================================`,
+        `七年級國文第二次段考｜即時評分互動測驗成績單`,
+        `==================================================`,
+        `匯出時間：${dateStr}`,
+        `測驗模式：${modeNames[appState.mode] || `完整練習`}`,
+        `單元篩選：${appState.unitFilter === `all` ? `全部單元` : getUnitName(appState.unitFilter)}`,
+        `本回得分：${stats.score} 分（滿分 100 分｜60 分及格｜80 分精熟）`,
+        `作答進度：${stats.answered} / ${stats.total} 題（${stats.progressPct}%）`,
+        `答對／答錯：${stats.correct} 對 ／ ${stats.wrong} 錯`,
+        `已作答正確率：${stats.accuracy === null ? `尚無作答` : `${stats.accuracy}%`}`,
+        ``,
+        `--- 各單元表現診斷 ---`
+      ];
+
+      UNITS.forEach(function (u) {
+        const unitQs = QUESTIONS.filter(function (q) { return q.unit === u.id; });
+        let ans = 0;
+        let ok = 0;
+        unitQs.forEach(function (q) {
+          const val = getAnswerForQ(appState.answers, q.id);
+          if (val !== undefined) {
+            ans++;
+            if (val === q.answer) ok++;
+          }
+        });
+        const rate = ans > 0 ? `${Math.round((ok / ans) * 100)}%` : `尚未作答`;
+        lines.push(`・${u.name}：已答 ${ans}/${unitQs.length} 題，答對 ${ok} 題，正確率 ${rate}`);
+      });
+
+      const letters = [`A`, `B`, `C`, `D`];
+      const wrongQs = QUESTIONS.filter(function (q) { return (appState.wrongIds || []).includes(q.id); });
+      lines.push(``);
+      lines.push(`--- 錯題復習筆記（共 ${wrongQs.length} 題） ---`);
+      if (wrongQs.length === 0) {
+        lines.push(`目前無錯誤題目紀錄。`);
+      } else {
+        wrongQs.forEach(function (q, i) {
+          lines.push(`${i + 1}. [${getUnitName(q.unit)}] ${q.prompt}`);
+          lines.push(`   正解：(${letters[q.answer]}) ${q.options[q.answer]}`);
+          lines.push(`   解析：${q.explanation}`);
+        });
+      }
+
+      return lines.join(`\n`);
+    }
+
+    function downloadScoreReport() {
+      const content = buildTextReport();
+      const filename = `七年級國文二段_即時評分成績單.txt`;
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: content,
+          contentType: `text/plain`,
+          encoding: `UTF-8`,
+          filename: filename
+        });
+      } else {
+        const blob = new Blob([content], { type: `text/plain;charset=utf-8` });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement(`a`);
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    function printScoreReport() {
+      window.print();
+    }
+
+    async function handleResetQuiz(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `再次點擊確認清空`;
+        btn.classList.remove(`btn-secondary`);
+        btn.classList.add(`btn-danger-armed`);
+        if (resetTimer) clearTimeout(resetTimer);
+        resetTimer = setTimeout(function () {
+          btn.dataset.armed = `false`;
+          btn.textContent = `重新作答`;
+          btn.classList.remove(`btn-danger-armed`);
+          btn.classList.add(`btn-secondary`);
+        }, 3500);
+        return;
+      }
+
+      if (resetTimer) clearTimeout(resetTimer);
+      btn.dataset.armed = `false`;
+      btn.textContent = `重新作答`;
+      btn.classList.remove(`btn-danger-armed`);
+      btn.classList.add(`btn-secondary`);
+
+      appState.answers = {};
+      appState.mockAnswers = {};
+      appState.reviewAnswers = {};
+      appState.wrongIds = [];
+      if (appState.mode === `mock`) {
+        generateMockIds();
+      }
+      highlightedQId = null;
+      renderAll();
+      await persistState();
+    }
+
+    async function initApp() {
+      const statusEl = document.getElementById(`save-status`);
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            appState = {
+              answers: saved.answers && typeof saved.answers === `object` ? saved.answers : {},
+              mockAnswers: saved.mockAnswers && typeof saved.mockAnswers === `object` ? saved.mockAnswers : {},
+              reviewAnswers: saved.reviewAnswers && typeof saved.reviewAnswers === `object` ? saved.reviewAnswers : {},
+              wrongIds: Array.isArray(saved.wrongIds) ? saved.wrongIds : [],
+              mode: saved.mode || `all`,
+              unitFilter: saved.unitFilter || `all`,
+              mockIds: Array.isArray(saved.mockIds) ? saved.mockIds : []
+            };
+          }
+          if (statusEl) statusEl.textContent = `已連線自動存檔`;
+        }
+      } catch (err) {
+        if (statusEl) statusEl.textContent = `單機即時模式`;
+      }
+
+      renderAll();
+
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+          window.notebookAppApi.notifyAppReady();
+        }
+      } catch (err) {
+        // Safe fallback when previewed outside host
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>

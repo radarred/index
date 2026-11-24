@@ -1,0 +1,2702 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="briefing">
+  <title>國中七年級歷史第二次段考・即時評分互動測驗</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces: warm stone-white paper (Briefing) */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      /* Ink */
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      /* Rules */
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+      --border-subtle: #c8c4b8;
+
+      /* Accents */
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --secondary-soft: #e7f0f3;
+      --tertiary: #785008;
+      --tertiary-container: #f5e6c4;
+      --error: #b42318;
+      --error-soft: #fdf0ef;
+      --error-border: #e5a39e;
+      --on-error: #ffffff;
+
+      /* Semantic */
+      --positive: #1f6b47;
+      --positive-soft: #eaf5ef;
+      --positive-border: #9ad0b5;
+      --warning: #a15c00;
+      --warning-soft: #fef6e6;
+      --focus: #1f4e5f;
+
+      /* Data series */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* Map palette */
+      --map-sea: #eaf1f4;
+      --map-land: #e9e2d0;
+      --map-land-muted: #d9d1be;
+      --map-mountain: #c4baa2;
+      --map-route: #b84a39;
+
+      /* Fonts */
+      --font-headline: 'Noto Serif TC', 'Source Serif 4', serif;
+      --font-body: 'Noto Sans TC', 'Plus Jakarta Sans', sans-serif;
+      --font-label: 'Geist Mono', 'Noto Sans TC', monospace;
+
+      /* Shape */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+      --badge-radius: 2px;
+
+      /* Style effects */
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --heading-tracking: -0.02em;
+      --label-tracking: 0.06em;
+
+      /* Type scale (Focused Tool) */
+      --display-size: clamp(1.625rem, 1.35rem + 1.1vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header { position: static !important; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    :focus-visible {
+      outline: 2.5px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Dossier Bar (Briefing Treatment #1) */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-left {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: var(--label-size);
+      letter-spacing: 0.02em;
+      padding: 0.25rem 0.625rem;
+      border-radius: var(--badge-radius);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+
+    /* Header Layout */
+    .header-main {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .header-copy {
+      max-width: 65ch;
+    }
+    .title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--display-size);
+      letter-spacing: var(--heading-tracking);
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: var(--subhead-size);
+      color: var(--secondary);
+      margin: var(--space-xs) 0 0 0;
+    }
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: 0.5rem 1rem;
+      border-radius: var(--rounded);
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      border: 1px solid var(--border-subtle);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out),
+                  transform var(--dur-micro) var(--ease-out);
+    }
+    .btn:hover:not(:disabled) {
+      background-color: var(--surface-container);
+    }
+    .btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--secondary);
+      border-color: var(--secondary);
+    }
+    .btn-danger-armed {
+      background-color: var(--error);
+      color: var(--on-error);
+      border-color: var(--error);
+    }
+    .btn-danger-armed:hover:not(:disabled) {
+      background-color: var(--error);
+    }
+    .btn-sm {
+      min-height: 36px;
+      padding: 0.375rem 0.75rem;
+      font-size: 0.8125rem;
+    }
+
+    .status-toast {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--positive);
+      background-color: var(--positive-soft);
+      border: 1px solid var(--positive-border);
+      padding: 0.25rem 0.625rem;
+      border-radius: var(--rounded);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      opacity: 0;
+      transition: opacity var(--dur-short) var(--ease-out);
+    }
+    .status-toast.visible {
+      opacity: 1;
+    }
+
+    /* Figure Cards (Briefing Treatment #3) */
+    .figure-card {
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+
+    /* 4 KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .kpi-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-xs);
+      padding: var(--space-md);
+    }
+    .kpi-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xs);
+    }
+    .kpi-index {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--secondary);
+    }
+    .kpi-label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--on-surface-variant);
+    }
+    .kpi-value {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: clamp(1.75rem, 1.4rem + 1vw, 2.25rem);
+      line-height: 1.1;
+      font-variant-numeric: lining-nums tabular-nums;
+      color: var(--on-surface);
+      margin-top: var(--space-xs);
+    }
+    .kpi-value.is-pass { color: var(--positive); }
+    .kpi-value.is-fail { color: var(--error); }
+    .kpi-sub {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.125rem 0.45rem;
+      border-radius: var(--badge-radius);
+      font-size: var(--label-size);
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .tag-neutral { background-color: var(--surface-container); color: var(--on-surface-variant); }
+    .tag-positive { background-color: var(--positive-soft); color: var(--positive); }
+    .tag-warning { background-color: var(--tertiary-container); color: var(--tertiary); }
+    .tag-error { background-color: var(--error-soft); color: var(--error); }
+    .tag-secondary { background-color: var(--secondary-soft); color: var(--secondary); }
+
+    /* Passing Ruler Card */
+    .ruler-card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .ruler-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .ruler-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: 1.0625rem;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .ruler-status {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+    .ruler-wrap {
+      position: relative;
+      padding-top: 2rem;
+      padding-bottom: 2.25rem;
+    }
+    .ruler-track {
+      position: relative;
+      height: 18px;
+      background-color: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .ruler-fill {
+      width: 100%;
+      height: 100%;
+      transform-origin: left center;
+      transform: scaleX(0);
+      background-color: var(--data-1);
+      transition: transform var(--dur-short) var(--ease-out),
+                  background-color var(--dur-short) var(--ease-out);
+    }
+    .ruler-fill.pass { background-color: var(--positive); }
+    .ruler-fill.warn { background-color: var(--data-2); }
+    .ruler-fill.low { background-color: var(--data-4); }
+
+    /* Passing dashed line at 60% */
+    .ruler-pass-line {
+      position: absolute;
+      left: 60%;
+      top: 1.25rem;
+      bottom: 1.5rem;
+      width: 0;
+      border-left: 2.5px dashed var(--positive);
+      z-index: 3;
+      pointer-events: none;
+    }
+    .ruler-mastery-line {
+      position: absolute;
+      left: 80%;
+      top: 1.6rem;
+      bottom: 1.7rem;
+      width: 0;
+      border-left: 1.5px dotted var(--tertiary);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .ruler-pointer {
+      position: absolute;
+      top: 0;
+      left: 0%;
+      transform: translateX(-50%);
+      background-color: var(--primary);
+      color: var(--on-primary);
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--badge-radius);
+      white-space: nowrap;
+      z-index: 4;
+      font-variant-numeric: tabular-nums;
+    }
+    .ruler-pointer::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -5px;
+      transform: translateX(-50%);
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid var(--primary);
+    }
+    .ruler-pointer.is-pass { background-color: var(--positive); }
+    .ruler-pointer.is-pass::after { border-top-color: var(--positive); }
+
+    .ruler-ticks {
+      position: relative;
+      height: 1.5rem;
+      margin-top: var(--space-xs);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .ruler-tick {
+      position: absolute;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-weight: 500;
+    }
+    .ruler-tick.tick-start { left: 0%; transform: none; }
+    .ruler-tick.tick-30 { left: 30%; }
+    .ruler-tick.tick-60 { left: 60%; color: var(--positive); font-weight: 700; }
+    .ruler-tick.tick-80 { left: 80%; color: var(--tertiary); font-weight: 700; }
+    .ruler-tick.tick-100 { left: 100%; transform: translateX(-100%); }
+
+    /* Filter & Mode Control Bar */
+    .control-panel {
+      background-color: var(--surface-container);
+      border-top: var(--section-rule);
+      border-radius: 0 0 var(--rounded-lg) var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .control-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .chip-btn {
+      min-height: 44px;
+      padding: 0.45rem 0.875rem;
+      border-radius: var(--rounded);
+      border: 1px solid var(--border-subtle);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out);
+    }
+    .chip-btn:hover {
+      background-color: var(--surface-container-high);
+    }
+    .chip-btn.active {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .chip-btn.active-secondary {
+      background-color: var(--secondary);
+      color: var(--on-primary);
+      border-color: var(--secondary);
+    }
+    .chip-count {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      opacity: 0.85;
+    }
+
+    /* Quick-Jump Navigator */
+    .nav-strip {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      padding-top: var(--space-sm);
+      border-top: 1px solid var(--outline-variant);
+    }
+    .nav-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .nav-legend {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-md);
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: var(--badge-radius);
+      display: inline-block;
+      border: 1px solid var(--border-subtle);
+      background-color: var(--surface-container-low);
+    }
+    .legend-dot.dot-correct {
+      background-color: var(--positive-soft);
+      border-color: var(--positive);
+    }
+    .legend-dot.dot-wrong {
+      background-color: var(--error-soft);
+      border-color: var(--error);
+    }
+    .legend-dot.dot-active {
+      border: 2px solid var(--primary);
+    }
+
+    .q-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .q-num-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--rounded);
+      border: 1px solid var(--border-subtle);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.1;
+      position: relative;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .q-num-btn:hover {
+      background-color: var(--surface-container-high);
+    }
+    .q-num-btn.state-correct {
+      background-color: var(--positive-soft);
+      border-color: var(--positive);
+      color: var(--positive);
+    }
+    .q-num-btn.state-wrong {
+      background-color: var(--error-soft);
+      border-color: var(--error);
+      color: var(--error);
+    }
+    .q-num-btn.is-current {
+      box-shadow: 0 0 0 2.5px var(--primary);
+      z-index: 1;
+    }
+    .q-num-sub {
+      font-size: 0.625rem;
+      font-weight: 700;
+    }
+
+    /* Active Question Stage */
+    .quiz-stage {
+      container-type: inline-size;
+    }
+    .question-card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      padding: var(--space-lg);
+    }
+    .q-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .q-meta-left {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .q-index-badge {
+      background-color: var(--secondary);
+      color: var(--on-primary);
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--badge-radius);
+    }
+    .q-source-note {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+
+    .q-body-grid {
+      display: grid;
+      gap: var(--space-lg);
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .q-body-grid.has-figure {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      align-items: start;
+    }
+    @container (max-width: 780px) {
+      .q-body-grid.has-figure {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .q-stem {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      line-height: 1.65;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-md) 0;
+      max-width: 65ch;
+    }
+
+    .options-list {
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .option-btn {
+      width: 100%;
+      min-height: 50px;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border-radius: var(--rounded);
+      border: 1px solid var(--border-subtle);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      cursor: pointer;
+      line-height: 1.5;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .option-btn:hover:not(:disabled) {
+      background-color: var(--surface-container);
+      box-shadow: inset 3px 0 0 var(--secondary);
+    }
+    .option-btn:disabled {
+      cursor: default;
+    }
+    .option-letter {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--badge-radius);
+      background-color: var(--surface-container);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.8125rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .option-text {
+      flex: 1;
+      font-weight: 500;
+    }
+    .option-badge {
+      flex-shrink: 0;
+      font-size: var(--label-size);
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: var(--badge-radius);
+      align-self: center;
+    }
+
+    .option-btn.opt-correct {
+      background-color: var(--positive-soft);
+      border-color: var(--positive);
+      box-shadow: inset 4px 0 0 var(--positive);
+    }
+    .option-btn.opt-correct .option-letter {
+      background-color: var(--positive);
+      color: var(--on-primary);
+    }
+    .option-btn.opt-correct .option-badge {
+      background-color: var(--positive);
+      color: var(--on-primary);
+    }
+
+    .option-btn.opt-wrong {
+      background-color: var(--error-soft);
+      border-color: var(--error);
+      box-shadow: inset 4px 0 0 var(--error);
+    }
+    .option-btn.opt-wrong .option-letter {
+      background-color: var(--error);
+      color: var(--on-error);
+    }
+    .option-btn.opt-wrong .option-badge {
+      background-color: var(--error);
+      color: var(--on-error);
+    }
+
+    /* Visual Figure Box inside Question */
+    .q-figure-panel {
+      background-color: var(--surface-container);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .q-figure-caption {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--secondary);
+      margin: 0;
+    }
+    .q-svg-wrap {
+      background-color: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      padding: var(--space-xs);
+      min-height: 210px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .q-svg-wrap svg {
+      width: 100%;
+      height: auto;
+      max-height: 290px;
+      display: block;
+    }
+
+    /* SVG Thematic Styles (No inline hex!) */
+    .svg-sea { fill: var(--map-sea); }
+    .svg-land { fill: var(--map-land); stroke: var(--on-surface-variant); stroke-width: 1.25; }
+    .svg-land-alt { fill: var(--map-land-muted); stroke: var(--on-surface-variant); stroke-width: 1; }
+    .svg-zone-a { fill: var(--secondary-soft); stroke: var(--secondary); stroke-width: 1.5; stroke-dasharray: 4 3; }
+    .svg-zone-b { fill: var(--tertiary-container); stroke: var(--tertiary); stroke-width: 1.5; }
+    .svg-mountain { fill: none; stroke: var(--map-mountain); stroke-width: 3; stroke-linecap: round; }
+    .svg-route { fill: none; stroke: var(--map-route); stroke-width: 2.2; stroke-dasharray: 5 3; }
+    .svg-route-solid { fill: none; stroke: var(--secondary); stroke-width: 2.2; }
+    .svg-marker { fill: var(--primary); stroke: var(--surface-container-low); stroke-width: 1.5; }
+    .svg-marker-gold { fill: var(--primary-container); stroke: var(--primary); stroke-width: 1.5; }
+    .svg-marker-red { fill: var(--data-4); stroke: var(--surface-container-low); stroke-width: 1.5; }
+    .svg-label { fill: var(--on-surface); font-family: var(--font-body); font-size: 11px; font-weight: 600; }
+    .svg-label-sm { fill: var(--on-surface-variant); font-family: var(--font-body); font-size: 9.5px; font-weight: 500; }
+    .svg-label-bold { fill: var(--secondary); font-family: var(--font-body); font-size: 12px; font-weight: 700; }
+    .svg-label-red { fill: var(--error); font-family: var(--font-body); font-size: 11px; font-weight: 700; }
+    .svg-tbl-head { fill: var(--primary); }
+    .svg-tbl-head-txt { fill: var(--on-primary); font-family: var(--font-body); font-size: 10.5px; font-weight: 700; }
+    .svg-tbl-row { fill: var(--surface-container-low); stroke: var(--outline-variant); stroke-width: 1; }
+    .svg-tbl-row-alt { fill: var(--background); stroke: var(--outline-variant); stroke-width: 1; }
+    .svg-bar { fill: var(--data-1); }
+    .svg-bar-hi { fill: var(--positive); }
+
+    /* Instant Explanation Panel */
+    .explanation-box {
+      border-left: 4px solid var(--secondary);
+      background-color: var(--surface-container);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: 0 var(--rounded) var(--rounded) 0;
+      margin-top: var(--space-xs);
+      display: none;
+      animation: fadeIn var(--dur-short) var(--ease-out);
+    }
+    .explanation-box.is-open { display: block; }
+    .explanation-box.is-correct { border-left-color: var(--positive); background-color: var(--positive-soft); }
+    .explanation-box.is-wrong { border-left-color: var(--error); background-color: var(--error-soft); }
+    .exp-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-xs);
+    }
+    .exp-verdict {
+      font-weight: 700;
+      font-size: 0.9375rem;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .exp-verdict.v-correct { color: var(--positive); }
+    .exp-verdict.v-wrong { color: var(--error); }
+    .exp-text {
+      margin: 0;
+      color: var(--on-surface);
+      font-size: 0.9375rem;
+      line-height: 1.65;
+      max-width: 70ch;
+    }
+    .exp-keywords {
+      margin-top: var(--space-sm);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+
+    .q-footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    /* Empty State (e.g. Empty Wrong Questions) */
+    .empty-state {
+      text-align: left;
+      padding: var(--space-xl) var(--space-lg);
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+    .empty-state h3 {
+      margin: 0;
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      color: var(--on-surface);
+    }
+    .empty-state p {
+      margin: 0;
+      color: var(--on-surface-variant);
+      max-width: 55ch;
+    }
+
+    /* Diagnostic Table Section */
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
+    }
+    .section-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--headline-size);
+      letter-spacing: var(--heading-tracking);
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .diagnostic-insight {
+      background-color: var(--surface-container);
+      border-left: 4px solid var(--primary-container);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: 0 var(--rounded) var(--rounded) 0;
+      font-size: 0.9rem;
+      margin-bottom: var(--space-md);
+      color: var(--on-surface);
+    }
+    .table-scroll {
+      overflow-x: auto;
+    }
+    table.diag-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    table.diag-table th {
+      text-align: left;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--on-surface);
+      padding: 0.75rem 0.75rem;
+      border-bottom: var(--section-rule);
+      white-space: nowrap;
+    }
+    table.diag-table th.num,
+    table.diag-table td.num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-family: var(--font-label);
+    }
+    table.diag-table td {
+      padding: 0.85rem 0.75rem;
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: middle;
+    }
+    table.diag-table tr.total-row td {
+      font-weight: 700;
+      background-color: var(--surface-container);
+      border-top: 1.5px solid var(--outline);
+      border-bottom: none;
+    }
+    .mini-bar-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      justify-content: flex-end;
+    }
+    .mini-bar-track {
+      width: 64px;
+      height: 8px;
+      background-color: var(--surface-container-high);
+      border-radius: var(--badge-radius);
+      overflow: hidden;
+    }
+    .mini-bar-fill {
+      height: 100%;
+      width: 100%;
+      transform-origin: left center;
+      background-color: var(--data-1);
+    }
+    .mini-bar-fill.pass { background-color: var(--positive); }
+    .mini-bar-fill.low { background-color: var(--error); }
+
+    /* Footer Sources Note */
+    .sources-footer {
+      border-top: 1px solid var(--outline-variant);
+      padding-top: var(--space-md);
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      line-height: 1.6;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-md);
+      }
+      .kpi-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .figure-card, .control-panel, .question-card {
+        padding: var(--space-md);
+      }
+      .header-actions {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    @media print {
+      body { background-color: var(--surface-container-low); }
+      .header-actions, .control-panel, .q-footer-nav, .no-print { display: none !important; }
+      .page-grid { max-width: 100%; padding: 0; }
+      .figure-card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-grid">
+
+    <!-- 1. 頂部資訊與功能列 -->
+    <header>
+      <div class="dossier-bar">
+        <div class="dossier-left">
+          <span class="dossier-pill">國中七年級歷史</span>
+          <span class="dossier-meta">第二次段考範圍・大航海時代至清領後期（28 題實戰題庫）</span>
+        </div>
+        <span id="save-toast" class="status-toast" role="status" aria-live="polite">進度已自動儲存</span>
+      </div>
+
+      <div class="header-main">
+        <div class="header-copy">
+          <h1 class="title">七年級歷史第二次段考・即時評分互動測驗</h1>
+          <p class="standfirst">涵蓋荷西鄭氏時期、清初消極治臺與民變、開港通商及清末現代化建設，點擊選項即刻批改並解析。</p>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="btn btn-primary" onclick="exportScoreReport()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            下載成績單
+          </button>
+          <button type="button" class="btn" onclick="printScoreReport()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            列印結果
+          </button>
+          <button type="button" id="btn-reset-all" class="btn" onclick="handleResetAll(this)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            重新作答
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. 即時數據看板（4 張 KPI 卡片） -->
+    <section aria-label="即時測驗數據看板">
+      <div class="kpi-grid">
+        <article class="figure-card kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">即時百分制得分（60分及格）</span>
+            <span class="kpi-index">01</span>
+          </div>
+          <div id="kpi-score" class="kpi-value">0 分</div>
+          <div class="kpi-sub">
+            <span id="kpi-score-tag" class="tag tag-neutral">尚未作答</span>
+            <span id="kpi-score-hint">滿分 100 分</span>
+          </div>
+        </article>
+
+        <article class="figure-card kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">本回作答進度</span>
+            <span class="kpi-index">02</span>
+          </div>
+          <div id="kpi-progress" class="kpi-value">0 / 28 題</div>
+          <div class="kpi-sub">
+            <span id="kpi-progress-pct" class="tag tag-secondary">完成度 0%</span>
+            <span id="kpi-mode-label">完整練習</span>
+          </div>
+        </article>
+
+        <article class="figure-card kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">答對 ／ 答錯題數</span>
+            <span class="kpi-index">03</span>
+          </div>
+          <div id="kpi-cw" class="kpi-value">0 對 ／ 0 錯</div>
+          <div class="kpi-sub">
+            <span id="kpi-remaining">尚餘 28 題未作答</span>
+          </div>
+        </article>
+
+        <article class="figure-card kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">已作答正確率</span>
+            <span class="kpi-index">04</span>
+          </div>
+          <div id="kpi-accuracy" class="kpi-value">—</div>
+          <div class="kpi-sub">
+            <span id="kpi-accuracy-note">作答後即時計算命中率</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 3. 段考及格基準線量尺 -->
+    <section class="figure-card ruler-card" aria-label="段考及格基準線量尺">
+      <div class="ruler-head">
+        <h2 class="ruler-title">段考及格基準線量尺</h2>
+        <span id="ruler-status-text" class="ruler-status">開始作答後，指標將隨目前得分即時移動</span>
+      </div>
+
+      <div class="ruler-wrap">
+        <div id="ruler-pointer" class="ruler-pointer" style="left: 0%;">0 分</div>
+        <div class="ruler-pass-line" aria-hidden="true"></div>
+        <div class="ruler-mastery-line" aria-hidden="true"></div>
+        <div class="ruler-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="ruler-progressbar">
+          <div id="ruler-fill" class="ruler-fill low"></div>
+        </div>
+        <div class="ruler-ticks" aria-hidden="true">
+          <span class="ruler-tick tick-start">0 分</span>
+          <span class="ruler-tick tick-30">30 分</span>
+          <span class="ruler-tick tick-60">60 分（及格線）</span>
+          <span class="ruler-tick tick-80">80 分（精熟）</span>
+          <span class="ruler-tick tick-100">100 分</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 題目篩選、出題模式與快速跳轉題號 -->
+    <section class="control-panel no-print" aria-label="測驗控制與快速跳轉">
+      <div class="control-row">
+        <div class="control-group">
+          <span class="control-label">依單元篩選</span>
+          <div id="unit-filter-bar" class="chip-group" role="group" aria-label="單元篩選"></div>
+        </div>
+
+        <div class="control-group">
+          <span class="control-label">出題模式切換</span>
+          <div id="mode-filter-bar" class="chip-group" role="group" aria-label="出題模式"></div>
+        </div>
+      </div>
+
+      <div class="nav-strip">
+        <div class="nav-header">
+          <span class="control-label">快速跳轉題號（點選方格立即切換）</span>
+          <div class="nav-legend">
+            <span class="legend-item"><span class="legend-dot"></span>未作答</span>
+            <span class="legend-item"><span class="legend-dot dot-correct"></span>答對</span>
+            <span class="legend-item"><span class="legend-dot dot-wrong"></span>答錯</span>
+            <span class="legend-item"><span class="legend-dot dot-active"></span>目前題目</span>
+          </div>
+        </div>
+        <div id="quick-jump-grid" class="q-grid" role="navigation" aria-label="題號快速跳轉"></div>
+      </div>
+    </section>
+
+    <!-- 5. 作答與圖表判讀區 -->
+    <section id="quiz-stage" class="quiz-stage" aria-label="測驗作答區">
+      <!-- Rendered dynamically by JS -->
+    </section>
+
+    <!-- 6. 各單元作答表現與弱點診斷表 -->
+    <section aria-label="各單元作答表現與弱點診斷表">
+      <div class="dossier-bar">
+        <div class="dossier-left">
+          <span class="dossier-pill">DIAGNOSTIC</span>
+          <span class="dossier-meta">全題庫單元累積診斷・自動同步每次作答紀錄</span>
+        </div>
+      </div>
+
+      <div class="figure-card">
+        <div class="section-head">
+          <h2 class="section-title">各單元作答表現與弱點診斷表</h2>
+          <span id="diag-summary-meta" class="dossier-meta"></span>
+        </div>
+
+        <div id="diagnostic-insight" class="diagnostic-insight">
+          作答各單元題目後，系統將自動計算您的單元正確率並標示建議優先補強的章節。
+        </div>
+
+        <div class="table-scroll">
+          <table class="diag-table">
+            <thead>
+              <tr>
+                <th>單元名稱</th>
+                <th class="num">題庫數</th>
+                <th class="num">已作答數</th>
+                <th class="num">答對數</th>
+                <th class="num">正確率</th>
+                <th>掌握狀態</th>
+                <th class="no-print">練習操作</th>
+              </tr>
+            </thead>
+            <tbody id="diagnostic-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <footer class="sources-footer">
+      題庫內容編整自臺北市立仁愛國中、桃園市立中興國中、桃園市立同德國中、桃園市立石門國中、嘉義市立北興國中、高雄市立大樹國中、高雄市立林園國中、彰化縣立二水國中、彰化縣立埔心國中、彰化縣立埤頭國中、彰化縣立溪湖國中及彰化縣立福興國中七年級第一學期第二次歷史科段考試題。
+    </footer>
+  </main>
+
+  <api-shim></api-shim>
+  <script>
+    const UNITS = [
+      { id: `u1`, name: `單元一・大航海時代與原住民互動`, short: `1. 大航海時代` },
+      { id: `u2`, name: `單元二・清初治臺與社會變遷`, short: `2. 清初治臺` },
+      { id: `u3`, name: `單元三・開港通商與外力衝擊`, short: `3. 開港與牡丹社` },
+      { id: `u4`, name: `單元四・清法戰爭與臺灣現代化`, short: `4. 清法戰爭與現代化` }
+    ];
+
+    const QUESTIONS = [
+      {
+        id: `q01`,
+        unit: `u1`,
+        source: `仁愛國中段考題型`,
+        stem: `在臺灣有「護國神山」之稱的半導體公司進駐臺南市新市區（下圖「甲」區）設廠後，帶動地方發展。回顧臺灣史上，有關該地區過往發展的敘述，何者正確？`,
+        options: [
+          `原住民牡丹社的舊址`,
+          `曾是「番仔契」文書的盛行地區`,
+          `清代康熙時期屬於鳳山縣管轄範圍`,
+          `荷蘭人在此設立漢文學校`
+        ],
+        answer: 1,
+        explanation: `圖中甲區位於熱蘭遮城與普羅民遮城東北方、麻豆社南方，即今臺南市新市區，為西拉雅族「新港社」所在。荷蘭傳教士以羅馬字母拼寫新港社語言成為「新港文」，清代漢人與平埔族訂立土地契約常雙語並陳，俗稱「番仔契」（新港文書）。(A)牡丹社在屏東；(C)鳳山縣在南高雄與屏東一帶；(D)荷蘭人設校教授的是新港文與基督教義，非漢文學校。`,
+        keywords: [`新港社`, `新港文書`, `番仔契`, `西拉雅族`],
+        svgKey: `map_tainan_17c`,
+        svgCaption: `圖一：17 世紀臺南地區荷蘭據點與西拉雅四大社相對位置示意圖`
+      },
+      {
+        id: `q02`,
+        unit: `u1`,
+        source: `仁愛國中・埤頭國中題型`,
+        stem: `17 世紀時，某地區有些原住民能夠閱讀西班牙文，也曾有記載指出荷蘭人在此地活動時，需要透過會說西班牙語的人跟當地原住民溝通。此地區最可能位於現在的何處？`,
+        options: [
+          `基隆`,
+          `臺東`,
+          `臺中`,
+          `澎湖`
+        ],
+        answer: 0,
+        explanation: `1626 至 1642 年西班牙曾佔領北臺灣（雞籠、淡水），於雞籠和平島興建聖薩爾瓦多城，積極傳布天主教並教授西班牙語。1642 年荷蘭人北上逐走西班牙人後，與當地凱達格蘭族（如馬賽人）往來時仍需仰賴西班牙語譯者。`,
+        keywords: [`西班牙`, `聖薩爾瓦多城`, `雞籠`, `天主教`],
+        svgKey: `map_north_spain`,
+        svgCaption: `圖二：17 世紀北臺灣西班牙與馬賽人活動據點示意圖`
+      },
+      {
+        id: `q03`,
+        unit: `u1`,
+        source: `仁愛國中・二水國中題型`,
+        stem: `現今屏東外海的小琉球島上有名為「烏鬼洞」的景點，根據學者研究，在 1630～1640 年代某國殖民者因該國船民在島上遇害，遂自熱蘭遮城調軍進剿鎮壓，島上原住民躲藏到洞穴內仍遭到屠殺與被迫遷移。此某國應是哪個國家？`,
+        options: [
+          `日本`,
+          `中國`,
+          `荷蘭`,
+          `西班牙`
+        ],
+        answer: 2,
+        explanation: `1630～1640 年代以臺南熱蘭遮城為統治核心的政權是「荷蘭」聯合東印度公司。因船民在小琉球遇害，荷蘭人發動軍事進剿（拉美島事件），導致小琉球原住民大量傷亡與被迫遷離。`,
+        keywords: [`烏鬼洞`, `熱蘭遮城`, `荷蘭統治`],
+        svgKey: null
+      },
+      {
+        id: `q04`,
+        unit: `u1`,
+        source: `北興國中・埔心國中題型`,
+        stem: `右圖呈現 17 世紀臺灣某兩個勢力的主要活動範圍，請問圖中的「甲」、「乙」分別代表下列何者？`,
+        options: [
+          `甲：荷蘭控制範圍；乙：大肚王主要勢力範圍`,
+          `甲：大肚王主要勢力範圍；乙：鄭氏早期拓墾範圍`,
+          `甲：鄭氏早期拓墾範圍；乙：大肚王主要勢力範圍`,
+          `甲：西班牙勢力範圍；乙：荷蘭控制範圍`
+        ],
+        answer: 1,
+        explanation: `「甲」位於大肚溪流域（今臺中、彰化、南投一帶），為拍瀑拉族等組成的部落聯盟「大肚王」勢力範圍；「乙」位於安平承天府一帶，是鄭氏政權最初的政治中心與軍屯拓墾核心。後來鄭軍北上屯田，與大肚王爆發激烈衝突。`,
+        keywords: [`大肚王`, `大肚溪`, `安平承天府`, `鄭氏軍屯`],
+        svgKey: `map_mid_south_17c`,
+        svgCaption: `圖三：17 世紀中臺灣與南臺灣兩大勢力範圍示意圖`
+      },
+      {
+        id: `q05`,
+        unit: `u1`,
+        source: `中興國中・石門國中題型`,
+        stem: `文獻描寫某一時期統治當局治理原住民的情景：「地方會議在赤崁舉辦，長官對大會致詞，翻譯人員將話口譯成新港社原住民語……長官任命各社長老、授予權杖，並關切教堂、學校事務與年貢。」文中的「長官」最可能由下列何者所指派？`,
+        options: [
+          `英國領事館`,
+          `西班牙王國`,
+          `臺灣省行政長官公署`,
+          `荷蘭聯合東印度公司`
+        ],
+        answer: 3,
+        explanation: `荷蘭聯合東印度公司（V.O.C.）在武力降服麻豆社等部落後，透過定期在赤崁召開「地方會議」實施間接統治，授予部落長老鑲銀籐杖象徵權威，並要求協助宣達政令、辦理教會學校及繳納年貢。`,
+        keywords: [`地方會議`, `間接統治`, `授與權杖`, `V.O.C.`],
+        svgKey: null
+      },
+      {
+        id: `q06`,
+        unit: `u1`,
+        source: `北興國中・大樹國中題型`,
+        stem: `17 世紀中葉，臺南赤崁一帶漢人領袖向眾人說：「臺灣以前是蠻荒之島，幸好有我們漢人開墾。如今紅毛喧賓奪主，橫徵暴斂，與其束手待斃，不如奮起一戰。」請問在 1652 年帶領漢人發動此抗暴運動的是何人？`,
+        options: [
+          `顏思齊`,
+          `郭懷一`,
+          `鄭成功`,
+          `林爽文`
+        ],
+        answer: 1,
+        explanation: `「紅毛」指荷蘭人。荷蘭人雖招募漢人開墾，但土地皆歸公司所有，漢人須繳納高額人頭稅與狩獵、農業稅且受嚴苛管制，1652 年郭懷一遂在赤崁起義抗荷，最後在荷軍與新港社等原住民聯手鎮壓下失敗。`,
+        keywords: [`郭懷一事件`, `1652 年`, `荷蘭苛稅`],
+        svgKey: null
+      },
+      {
+        id: `q07`,
+        unit: `u1`,
+        source: `仁愛國中段考題型`,
+        stem: `右表為荷蘭統治臺灣時期對原住民傳教成果的統計表。由表中內容，我們可以正確解讀出下列哪一項訊息？`,
+        options: [
+          `新港社原住民的宗教信仰改變最小`,
+          `荷蘭人使用武力脅迫人民改變信仰`,
+          `表中各原住民社群皆有人接受新的宗教`,
+          `麻豆社原住民的受洗人數比例最高`
+        ],
+        answer: 2,
+        explanation: `表中五社的受洗者人數均大於 0，顯示各社皆有族人接受基督教信仰。(A)新港社全社 1,047 人全數受洗（100%），信仰改變最大；(B)統計表本身無法直接看出武力脅迫；(D)麻豆社受洗比例為 215/3,000（約 7.2%），為五社最低。`,
+        keywords: [`基督教傳播`, `新港社`, `統計表判讀`],
+        svgKey: `table_voc_baptism`,
+        svgCaption: `表一：荷蘭統治時期西拉雅族各社人口與受洗人數統計表`
+      },
+      {
+        id: `q08`,
+        unit: `u2`,
+        source: `北興國中・二水國中題型`,
+        stem: `1683 年鄭氏降清後，清廷內部曾爆發「臺灣棄留議」。最後某位大臣上書《恭陳臺灣棄留疏》，指出臺灣物產豐饒且掌握東南四省沿海門戶，放棄將釀成大禍，說服康熙皇帝將臺灣納入版圖。這位大臣是？`,
+        options: [
+          `沈葆楨`,
+          `施琅`,
+          `劉銘傳`,
+          `藍鼎元`
+        ],
+        answer: 1,
+        explanation: `清將領施琅率軍於澎湖海戰擊敗鄭氏後，鑑於臺灣戰略地位極為重要，若棄置恐為海盜或荷蘭等外國勢力再據，特上書《恭陳臺灣棄留疏》力主保留，使康熙皇帝於 1684 年將臺灣正式納入清帝國版圖。`,
+        keywords: [`臺灣棄留議`, `施琅`, `康熙皇帝`, `戰略地位`],
+        svgKey: null
+      },
+      {
+        id: `q09`,
+        unit: `u2`,
+        source: `北興國中・二水國中題型`,
+        stem: `清朝治臺初期將臺灣行政區劃分為「一府三縣」（如右圖），隸屬福建省。從當時行政區劃的分布情況來看，顯示出下列哪一項歷史現象？`,
+        options: [
+          `行政區域主要集中在東部與北部`,
+          `將臺灣府設於打狗一帶以向東南亞發展`,
+          `規畫的行政區域皆在西部，並未擴及東部地區`,
+          `清廷已針對全島原住民部落展開積極治理`
+        ],
+        answer: 2,
+        explanation: `1684 年清廷設「臺灣府」（今臺南），下轄諸羅縣、臺灣縣、鳳山縣三縣，範圍全數位於西部平原，中央山脈以東（後山）未納入設官治理，呈現「為防臺而治臺」的消極統治態度。`,
+        keywords: [`一府三縣`, `臺灣府`, `消極治臺`],
+        svgKey: `map_qing_early`,
+        svgCaption: `圖四：清初康熙年間「一府三縣」行政區劃示意圖`
+      },
+      {
+        id: `q10`,
+        unit: `u2`,
+        source: `仁愛國中・北興國中題型`,
+        stem: `康熙 56 年《諸羅縣志》記載：「男多於女，有村莊數百人而無一眷口者。蓋內地各津渡婦女之禁既嚴，娶一婦，動費百金。」關於當時臺灣社會情況的描述，下列何者「不正確」？`,
+        options: [
+          `清廷頒布《渡臺禁令》嚴格限制渡海`,
+          `主因是臺灣治安不佳，導致婦女自身不願渡臺`,
+          `在禁令管制之下，仍有許多移民冒險偷渡來臺`,
+          `單身無家室的「羅漢腳」成為社會治安隱憂`
+        ],
+        answer: 1,
+        explanation: `清初男女比例嚴重失衡的制度主因是清廷頒布《渡臺禁令》，規定「來臺須先申請證照」且「禁止攜帶家眷（婦女）」，而非單純婦女本身意願問題。禁令執行時寬時嚴，偷渡仍普遍，造成許多無田宅妻室的「羅漢腳」流寓各地。`,
+        keywords: [`渡臺禁令`, `禁止攜眷`, `羅漢腳`, `男女比例失衡`],
+        svgKey: null
+      },
+      {
+        id: `q11`,
+        unit: `u2`,
+        source: `北興國中・石門國中題型`,
+        stem: `史料記載：「清廷平亂後，幕僚藍鼎元建議在諸羅縣北半線地方另設一縣。於是在雍正元年（1723 年），劃虎尾溪以北增設彰化縣及淡水廳。」（如右圖演變）引發這次行政區調整的亂事是下列何者？`,
+        options: [
+          `郭懷一事件`,
+          `朱一貴事件`,
+          `林爽文事件`,
+          `戴潮春事件`
+        ],
+        answer: 1,
+        explanation: `康熙 60 年（1721 年）南臺灣爆發「朱一貴事件」，一度波及全臺。平定後清廷體認中北部漢人移民增多、原諸羅縣轄區過於遼闊，於雍正元年（1723 年）增設「彰化縣」與「淡水廳」（後增澎湖廳，形成一府四縣二廳）。`,
+        keywords: [`朱一貴事件`, `雍正元年`, `彰化縣`, `淡水廳`],
+        svgKey: `map_qing_yongzheng`,
+        svgCaption: `圖五：康熙「一府三縣」演變至雍正「一府四縣二廳」對比圖`
+      },
+      {
+        id: `q12`,
+        unit: `u2`,
+        source: `仁愛國中・中興國中題型`,
+        stem: `史籍記載：「諸羅被圍愈密，無可得食，掘樹根煮豆粕以充饑，而守志益堅。」事平後，乾隆皇帝特頒匾額嘉勉縣民忠義，並將該縣改名且於赤崁樓旁立九座「御龜碑」紀念。此民變是指？`,
+        options: [
+          `朱一貴事件`,
+          `郭懷一事件`,
+          `林爽文事件`,
+          `戴潮春事件`
+        ],
+        answer: 2,
+        explanation: `乾隆 51 年（1786 年）中部天地會領袖林爽文起事，為清代臺灣規模最大的民變。諸羅縣城居民協力死守城池，清廷派福康安率軍平亂後，乾隆皇帝為「嘉其義行」將諸羅縣改名為「嘉義縣」，並立御龜碑記功。`,
+        keywords: [`林爽文事件`, `嘉義縣`, `御龜碑`, `乾隆年間`],
+        svgKey: null
+      },
+      {
+        id: `q13`,
+        unit: `u2`,
+        source: `仁愛國中・埤頭國中題型`,
+        stem: `清嘉慶年間，福州將軍賽沖阿平定海盜蔡牽後，擔憂臺灣東北部「蛤仔難」土地膏腴再遭海盜窺伺，加上漢人早已大量入墾，朝廷遂於嘉慶 17 年（1812 年）將當地正式納入版圖並設官治理。此新增行政區為？`,
+        options: [
+          `淡水廳`,
+          `澎湖廳`,
+          `噶瑪蘭廳`,
+          `卑南廳`
+        ],
+        answer: 2,
+        explanation: `嘉慶 17 年清廷為加強管理移墾宜蘭（蛤仔難）的漢人並防範海盜蔡牽佔據，正式設立「噶瑪蘭廳」，使臺灣行政區演變為「一府四縣三廳」，也是清領前期由西向東擴張至東北部的代表。`,
+        keywords: [`噶瑪蘭廳`, `蛤仔難`, `海盜蔡牽`, `嘉慶年間`],
+        svgKey: null
+      },
+      {
+        id: `q14`,
+        unit: `u2`,
+        source: `仁愛國中・埤頭國中題型`,
+        stem: `清朝臺灣古地圖上經常出現「土牛紅線」（舊界）與「土牛藍線」（新勘定界址），地表則以「土牛溝」作為界線，且新的土牛藍線更往深山推移（如右圖）。造成界線持續往深山移動的主要原因為何？`,
+        options: [
+          `清朝在乾隆年間便全面廢除劃界封山政策`,
+          `清朝主動派官員帶領漢人入山開採樟腦`,
+          `漢人移民常違反禁令越界入山侵墾，清廷只好屢次重勘界線`,
+          `原住民部落主動遷移至東部並將西部山區讓與官府`
+        ],
+        answer: 2,
+        explanation: `清廷為實施「劃界封山」、防止漢原衝突而立石碑與挖土牛溝；然而因漢人人口增加、土地需求孔急，越界私墾或租買原住民土地情形極為普遍，迫使官方多次重定界線（紅線變藍線），番界逐步往內山退縮，原住民生存空間日益縮小。`,
+        keywords: [`劃界封山`, `土牛溝`, `土牛紅線與藍線`, `漢原衝突`],
+        svgKey: `map_tuniu_line`,
+        svgCaption: `圖六：清代臺灣「土牛紅線」與「土牛藍線」番界往內山推移示意圖`
+      },
+      {
+        id: `q15`,
+        unit: `u3`,
+        source: `北興國中・二水國中題型`,
+        stem: `19 世紀中葉，清帝國在某場對外戰爭失利後簽訂條約，被迫在臺灣開放四個通商口岸（如右圖甲、乙、丙、丁），臺灣從此重新被納入國際貿易體系。請問促使這四個港口開放的是哪一場戰爭？`,
+        options: [
+          `鴉片戰爭`,
+          `英法聯軍之役`,
+          `牡丹社事件`,
+          `清法戰爭`
+        ],
+        answer: 1,
+        explanation: `1858 年英法聯軍之役後清廷簽訂《天津條約》，臺灣陸續開放淡水（滬尾）、雞籠（基隆）、安平（臺南）、打狗（高雄）四處為通商口岸，揭開清領後期開港通商的序幕。`,
+        keywords: [`英法聯軍`, `開港通商`, `四大口岸`],
+        svgKey: `map_four_ports`,
+        svgCaption: `圖七：19 世紀中葉清帝國於臺灣開放之四個通商口岸分布圖`
+      },
+      {
+        id: `q16`,
+        unit: `u3`,
+        source: `二水國中・會考改寫題型`,
+        stem: `右表為臺灣開港通商後部分洋行的營運狀況。若考量當時商品主要產區與出口港位置，這些洋行最可能設在臺灣哪一地區，並帶動該區躍升為全臺經濟重心？`,
+        options: [
+          `北部地區`,
+          `中部地區`,
+          `南部地區`,
+          `東部地區`
+        ],
+        answer: 0,
+        explanation: `表中寶順、美利士、公泰等洋行主要出口「茶葉、樟腦與煤礦」。開港通商後，北部丘陵盛產茶葉與樟腦、基隆產煤礦，多經大稻埕集散由淡水港、雞籠港出口，帶動北臺灣快速繁榮。南部安平、打狗則以出口蔗糖為主。`,
+        keywords: [`洋行`, `茶葉`, `樟腦`, `經濟重心北移`],
+        svgKey: `table_yanghang_exports`,
+        svgCaption: `表二：臺灣開港通商後部分洋行主要出口商品統計表`
+      },
+      {
+        id: `q17`,
+        unit: `u3`,
+        source: `民族國中・二水國中題型`,
+        stem: `臺灣開港通商後，西方傳教士陸續來臺以「醫療結合傳教」服務民眾。其中在淡水設立「滬尾偕醫館」、創辦「牛津學堂」與「淡水女學堂」，並常親自為民眾拔牙行醫的長老教會牧師是誰？`,
+        options: [
+          `馬雅各`,
+          `馬偕`,
+          `李春生`,
+          `甘治士`
+        ],
+        answer: 1,
+        explanation: `開港通商後，加拿大長老教會牧師馬偕在北臺灣（淡水）創設滬尾偕醫館、牛津學堂及淡水女學堂；蘇格蘭醫師馬雅各則在南臺灣（臺南）設立臺灣最早的西式醫館。李春生是協助茶業外銷的買辦與商人；甘治士為 17 世紀荷蘭時期牧師。`,
+        keywords: [`馬偕`, `滬尾偕醫館`, `牛津學堂`, `醫療傳教`],
+        svgKey: null
+      },
+      {
+        id: `q18`,
+        unit: `u3`,
+        source: `林園國中・仁愛國中題型`,
+        stem: `1871 年琉球宮古島民船難漂流至八瑤灣，54 人被排灣族人殺害。1874 年日本以此為藉口出兵攻打南臺灣，雙方於石門激戰（如右圖）。事後中日簽約，清廷承認日本此舉為「保民義舉」。此歷史事件為？`,
+        options: [
+          `西仔反`,
+          `牡丹社事件`,
+          `清法戰爭`,
+          `甲午戰爭`
+        ],
+        answer: 1,
+        explanation: `1874 年日本以「懲辦兇手」為由出兵攻打屏東牡丹社與高士佛社，史稱「牡丹社事件」。清廷承認「保民義舉」並給付撫卹與軍費，使日本藉此確認琉球人為日本屬民；此役也驚醒清廷，促成治臺政策轉趨積極。`,
+        keywords: [`牡丹社事件`, `1874 年`, `保民義舉`, `琉球藩民`],
+        svgKey: `map_mudan_1874`,
+        svgCaption: `圖八：1874 年牡丹社事件日軍登陸與衝突地點示意圖`
+      },
+      {
+        id: `q19`,
+        unit: `u3`,
+        source: `仁愛國中・埤頭國中題型`,
+        stem: `牡丹社事件發生後，清廷任命欽差大臣來臺督辦軍務與善後。他奏請廢除渡臺禁令與劃界封山禁令，招募大陸人民來臺開墾、發給耕具種子，並於 1875 年增設臺北府。這位大臣是誰？`,
+        options: [
+          `施琅`,
+          `沈葆楨`,
+          `劉銘傳`,
+          `邵友濂`
+        ],
+        answer: 1,
+        explanation: `1874 年牡丹社事件後，清廷派「沈葆楨」來臺擔任欽差大臣。他推動廢除渡臺禁令與封山令、展開「開山撫番」、修建億載金城，並於 1875 年奏請增設「臺北府」與恆春縣，正式將清廷治臺方針由消極轉為積極。`,
+        keywords: [`沈葆楨`, `廢除渡臺禁令`, `臺北府`, `積極治臺`],
+        svgKey: null
+      },
+      {
+        id: `q20`,
+        unit: `u3`,
+        source: `北興國中・福興國中題型`,
+        stem: `臺南安平的一級古蹟「億載金城」（二鯤鯓砲臺）是臺灣最早的現代化西式砲臺，基隆亦有題字「海門天險」的二沙灣砲臺。這兩處海防砲臺的修築，主要反映清末當時何種迫切需要？`,
+        options: [
+          `招撫與教育山區原住民`,
+          `強化海防以防範外國勢力從海上入侵`,
+          `管制開港通商後的外商走私貿易`,
+          `鎮壓島內層出不窮的漢人分類械鬥`
+        ],
+        answer: 1,
+        explanation: `億載金城為牡丹社事件後沈葆楨聘請法國技師設計建造的新式砲臺，二沙灣砲臺則在鴉片戰爭與清法戰爭期間強化防禦，兩者皆是清廷面對外國列強海上威脅、強化臺灣海防的重要見證。`,
+        keywords: [`億載金城`, `海門天險`, `海防建設`, `沈葆楨`],
+        svgKey: null
+      },
+      {
+        id: `q21`,
+        unit: `u3`,
+        source: `北興國中・福興國中題型`,
+        stem: `右圖呈現清同治至光緒初年開闢的北路（蘇澳→花蓮）、中路（竹山→玉里，即八通關古道）、南路（赤山→卑南臺東）等三條山路。請問推動這項「開山撫番」工程的官員及其主要目的為何？`,
+        options: [
+          `劉銘傳；方便日後修築貫通東部的鐵路`,
+          `沈葆楨；貫通前後山聯繫，宣示清廷對臺灣東部的主權`,
+          `施琅；徹底將平埔族遷移至中央山脈以東`,
+          `劉國軒；擴大鄭氏軍屯的耕地面積`
+        ],
+        answer: 1,
+        explanation: `牡丹社事件期間，日本曾宣稱臺灣東部「番地」非清朝有效管轄（無主地）。因此沈葆楨展開「開山撫番」，開闢北、中、南三條通往後山的道路，將行政力量與漢人開墾正式推向東部，鞏固主權。`,
+        keywords: [`開山撫番`, `八通關古道`, `北中南三路`, `沈葆楨`],
+        svgKey: `map_shen_roads`,
+        svgCaption: `圖九：清末沈葆楨「開山撫番」北、中、南三路開闢路線圖`
+      },
+      {
+        id: `q22`,
+        unit: `u4`,
+        source: `仁愛國中・北興國中題型`,
+        stem: `1884 年法軍因中國藩屬國問題與清廷開戰，法軍遠東艦隊封鎖臺灣海峽並進攻基隆、淡水及佔領澎湖（如右圖）。這場在北臺灣民間俗稱「西仔反」的戰役是？`,
+        options: [
+          `英法聯軍之役`,
+          `牡丹社事件`,
+          `清法戰爭`,
+          `甲午戰爭`
+        ],
+        answer: 2,
+        explanation: `1884 年法國因進攻清廷藩屬國「越南」而爆發「清法戰爭」（中法戰爭）。法軍為逼清廷妥協而轉攻臺灣北部基隆、淡水（滬尾之役）並佔領澎湖，臺灣民間稱法軍為「西仔」，稱此戰役為「西仔反」。`,
+        keywords: [`清法戰爭`, `西仔反`, `越南問題`, `基隆淡水澎湖`],
+        svgKey: `map_sino_french`,
+        svgCaption: `圖十：1884 年清法戰爭戰火波及基隆、淡水與澎湖路線示意圖`
+      },
+      {
+        id: `q23`,
+        unit: `u4`,
+        source: `石門國中・中興國中題型`,
+        stem: `基隆現存的「法軍公墓」見證了清法戰爭的激烈戰事。這場戰役結束後，對臺灣的政治地位與行政建置產生了下列哪一項最重大的轉變？`,
+        options: [
+          `清廷決定恢復海禁政策，關閉四個通商口岸`,
+          `清廷體認臺灣防務攸關東南門戶，於 1885 年宣布「臺灣建省」`,
+          `臺灣正式脫離福建省管轄並獨立建國`,
+          `清廷把最高行政中心從臺北遷回臺南`
+        ],
+        answer: 1,
+        explanation: `清法戰爭時法軍封鎖臺海使清廷警覺臺灣孤懸海外、戰略地位極為關鍵，遂於光緒 11 年（1885 年）宣布將臺灣自福建省劃出獨立建省（福建臺灣省），並任命劉銘傳為首任巡撫。`,
+        keywords: [`清法戰爭`, `1885 年`, `臺灣建省`, `法軍公墓`],
+        svgKey: null
+      },
+      {
+        id: `q24`,
+        unit: `u4`,
+        source: `仁愛國中・埤頭國中題型`,
+        stem: `右圖為清末臺灣某一時期的行政區劃（北至南為臺北府、臺灣府、臺南府，東部為臺東直隸州）。根據此圖與史實，下列敘述何者正確？`,
+        options: [
+          `當時臺灣維持「一府四縣三廳」的行政區劃`,
+          `當時的「臺灣府」位於臺灣中部，原有的府城已改稱「臺南府」`,
+          `當時清廷仍嚴格執行劃界封山，禁止漢人進入臺東`,
+          `這是牡丹社事件後沈葆楨時期完成的最終行政區劃`
+        ],
+        answer: 1,
+        explanation: `1885 年臺灣建省後，首任巡撫劉銘傳調整全臺行政區為「三府一直隸州」：臺北府、臺灣府（新設於中部，今臺中一帶）、臺南府（原舊臺灣府改名），以及東部新設的「臺東直隸州」，奠定今日臺灣南北與東部行政架構基礎。`,
+        keywords: [`三府一直隸州`, `臺東直隸州`, `劉銘傳`, `行政區調整`],
+        svgKey: `map_three_prefs`,
+        svgCaption: `圖十一：臺灣建省後「三府一直隸州」行政區劃示意圖`
+      },
+      {
+        id: `q25`,
+        unit: `u4`,
+        source: `中興國中・仁愛國中題型`,
+        stem: `一位外國教師受聘來臺任教，他在寄回家鄉的書信中提到：「當地剛成立電報學堂急徵專家，郵政總局也剛剛成立，通信非常方便；除了一些外國商人外，還有幾位鐵路專家，彼此常有往來。」他寫信的時間與地點最可能是？`,
+        options: [
+          `1721 年臺南`,
+          `1864 年基隆`,
+          `1875 年臺東`,
+          `1888 年臺北`
+        ],
+        answer: 3,
+        explanation: `電報學堂、郵政總局與鐵路興建均是 1885 年臺灣建省後、首任巡撫劉銘傳在臺北推行現代化建設（自強運動在臺延伸）的成果，因此最符合 1888 年臺北的時代背景。`,
+        keywords: [`劉銘傳`, `郵政總局`, `電報學堂`, `1888 年臺北`],
+        svgKey: null
+      },
+      {
+        id: `q26`,
+        unit: `u4`,
+        source: `北興國中・仁愛國中題型`,
+        stem: `劉銘傳擔任首任臺灣巡撫期間致力推動現代化建設，讓臺灣成為當時清帝國最進步的行省之一。請問下列哪一項建設「並非」劉銘傳的政績？`,
+        options: [
+          `興建基隆至臺北（後延至新竹）的鐵路及「獅球嶺隧道」`,
+          `創設郵政總局、發行龍馬郵票，並架設連接福州與臺南的電報線`,
+          `開闢北中南三路通往後山並修建安平「億載金城」`,
+          `設立西學堂與番學堂，並在臺北裝設電燈照明`
+        ],
+        answer: 2,
+        explanation: `開闢通往後山的北中南三路（開山撫番）以及興建安平億載金城砲臺，皆是 1874 年牡丹社事件後欽差大臣「沈葆楨」的政績，而非劉銘傳。劉銘傳政績包括鐵路（獅球嶺隧道題字「曠宇天開」）、郵局、電報、輪船、電燈及西學堂等。`,
+        keywords: [`劉銘傳政績`, `獅球嶺隧道`, `電燈`, `西學堂`],
+        svgKey: null
+      },
+      {
+        id: `q27`,
+        unit: `u4`,
+        source: `北興國中・民族國中題型`,
+        stem: `清代科舉制度規定「鄉試」須赴所屬省城應考。一位祖籍臺北府的秀才第一次必須冒險渡海到福建福州考舉人，但數年後他的第二次鄉試卻能直接在臺灣本島參加。這兩次考試之間發生了哪一項歷史變遷？`,
+        options: [
+          `朱一貴事件爆發`,
+          `英法聯軍開港通商`,
+          `清法戰爭與臺灣建省`,
+          `林爽文事件平定`
+        ],
+        answer: 2,
+        explanation: `清初至清末，臺灣原隸屬於福建省，因此臺灣讀書人必須渡海至福建省城福州參加鄉試。1884 年清法戰爭後，清廷於 1885 年宣布「臺灣建省」，臺灣成為獨立一省，科舉考試得以於臺灣省本地舉辦。`,
+        keywords: [`臺灣建省`, `福建臺灣省`, `鄉試地點改變`],
+        svgKey: null
+      },
+      {
+        id: `q28`,
+        unit: `u4`,
+        source: `仁愛國中段考題型`,
+        stem: `光緒元年（1875 年）清廷決定在北臺灣設立「臺北府」，歷經規劃與興築，設有東門、西門、南門、小南門與北門等五座城門的臺北府城終告完成。關於臺北府與臺北城的史實，下列何者正確？`,
+        options: [
+          `臺北府是清法戰爭後由劉銘傳奏請設立的`,
+          `臺北府城五座城門於 1884 年完工`,
+          `臺北府設立時間比宜蘭的噶瑪蘭廳還要早`,
+          `臺北府是清朝在臺灣設立的最後一個府級行政區`
+        ],
+        answer: 1,
+        explanation: `臺北府於 1875 年由沈葆楨奏請設立，臺北府城則於 1884 年竣工（五座城門中北門至今保存最完整）。(C)噶瑪蘭廳設於 1812 年（嘉慶年間），早於臺北府；(D)臺灣建省後劉銘傳於中部另設新臺灣府，原舊臺灣府改為臺南府，故臺北府非最後設之府。`,
+        keywords: [`臺北府`, `臺北建城 1884`, `沈葆楨`, `五座城門`],
+        svgKey: null
+      }
+    ];
+
+    function renderQuestionSvg(svgKey) {
+      if (!svgKey) return ``;
+      const svgs = {
+        map_tainan_17c: `
+          <svg viewBox="0 0 360 220" role="img" aria-label="17世紀臺南熱蘭遮城、普羅民遮城、麻豆社與甲區位置圖">
+            <rect x="0" y="0" width="360" height="220" class="svg-sea"/>
+            <path d="M125 15 L345 15 L345 205 L120 205 Q100 165 115 130 Q125 90 108 55 Z" class="svg-land"/>
+            <path d="M88 122 Q105 115 110 132 Q104 148 86 142 Z" class="svg-land"/>
+            <circle cx="96" cy="133" r="6" class="svg-marker"/>
+            <text x="12" y="137" class="svg-label">熱蘭遮城(安平)</text>
+            <circle cx="145" cy="148" r="5.5" class="svg-marker"/>
+            <text x="155" y="152" class="svg-label">普羅民遮城(赤崁)</text>
+            <circle cx="215" cy="58" r="6" class="svg-marker-red"/>
+            <text x="226" y="62" class="svg-label">麻豆社</text>
+            <ellipse cx="222" cy="112" rx="34" ry="20" class="svg-zone-a"/>
+            <text x="215" y="116" class="svg-label-bold">甲</text>
+            <text x="165" y="195" class="svg-label-sm">今臺南市新市區一帶</text>
+            <text x="22" y="34" class="svg-label-sm">臺灣海峽</text>
+          </svg>
+        `,
+        map_north_spain: `
+          <svg viewBox="0 0 360 220" role="img" aria-label="17世紀北臺灣西班牙據點圖">
+            <rect x="0" y="0" width="360" height="220" class="svg-sea"/>
+            <path d="M25 205 Q65 130 130 92 Q195 65 270 95 L325 135 L335 205 Z" class="svg-land"/>
+            <path d="M165 140 Q215 125 260 170 L285 205" class="svg-mountain"/>
+            <circle cx="136" cy="95" r="6" class="svg-marker-red"/>
+            <text x="68" y="83" class="svg-label">淡水(聖多明哥城)</text>
+            <circle cx="228" cy="85" r="6.5" class="svg-marker-gold"/>
+            <text x="200" y="66" class="svg-label-bold">雞籠(聖薩爾瓦多城)</text>
+            <circle cx="288" cy="108" r="5" class="svg-marker"/>
+            <text x="296" y="112" class="svg-label">三貂角</text>
+            <ellipse cx="200" cy="106" rx="75" ry="24" class="svg-zone-a"/>
+            <text x="155" y="114" class="svg-label-sm">馬賽人・凱達格蘭族活動帶</text>
+          </svg>
+        `,
+        map_mid_south_17c: `
+          <svg viewBox="0 0 360 220" role="img" aria-label="17世紀中南部大肚王與鄭氏拓墾範圍圖">
+            <rect x="0" y="0" width="360" height="220" class="svg-sea"/>
+            <path d="M185 15 L255 15 Q275 80 245 140 Q215 185 185 208 L135 208 Q110 175 128 135 Q148 80 165 15 Z" class="svg-land"/>
+            <path d="M205 28 Q215 110 190 190" class="svg-mountain"/>
+            <ellipse cx="166" cy="82" rx="28" ry="22" class="svg-zone-b"/>
+            <text x="160" y="86" class="svg-label-bold">甲</text>
+            <line x1="138" y1="88" x2="188" y2="88" class="svg-route-solid"/>
+            <text x="48" y="88" class="svg-label">大肚溪</text>
+            <ellipse cx="145" cy="158" rx="26" ry="22" class="svg-zone-a"/>
+            <text x="139" y="162" class="svg-label-bold">乙</text>
+            <circle cx="132" cy="168" r="5" class="svg-marker"/>
+            <text x="28" y="172" class="svg-label">安平・承天府</text>
+          </svg>
+        `,
+        table_voc_baptism: `
+          <svg viewBox="0 0 360 220" role="img" aria-label="荷蘭時期西拉雅族各社人口與受洗統計表">
+            <rect x="10" y="12" width="340" height="30" class="svg-tbl-head"/>
+            <text x="24" y="31" class="svg-tbl-head-txt">部落社名</text>
+            <text x="128" y="31" class="svg-tbl-head-txt">人口數(人)</text>
+            <text x="215" y="31" class="svg-tbl-head-txt">受洗者(人)</text>
+            <text x="295" y="31" class="svg-tbl-head-txt">比例</text>
+
+            <rect x="10" y="42" width="340" height="32" class="svg-tbl-row"/>
+            <text x="24" y="62" class="svg-label-bold">新港社</text>
+            <text x="145" y="62" class="svg-label">1,047</text>
+            <text x="230" y="62" class="svg-label-bold">1,047</text>
+            <rect x="290" y="52" width="48" height="10" class="svg-bar-hi"/>
+
+            <rect x="10" y="74" width="340" height="32" class="svg-tbl-row-alt"/>
+            <text x="24" y="94" class="svg-label">蕭壠社</text>
+            <text x="145" y="94" class="svg-label">2,600</text>
+            <text x="235" y="94" class="svg-label">282</text>
+            <rect x="290" y="84" width="7" height="10" class="svg-bar"/>
+
+            <rect x="10" y="106" width="340" height="32" class="svg-tbl-row"/>
+            <text x="24" y="126" class="svg-label">目加溜灣社</text>
+            <text x="145" y="126" class="svg-label">1,000</text>
+            <text x="235" y="126" class="svg-label">261</text>
+            <rect x="290" y="116" width="13" height="10" class="svg-bar"/>
+
+            <rect x="10" y="138" width="340" height="32" class="svg-tbl-row-alt"/>
+            <text x="24" y="158" class="svg-label">麻豆社</text>
+            <text x="145" y="158" class="svg-label">3,000</text>
+            <text x="235" y="158" class="svg-label">215</text>
+            <rect x="290" y="148" width="5" height="10" class="svg-bar"/>
+
+            <rect x="10" y="170" width="340" height="32" class="svg-tbl-row"/>
+            <text x="24" y="190" class="svg-label">大目降社</text>
+            <text x="145" y="190" class="svg-label">1,000</text>
+            <text x="235" y="190" class="svg-label">209</text>
+            <rect x="290" y="180" width="11" height="10" class="svg-bar"/>
+          </svg>
+        `,
+        map_qing_early: `
+          <svg viewBox="0 0 360 220" role="img" aria-label="清初康熙一府三縣行政區圖">
+            <rect x="0" y="0" width="360" height="220" class="svg-sea"/>
+            <path d="M195 16 Q225 22 232 60 Q222 130 198 205 L178 205 Q150 155 135 125 Q128 80 162 28 Z" class="svg-land"/>
+            <path d="M198 30 Q204 110 188 188" class="svg-mountain"/>
+            <path d="M162 28 Q175 65 188 125 L142 125 Q134 80 162 28 Z" class="svg-zone-a"/>
+            <line x1="138" y1="125" x2="188" y2="125" class="svg-route-solid"/>
+            <line x1="146" y1="152" x2="186" y2="152" class="svg-route-solid"/>
+            <circle cx="152" cy="138" r="5.5" class="svg-marker-gold"/>
+            <text x="60" y="78" class="svg-label-bold">諸羅縣（北端未設治）</text>
+            <text x="40" y="142" class="svg-label-bold">臺灣府・臺灣縣</text>
+            <text x="68" y="180" class="svg-label-bold">鳳山縣</text>
+            <text x="242" y="112" class="svg-label-sm">中央山脈以東</text>
+            <text x="242" y="128" class="svg-label-red">（未設官治理）</text>
+          </svg>
+        `,
+        map_qing_yongzheng: `
+          <svg viewBox="0 0 360 220" role="img" aria-label="康熙與雍正行政區對比圖">
+            <rect x="0" y="0" width="360" height="220" class="svg-sea"/>
+            <text x="48" y="22" class="svg-label-bold">康熙（一府三縣）</text>
+            <path d="M85 32 Q115 35 118 70 Q112 135 95 202 L82 202 Q62 155 52 120 Q48 75 72 35 Z" class="svg-land"/>
+            <line x1="54" y1="125" x2="105" y2="125" class="svg-route-solid"/>
+            <line x1="60" y1="152" x2="100" y2="152" class="svg-route-solid"/>
+            <text x="62" y="84" class="svg-label-sm">諸羅縣</text>
+            <text x="62" y="142" class="svg-label-sm">臺灣縣</text>
+            <text x="66" y="176" class="svg-label-sm">鳳山縣</text>
+
+            <path d="M152 115 L186 115" class="svg-route"/>
+            <polygon points="184,110 194,115 184,120" class="svg-marker-red"/>
+
+            <text x="224" y="22" class="svg-label-bold">雍正（一府四縣二廳）</text>
+            <path d="M255 32 Q285 35 288 70 Q282 135 265 202 L252 202 Q232 155 222 120 Q218 75 242 35 Z" class="svg-land"/>
+            <line x1="232" y1="68" x2="278" y2="68" class="svg-route-solid"/>
+            <line x1="226" y1="98" x2="278" y2="98" class="svg-route-solid"/>
+            <line x1="224" y1="125" x2="275" y2="125" class="svg-route-solid"/>
+            <line x1="230" y1="152" x2="270" y2="152" class="svg-route-solid"/>
+            <circle cx="204" cy="128" r="5" class="svg-marker"/>
+            <text x="174" y="146" class="svg-label-sm">澎湖廳</text>
+            <text x="292" y="54" class="svg-label-red">淡水廳(增)</text>
+            <text x="292" y="86" class="svg-label-red">彰化縣(增)</text>
+            <text x="292" y="114" class="svg-label-sm">諸羅縣</text>
+            <text x="292" y="142" class="svg-label-sm">臺灣縣</text>
+            <text x="292" y="175" class="svg-label-sm">鳳山縣</text>
+          </svg>
+        `,
+        map_tuniu_line: `
+          <svg viewBox="0 0 360 220" role="img" aria-label="土牛紅線與土牛藍線往內山推移示意圖">
+            <rect x="10" y="14" width="110" height="192" class="svg-land"/>
+            <rect x="120" y="14" width="105" height="192" class="svg-zone-b"/>
+            <rect x="225" y="14" width="125" height="192" class="svg-land-alt"/>
+            <text x="24" y="42" class="svg-label-bold">西部平原</text>
+            <text x="24" y="60" class="svg-label-sm">漢人開墾聚落</text>
+
+            <line x1="120" y1="20" x2="120" y2="200" class="svg-route" style="stroke: var(--error); stroke-width: 3;"/>
+            <text x="82" y="192" class="svg-label-red">土牛紅線(舊界)</text>
+
+            <line x1="225" y1="20" x2="225" y2="200" class="svg-route-solid" style="stroke: var(--secondary); stroke-width: 3;"/>
+            <text x="184" y="192" class="svg-label-bold">土牛藍線(新界)</text>
+
+            <path d="M132 105 L210 105" class="svg-route-solid"/>
+            <polygon points="206,100 218,105 206,110" class="svg-marker"/>
+            <text x="132" y="94" class="svg-label-sm">漢人越界入墾</text>
+
+            <path d="M275 38 L295 85 L278 135 L298 185" class="svg-mountain"/>
+            <text x="248" y="42" class="svg-label-bold">內山番界</text>
+            <text x="248" y="60" class="svg-label-sm">原住民生活空間</text>
+            <text x="248" y="76" class="svg-label-sm">遭擠壓退縮</text>
+          </svg>
+        `,
+        map_four_ports: `
+          <svg viewBox="0 0 360 220" role="img" aria-label="清末臺灣開港通商四港口分布圖">
+            <rect x="0" y="0" width="360" height="220" class="svg-sea"/>
+            <path d="M198 18 Q228 24 234 62 Q222 132 198 205 L178 205 Q148 158 134 125 Q128 80 165 28 Z" class="svg-land"/>
+            <path d="M198 30 Q204 110 188 188" class="svg-mountain"/>
+            <circle cx="176" cy="26" r="6" class="svg-marker-gold"/>
+            <text x="72" y="30" class="svg-label-bold">甲・淡水（滬尾）</text>
+            <circle cx="204" cy="24" r="6" class="svg-marker-gold"/>
+            <text x="216" y="28" class="svg-label-bold">乙・雞籠（基隆）</text>
+            <circle cx="142" cy="144" r="6" class="svg-marker-gold"/>
+            <text x="58" y="148" class="svg-label-bold">丙・安平（臺南）</text>
+            <circle cx="158" cy="172" r="6" class="svg-marker-gold"/>
+            <text x="70" y="176" class="svg-label-bold">丁・打狗（高雄）</text>
+          </svg>
+        `,
+        table_yanghang_exports: `
+          <svg viewBox="0 0 360 220" role="img" aria-label="開港通商後洋行出口商品對照表">
+            <rect x="16" y="20" width="328" height="32" class="svg-tbl-head"/>
+            <text x="34" y="40" class="svg-tbl-head-txt">外商洋行名稱</text>
+            <text x="205" y="40" class="svg-tbl-head-txt">主要出口商品</text>
+
+            <rect x="16" y="52" width="328" height="36" class="svg-tbl-row"/>
+            <text x="34" y="75" class="svg-label-bold">寶順洋行</text>
+            <text x="205" y="75" class="svg-label">茶葉</text>
+
+            <rect x="16" y="88" width="328" height="36" class="svg-tbl-row-alt"/>
+            <text x="34" y="111" class="svg-label-bold">美利士洋行</text>
+            <text x="205" y="111" class="svg-label">樟腦</text>
+
+            <rect x="16" y="124" width="328" height="36" class="svg-tbl-row"/>
+            <text x="34" y="147" class="svg-label-bold">公泰洋行</text>
+            <text x="205" y="147" class="svg-label">樟腦</text>
+
+            <rect x="16" y="160" width="328" height="36" class="svg-tbl-row-alt"/>
+            <text x="34" y="183" class="svg-label-bold">費爾・哈士迪斯洋行</text>
+            <text x="205" y="183" class="svg-label">樟腦、煤礦</text>
+          </svg>
+        `,
+        map_mudan_1874: `
+          <svg viewBox="0 0 360 220" role="img" aria-label="1874年牡丹社事件南臺灣衝突示意圖">
+            <rect x="0" y="0" width="360" height="220" class="svg-sea"/>
+            <path d="M105 15 L235 15 Q245 85 225 145 Q210 188 182 205 Q162 192 152 162 Q132 105 105 15 Z" class="svg-land"/>
+            <circle cx="136" cy="94" r="5" class="svg-marker"/>
+            <text x="78" y="98" class="svg-label">車城・社寮港</text>
+            <circle cx="195" cy="96" r="6.5" class="svg-marker-red"/>
+            <text x="208" y="98" class="svg-label-red">牡丹社</text>
+            <circle cx="170" cy="100" r="4.5" class="svg-marker"/>
+            <text x="150" y="82" class="svg-label-sm">石門</text>
+            <circle cx="226" cy="148" r="5.5" class="svg-marker-gold"/>
+            <text x="236" y="152" class="svg-label-bold">八瑤灣（漂流地）</text>
+            <path d="M62 118 Q102 105 130 98" class="svg-route"/>
+            <polygon points="126,93 136,96 128,103" class="svg-marker-red"/>
+            <text x="22" y="136" class="svg-label-red">1874年日軍登陸</text>
+          </svg>
+        `,
+        map_shen_roads: `
+          <svg viewBox="0 0 360 220" role="img" aria-label="沈葆楨開山撫番北中南三路圖">
+            <rect x="0" y="0" width="360" height="220" class="svg-sea"/>
+            <path d="M198 16 Q228 24 234 62 Q222 132 198 205 L178 205 Q148 158 134 125 Q128 80 165 28 Z" class="svg-land"/>
+            <path d="M198 30 Q204 110 188 188" class="svg-mountain"/>
+            <path d="M214 38 L224 68" class="svg-route"/>
+            <text x="236" y="54" class="svg-label-red">北路：蘇澳→花蓮</text>
+            <path d="M162 96 L214 112" class="svg-route"/>
+            <text x="12" y="100" class="svg-label-red">中路：竹山→玉里(八通關)</text>
+            <path d="M164 168 L202 152" class="svg-route"/>
+            <text x="210" y="162" class="svg-label-red">南路：赤山→卑南(臺東)</text>
+          </svg>
+        `,
+        map_sino_french: `
+          <svg viewBox="0 0 360 220" role="img" aria-label="1884年清法戰爭進攻路線示意圖">
+            <rect x="0" y="0" width="360" height="220" class="svg-sea"/>
+            <path d="M10 15 L145 15 Q162 72 135 128 Q95 162 45 208 L10 208 Z" class="svg-land-alt"/>
+            <path d="M258 46 Q278 52 280 86 Q272 132 254 176 L242 176 Q224 142 222 108 Q226 68 258 46 Z" class="svg-land"/>
+            <circle cx="52" cy="182" r="5" class="svg-marker"/>
+            <text x="18" y="172" class="svg-label">越南河內</text>
+            <circle cx="144" cy="76" r="5" class="svg-marker"/>
+            <text x="86" y="80" class="svg-label">馬尾</text>
+            <circle cx="252" cy="54" r="5.5" class="svg-marker-red"/>
+            <text x="274" y="52" class="svg-label-red">淡水</text>
+            <circle cx="268" cy="56" r="5.5" class="svg-marker-red"/>
+            <text x="284" y="68" class="svg-label-red">基隆</text>
+            <circle cx="204" cy="128" r="5" class="svg-marker-red"/>
+            <text x="164" y="145" class="svg-label-red">澎湖</text>
+            <path d="M60 176 Q145 160 198 132" class="svg-route"/>
+            <path d="M204 122 Q218 82 246 58" class="svg-route"/>
+            <text x="122" y="195" class="svg-label-bold">法軍艦隊北上攻臺路線</text>
+          </svg>
+        `,
+        map_three_prefs: `
+          <svg viewBox="0 0 360 220" role="img" aria-label="臺灣建省後三府一直隸州圖">
+            <rect x="0" y="0" width="360" height="220" class="svg-sea"/>
+            <path d="M198 16 Q228 24 234 62 Q222 132 198 205 L178 205 Q148 158 134 125 Q128 80 165 28 Z" class="svg-land"/>
+            <path d="M198 30 Q204 110 188 188" class="svg-mountain"/>
+            <line x1="145" y1="68" x2="218" y2="68" class="svg-route-solid"/>
+            <line x1="134" y1="118" x2="195" y2="118" class="svg-route-solid"/>
+            <text x="58" y="48" class="svg-label-bold">臺北府（北部）</text>
+            <text x="38" y="98" class="svg-label-bold">臺灣府（中部）</text>
+            <text x="52" y="156" class="svg-label-bold">臺南府（南部）</text>
+            <text x="234" y="124" class="svg-label-red">臺東直隸州（東部）</text>
+          </svg>
+        `
+      };
+      return svgs[svgKey] || ``;
+    }
+
+    const OPTION_LETTERS = [`A`, `B`, `C`, `D`];
+
+    const appState = {
+      selectedUnit: `all`,
+      mode: `full`, // 'full' | 'mock10' | 'wrong'
+      mockIds: [],
+      wrongReviewIds: [],
+      deckAnswers: {},   // current active round answers { qid: optionIdx }
+      masterAnswers: {}, // whole-bank cumulative { qid: { selected, isCorrect } }
+      wrongBook: [],     // persistent list of missed question IDs
+      currentIdx: 0
+    };
+
+    let saveToastTimer = null;
+    let resetArmedTimer = null;
+
+    function shuffleArray(arr) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = copy[i];
+        copy[i] = copy[j];
+        copy[j] = tmp;
+      }
+      return copy;
+    }
+
+    function getUnitQuestions(unitId) {
+      if (unitId === `all`) return QUESTIONS.slice();
+      return QUESTIONS.filter(function(q) { return q.unit === unitId; });
+    }
+
+    function getActiveDeck() {
+      const pool = getUnitQuestions(appState.selectedUnit);
+      if (appState.mode === `full`) {
+        return pool;
+      }
+      if (appState.mode === `mock10`) {
+        const poolMap = {};
+        pool.forEach(function(q) { poolMap[q.id] = q; });
+        const valid = appState.mockIds.map(function(id) { return poolMap[id]; }).filter(Boolean);
+        if (valid.length === 0 && pool.length > 0) {
+          buildMockDeck();
+          return appState.mockIds.map(function(id) { return poolMap[id]; }).filter(Boolean);
+        }
+        return valid;
+      }
+      if (appState.mode === `wrong`) {
+        const poolMap = {};
+        pool.forEach(function(q) { poolMap[q.id] = q; });
+        return appState.wrongReviewIds.map(function(id) { return poolMap[id]; }).filter(Boolean);
+      }
+      return pool;
+    }
+
+    function buildMockDeck() {
+      const pool = getUnitQuestions(appState.selectedUnit);
+      const picked = shuffleArray(pool).slice(0, Math.min(10, pool.length));
+      appState.mockIds = picked.map(function(q) { return q.id; });
+      appState.deckAnswers = {};
+      appState.currentIdx = 0;
+    }
+
+    function buildWrongReviewDeck() {
+      const pool = getUnitQuestions(appState.selectedUnit);
+      const wrongSet = {};
+      appState.wrongBook.forEach(function(id) { wrongSet[id] = true; });
+      appState.wrongReviewIds = pool.filter(function(q) { return Boolean(wrongSet[q.id]); }).map(function(q) { return q.id; });
+      appState.deckAnswers = {};
+      appState.currentIdx = 0;
+    }
+
+    async function saveState() {
+      const payload = {
+        selectedUnit: appState.selectedUnit,
+        mode: appState.mode,
+        mockIds: appState.mockIds,
+        wrongReviewIds: appState.wrongReviewIds,
+        deckAnswers: appState.deckAnswers,
+        masterAnswers: appState.masterAnswers,
+        wrongBook: appState.wrongBook,
+        currentIdx: appState.currentIdx
+      };
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState(payload);
+          showSaveToast();
+        }
+      } catch (err) {
+        // Ignore persistence errors silently in standalone viewer
+      }
+    }
+
+    function showSaveToast() {
+      const toast = document.getElementById(`save-toast`);
+      if (!toast) return;
+      toast.classList.add(`visible`);
+      if (saveToastTimer) clearTimeout(saveToastTimer);
+      saveToastTimer = setTimeout(function() {
+        toast.classList.remove(`visible`);
+      }, 1800);
+    }
+
+    function selectUnit(unitId) {
+      appState.selectedUnit = unitId;
+      appState.currentIdx = 0;
+      if (appState.mode === `mock10`) {
+        buildMockDeck();
+      } else if (appState.mode === `wrong`) {
+        buildWrongReviewDeck();
+      }
+      renderAll();
+      saveState();
+    }
+
+    function selectMode(modeName) {
+      appState.mode = modeName;
+      appState.currentIdx = 0;
+      if (modeName === `mock10`) {
+        buildMockDeck();
+      } else if (modeName === `wrong`) {
+        buildWrongReviewDeck();
+      } else if (modeName === `full`) {
+        // Sync full deckAnswers from masterAnswers so full practice keeps progress
+        const synced = {};
+        QUESTIONS.forEach(function(q) {
+          if (appState.masterAnswers[q.id]) {
+            synced[q.id] = appState.masterAnswers[q.id].selected;
+          }
+        });
+        appState.deckAnswers = synced;
+      }
+      renderAll();
+      saveState();
+    }
+
+    function rerollMockQuiz() {
+      appState.mode = `mock10`;
+      buildMockDeck();
+      renderAll();
+      saveState();
+    }
+
+    function jumpToQuestion(idx) {
+      const deck = getActiveDeck();
+      if (idx < 0 || idx >= deck.length) return;
+      appState.currentIdx = idx;
+      renderAll();
+      saveState();
+    }
+
+    function stepQuestion(delta) {
+      const deck = getActiveDeck();
+      const next = appState.currentIdx + delta;
+      if (next >= 0 && next < deck.length) {
+        appState.currentIdx = next;
+        renderAll();
+        saveState();
+      }
+    }
+
+    function chooseOption(qId, optIdx) {
+      const q = QUESTIONS.find(function(item) { return item.id === qId; });
+      if (!q) return;
+      if (Object.prototype.hasOwnProperty.call(appState.deckAnswers, qId)) return;
+
+      const isCorrect = optIdx === q.answer;
+      appState.deckAnswers[qId] = optIdx;
+      appState.masterAnswers[qId] = { selected: optIdx, isCorrect: isCorrect };
+
+      if (!isCorrect) {
+        if (appState.wrongBook.indexOf(qId) === -1) {
+          appState.wrongBook.push(qId);
+        }
+      } else if (appState.mode === `wrong`) {
+        appState.wrongBook = appState.wrongBook.filter(function(id) { return id !== qId; });
+      } else {
+        // Also remove from wrongBook if answered right again
+        appState.wrongBook = appState.wrongBook.filter(function(id) { return id !== qId; });
+      }
+
+      renderAll();
+      saveState();
+    }
+
+    function handleResetAll(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.classList.add(`btn-danger-armed`);
+        btn.textContent = `確定清空？再點一次重置`;
+        if (resetArmedTimer) clearTimeout(resetArmedTimer);
+        resetArmedTimer = setTimeout(function() {
+          btn.dataset.armed = `false`;
+          btn.classList.remove(`btn-danger-armed`);
+          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> 重新作答`;
+        }, 3500);
+        return;
+      }
+
+      if (resetArmedTimer) clearTimeout(resetArmedTimer);
+      btn.dataset.armed = `false`;
+      btn.classList.remove(`btn-danger-armed`);
+      btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> 重新作答`;
+
+      appState.deckAnswers = {};
+      appState.masterAnswers = {};
+      appState.wrongBook = [];
+      appState.wrongReviewIds = [];
+      appState.currentIdx = 0;
+      if (appState.mode === `mock10`) {
+        buildMockDeck();
+      } else if (appState.mode === `wrong`) {
+        appState.mode = `full`;
+      }
+      renderAll();
+      saveState();
+    }
+
+    function practiceUnitFromTable(unitId) {
+      appState.selectedUnit = unitId;
+      appState.mode = `full`;
+      appState.currentIdx = 0;
+      const synced = {};
+      QUESTIONS.forEach(function(q) {
+        if (appState.masterAnswers[q.id]) {
+          synced[q.id] = appState.masterAnswers[q.id].selected;
+        }
+      });
+      appState.deckAnswers = synced;
+      renderAll();
+      saveState();
+      const stage = document.getElementById(`quiz-stage`);
+      if (stage) {
+        stage.scrollIntoView({ behavior: `smooth`, block: `start` });
+      }
+    }
+
+    function computeDeckMetrics(deck) {
+      const total = deck.length;
+      let answered = 0;
+      let correct = 0;
+      let wrong = 0;
+      deck.forEach(function(q) {
+        if (Object.prototype.hasOwnProperty.call(appState.deckAnswers, q.id)) {
+          answered += 1;
+          if (appState.deckAnswers[q.id] === q.answer) {
+            correct += 1;
+          } else {
+            wrong += 1;
+          }
+        }
+      });
+      const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+      const progressPct = total > 0 ? Math.round((answered / total) * 100) : 0;
+      const accuracyPct = answered > 0 ? Math.round((correct / answered) * 100) : null;
+      return { total, answered, correct, wrong, score, progressPct, accuracyPct };
+    }
+
+    function renderKpisAndRuler(deck) {
+      const m = computeDeckMetrics(deck);
+      const scoreEl = document.getElementById(`kpi-score`);
+      const scoreTagEl = document.getElementById(`kpi-score-tag`);
+      const scoreHintEl = document.getElementById(`kpi-score-hint`);
+      const progEl = document.getElementById(`kpi-progress`);
+      const progPctEl = document.getElementById(`kpi-progress-pct`);
+      const modeLblEl = document.getElementById(`kpi-mode-label`);
+      const cwEl = document.getElementById(`kpi-cw`);
+      const remEl = document.getElementById(`kpi-remaining`);
+      const accEl = document.getElementById(`kpi-accuracy`);
+      const accNoteEl = document.getElementById(`kpi-accuracy-note`);
+
+      if (scoreEl) {
+        scoreEl.textContent = `${m.score} 分`;
+        scoreEl.classList.remove(`is-pass`, `is-fail`);
+        if (m.answered > 0) {
+          scoreEl.classList.add(m.score >= 60 ? `is-pass` : `is-fail`);
+        }
+      }
+      if (scoreTagEl) {
+        scoreTagEl.className = `tag`;
+        if (m.answered === 0) {
+          scoreTagEl.classList.add(`tag-neutral`);
+          scoreTagEl.textContent = `尚未作答`;
+        } else if (m.score >= 80) {
+          scoreTagEl.classList.add(`tag-positive`);
+          scoreTagEl.textContent = `段考精熟`;
+        } else if (m.score >= 60) {
+          scoreTagEl.classList.add(`tag-positive`);
+          scoreTagEl.textContent = `已達及格`;
+        } else {
+          scoreTagEl.classList.add(`tag-error`);
+          scoreTagEl.textContent = `未達 60 分`;
+        }
+      }
+      if (scoreHintEl) {
+        scoreHintEl.textContent = m.total > 0 ? `每題約 ${(100 / m.total).toFixed(1)} 分` : `目前無題目`;
+      }
+      if (progEl) progEl.textContent = `${m.answered} / ${m.total} 題`;
+      if (progPctEl) progPctEl.textContent = `完成度 ${m.progressPct}%`;
+      if (modeLblEl) {
+        const modeMap = { full: `完整練習`, mock10: `模擬抽測 10 題`, wrong: `錯題複習` };
+        modeLblEl.textContent = modeMap[appState.mode] || `完整練習`;
+      }
+      if (cwEl) cwEl.textContent = `${m.correct} 對 ／ ${m.wrong} 錯`;
+      if (remEl) remEl.textContent = `尚餘 ${Math.max(0, m.total - m.answered)} 題未作答`;
+      if (accEl) accEl.textContent = m.accuracyPct === null ? `—` : `${m.accuracyPct}%`;
+      if (accNoteEl) {
+        accNoteEl.textContent = m.accuracyPct === null ? `作答後即時計算命中率` : `已作答 ${m.answered} 題中之正確率`;
+      }
+
+      // Ruler update
+      const fill = document.getElementById(`ruler-fill`);
+      const pointer = document.getElementById(`ruler-pointer`);
+      const pb = document.getElementById(`ruler-progressbar`);
+      const statusTxt = document.getElementById(`ruler-status-text`);
+
+      if (fill) {
+        fill.style.transform = `scaleX(${Math.max(0, Math.min(1, m.score / 100))})`;
+        fill.classList.remove(`pass`, `warn`, `low`);
+        if (m.score >= 60) fill.classList.add(`pass`);
+        else if (m.score >= 30) fill.classList.add(`warn`);
+        else fill.classList.add(`low`);
+      }
+      if (pointer) {
+        pointer.style.left = `${m.score}%`;
+        pointer.textContent = `${m.score} 分`;
+        pointer.classList.toggle(`is-pass`, m.score >= 60);
+      }
+      if (pb) {
+        pb.setAttribute(`aria-valuenow`, String(m.score));
+      }
+      if (statusTxt) {
+        if (m.answered === 0) {
+          statusTxt.textContent = `尚未作答：目標先跨越 60 分及格線，再邁向 80 分精熟`;
+        } else if (m.score < 60) {
+          statusTxt.textContent = `目前 ${m.score} 分，距離 60 分及格基準線尚差 ${60 - m.score} 分`;
+        } else if (m.score < 80) {
+          statusTxt.textContent = `已通過 60 分及格線！距離 80 分精熟門檻僅差 ${80 - m.score} 分`;
+        } else {
+          statusTxt.textContent = `表現優異！目前 ${m.score} 分，已達 80 分精熟標準`;
+        }
+      }
+    }
+
+    function renderFiltersAndNavigator(deck) {
+      const unitBar = document.getElementById(`unit-filter-bar`);
+      if (unitBar) {
+        let html = `<button type="button" class="chip-btn ${appState.selectedUnit === `all` ? `active` : ``}" onclick="selectUnit('all')">全部單元 <span class="chip-count">(${QUESTIONS.length})</span></button>`;
+        UNITS.forEach(function(u) {
+          const count = QUESTIONS.filter(function(q) { return q.unit === u.id; }).length;
+          const isAct = appState.selectedUnit === u.id;
+          html += `<button type="button" class="chip-btn ${isAct ? `active` : ``}" onclick="selectUnit('${u.id}')">${u.short} <span class="chip-count">(${count})</span></button>`;
+        });
+        unitBar.innerHTML = html;
+      }
+
+      const modeBar = document.getElementById(`mode-filter-bar`);
+      if (modeBar) {
+        const wrongCount = appState.wrongBook.length;
+        let html = `
+          <button type="button" class="chip-btn ${appState.mode === `full` ? `active-secondary` : ``}" onclick="selectMode('full')">完整練習</button>
+          <button type="button" class="chip-btn ${appState.mode === `mock10` ? `active-secondary` : ``}" onclick="selectMode('mock10')">段考模擬抽測（隨機 10 題）</button>
+          <button type="button" class="chip-btn ${appState.mode === `wrong` ? `active-secondary` : ``}" onclick="selectMode('wrong')">錯題集中複習 <span class="chip-count">(${wrongCount})</span></button>
+        `;
+        if (appState.mode === `mock10`) {
+          html += `<button type="button" class="btn btn-sm" onclick="rerollMockQuiz()">重新抽 10 題</button>`;
+        }
+        modeBar.innerHTML = html;
+      }
+
+      const jumpGrid = document.getElementById(`quick-jump-grid`);
+      if (jumpGrid) {
+        if (deck.length === 0) {
+          jumpGrid.innerHTML = `<span class="dossier-meta">目前篩選條件下無待練習題目</span>`;
+          return;
+        }
+        let html = ``;
+        deck.forEach(function(q, idx) {
+          const hasAns = Object.prototype.hasOwnProperty.call(appState.deckAnswers, q.id);
+          const isCorrect = hasAns && appState.deckAnswers[q.id] === q.answer;
+          const stateCls = !hasAns ? `` : (isCorrect ? `state-correct` : `state-wrong`);
+          const curCls = idx === appState.currentIdx ? `is-current` : ``;
+          const subMark = !hasAns ? `` : (isCorrect ? `✓` : `✗`);
+          const numStr = String(idx + 1).padStart(2, `0`);
+          html += `
+            <button type="button" class="q-num-btn ${stateCls} ${curCls}" onclick="jumpToQuestion(${idx})" aria-label="第 ${idx + 1} 題${!hasAns ? `（未作答）` : (isCorrect ? `（答對）` : `（答錯）`)}">
+              <span>${numStr}</span>
+              ${subMark ? `<span class="q-num-sub">${subMark}</span>` : ``}
+            </button>
+          `;
+        });
+        jumpGrid.innerHTML = html;
+      }
+    }
+
+    function renderQuizStage(deck) {
+      const stage = document.getElementById(`quiz-stage`);
+      if (!stage) return;
+
+      if (deck.length === 0) {
+        if (appState.mode === `wrong`) {
+          stage.innerHTML = `
+            <div class="empty-state">
+              <h3>目前錯題本為空，沒有需要補救的錯題</h3>
+              <p>您尚未答錯任何題目，或是已經將所有錯題順利訂正完成。建議切換回「完整練習」或「段考模擬抽測」繼續挑戰！</p>
+              <button type="button" class="btn btn-primary" onclick="selectMode('full')">前往完整練習</button>
+            </div>
+          `;
+        } else {
+          stage.innerHTML = `
+            <div class="empty-state">
+              <h3>目前條件下沒有題目</h3>
+              <p>請切換其他單元或點選下方按鈕回到全部單元完整練習。</p>
+              <button type="button" class="btn btn-primary" onclick="selectUnit('all')">顯示全部單元</button>
+            </div>
+          `;
+        }
+        return;
+      }
+
+      if (appState.currentIdx >= deck.length) {
+        appState.currentIdx = 0;
+      }
+      const q = deck[appState.currentIdx];
+      const unitObj = UNITS.find(function(u) { return u.id === q.unit; });
+      const unitLabel = unitObj ? unitObj.name : ``;
+      const hasAns = Object.prototype.hasOwnProperty.call(appState.deckAnswers, q.id);
+      const selectedIdx = hasAns ? appState.deckAnswers[q.id] : -1;
+      const isCorrect = hasAns && selectedIdx === q.answer;
+      const svgMarkup = renderQuestionSvg(q.svgKey);
+      const hasFigure = Boolean(svgMarkup);
+
+      let statusTag = `<span class="tag tag-neutral">未作答</span>`;
+      if (hasAns) {
+        statusTag = isCorrect
+          ? `<span class="tag tag-positive">答對 ✓</span>`
+          : `<span class="tag tag-error">答錯 ✗</span>`;
+      }
+
+      let optionsHtml = ``;
+      q.options.forEach(function(optText, idx) {
+        let optCls = ``;
+        let badgeHtml = ``;
+        if (hasAns) {
+          if (idx === q.answer) {
+            optCls = `opt-correct`;
+            badgeHtml = `<span class="option-badge">正確答案</span>`;
+          } else if (idx === selectedIdx && idx !== q.answer) {
+            optCls = `opt-wrong`;
+            badgeHtml = `<span class="option-badge">您的作答</span>`;
+          }
+        }
+        optionsHtml += `
+          <button type="button" class="option-btn ${optCls}" ${hasAns ? `disabled` : ``} onclick="chooseOption('${q.id}', ${idx})">
+            <span class="option-letter">${OPTION_LETTERS[idx]}</span>
+            <span class="option-text">${optText}</span>
+            ${badgeHtml}
+          </button>
+        `;
+      });
+
+      const expCls = hasAns ? (isCorrect ? `is-open is-correct` : `is-open is-wrong`) : ``;
+      const verdictHtml = hasAns
+        ? (isCorrect
+            ? `<span class="exp-verdict v-correct">✓ 答對了！正確答案為 (${OPTION_LETTERS[q.answer]})${appState.mode === `wrong` ? `・已訂正並移出錯題本` : ``}</span>`
+            : `<span class="exp-verdict v-wrong">✗ 答錯了，正確答案應為 (${OPTION_LETTERS[q.answer]})</span>`)
+        : ``;
+
+      const kwHtml = q.keywords.map(function(k) {
+        return `<span class="tag tag-warning">${k}</span>`;
+      }).join(``);
+
+      stage.innerHTML = `
+        <article class="figure-card question-card">
+          <div class="q-meta-bar">
+            <div class="q-meta-left">
+              <span class="q-index-badge">題號 ${String(appState.currentIdx + 1).padStart(2, `0`)} / ${String(deck.length).padStart(2, `0`)}</span>
+              <span class="tag tag-secondary">${unitLabel}</span>
+              ${statusTag}
+            </div>
+            <span class="q-source-note">考點來源：${q.source}</span>
+          </div>
+
+          <div class="q-body-grid ${hasFigure ? `has-figure` : ``}">
+            <div>
+              <p class="q-stem">${q.stem}</p>
+              <div class="options-list" role="group" aria-label="作答選項">
+                ${optionsHtml}
+              </div>
+            </div>
+
+            ${hasFigure ? `
+              <aside class="q-figure-panel" aria-label="輔助判讀圖表">
+                <p class="q-figure-caption">${q.svgCaption}</p>
+                <div class="q-svg-wrap">${svgMarkup}</div>
+              </aside>
+            ` : ``}
+          </div>
+
+          <div class="explanation-box ${expCls}" aria-live="polite">
+            <div class="exp-header">
+              ${verdictHtml}
+            </div>
+            <p class="exp-text">${q.explanation}</p>
+            <div class="exp-keywords">${kwHtml}</div>
+          </div>
+
+          <div class="q-footer-nav">
+            <button type="button" class="btn" ${appState.currentIdx === 0 ? `disabled` : ``} onclick="stepQuestion(-1)">← 上一題</button>
+            <span class="dossier-meta">目前第 ${appState.currentIdx + 1} 題・共 ${deck.length} 題</span>
+            <button type="button" class="btn btn-primary" ${appState.currentIdx >= deck.length - 1 ? `disabled` : ``} onclick="stepQuestion(1)">下一題 →</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderDiagnosticTable() {
+      const tbody = document.getElementById(`diagnostic-tbody`);
+      const insight = document.getElementById(`diagnostic-insight`);
+      const summaryMeta = document.getElementById(`diag-summary-meta`);
+      if (!tbody) return;
+
+      let totalBank = 0;
+      let totalAns = 0;
+      let totalCorr = 0;
+      let rowsHtml = ``;
+      const unitResults = [];
+
+      UNITS.forEach(function(u) {
+        const qs = QUESTIONS.filter(function(q) { return q.unit === u.id; });
+        const qCount = qs.length;
+        let ansCount = 0;
+        let corrCount = 0;
+        qs.forEach(function(q) {
+          const rec = appState.masterAnswers[q.id];
+          if (rec) {
+            ansCount += 1;
+            if (rec.isCorrect) corrCount += 1;
+          }
+        });
+        totalBank += qCount;
+        totalAns += ansCount;
+        totalCorr += corrCount;
+
+        const acc = ansCount > 0 ? Math.round((corrCount / ansCount) * 100) : null;
+        unitResults.push({ unit: u, qCount, ansCount, corrCount, acc });
+
+        let statusBadge = `<span class="tag tag-neutral">尚未作答</span>`;
+        let barCls = ``;
+        if (acc !== null) {
+          if (acc >= 80) {
+            statusBadge = `<span class="tag tag-positive">精熟達標</span>`;
+            barCls = `pass`;
+          } else if (acc >= 60) {
+            statusBadge = `<span class="tag tag-warning">基礎穩定</span>`;
+          } else {
+            statusBadge = `<span class="tag tag-error">尚需加強</span>`;
+            barCls = `low`;
+          }
+        }
+
+        const scaleRatio = acc !== null ? (acc / 100) : 0;
+        rowsHtml += `
+          <tr>
+            <td><strong>${u.name}</strong></td>
+            <td class="num">${qCount}</td>
+            <td class="num">${ansCount}</td>
+            <td class="num">${corrCount}</td>
+            <td class="num">
+              <div class="mini-bar-wrap">
+                <div class="mini-bar-track" aria-hidden="true">
+                  <div class="mini-bar-fill ${barCls}" style="transform: scaleX(${scaleRatio});"></div>
+                </div>
+                <span>${acc === null ? `—` : `${acc}%`}</span>
+              </div>
+            </td>
+            <td>${statusBadge}</td>
+            <td class="no-print">
+              <button type="button" class="btn btn-sm" onclick="practiceUnitFromTable('${u.id}')">專練此單元</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      const totalAcc = totalAns > 0 ? Math.round((totalCorr / totalAns) * 100) : null;
+      let totalBadge = `<span class="tag tag-neutral">尚未作答</span>`;
+      if (totalAcc !== null) {
+        if (totalAcc >= 80) totalBadge = `<span class="tag tag-positive">整體精熟</span>`;
+        else if (totalAcc >= 60) totalBadge = `<span class="tag tag-positive">整體及格</span>`;
+        else totalBadge = `<span class="tag tag-error">待補強</span>`;
+      }
+
+      rowsHtml += `
+        <tr class="total-row">
+          <td>全題庫總計</td>
+          <td class="num">${totalBank}</td>
+          <td class="num">${totalAns}</td>
+          <td class="num">${totalCorr}</td>
+          <td class="num">${totalAcc === null ? `—` : `${totalAcc}%`}</td>
+          <td>${totalBadge}</td>
+          <td class="no-print">
+            <button type="button" class="btn btn-sm" onclick="practiceUnitFromTable('all')">全部練習</button>
+          </td>
+        </tr>
+      `;
+      tbody.innerHTML = rowsHtml;
+
+      if (summaryMeta) {
+        summaryMeta.textContent = `全題庫累積已作答 ${totalAns} / ${totalBank} 題・錯題本現有 ${appState.wrongBook.length} 題`;
+      }
+
+      if (insight) {
+        const answeredUnits = unitResults.filter(function(r) { return r.ansCount > 0; });
+        if (answeredUnits.length === 0) {
+          insight.textContent = `尚未有作答紀錄。作答後此處將依據各單元命中率，自動診斷強項與最需加強的章節。`;
+        } else {
+          const sorted = answeredUnits.slice().sort(function(a, b) { return a.acc - b.acc; });
+          const weakest = sorted[0];
+          const strongest = sorted[sorted.length - 1];
+          if (weakest.acc < 60) {
+            insight.innerHTML = `<strong>弱點診斷建議：</strong>「${weakest.unit.name}」目前正確率僅 <strong>${weakest.acc}%</strong>（答對 ${weakest.corrCount}/${weakest.ansCount} 題），建議優先專練或開啟「錯題集中複習」補強。表現最佳為「${strongest.unit.name}」（${strongest.acc}%）。`;
+          } else if (weakest.acc < 80) {
+            insight.innerHTML = `<strong>診斷摘要：</strong>所有已測單元皆達 60% 及格線！可針對正確率相對較低的「${weakest.unit.name}」（${weakest.acc}%）再做精熟強化。`;
+          } else {
+            insight.innerHTML = `<strong>診斷摘要：</strong>已作答單元正確率均達 80% 以上（整體累積 ${totalAcc}%），各章節觀念掌握穩健！`;
+          }
+        }
+      }
+    }
+
+    function exportScoreReport() {
+      const deck = getActiveDeck();
+      const m = computeDeckMetrics(deck);
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, `0`)}-${String(now.getDate()).padStart(2, `0`)} ${String(now.getHours()).padStart(2, `0`)}:${String(now.getMinutes()).padStart(2, `0`)}`;
+
+      const lines = [
+        `科目,國中七年級歷史第二次段考即時評分測驗`,
+        `匯出時間,${dateStr}`,
+        `目前模式,${appState.mode === `full` ? `完整練習` : (appState.mode === `mock10` ? `段考模擬抽測` : `錯題集中複習`)}`,
+        `本回得分,${m.score} 分（${m.score >= 60 ? `及格` : `未達及格線`}）`,
+        `本回作答進度,${m.answered} / ${m.total} 題`,
+        `答對 / 答錯,${m.correct} 對 / ${m.wrong} 錯`,
+        `已作答正確率,${m.accuracyPct === null ? `未作答` : `${m.accuracyPct}%`}`,
+        ``,
+        `--- 各單元累積診斷 ---`,
+        `單元名稱,題庫數,已作答數,答對數,正確率,掌握狀態`
+      ];
+
+      UNITS.forEach(function(u) {
+        const qs = QUESTIONS.filter(function(q) { return q.unit === u.id; });
+        let ans = 0;
+        let corr = 0;
+        qs.forEach(function(q) {
+          const rec = appState.masterAnswers[q.id];
+          if (rec) {
+            ans += 1;
+            if (rec.isCorrect) corr += 1;
+          }
+        });
+        const acc = ans > 0 ? Math.round((corr / ans) * 100) : null;
+        const st = acc === null ? `尚未作答` : (acc >= 80 ? `精熟達標` : (acc >= 60 ? `基礎穩定` : `尚需加強`));
+        lines.push(`${u.name},${qs.length},${ans},${corr},${acc === null ? `-` : `${acc}%`},${st}`);
+      });
+
+      const csvContent = `\uFEFF` + lines.join(`\n`);
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: csvContent,
+          contentType: `text/csv`,
+          encoding: `UTF-8`,
+          filename: `七年級歷史第二次段考成績單.csv`
+        });
+      }
+    }
+
+    function printScoreReport() {
+      window.print();
+    }
+
+    function renderAll() {
+      const deck = getActiveDeck();
+      renderKpisAndRuler(deck);
+      renderFiltersAndNavigator(deck);
+      renderQuizStage(deck);
+      renderDiagnosticTable();
+    }
+
+    async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            if (typeof saved.selectedUnit === `string`) appState.selectedUnit = saved.selectedUnit;
+            if (typeof saved.mode === `string`) appState.mode = saved.mode;
+            if (Array.isArray(saved.mockIds)) appState.mockIds = saved.mockIds;
+            if (Array.isArray(saved.wrongReviewIds)) appState.wrongReviewIds = saved.wrongReviewIds;
+            if (saved.deckAnswers && typeof saved.deckAnswers === `object`) appState.deckAnswers = saved.deckAnswers;
+            if (saved.masterAnswers && typeof saved.masterAnswers === `object`) appState.masterAnswers = saved.masterAnswers;
+            if (Array.isArray(saved.wrongBook)) appState.wrongBook = saved.wrongBook;
+            if (typeof saved.currentIdx === `number`) appState.currentIdx = saved.currentIdx;
+          }
+        }
+      } catch (err) {
+        // Fallback to clean initial state
+      }
+
+      renderAll();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    initApp();
+  </script>
+</body>
+</html>

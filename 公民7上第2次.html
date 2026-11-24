@@ -1,0 +1,3009 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="artifact-type" content="tool">
+<meta name="design-style" content="vitals">
+<title>國中七年級公民（7上第二次段考）即時評分互動測驗</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Figtree:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+<style>
+:root {
+  color-scheme: light;
+
+  /* 1. Vitals style tokens */
+  --background: #ffffff;
+  --surface-container-low: #f1f7f8;
+  --surface-container: #e3f1f3;
+  --surface-container-high: #d5e9ec;
+
+  --on-surface: #1b2b33;
+  --on-surface-variant: #46585f;
+
+  --outline: #7b9198;
+  --outline-variant: #d5e3e5;
+
+  --primary: #0f7c8a;
+  --on-primary: #ffffff;
+  --primary-container: #e3f1f3;
+  --on-primary-container: #0a5560;
+  --secondary: #1d5e3a;
+  --tertiary: #2e7d4f;
+  --error: #b3261e;
+  --on-error: #ffffff;
+
+  --data-1: #0f7c8a;
+  --data-2: #2e7d4f;
+  --data-3: #b86e00;
+  --data-4: #5c5fb0;
+  --data-context: #b8c7ca;
+
+  /* 2. Fonts (Non-Latin Chinese primary + Figtree / Atkinson Hyperlegible) */
+  --font-headline: 'Noto Sans TC', 'Figtree', sans-serif;
+  --font-body: 'Noto Sans TC', 'Atkinson Hyperlegible', sans-serif;
+  --font-label: 'Noto Sans TC', 'Figtree', sans-serif;
+
+  /* Shape */
+  --rounded: 0.625rem;
+  --rounded-lg: 0.875rem;
+  --rounded-full: 9999px;
+
+  /* Style effects */
+  --top-bar: 6px solid var(--primary);
+  --status-bar-width: 4px;
+  --card-border: 1px solid var(--outline-variant);
+  --card-lift: 0 1px 2px rgb(27 43 51 / 0.05), 0 6px 16px rgb(27 43 51 / 0.05);
+
+  /* 3. Shared semantic, focus, scale, spacing, motion tokens */
+  --positive: var(--tertiary);
+  --positive-tint: color-mix(in srgb, var(--tertiary) 12%, var(--background));
+  --warning: var(--data-3);
+  --warning-tint: color-mix(in srgb, var(--data-3) 12%, var(--background));
+  --error-tint: color-mix(in srgb, var(--error) 10%, var(--background));
+  --focus: var(--primary);
+
+  --display-size: clamp(1.625rem, 1.35rem + 1.1vw, 2.125rem);
+  --headline-size: clamp(1.1875rem, 1.08rem + 0.45vw, 1.4375rem);
+  --subhead-size: clamp(1.03125rem, 0.98rem + 0.22vw, 1.15rem);
+  --body-size: clamp(0.9375rem, 0.91rem + 0.14vw, 1rem);
+  --label-size: 0.78rem;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+}
+
+/* Base reset */
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  overflow-x: clip;
+  margin: 0;
+  padding: 0;
+  background-color: var(--surface-container-low);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+  font-size: var(--body-size);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+header { position: static !important; }
+button, input, select, textarea { font-family: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.page-shell {
+  border-top: var(--top-bar);
+  min-height: 100vh;
+}
+
+.page-grid {
+  display: grid;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.page-grid * { min-width: 0; }
+
+/* Header & Top Action Bar */
+.hero-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-lg);
+  background: var(--background);
+  border: var(--card-border);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--card-lift);
+}
+
+.hero-copy {
+  flex: 1 1 480px;
+  max-width: 68ch;
+}
+
+.hero-kicker-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: var(--label-size);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--rounded-full);
+  background: var(--positive-tint);
+  color: var(--secondary);
+  line-height: 1.4;
+}
+.chip[data-status="info"] {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.chip[data-status="alert"] {
+  background: var(--error-tint);
+  color: var(--error);
+}
+.chip[data-status="neutral"] {
+  background: var(--surface-container-low);
+  color: var(--on-surface-variant);
+  border: 1px solid var(--outline-variant);
+}
+
+.title {
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-size: var(--display-size);
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: var(--on-surface);
+  margin: 0;
+}
+
+.lede {
+  font-size: var(--body-size);
+  line-height: 1.65;
+  color: var(--on-surface-variant);
+  margin: var(--space-sm) 0 0 0;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--rounded);
+  font-weight: 600;
+  font-size: var(--body-size);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color var(--dur-micro) var(--ease-out),
+              color var(--dur-micro) var(--ease-out),
+              box-shadow var(--dur-micro) var(--ease-out),
+              transform var(--dur-micro) var(--ease-out);
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--on-primary-container);
+}
+
+.btn-secondary {
+  background: var(--background);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: var(--surface-container-low);
+}
+
+.btn-danger-outline {
+  background: var(--background);
+  color: var(--error);
+  border-color: var(--error);
+}
+.btn-danger-outline:hover:not(:disabled) {
+  background: var(--error-tint);
+}
+.btn-danger-outline[data-armed="true"] {
+  background: var(--error);
+  color: var(--on-error);
+}
+
+.btn-compact {
+  min-height: 36px;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--label-size);
+}
+
+.save-toast {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--label-size);
+  color: var(--on-surface-variant);
+  font-weight: 600;
+}
+
+/* Section Headers */
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+.section-title {
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-size: var(--headline-size);
+  line-height: 1.2;
+  color: var(--on-surface);
+  margin: 0;
+}
+.section-sub {
+  font-size: var(--label-size);
+  color: var(--on-surface-variant);
+  font-weight: 600;
+}
+
+/* KPI Grid */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+
+.status-card {
+  background: var(--background);
+  border: var(--card-border);
+  border-left: var(--status-bar-width) solid var(--primary);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-md) var(--space-lg);
+  box-shadow: var(--card-lift);
+  transition: box-shadow var(--dur-short) var(--ease-out);
+}
+.status-card[data-status="ok"] { border-left-color: var(--tertiary); }
+.status-card[data-status="alert"] { border-left-color: var(--error); }
+.status-card[data-status="warn"] { border-left-color: var(--warning); }
+
+.kpi-label {
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: var(--label-size);
+  color: var(--on-surface-variant);
+  margin: 0;
+}
+
+.kpi-value {
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-size: clamp(1.625rem, 1.4rem + 0.8vw, 2rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+  color: var(--on-surface);
+  margin: var(--space-xs) 0;
+}
+
+.kpi-caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--label-size);
+  color: var(--on-surface-variant);
+  margin: 0;
+}
+
+/* Passing Benchmark Ruler Card */
+.ruler-card {
+  background: var(--background);
+  border: var(--card-border);
+  border-left: var(--status-bar-width) solid var(--primary);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-md) var(--space-lg);
+  box-shadow: var(--card-lift);
+}
+
+.ruler-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.ruler-title {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  font-size: var(--subhead-size);
+  margin: 0;
+}
+
+.ruler-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  font-size: var(--label-size);
+  color: var(--on-surface-variant);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.swatch-pass { background: var(--tertiary); opacity: 0.25; border: 1px dashed var(--tertiary); }
+.swatch-master { background: var(--tertiary); opacity: 0.45; }
+.swatch-current { background: var(--primary); border-radius: 9999px; }
+
+.ruler-svg-wrap {
+  width: 100%;
+  overflow: visible;
+}
+
+/* Filter, Mode & Navigator Panel */
+.control-panel {
+  background: var(--background);
+  border: var(--card-border);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--card-lift);
+  display: grid;
+  gap: var(--space-md);
+}
+
+.control-group {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.control-label {
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: var(--label-size);
+  color: var(--on-surface-variant);
+}
+
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--rounded);
+  border: 1px solid var(--outline-variant);
+  background: var(--background);
+  color: var(--on-surface);
+  font-weight: 600;
+  font-size: var(--label-size);
+  cursor: pointer;
+  transition: background-color var(--dur-micro) var(--ease-out),
+              color var(--dur-micro) var(--ease-out),
+              box-shadow var(--dur-micro) var(--ease-out);
+}
+.filter-btn:hover {
+  background: var(--surface-container-low);
+}
+.filter-btn[aria-pressed="true"] {
+  background: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
+}
+.filter-count {
+  font-variant-numeric: tabular-nums;
+  padding: 1px 7px;
+  border-radius: var(--rounded-full);
+  background: var(--surface-container);
+  color: var(--on-primary-container);
+  font-size: 0.72rem;
+}
+.filter-btn[aria-pressed="true"] .filter-count {
+  background: var(--background);
+  color: var(--primary);
+}
+
+.mode-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--outline-variant);
+}
+
+/* Quick Jump Number Grid */
+.jump-section {
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--outline-variant);
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.jump-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.jump-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  font-size: var(--label-size);
+  color: var(--on-surface-variant);
+}
+
+.jump-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.dot-unanswered { background: var(--background); border: 1.5px solid var(--outline); }
+.dot-correct { background: var(--positive-tint); border: 1.5px solid var(--tertiary); }
+.dot-wrong { background: var(--error-tint); border: 1.5px solid var(--error); }
+
+.jump-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+  gap: var(--space-xs);
+}
+
+.jump-tile {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: var(--rounded);
+  border: 1px solid var(--outline-variant);
+  background: var(--background);
+  color: var(--on-surface);
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: var(--label-size);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background-color var(--dur-micro) var(--ease-out),
+              box-shadow var(--dur-micro) var(--ease-out),
+              transform var(--dur-micro) var(--ease-out);
+}
+.jump-tile:hover {
+  background: var(--surface-container-low);
+}
+.jump-tile[data-state="correct"] {
+  background: var(--positive-tint);
+  border-color: var(--tertiary);
+  color: var(--secondary);
+}
+.jump-tile[data-state="wrong"] {
+  background: var(--error-tint);
+  border-color: var(--error);
+  color: var(--error);
+}
+.jump-tile[data-active="true"] {
+  box-shadow: 0 0 0 2.5px var(--primary);
+}
+
+/* Question List & Cards */
+.questions-stack {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.question-card {
+  background: var(--background);
+  border: var(--card-border);
+  border-left: var(--status-bar-width) solid var(--outline);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--card-lift);
+  display: grid;
+  gap: var(--space-md);
+  scroll-margin-top: var(--space-lg);
+}
+.question-card[data-result="correct"] { border-left-color: var(--tertiary); }
+.question-card[data-result="wrong"] { border-left-color: var(--error); }
+.question-card.is-highlighted {
+  box-shadow: 0 0 0 2px var(--primary), var(--card-lift);
+}
+
+.q-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.q-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.q-number {
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-size: var(--subhead-size);
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.q-source {
+  font-size: var(--label-size);
+  color: var(--on-surface-variant);
+  font-weight: 500;
+}
+
+.q-stem {
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.08rem);
+  font-weight: 600;
+  line-height: 1.65;
+  color: var(--on-surface);
+  margin: 0;
+  max-width: 72ch;
+}
+
+/* Custom SVG Figure Container */
+.q-figure {
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--rounded);
+  padding: var(--space-md);
+  display: grid;
+  gap: var(--space-xs);
+  justify-items: center;
+}
+.q-figure-caption {
+  font-size: var(--label-size);
+  color: var(--on-surface-variant);
+  font-weight: 600;
+  text-align: center;
+}
+.q-figure svg {
+  width: 100%;
+  max-width: 620px;
+  height: auto;
+  display: block;
+}
+
+/* Option Buttons */
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+
+.option-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  width: 100%;
+  min-height: 48px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--rounded);
+  border: 1px solid var(--outline-variant);
+  background: var(--background);
+  color: var(--on-surface);
+  text-align: left;
+  font-size: var(--body-size);
+  line-height: 1.5;
+  cursor: pointer;
+  transition: background-color var(--dur-micro) var(--ease-out),
+              box-shadow var(--dur-micro) var(--ease-out);
+}
+.option-btn:hover:not(:disabled) {
+  background: var(--surface-container-low);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+.option-btn:disabled {
+  cursor: default;
+}
+
+.option-letter {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--rounded-full);
+  background: var(--surface-container-low);
+  color: var(--on-surface);
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: var(--label-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.option-btn[data-state="correct"] {
+  background: var(--positive-tint);
+  box-shadow: inset 0 0 0 2px var(--tertiary);
+  color: var(--secondary);
+  font-weight: 600;
+}
+.option-btn[data-state="correct"] .option-letter {
+  background: var(--tertiary);
+  color: var(--on-primary);
+}
+
+.option-btn[data-state="wrong"] {
+  background: var(--error-tint);
+  box-shadow: inset 0 0 0 2px var(--error);
+  color: var(--error);
+  font-weight: 600;
+}
+.option-btn[data-state="wrong"] .option-letter {
+  background: var(--error);
+  color: var(--on-error);
+}
+
+.option-text {
+  flex: 1 1 auto;
+}
+
+/* Explanation Callout */
+.explanation-box {
+  background: var(--surface-container-low);
+  border-radius: var(--rounded);
+  border-left: var(--status-bar-width) solid var(--primary);
+  padding: var(--space-md);
+  display: grid;
+  gap: var(--space-xs);
+  animation: fadeSlideIn var(--dur-short) var(--ease-out);
+}
+.explanation-box[data-result="correct"] {
+  background: var(--positive-tint);
+  border-left-color: var(--tertiary);
+}
+.explanation-box[data-result="wrong"] {
+  background: var(--error-tint);
+  border-left-color: var(--error);
+}
+
+.explanation-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-weight: 700;
+  font-size: var(--body-size);
+}
+.explanation-head[data-result="correct"] { color: var(--secondary); }
+.explanation-head[data-result="wrong"] { color: var(--error); }
+
+.explanation-body {
+  margin: 0;
+  font-size: var(--body-size);
+  color: var(--on-surface);
+  line-height: 1.65;
+  max-width: 72ch;
+}
+
+/* Empty State */
+.empty-state {
+  background: var(--background);
+  border: var(--card-border);
+  border-left: var(--status-bar-width) solid var(--tertiary);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-xl) var(--space-lg);
+  text-align: center;
+  display: grid;
+  gap: var(--space-sm);
+  justify-items: center;
+}
+.empty-title {
+  font-family: var(--font-headline);
+  font-weight: 800;
+  font-size: var(--headline-size);
+  margin: 0;
+}
+.empty-desc {
+  color: var(--on-surface-variant);
+  max-width: 52ch;
+  margin: 0;
+}
+
+/* Diagnostic Breakdown Table */
+.diagnostic-card {
+  background: var(--background);
+  border: var(--card-border);
+  border-left: var(--status-bar-width) solid var(--primary);
+  border-radius: var(--rounded-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--card-lift);
+  display: grid;
+  gap: var(--space-md);
+}
+
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.diag-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  min-width: 680px;
+}
+
+.diag-table th {
+  background: var(--surface-container-low);
+  color: var(--on-surface-variant);
+  font-family: var(--font-label);
+  font-weight: 700;
+  font-size: var(--label-size);
+  text-align: left;
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1.5px solid var(--outline-variant);
+}
+
+.diag-table td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--outline-variant);
+  vertical-align: middle;
+}
+
+.diag-table tfoot td {
+  font-weight: 700;
+  background: var(--surface-container-low);
+  border-top: 1.5px solid var(--outline);
+  border-bottom: none;
+}
+
+.diag-num {
+  text-align: right !important;
+}
+
+.mini-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.mini-bar-track {
+  flex: 1 1 80px;
+  height: 8px;
+  background: var(--surface-container-low);
+  border-radius: var(--rounded-full);
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--outline-variant);
+}
+.mini-bar-fill {
+  height: 100%;
+  border-radius: var(--rounded-full);
+  background: var(--primary);
+  transition: width var(--dur-short) var(--ease-out);
+}
+.mini-bar-fill[data-tier="master"] { background: var(--tertiary); }
+.mini-bar-fill[data-tier="weak"] { background: var(--error); }
+
+/* Footer Source Attribution */
+.source-footer {
+  font-size: var(--label-size);
+  color: var(--on-surface-variant);
+  padding: var(--space-md) 0 var(--space-lg);
+  border-top: 1px solid var(--outline-variant);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 960px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .page-grid {
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+  .options-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-header,
+  .control-panel,
+  .question-card,
+  .diagnostic-card {
+    padding: var(--space-md);
+  }
+}
+
+/* Print Stylesheet for Score Report */
+@media print {
+  body { background: var(--background); }
+  .page-shell { border-top: none; }
+  .hero-actions,
+  .control-panel,
+  .btn,
+  .save-toast {
+    display: none !important;
+  }
+  .question-card,
+  .status-card,
+  .ruler-card,
+  .diagnostic-card,
+  .hero-header {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="page-shell">
+  <div class="page-grid">
+
+    <!-- 1. 頂部資訊與功能列 -->
+    <header class="hero-header">
+      <div class="hero-copy">
+        <div class="hero-kicker-row">
+          <span class="chip" data-status="info">國中七年級社會領域・公民科</span>
+          <span class="chip" data-status="neutral">7上第二次段考（翰林版 L3–L4）</span>
+          <span id="save-status" class="save-toast" aria-live="polite">
+            <i data-lucide="cloud-check" width="15" height="15"></i>
+            <span>作答進度自動存檔</span>
+          </span>
+        </div>
+        <h1 class="title">七上公民第二次段考：即時評分互動測驗</h1>
+        <p class="lede">
+          彙整各校段考實戰試題共 40 題，涵蓋「家庭型態與功能」、「親屬關係與法律」、「性別平權與家暴防治」及「社會變遷與人口問題」四大核心單元。點選選項立即批改並展開詳細解析，搭配家族親屬樹狀圖與人口趨勢圖表判讀。
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button type="button" class="btn btn-secondary" onclick="exportScoreReport()">
+          <i data-lucide="download" width="18" height="18"></i>
+          <span>下載成績單</span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="printScoreReport()">
+          <i data-lucide="printer" width="18" height="18"></i>
+          <span>列印成績單</span>
+        </button>
+        <button type="button" id="reset-btn" class="btn btn-danger-outline" data-armed="false" onclick="handleResetQuiz(this)">
+          <i data-lucide="rotate-ccw" width="18" height="18"></i>
+          <span>重新作答</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. 即時數據看板（4張KPI卡片） -->
+    <section aria-label="即時數據看板">
+      <div class="kpi-grid">
+        <article id="kpi-score-card" class="status-card" data-status="info">
+          <p class="kpi-label">即時百分制得分（60分及格）</p>
+          <p id="kpi-score-value" class="kpi-value">0 分</p>
+          <p id="kpi-score-caption" class="kpi-caption">
+            <span class="chip" data-status="neutral">尚未作答</span>
+            <span>滿分 100 分</span>
+          </p>
+        </article>
+
+        <article class="status-card" data-status="info">
+          <p class="kpi-label">本回作答進度</p>
+          <p id="kpi-progress-value" class="kpi-value">0 / 40 題</p>
+          <p id="kpi-progress-caption" class="kpi-caption">完成度 0%</p>
+        </article>
+
+        <article id="kpi-count-card" class="status-card" data-status="info">
+          <p class="kpi-label">答對／答錯題數</p>
+          <p id="kpi-count-value" class="kpi-value">0 ／ 0 題</p>
+          <p id="kpi-count-caption" class="kpi-caption">錯題待複習：0 題</p>
+        </article>
+
+        <article id="kpi-acc-card" class="status-card" data-status="info">
+          <p class="kpi-label">已作答正確率</p>
+          <p id="kpi-acc-value" class="kpi-value">--%</p>
+          <p id="kpi-acc-caption" class="kpi-caption">請點選下方試題開始作答</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 3. 段考及格基準線量尺 -->
+    <section class="ruler-card" aria-label="段考及格基準線量尺">
+      <div class="ruler-header">
+        <h2 class="ruler-title">段考及格基準線量尺</h2>
+        <div class="ruler-legend">
+          <span class="legend-item"><span class="legend-swatch swatch-pass"></span>及格區間（60–79分）</span>
+          <span class="legend-item"><span class="legend-swatch swatch-master"></span>精熟區間（80–100分）</span>
+          <span class="legend-item"><span class="legend-swatch swatch-current"></span>目前得分指標</span>
+        </div>
+      </div>
+      <div id="ruler-svg-container" class="ruler-svg-wrap"></div>
+    </section>
+
+    <!-- 4. 題目篩選、三種出題模式與快速跳轉題號 -->
+    <section class="control-panel" aria-label="測驗篩選與快速跳轉">
+      <div class="control-group">
+        <span class="control-label">依單元篩選題庫</span>
+        <div id="unit-filter-row" class="pill-row"></div>
+      </div>
+
+      <div class="mode-toolbar">
+        <div class="control-group" style="flex: 1 1 auto;">
+          <span class="control-label">出題模式切換</span>
+          <div id="mode-btn-row" class="pill-row">
+            <button type="button" class="filter-btn" data-mode="all" aria-pressed="true" onclick="setQuizMode('all')">
+              <i data-lucide="layers" width="16" height="16"></i>
+              <span>完整練習</span>
+            </button>
+            <button type="button" class="filter-btn" data-mode="mock" aria-pressed="false" onclick="setQuizMode('mock')">
+              <i data-lucide="shuffle" width="16" height="16"></i>
+              <span>段考模擬抽測（10題）</span>
+            </button>
+            <button type="button" class="filter-btn" data-mode="wrong" aria-pressed="false" onclick="setQuizMode('wrong')">
+              <i data-lucide="bookmark-check" width="16" height="16"></i>
+              <span>錯題集中複習</span>
+              <span id="wrong-mode-badge" class="filter-count">0</span>
+            </button>
+          </div>
+        </div>
+        <div id="mock-actions" style="display: none;">
+          <button type="button" class="btn btn-secondary btn-compact" onclick="rerollMockQuestions()">
+            <i data-lucide="refresh-cw" width="15" height="15"></i>
+            <span>重新抽取 10 題</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="jump-section">
+        <div class="jump-header">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-md);">
+            <span class="control-label">快速跳轉題號</span>
+            <div class="jump-legend">
+              <span><span class="jump-dot dot-unanswered"></span> 未作答</span>
+              <span><span class="jump-dot dot-correct"></span> 答對</span>
+              <span><span class="jump-dot dot-wrong"></span> 答錯</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-secondary btn-compact" onclick="jumpToNextUnanswered()">
+            <i data-lucide="arrow-down-right" width="15" height="15"></i>
+            <span>跳至下一題未作答</span>
+          </button>
+        </div>
+        <div id="jump-grid" class="jump-grid"></div>
+      </div>
+    </section>
+
+    <!-- 5. 測驗試題與圖表判讀區 -->
+    <main aria-label="測驗題目區">
+      <div class="section-head">
+        <h2 id="quiz-section-title" class="section-title">試題作答區</h2>
+        <span id="quiz-section-meta" class="section-sub">共 40 題</span>
+      </div>
+      <div id="questions-container" class="questions-stack"></div>
+    </main>
+
+    <!-- 6. 各單元作答表現與弱點診斷表 -->
+    <section class="diagnostic-card" aria-label="各單元作答表現與弱點診斷">
+      <div class="section-head" style="margin-bottom:0;">
+        <div>
+          <h2 class="section-title">各單元作答表現與弱點診斷表</h2>
+          <p class="kpi-caption" style="margin-top:var(--space-xs);">依據各單元已作答題目即時統計正確率，低於 60% 及格線將自動標示弱點複習建議。</p>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table class="diag-table">
+          <thead>
+            <tr>
+              <th>單元名稱</th>
+              <th class="diag-num">題庫數</th>
+              <th class="diag-num">已作答數</th>
+              <th class="diag-num">答對數</th>
+              <th class="diag-num">答錯數</th>
+              <th style="min-width:150px;">正確率（60%及格）</th>
+              <th>掌握狀態</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="diagnostic-tbody"></tbody>
+          <tfoot id="diagnostic-tfoot"></tfoot>
+        </table>
+      </div>
+    </section>
+
+    <footer class="source-footer">
+      <span>題庫資料來源：臺北市立中山國中、臺北市立民族實中、桃園市立中興國中、桃園市立同德國中、桃園市立石門國中、嘉義市立北興國中、高雄市立大樹國中、高雄市立林園高中國中部、彰化縣立埔心國中、彰化縣立埤頭國中、彰化縣立大同國中、彰化縣立福興國中（七年級上學期第二次段考公民科試題）。</span>
+      <span>本測驗提供即時回饋與自動存檔功能。</span>
+    </footer>
+
+  </div>
+</div>
+
+<api-shim></api-shim>
+<script>
+const UNITS = [
+  { id: 'u1', name: '單元一：家庭型態與功能', short: '家庭型態與功能' },
+  { id: 'u2', name: '單元二：親屬關係與法律', short: '親屬關係與法律' },
+  { id: 'u3', name: '單元三：性別平權與家暴防治', short: '性別平權與家暴防治' },
+  { id: 'u4', name: '單元四：社會變遷與人口問題', short: '社會變遷與人口問題' }
+];
+
+const QUESTIONS = [
+  /* ===== 單元一：家庭型態與功能 (10題) ===== */
+  {
+    id: 'u1_01',
+    unit: 'u1',
+    source: '北興國中・大樹國中段考題',
+    stem: `觀察下圖父子間的對話，這兩代對家庭的哪一項主要功能產生了認知差異？`,
+    svgType: 'u1_fertility_dialog',
+    svgCaption: `圖：父子對生兒育女規劃之對話示意圖`,
+    options: [
+      `經濟功能`,
+      `教育功能`,
+      `生育功能`,
+      `保護與照顧功能`
+    ],
+    answer: 2,
+    explanation: `家庭的「生育功能」是指生兒育女、繁衍後代與傳承家族血緣。圖中父親期待早日抱孫，但年輕夫妻選擇享受兩人世界、暫不生育，反映兩代對於家庭「生育功能」的觀念轉變。`
+  },
+  {
+    id: 'u1_02',
+    unit: 'u1',
+    source: '中山國中・大樹國中段考題',
+    stem: `一位得獎人在感言中說道：「我要謝謝我的父母，每當我犯錯時，總是耐心勸誡我，導正我的行為，讓我學會正確的做人處事之道。」這段感言最能體現家庭的哪一項功能？`,
+    options: [
+      `經濟功能`,
+      `教育功能`,
+      `生育功能`,
+      `保護與照顧功能`
+    ],
+    answer: 1,
+    explanation: `家庭是一個人最早學習社會化的團體。「身教重於言教」，父母透過言行教導子女正確的價值觀、待人接物與規範，導正行為偏差，屬於家庭的「教育功能」。`
+  },
+  {
+    id: 'u1_03',
+    unit: 'u1',
+    source: '中興國中・北興國中段考題',
+    stem: `自從家興的父親過世後，母親便一肩扛起生活開銷，白天極力爭取兼差貼補家用，但晚上她堅持不排工作，因為要陪家興吃晚餐、寫功課，十年來始終如一。家興的母親「晚上不排工作」是為了發揮家庭的哪些功能？`,
+    options: [
+      `生育、教育功能`,
+      `保護與照顧、教育功能`,
+      `教育、經濟功能`,
+      `經濟、保護與照顧功能`
+    ],
+    answer: 1,
+    explanation: `白天兼差賺錢是為了發揮「經濟功能」；晚上陪伴孩子吃晚餐照顧生活起居（保護與照顧功能）並指導寫功課（教育功能），因此晚上不排工作展現的是「保護與照顧、教育功能」。`
+  },
+  {
+    id: 'u1_04',
+    unit: 'u1',
+    source: '石門國中・同德國中段考題',
+    stem: `有人形容家庭是「暴風雨中的避風港」，當我們在外面遭受挫折或感到委屈時，家人的陪伴與傾聽總能給我們安全感與歸屬感。這說明了家庭哪一項其他社會機構難以取代的功能？`,
+    options: [
+      `教育功能`,
+      `生育功能`,
+      `經濟功能`,
+      `保護與照顧功能`
+    ],
+    answer: 3,
+    explanation: `家庭的「保護與照顧功能」包含生理上的生活照護（食衣住行、生病照顧）以及心理上的情感支持、歸屬感與安全感。親情之間的情感避風港是其他社會機構無法完全取代的。`
+  },
+  {
+    id: 'u1_05',
+    unit: 'u1',
+    source: '北興國中・大樹國中段考題',
+    stem: `政府近期放寬微型創業貸款條件，協助有心創業者取得資金、降低失業風險；另外也有新手父母積極接案工作「努力賺奶粉錢」，以支應全家食衣住行所需。上述作為最直接有助於發揮家庭的哪一項功能？`,
+    options: [
+      `生育功能`,
+      `教育功能`,
+      `經濟功能`,
+      `保護與照顧功能`
+    ],
+    answer: 2,
+    explanation: `家庭成員外出工作獲取所得、分配並滿足家庭成員基本生活開銷與消費需求，屬於家庭的「經濟功能」。現代家庭已由過去農業社會的自給自足「生產」轉為現代的「消費」為主。`
+  },
+  {
+    id: 'u1_06',
+    unit: 'u1',
+    source: '中興國中段考題',
+    stem: `附圖中，橫軸代表「家庭成員親屬關係的複雜度」（愈往右愈複雜），縱軸代表「家庭成員人數」（愈往上人數愈多）。請問：「核心家庭（小家庭）」最可能位於圖中的哪一個位置？`,
+    svgType: 'u1_quadrant',
+    svgCaption: `圖：家庭成員人數與親屬關係複雜度分布示意圖`,
+    options: [
+      `甲`,
+      `乙`,
+      `丙`,
+      `丁`
+    ],
+    answer: 0,
+    explanation: `「核心家庭（小家庭）」僅由一對夫妻及其未婚子女組成，通常家庭成員人數較少，且親屬關係最單純（僅配偶與直系血親關係），因此對應於左下方的「甲」點。丁點（人數多且關係複雜）則對應於「大家庭（擴展家庭）」。`
+  },
+  {
+    id: 'u1_07',
+    unit: 'u1',
+    source: '中山國中・北興國中段考題',
+    stem: `公民課時四位同學分享自己的家庭成員組成，請問下列哪一位同學的家庭型態屬於「大家庭（擴展家庭）」？`,
+    options: [
+      `沁穎：我們家人口簡單，就只有爸爸、媽媽和我一起住`,
+      `珈妤：爺爺是我們家的大家長，伯父一家人也和我們同住`,
+      `曉莉：我爸媽離婚後，現在我和媽媽相依為命`,
+      `云婕：外婆和我們一家三口同住，每天都會煮飯給我們吃`
+    ],
+    answer: 1,
+    explanation: `大家庭（擴展家庭）由祖父母、已婚兄弟姊妹及各自的子女共同居住組成，包含數個具血緣關係的小家庭。珈妤家與爺爺、伯父一家同住屬於大家庭；沁穎為小家庭（核心家庭）；曉莉為單親家庭；云婕為三代同堂的折衷家庭（主幹家庭）。`
+  },
+  {
+    id: 'u1_08',
+    unit: 'u1',
+    source: '北興國中・埤頭國中段考題',
+    stem: `小丸子家中有愛護孫女的爺爺奶奶、喜歡吃海鮮的爸爸、嚴格管教她的媽媽，還有一位常鬥嘴但感情很好的姊姊，一家五口同住一屋簷下。這種家庭型態屬於下列何者？`,
+    options: [
+      `重組家庭`,
+      `折衷家庭`,
+      `大家庭`,
+      `隔代教養家庭`
+    ],
+    answer: 1,
+    explanation: `「折衷家庭（主幹家庭）」是指由祖父母、一對父母及其未婚子女所組成的三代同堂家庭。此型態中只有一對已婚子女與父母同住（未包含伯叔等其他已婚兄弟家庭），兼顧長輩照顧與幼兒照護。`
+  },
+  {
+    id: 'u1_09',
+    unit: 'u1',
+    source: '石門國中・北興國中段考題',
+    stem: `隨著婚姻與生育觀念改變，現代社會出現越來越多夫妻雙方皆外出工作、有穩定雙薪收入，但選擇不生育子女（Double Income, No Kids）的家庭。這類家庭生活模式稱為什麼？`,
+    options: [
+      `重組家庭`,
+      `兩地家庭`,
+      `單親家庭`,
+      `頂客家庭`
+    ],
+    answer: 3,
+    explanation: `「頂客家庭」（DINK, Double Income, No Kids）是指夫妻雙方都有工作收入，但因不孕或自主規劃而不生育子女的家庭型態。若為離婚或喪偶後再婚並帶來前次婚姻子女，則稱為「重組家庭（繼親家庭）」。`
+  },
+  {
+    id: 'u1_10',
+    unit: 'u1',
+    source: '中興國中・林園高中國中部段考題',
+    stem: `下圖是同學調查自己這代與（外）祖父母輩家庭成員數的統計比較圖。根據圖表數據分析，下列敘述何者正確？`,
+    svgType: 'u1_household_size',
+    svgCaption: `圖：兩代家庭成員人數比例統計比較圖`,
+    options: [
+      `現代家庭型態以隔代教養家庭為主`,
+      `三代同堂的型態成為現今社會最普遍的現象`,
+      `經濟環境改善使得生育率逐漸上升`,
+      `現今多數家庭的成員人數較過去明顯減少`
+    ],
+    answer: 3,
+    explanation: `從統計圖可見，（外）祖父母輩家庭人數超過 8 人者高達 71%，2～4 人僅佔 4%；到了自己這代，2～4 人的小家庭比例高達 82%，超過 8 人僅剩 5%。這明確顯示現今多數家庭的成員人數較過去大幅減少。`
+  },
+
+  /* ===== 單元二：親屬關係與法律 (10題) ===== */
+  {
+    id: 'u2_01',
+    unit: 'u2',
+    source: '中山國中・北興國中段考題',
+    stem: `公民老師在課堂上複習我國《民法》規定的親屬關係種類，並請四位同學回答。請問：下列哪一位同學的配對「錯誤」？`,
+    options: [
+      `立緹：姨丈 ── 姻親`,
+      `芯瑀：堂姊 ── 旁系血親`,
+      `慧紋：岳父 ── 自然血親`,
+      `筠方：養母 ── 法定血親`
+    ],
+    answer: 2,
+    explanation: `岳父是「配偶的爸爸」，即「配偶的血親」，在《民法》上屬於「姻親」，而非具有直接血緣關係的「自然血親」。姨丈是血親的配偶（姻親）、堂姊是旁系血親、養母是經法院認可收養的法定血親。`
+  },
+  {
+    id: 'u2_02',
+    unit: 'u2',
+    source: '中興國中・北興國中段考題',
+    stem: `罹癌的偉奇急需進行骨髓移植，醫生表示與偉奇具有「自然血親」關係的親屬，配對成功的機率較高。請問下列哪一位親屬最符合醫生所說的條件？`,
+    options: [
+      `偉奇的乾哥`,
+      `偉奇的嬸嬸`,
+      `偉奇的姑丈`,
+      `偉奇的舅舅`
+    ],
+    answer: 3,
+    explanation: `「自然血親」是指因出生而具有血緣關係的親屬。舅舅是母親的兄弟，與偉奇同源於外祖父母，屬於旁系自然血親。嬸嬸（叔父之妻）與姑丈（姑姑之夫）均為「血親的配偶」屬姻親；乾哥（結拜）在法律上無親屬關係。`
+  },
+  {
+    id: 'u2_03',
+    unit: 'u2',
+    source: '北興國中段考題',
+    stem: `附圖為湯姆的家族親屬關係示意圖，根據圖中連線關係判斷，下列哪一項說明正確？`,
+    svgType: 'u2_tom_tree',
+    svgCaption: `圖：湯姆的家族親屬示意圖`,
+    options: [
+      `姑姑和父親為姻親`,
+      `湯姆和姑姑為旁系血親`,
+      `父親和阿姨為法定血親`,
+      `母親和阿姨為直系血親`
+    ],
+    answer: 1,
+    explanation: `由圖可知，父親與姑姑為兄妹（旁系血親），湯姆為父親之子，因此湯姆與姑姑同源於祖父母，屬於「旁系血親」。父親與阿姨為「配偶的血親」屬姻親；母親與阿姨為姊妹，屬旁系血親而非直系血親。`
+  },
+  {
+    id: 'u2_04',
+    unit: 'u2',
+    source: '福興國中・會考補考實戰題',
+    stem: `附圖為甲、乙兩家人之間的親屬關係圖（□代表男性、○代表女性、═代表婚姻關係、─代表血親關係）。根據我國《民法》規定判斷，下列哪一組親屬關係屬於「姻親」？`,
+    svgType: 'u2_exam_tree',
+    svgCaption: `圖：親屬關係符號結構示意圖（□男性、○女性、═婚姻、─血親）`,
+    options: [
+      `甲與乙`,
+      `乙與戊`,
+      `丙與庚`,
+      `己與庚`
+    ],
+    answer: 1,
+    explanation: `由圖判讀：戊與己為夫妻，生下甲、丙、庚三名子女；甲與乙結婚成為「配偶」。乙是甲的妻子，戊是甲的父親，因此乙與戊為「配偶的血親」（媳婦與公公），屬於「姻親」。甲與乙為配偶、丙與庚為旁系血親、己與庚為直系血親。`
+  },
+  {
+    id: 'u2_05',
+    unit: 'u2',
+    source: '中山國中・北興國中段考題',
+    stem: `不孕的王姓夫妻想收養父母雙亡的小凱，藉此組成溫暖的家庭。依據我國《民法》關於「收養」的規定，下列敘述何者正確？`,
+    options: [
+      `只需向戶政事務所登記，不須經由法院核可`,
+      `收養完成後，雙方建立的是「姻親」關係`,
+      `須符合法定條件並經「法院」認可，在法律上視同自然血親`,
+      `養子女在法律上的繼承權利比親生子女少一半`
+    ],
+    answer: 2,
+    explanation: `收養是透過法律程序建立的親子關係，必須向「法院」聲請認可。核可後雙方成為「法定血親（擬制血親）」，在法律上的權利義務（包含親權與繼承權）皆視同自然血親（婚生子女）。`
+  },
+  {
+    id: 'u2_06',
+    unit: 'u2',
+    source: '同德國中段考題',
+    stem: `安德魯和家族一起搭郵輪旅遊，下圖為家族在郵輪上的房間平面配置。安德魯與弟弟同住一間，若他們房間的左邊鄰居是「血親和姻親」，右邊鄰居是「直系血親」，請問安德魯應該住在哪一間房？`,
+    svgType: 'u2_cruise_map',
+    svgCaption: `圖：安德魯家族郵輪房間配置示意圖`,
+    options: [
+      `甲房`,
+      `乙房`,
+      `丙房`,
+      `丁房`
+    ],
+    answer: 0,
+    explanation: `觀察「甲房」：左邊緊鄰「堂妹」（旁系血親）與「嬸嬸」（血親的配偶，屬姻親），符合「血親和姻親」；右邊緊鄰「爸爸媽媽」，符合「直系血親」。乙房左為直系血親、右為旁系血親；丙房左為直系血親、右為旁系血親；丁房左為旁系血親、右為血親和姻親，故選甲房。`
+  },
+  {
+    id: 'u2_07',
+    unit: 'u2',
+    source: '北興國中・中山國中段考題',
+    stem: `小惠與小麗兩姊妹在同一天舉辦婚禮，兩位新郎（大姨丈與小姨丈／姊夫與妹婿）雖然分住兩地，卻感情很好。請問：這兩位新郎彼此間的稱謂與法律親屬關係為何？`,
+    options: [
+      `連襟、法定血親`,
+      `姑嫂、自然血親`,
+      `連襟、姻親`,
+      `妯娌、姻親`
+    ],
+    answer: 2,
+    explanation: `姊妹兩人的丈夫互稱為「連襟」。以其中一方來看，對方是「配偶的血親（姊妹）的配偶」，符合《民法》第 969 條姻親定義中的「配偶之血親之配偶」，因此屬於「姻親」。`
+  },
+  {
+    id: 'u2_08',
+    unit: 'u2',
+    source: '北興國中・林園高中國中部段考題',
+    stem: `立民與毅民兩兄弟同時完婚，婚後兩位新娘相處融洽，假日經常相約出遊。請問：兄弟倆的妻子彼此之間互稱為什麼？又屬於哪一種親屬關係？`,
+    options: [
+      `連襟、法定血親`,
+      `姑嫂、自然血親`,
+      `妯娌、姻親`,
+      `婆媳、姻親`
+    ],
+    answer: 2,
+    explanation: `兄弟兩人的妻子（大嫂與弟媳）互稱為「妯娌」。她們彼此是「配偶的血親（兄弟）的配偶」，在《民法》上屬於「姻親」；若離婚導致婚姻關係消滅，姻親關係亦隨之消滅。`
+  },
+  {
+    id: 'u2_09',
+    unit: 'u2',
+    source: '北興國中・石門國中段考題',
+    stem: `小宛與阿寧相戀多年後步入禮堂，雙方父母在婚禮上開心寒暄，並互稱「親家公、親家母」。請問在我國《民法》上，「親家」雙方屬於何種親屬關係？`,
+    options: [
+      `血親的配偶，屬於姻親`,
+      `配偶的血親，屬於姻親`,
+      `血親的配偶的血親，無親屬關係`,
+      `配偶的血親的配偶，屬於姻親`
+    ],
+    answer: 2,
+    explanation: `《民法》規定的姻親僅包含三類：「血親之配偶」、「配偶之血親」、「配偶之血親之配偶」。親家是「子女（血親）之配偶之父母（血親）」，即「血親的配偶的血親」，因此雙方在法律上「沒有親屬關係」。`
+  },
+  {
+    id: 'u2_10',
+    unit: 'u2',
+    source: '中山國中・同德國中段考題',
+    stem: `基於家庭倫理及優生學考量，我國《民法》規定具有一定範圍的近親血親及姻親間不得結婚。據此判斷，下列哪一組若辦理結婚登記，其婚姻最可能是「有效」的？`,
+    options: [
+      `芷宸與哥哥的養子`,
+      `暄涵與伯父的兒子`,
+      `庭瑄與大嫂的弟弟`,
+      `安好與姑姑的兒子`
+    ],
+    answer: 2,
+    explanation: `(A) 哥哥的養子與芷宸為旁系擬制血親（視同三親等旁系血親，禁婚）；(B) 伯父的兒子（堂哥）與 (D) 姑姑的兒子（表哥）皆為四親等旁系血親（六親等內旁系血親禁婚）；唯有 (C) 大嫂的弟弟屬於「血親的配偶的血親」，法律上無親屬關係，可合法結婚！`
+  },
+
+  /* ===== 單元三：性別平權與家暴防治 (10題) ===== */
+  {
+    id: 'u3_01',
+    unit: 'u3',
+    source: '大樹國中・北興國中段考題',
+    stem: `有學者指出，部分商業廣告若傳達不當訊息，容易強化社會對男女的「性別刻板印象」。下列哪一則廣告臺詞最可能產生上述效果？`,
+    options: [
+      `男女生理需求大不同，營養補充各取所需`,
+      `健康活靈芝，孝順父母親的最佳選擇`,
+      `體貼老婆的第一選擇，清淨牌洗衣機`,
+      `安康保全，守護全家人的平安與幸福`
+    ],
+    answer: 2,
+    explanation: `「體貼老婆的第一選擇，清淨牌洗衣機」暗指「洗衣服是老婆的專屬家務」，買洗衣機是為了幫老婆做她的份內工作，這強化了「女主內」的傳統性別刻板印象。`
+  },
+  {
+    id: 'u3_02',
+    unit: 'u3',
+    source: '石門國中段考題',
+    stem: `下圖是行政院對臺灣有偶男女性每日家務勞動平均時數的調查統計圖。根據圖表數據，下列敘述何者正確？`,
+    svgType: 'u3_housework_bar',
+    svgCaption: `圖：有偶女性與丈夫（同居人）每日家務勞動時數比較（單位：小時）`,
+    options: [
+      `現行女性總家務勞動時數低於男性`,
+      `現行男性照顧子女的時間大於女性`,
+      `現行女性承擔了大多數的家務勞動`,
+      `現行家務分工已完全達到性別平權`
+    ],
+    answer: 2,
+    explanation: `圖表顯示，有偶女性每日家務總計達 3.88 小時，遠高於丈夫的 1.13 小時；無論在照顧子女（3.3 vs 1.41）、做家事（2.23 vs 0.87）或照顧家人，女性投入時間均高出男性許多，顯示現行女性仍承擔大多數家務勞動。`
+  },
+  {
+    id: 'u3_03',
+    unit: 'u3',
+    source: '石門國中段考題',
+    stem: `附圖是我國「15 到 64 歲已婚女性就業率」變化折線圖。圖中曲線的長期趨勢，最主要是受到下列哪一項社會觀念變遷的影響？`,
+    svgType: 'u3_female_work_line',
+    svgCaption: `圖：我國 15–64 歲已婚女性就業率變化趨勢（2000–2016 年）`,
+    options: [
+      `女性認為男大當婚、女大當嫁才是幸福`,
+      `多數女性認為傳宗接代是唯一人生目標`,
+      `生育率提高使家庭經濟負擔暴增`,
+      `女性不再受限於「男主外、女主內」的傳統性別角色束縛`
+    ],
+    answer: 3,
+    explanation: `圖中已婚女性就業率從 2000 年約 46.5% 穩定攀升至 2016 年超過 56%，顯示女性婚後外出工作日益普遍，不再受限於「女主內」的傳統性別角色，也提升了女性在家庭中的經濟自主與地位。`
+  },
+  {
+    id: 'u3_04',
+    unit: 'u3',
+    source: '北興國中・石門國中段考題',
+    stem: `新婚的阿倫說：「家裡的薪水應該交給負責賺錢的我管理。」太太小涵反駁：「依照我國法律規定，日常家務上夫妻互為代理人，從事家務勞動者也有自由使用家庭收入的權利！」小涵所指的「法律」應為下列何者？`,
+    options: [
+      `《性別平等教育法》`,
+      `《性別工作平等法》`,
+      `《民法》`,
+      `《家庭暴力防治法》`
+    ],
+    answer: 2,
+    explanation: `《民法》親屬編修正後落實夫妻平權：夫妻於日常家務互為代理人、依各自經濟能力共同分擔家庭生活費用，並且在家庭生活費用外各自保有自由處分之財產與平等的經濟自主權。`
+  },
+  {
+    id: 'u3_05',
+    unit: 'u3',
+    source: '中興國中・北興國中段考題',
+    stem: `以往我國《民法》規定子女原則上應「從父姓」，經立法院三讀修正通過後，改由父母雙方以書面約定子女從父姓或母姓。立法院這項修法的主要目的為何？`,
+    options: [
+      `降低夫妻離婚率`,
+      `創造母系社會制度`,
+      `促進家庭性別平權`,
+      `提升國家生育率`
+    ],
+    answer: 2,
+    explanation: `過去一律從父姓的規定隱含父權優先與重男輕女觀念；修正《民法》讓父母共同協議決定子女姓氏（若約定不成可抽籤決定），是為了落實憲法男女平等精神，促進家庭平權。`
+  },
+  {
+    id: 'u3_06',
+    unit: 'u3',
+    source: '北興國中・中山國中・同德國中段考題',
+    stem: `一名雇主不准男性員工申請「育嬰假」，還威脅將其辭退，經勞工局認定違法並予以開罰。請問：關於我國育嬰假的法律依據與規定，下列何者正確？`,
+    options: [
+      `規定於《民法》，僅限已婚女性申請`,
+      `規定於《性別工作平等法》（性別平等工作法），任職滿 6 個月且子女滿 3 歲前不分性別皆可申請`,
+      `規定於《性別平等教育法》，子女滿 5 歲前皆可申請`,
+      `請育嬰假期間不得申請任何育嬰留職停薪津貼`
+    ],
+    answer: 1,
+    explanation: `依據《性別工作平等法》（2023 年起更名為《性別平等工作法》），受僱者只要任職滿 6 個月後，於每一子女滿 3 歲前，不分男性或女性皆可申請育嬰留職停薪（最長 2 年），且期間可依法請領育嬰留職停薪津貼；雇主拒絕或給予不利處分即屬違法。`
+  },
+  {
+    id: 'u3_07',
+    unit: 'u3',
+    source: '北興國中・石門國中・中山國中段考題',
+    stem: `女老師小真與先生結婚五年後因故決定離婚，雙方對於 3 歲兒子豆豆的親權（監護權）爭執不下而對簿公堂。先生主張自己收入高得多，但法院最終考量先生過往不當行為紀錄，將親權判給小真。請問：法院判決親權歸屬的核心原則為何？`,
+    options: [
+      `以父母雙方中經濟收入較高者優先`,
+      `一律保障母親優先取得幼兒親權`,
+      `依《民法》規定，考量未成年子女的「最佳利益」來決定`,
+      `依父母雙方的社會地位高低決定`
+    ],
+    answer: 2,
+    explanation: `現行《民法》規定，父母離婚後或對未成年子女親權行使意見不一致時，法院應依「未成年子女之最佳利益」審酌父母的品行、教養意願、親子互動及照顧能力等一切情狀來裁定，不再只看經濟收入或父權優先。`
+  },
+  {
+    id: 'u3_08',
+    unit: 'u3',
+    source: '中興國中・同德國中・北興國中段考題',
+    stem: `小嵐剛出生時即被生母棄養，靠著社工與育幼院協助才順利長大。30 年後生母突然現身要求小嵐負起扶養責任。依我國現行《民法》規定，小嵐應如何保障自身權益？`,
+    options: [
+      `我國重視孝道倫理，被遺棄仍須負起全責扶養`,
+      `可向「法院」請求免除或減輕對生母的扶養義務`,
+      `可向「警察局」申請免除扶養義務證明書`,
+      `子女照顧父母純屬道德自發，原本就無法律義務`
+    ],
+    answer: 1,
+    explanation: `《民法》雖規定子女對父母負有扶養義務，但若父母曾對子女有虐待、重大侮辱、家暴，或無正當理由未盡扶養義務（遺棄）且情節重大者，子女成年後可向「法院」請求減輕或免除其扶養義務。`
+  },
+  {
+    id: 'u3_09',
+    unit: 'u3',
+    source: '同德國中段考題',
+    stem: `附圖為政府依據《家庭暴力防治法》處理家暴案件、核發保護令的標準行政流程圖。請問：圖中負責審理並核發各類保護令的機關「甲」是指哪一個單位？`,
+    svgType: 'u3_protection_flow',
+    svgCaption: `圖：家庭暴力保護令聲請與核發流程圖`,
+    options: [
+      `縣（市）政府社會局（處）`,
+      `各地警察局婦幼隊`,
+      `地方法院`,
+      `內政部家庭暴力防治委員會`
+    ],
+    answer: 2,
+    explanation: `依《家庭暴力防治法》規定，保護令（包含通常、暫時、緊急保護令）皆必須由「地方法院」審理核發。被害人可直接聲請，或遇急迫危險時由檢察官、警察機關或地方主管機關（社會局）代為向法院聲請緊急保護令。`
+  },
+  {
+    id: 'u3_10',
+    unit: 'u3',
+    source: '中山國中・北興國中・埤頭國中段考題',
+    stem: `新聞報導某父親酒後長期對兩歲半女童施暴成傷，鄰居發現後立即報警。關於此類「家庭暴力事件」，下列敘述何者「正確」？`,
+    options: [
+      `「清官難斷家務事」，鄰居不應干涉父母管教子女`,
+      `《民法》賦予父母懲戒權，因此打傷子女完全合法`,
+      `可撥打 110 或 113 保護專線求助，且法院可限制或禁止不適任父母行使親權`,
+      `法院可以依法宣告永遠終止父母與子女間的血緣親子關係`
+    ],
+    answer: 2,
+    explanation: `家庭暴力包含身體、精神及經濟上之不法侵害，並非私領域家務事。發現家暴應撥打 110 報警或 113 保護專線；對不適任且施暴的父母，法院可依法宣告「限制或禁止（停止）其行使親權」，但自然血親的親子身分關係不會因禁止行使親權而消滅。`
+  },
+
+  /* ===== 單元四：社會變遷與人口問題 (10題) ===== */
+  {
+    id: 'u4_01',
+    unit: 'u4',
+    source: '大同國中・中興國中段考題',
+    stem: `人類從過去到現代，在科學技術、價值觀念、政治經濟制度及自然生態環境等社會生活各方面不斷改變的過程，在公民學上稱為什麼？`,
+    options: [
+      `社會化`,
+      `性別角色`,
+      `社會變遷`,
+      `全球化`
+    ],
+    answer: 2,
+    explanation: `「社會變遷」是指人類社會從過去到現在，在器物技術、制度規範與價值觀念等各層面持續演變的過程；而個人學習適應社會生活的過程則稱為「社會化」。`
+  },
+  {
+    id: 'u4_02',
+    unit: 'u4',
+    source: '中興國中・埔心國中段考題',
+    stem: `個人從出生開始，在成長過程中學習各種知識、技能與社會規範，使自己能夠融入並適應社會生活的過程稱為什麼？其中個人最先接觸到的學習場所為何？`,
+    options: [
+      `社會化；家庭`,
+      `制度化；學校`,
+      `社會變遷；同儕`,
+      `專業化；傳播媒體`
+    ],
+    answer: 0,
+    explanation: `個人學習社會規範與價值觀以適應群體生活的過程稱為「社會化」。個人出生後最早接觸、影響最深遠的社會化團體就是「家庭」，其次才是學校、同儕與傳播媒體。`
+  },
+  {
+    id: 'u4_03',
+    unit: 'u4',
+    source: '福興國中・國中教育會考實戰題',
+    stem: `小皇蒐集了三則新聞摘要作為公民報告素材：①過半數國中小學生課後上安親班；②政府推動老人安養與長照福利措施；③國內寵物登記數量超越 0～6 歲嬰幼兒總數。這份報告最可能探討的主題為何？`,
+    options: [
+      `家庭功能的變化`,
+      `家庭衝突的化解`,
+      `社會教育的重要性`,
+      `家庭暴力防治成效`
+    ],
+    answer: 0,
+    explanation: `這三則現象分別對應家庭傳統功能的轉變：①安親班輔助/分擔「教育與照顧功能」；②長照機構分擔「保護與照顧功能」；③少子化反映「生育功能」減弱。三者合起來正是在探討現代社會的「家庭功能變化」。`
+  },
+  {
+    id: 'u4_04',
+    unit: 'u4',
+    source: '埤頭國中・石門國中・民族實中段考題',
+    stem: `附圖為我國 65 歲以上高齡人口比例與人數推估時程圖。依據聯合國定義標準，下列關於我國人口結構變化的說明何者正確？`,
+    svgType: 'u4_taiwan_aging',
+    svgCaption: `圖：臺灣 65 歲以上老年人口比例推估與高齡化里程碑`,
+    options: [
+      `從 1993 年起，我國邁入「高齡社會」`,
+      `從 1993 年（7.1%）進入高齡化社會，2018 年（14.6%）邁入高齡社會`,
+      `2025 年老年人口將達 20.1%，代表我國邁入「高齡化社會」`,
+      `人口老化趨勢若持續，政府的社會福利支出將會大幅降低`
+    ],
+    answer: 1,
+    explanation: `依聯合國標準，65 歲以上人口達總人口 7% 為「高齡化社會」（臺灣 1993 年達到 7.1%）、達 14% 為「高齡社會」（臺灣 2018 年達到 14.6%）、達 20% 則稱為「超高齡社會」（臺灣預計 2025 年達到 20.1%）。此趨勢將使醫療與長照等社福支出增加。`
+  },
+  {
+    id: 'u4_05',
+    unit: 'u4',
+    source: '石門國中段考題',
+    stem: `附圖為「門門國」1991 至 2016 年間 65 歲以上老年人口佔總人口比例變化折線圖。依照我國與聯合國對「高齡化社會」的定義，門門國最有可能在西元哪一年正式成為高齡化社會？`,
+    svgType: 'u4_menmen_line',
+    svgCaption: `圖：門門國 65 歲以上人口比例變化趨勢圖`,
+    options: [
+      `1995 年`,
+      `2000 年`,
+      `2005 年`,
+      `2010 年`
+    ],
+    answer: 0,
+    explanation: `「高齡化社會」的門檻是 65 歲以上人口佔比超過 7%。從折線圖可見，門門國在 1991 年為 6.53%，到 1996 年已達 7.86%，因此跨越 7% 門檻的年份正落在 1991～1996 年之間的「1995 年」。`
+  },
+  {
+    id: 'u4_06',
+    unit: 'u4',
+    source: '石門國中段考題',
+    stem: `下圖呈現「門之國」2015 至 2019 年間每年出生人口數與老年人口數統計。依據圖中數據判讀，下列哪一項解釋最正確？`,
+    svgType: 'u4_menzhi_dual',
+    svgCaption: `圖：門之國 2015–2019 年出生人口數與老年人口數變化（單位：萬人）`,
+    options: [
+      `人口總數呈現負成長趨勢`,
+      `出生人口數逐年下降，反映出「少子化」與「人口高齡化」現象`,
+      `老年人口數急遽下降`,
+      `出生率正漸漸大幅提高`
+    ],
+    answer: 1,
+    explanation: `由圖可知，門之國的年出生人口數從 2015 年的 26 萬人一路下滑至 2019 年的 20 萬人（呈現少子化趨勢），同時老年人口數從 197 萬人持續攀升至 222 萬人（呈現高齡化趨勢）。`
+  },
+  {
+    id: 'u4_07',
+    unit: 'u4',
+    source: '大樹國中段考題',
+    stem: `附圖為「大樹國」過去、現在以及推估未來的老年人口與就業人口佔總人口比率變化。根據圖示判斷，下列哪一項敘述最符合該國的社會變遷趨勢？`,
+    svgType: 'u4_dashu_ratio',
+    svgCaption: `圖：大樹國不同時期老年人口與就業人口比例變化示意圖`,
+    options: [
+      `人口老化導致大量青壯年找不到工作`,
+      `老年人口比例不變、就業人口比例大幅增加`,
+      `未來青壯年人口對老年人的扶養負擔逐漸加重`,
+      `少子化使三代同堂比例快速回升`
+    ],
+    answer: 2,
+    explanation: `圖中顯示「老年人口比例」隨時間大幅增加，而「就業（青壯年）人口比例」相對縮小，這代表每位就業青壯年所需共同負擔的老年人口數變多，即「老年人的扶養負擔漸增」。`
+  },
+  {
+    id: 'u4_08',
+    unit: 'u4',
+    source: '石門國中・北興國中・埤頭國中段考題',
+    stem: `我國近年出生率持續探底，許多嬰幼兒用品店減少而寵物店大增。面對「少子化」危機，它可能帶來什麼長期衝擊，政府又推出何種政策加以因應？`,
+    options: [
+      `未來年輕人扶養負擔減輕；政府採行「一胎化」政策`,
+      `未來勞動力短缺影響經濟成長；政府增設公共托育中心並發放育兒津貼`,
+      `家暴發生率必定升高；政府設立家庭暴力防治中心`,
+      `人口結構年輕化；政府減少公立幼兒園名額`
+    ],
+    answer: 1,
+    explanation: `少子化將導致未來教育資源過剩、勞動力短缺進而影響國家經濟發展，且青壯年扶養長輩的壓力倍增。政府透過增設公共托育中心、發放育兒津貼（如 0～6 歲國家一起養）及落實育嬰假制度來減緩少子化。`
+  },
+  {
+    id: 'u4_09',
+    unit: 'u4',
+    source: '北興國中・埤頭國中・石門國中段考題',
+    stem: `醫院近年陸續增設無障礙高齡病房與高齡友善門診，大專院校也紛紛開設老人照護相關科系。面對我國已邁入「高齡社會」，下列哪一項是政府較妥善的因應措施？`,
+    options: [
+      `立法強制已婚子女必須與年邁父母同住`,
+      `將所有高齡長輩集中送往偏遠安養機構`,
+      `建構完善的長期照護制度、培訓長照人才與開辦日間照顧中心`,
+      `停止辦理長者交通接送與社區共餐服務`
+    ],
+    answer: 2,
+    explanation: `面對高齡社會帶來的照護需求與經濟壓力，政府制定《長期照顧服務法》，建立在地老化的長照體系、培訓照顧服務員、開辦老人日間照顧與共餐服務，並推動長者無障礙交通接送，而非強制同住或集中隔離。`
+  },
+  {
+    id: 'u4_10',
+    unit: 'u4',
+    source: '大同國中・埔心國中段考題',
+    stem: `學者以「一碗湯的距離」來形容現代興起的「三代同鄰」居住型態──燉一鍋雞湯端到孩子家時剛好能喝，近了太燙、遠了太涼。提倡此居住型態主要是為了解決現代家庭的何種問題？`,
+    options: [
+      `減少未婚獨居人口的增加`,
+      `兼顧長輩就近照護與彼此獨立空間，減輕老人照護壓力並減少同住摩擦`,
+      `提高國人平均結婚年齡`,
+      `完全取代政府的長期照護保險制度`
+    ],
+    answer: 1,
+    explanation: `三代同堂雖可互相照應，卻容易因兩代作息、衛生或教養觀念不同產生摩擦；「三代同鄰」讓兩代住在同一社區或相鄰巷弄，既能保留各自的獨立空間減少衝突，又能就近相互照應、減輕老人照護壓力。`
+  }
+];
+
+/* ===== Persistent State ===== */
+const DEFAULT_STATE = {
+  answers: {},          // { [qid]: optionIndex }
+  wrongIds: [],         // array of qids ever answered wrong (until corrected in review or reset)
+  selectedUnit: 'all',  // 'all' | 'u1' | 'u2' | 'u3' | 'u4'
+  quizMode: 'all',      // 'all' | 'mock' | 'wrong'
+  mockIds: [],          // 10 randomly sampled qids
+  reviewAnswers: {},    // fresh answers inside 'wrong' review mode
+  activeQid: 'u1_01'
+};
+
+let appState = cloneDefaultState();
+let persistTimer = null;
+
+function cloneDefaultState() {
+  return {
+    answers: {},
+    wrongIds: [],
+    selectedUnit: 'all',
+    quizMode: 'all',
+    mockIds: [],
+    reviewAnswers: {},
+    activeQid: 'u1_01'
+  };
+}
+
+function showSaveStatus(text, isBusy) {
+  const el = document.getElementById('save-status');
+  if (!el) return;
+  const span = el.querySelector('span');
+  if (span) span.textContent = text;
+  el.style.opacity = isBusy ? '0.75' : '1';
+}
+
+async function saveState() {
+  showSaveStatus('正在存檔…', true);
+  if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+    try {
+      await window.notebookAppApi.setAppState(appState);
+      showSaveStatus('作答進度已自動存檔', false);
+      return;
+    } catch (e) {
+      showSaveStatus('本次階段暫存中', false);
+      return;
+    }
+  }
+  showSaveStatus('作答進度已自動存檔', false);
+}
+
+function scheduleSave() {
+  if (persistTimer) clearTimeout(persistTimer);
+  persistTimer = setTimeout(function() {
+    saveState();
+  }, 150);
+}
+
+/* ===== Helpers ===== */
+function getUnitById(unitId) {
+  for (let i = 0; i < UNITS.length; i++) {
+    if (UNITS[i].id === unitId) return UNITS[i];
+  }
+  return UNITS[0];
+}
+
+function getQuestionById(qid) {
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    if (QUESTIONS[i].id === qid) return QUESTIONS[i];
+  }
+  return null;
+}
+
+function sampleMockIds(unitFilter) {
+  const pool = QUESTIONS.filter(function(q) {
+    return unitFilter === 'all' || q.unit === unitFilter;
+  }).map(function(q) { return q.id; });
+
+  const copy = pool.slice();
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = copy[i];
+    copy[i] = copy[j];
+    copy[j] = tmp;
+  }
+  return copy.slice(0, Math.min(10, copy.length));
+}
+
+function getActiveQuestions() {
+  const unitFilter = appState.selectedUnit;
+  if (appState.quizMode === 'mock') {
+    if (!appState.mockIds || appState.mockIds.length === 0) {
+      appState.mockIds = sampleMockIds(unitFilter);
+    }
+    const list = [];
+    for (let i = 0; i < appState.mockIds.length; i++) {
+      const q = getQuestionById(appState.mockIds[i]);
+      if (q && (unitFilter === 'all' || q.unit === unitFilter)) {
+        list.push(q);
+      }
+    }
+    if (list.length === 0) {
+      appState.mockIds = sampleMockIds(unitFilter);
+      return getActiveQuestions();
+    }
+    return list;
+  }
+
+  if (appState.quizMode === 'wrong') {
+    return QUESTIONS.filter(function(q) {
+      const isWrong = appState.wrongIds.indexOf(q.id) !== -1;
+      const inReviewSession = typeof appState.reviewAnswers[q.id] === 'number';
+      const unitOk = unitFilter === 'all' || q.unit === unitFilter;
+      return (isWrong || inReviewSession) && unitOk;
+    });
+  }
+
+  return QUESTIONS.filter(function(q) {
+    return unitFilter === 'all' || q.unit === unitFilter;
+  });
+}
+
+function getCurrentAnswerMap() {
+  return appState.quizMode === 'wrong' ? appState.reviewAnswers : appState.answers;
+}
+
+/* ===== Custom SVG Generators ===== */
+function renderQuestionSvg(svgType) {
+  if (!svgType) return '';
+  switch (svgType) {
+    case 'u1_fertility_dialog':
+      return `
+        <svg viewBox="0 0 560 190" role="img" aria-label="父子關於生育規劃的對話圖">
+          <rect x="8" y="10" width="250" height="122" rx="12" fill="var(--background)" stroke="var(--primary)" stroke-width="2"/>
+          <polygon points="95,132 115,132 100,152" fill="var(--background)" stroke="var(--primary)" stroke-width="2"/>
+          <rect x="92" y="128" width="24" height="6" fill="var(--background)"/>
+          <text x="24" y="38" fill="var(--primary)" font-size="13" font-weight="700">父親</text>
+          <text x="24" y="64" fill="var(--on-surface)" font-size="14">「你們夫妻打算什麼時候</text>
+          <text x="24" y="86" fill="var(--on-surface)" font-size="14">讓我抱孫子？蔡伯伯的</text>
+          <text x="24" y="108" fill="var(--on-surface)" font-size="14">孫子已經 5 歲多了呢！」</text>
+
+          <rect x="302" y="24" width="250" height="108" rx="12" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="2"/>
+          <polygon points="445,132 465,132 460,152" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="2"/>
+          <rect x="442" y="128" width="24" height="6" fill="var(--primary-container)"/>
+          <text x="318" y="52" fill="var(--on-primary-container)" font-size="13" font-weight="700">已婚兒子</text>
+          <text x="318" y="78" fill="var(--on-surface)" font-size="14">「爸，我們沒有這個計畫，</text>
+          <text x="318" y="100" fill="var(--on-surface)" font-size="14">我們只想享受兩人世界。」</text>
+
+          <circle cx="100" cy="168" r="14" fill="var(--surface-container)" stroke="var(--outline)" stroke-width="1.5"/>
+          <text x="100" y="173" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="700">父</text>
+          <circle cx="460" cy="168" r="14" fill="var(--primary)" />
+          <text x="460" y="173" text-anchor="middle" fill="var(--on-primary)" font-size="12" font-weight="700">子</text>
+        </svg>`;
+
+    case 'u1_quadrant':
+      return `
+        <svg viewBox="0 0 460 250" role="img" aria-label="家庭成員人數與親屬關係複雜度座標圖">
+          <line x1="75" y1="205" x2="420" y2="205" stroke="var(--on-surface)" stroke-width="2"/>
+          <polygon points="420,200 432,205 420,210" fill="var(--on-surface)"/>
+          <line x1="75" y1="205" x2="75" y2="24" stroke="var(--on-surface)" stroke-width="2"/>
+          <polygon points="70,24 75,12 80,24" fill="var(--on-surface)"/>
+
+          <line x1="75" y1="115" x2="415" y2="115" stroke="var(--outline-variant)" stroke-dasharray="4 4"/>
+          <line x1="245" y1="24" x2="245" y2="205" stroke="var(--outline-variant)" stroke-dasharray="4 4"/>
+
+          <text x="64" y="42" text-anchor="end" fill="var(--on-surface-variant)" font-size="12" font-weight="600">多</text>
+          <text x="64" y="118" text-anchor="end" fill="var(--on-surface)" font-size="12" font-weight="700">人數</text>
+          <text x="64" y="198" text-anchor="end" fill="var(--on-surface-variant)" font-size="12" font-weight="600">少</text>
+
+          <text x="95" y="226" fill="var(--on-surface-variant)" font-size="12" font-weight="600">單純</text>
+          <text x="245" y="226" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="700">成員親屬關係複雜度</text>
+          <text x="395" y="226" text-anchor="end" fill="var(--on-surface-variant)" font-size="12" font-weight="600">複雜</text>
+
+          <circle cx="135" cy="172" r="8" fill="var(--data-1)"/>
+          <text x="150" y="177" fill="var(--on-surface)" font-size="15" font-weight="700">甲</text>
+
+          <circle cx="135" cy="58" r="8" fill="var(--data-2)"/>
+          <text x="150" y="63" fill="var(--on-surface)" font-size="15" font-weight="700">乙</text>
+
+          <circle cx="245" cy="115" r="8" fill="var(--data-3)"/>
+          <text x="260" y="120" fill="var(--on-surface)" font-size="15" font-weight="700">丙</text>
+
+          <circle cx="355" cy="58" r="8" fill="var(--data-4)"/>
+          <text x="370" y="63" fill="var(--on-surface)" font-size="15" font-weight="700">丁</text>
+        </svg>`;
+
+    case 'u1_household_size':
+      return `
+        <svg viewBox="0 0 520 220" role="img" aria-label="自己這代與祖父母輩家庭成員數比較長條圖">
+          <rect x="290" y="10" width="14" height="14" rx="3" fill="var(--data-1)"/>
+          <text x="310" y="22" fill="var(--on-surface)" font-size="12" font-weight="600">自己這代</text>
+          <rect x="385" y="10" width="14" height="14" rx="3" fill="var(--data-context)"/>
+          <text x="405" y="22" fill="var(--on-surface)" font-size="12" font-weight="600">（外）祖父母輩</text>
+
+          <line x1="65" y1="180" x2="490" y2="180" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="65" y1="130" x2="490" y2="130" stroke="var(--outline-variant)"/>
+          <line x1="65" y1="80" x2="490" y2="80" stroke="var(--outline-variant)"/>
+          <line x1="65" y1="30" x2="490" y2="30" stroke="var(--outline-variant)"/>
+
+          <text x="55" y="184" text-anchor="end" fill="var(--on-surface-variant)" font-size="11">0%</text>
+          <text x="55" y="134" text-anchor="end" fill="var(--on-surface-variant)" font-size="11">33%</text>
+          <text x="55" y="84" text-anchor="end" fill="var(--on-surface-variant)" font-size="11">67%</text>
+          <text x="55" y="34" text-anchor="end" fill="var(--on-surface-variant)" font-size="11">100%</text>
+
+          <!-- 2~4人: 82% vs 4% -->
+          <rect x="95" y="57" width="44" height="123" rx="3" fill="var(--data-1)"/>
+          <text x="117" y="50" text-anchor="middle" fill="var(--data-1)" font-size="12" font-weight="700">82%</text>
+          <rect x="145" y="174" width="44" height="6" rx="2" fill="var(--data-context)"/>
+          <text x="167" y="167" text-anchor="middle" fill="var(--on-surface-variant)" font-size="12" font-weight="700">4%</text>
+          <text x="142" y="202" text-anchor="middle" fill="var(--on-surface)" font-size="13" font-weight="600">2～4 人</text>
+
+          <!-- 5~8人: 13% vs 25% -->
+          <rect x="235" y="160" width="44" height="20" rx="3" fill="var(--data-1)"/>
+          <text x="257" y="153" text-anchor="middle" fill="var(--data-1)" font-size="12" font-weight="700">13%</text>
+          <rect x="285" y="142" width="44" height="38" rx="3" fill="var(--data-context)"/>
+          <text x="307" y="135" text-anchor="middle" fill="var(--on-surface-variant)" font-size="12" font-weight="700">25%</text>
+          <text x="282" y="202" text-anchor="middle" fill="var(--on-surface)" font-size="13" font-weight="600">5～8 人</text>
+
+          <!-- 超過8人: 5% vs 71% -->
+          <rect x="375" y="172" width="44" height="8" rx="2" fill="var(--data-1)"/>
+          <text x="397" y="165" text-anchor="middle" fill="var(--data-1)" font-size="12" font-weight="700">5%</text>
+          <rect x="425" y="73" width="44" height="107" rx="3" fill="var(--data-context)"/>
+          <text x="447" y="66" text-anchor="middle" fill="var(--on-surface-variant)" font-size="12" font-weight="700">71%</text>
+          <text x="422" y="202" text-anchor="middle" fill="var(--on-surface)" font-size="13" font-weight="600">超過 8 人</text>
+        </svg>`;
+
+    case 'u2_tom_tree':
+      return `
+        <svg viewBox="0 0 500 220" role="img" aria-label="湯姆家族親屬樹狀圖">
+          <!-- Grandparents -->
+          <rect x="112" y="14" width="66" height="32" rx="6" fill="var(--background)" stroke="var(--outline)" stroke-width="1.5"/>
+          <text x="145" y="35" text-anchor="middle" fill="var(--on-surface)" font-size="13" font-weight="700">祖父</text>
+          <line x1="178" y1="27" x2="206" y2="27" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <line x1="178" y1="33" x2="206" y2="33" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <rect x="206" y="14" width="66" height="32" rx="6" fill="var(--background)" stroke="var(--outline)" stroke-width="1.5"/>
+          <text x="239" y="35" text-anchor="middle" fill="var(--on-surface)" font-size="13" font-weight="700">祖母</text>
+
+          <!-- Descent lines to Father & Aunt(paternal) -->
+          <line x1="192" y1="33" x2="192" y2="72" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <line x1="80" y1="72" x2="192" y2="72" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <line x1="80" y1="72" x2="80" y2="95" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <line x1="192" y1="72" x2="192" y2="95" stroke="var(--on-surface)" stroke-width="1.5"/>
+
+          <!-- Parents Row -->
+          <rect x="44" y="95" width="72" height="34" rx="6" fill="var(--background)" stroke="var(--primary)" stroke-width="1.5"/>
+          <text x="80" y="117" text-anchor="middle" fill="var(--on-surface)" font-size="14" font-weight="700">姑姑</text>
+
+          <rect x="156" y="95" width="72" height="34" rx="6" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="1.5"/>
+          <text x="192" y="117" text-anchor="middle" fill="var(--on-primary-container)" font-size="14" font-weight="700">父親</text>
+
+          <line x1="228" y1="109" x2="272" y2="109" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <line x1="228" y1="115" x2="272" y2="115" stroke="var(--on-surface)" stroke-width="1.5"/>
+
+          <rect x="272" y="95" width="72" height="34" rx="6" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="1.5"/>
+          <text x="308" y="117" text-anchor="middle" fill="var(--on-primary-container)" font-size="14" font-weight="700">母親</text>
+
+          <!-- Maternal Aunt connection -->
+          <path d="M 308 95 L 308 72 L 420 72 L 420 95" fill="none" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <rect x="384" y="95" width="72" height="34" rx="6" fill="var(--background)" stroke="var(--outline)" stroke-width="1.5"/>
+          <text x="420" y="117" text-anchor="middle" fill="var(--on-surface)" font-size="14" font-weight="700">阿姨</text>
+          <text x="364" y="65" text-anchor="middle" fill="var(--on-surface-variant)" font-size="11">同源外祖父母</text>
+
+          <!-- Tom -->
+          <line x1="250" y1="115" x2="250" y2="165" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <rect x="206" y="165" width="88" height="38" rx="19" fill="var(--primary)"/>
+          <text x="250" y="189" text-anchor="middle" fill="var(--on-primary)" font-size="15" font-weight="800">湯姆</text>
+        </svg>`;
+
+    case 'u2_exam_tree':
+      return `
+        <svg viewBox="0 0 500 225" role="img" aria-label="甲乙丙丁戊己庚親屬關係符號圖">
+          <!-- Legend -->
+          <rect x="330" y="12" width="16" height="16" fill="var(--background)" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <text x="352" y="25" fill="var(--on-surface-variant)" font-size="12">男性</text>
+          <circle cx="408" cy="20" r="8" fill="var(--background)" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <text x="422" y="25" fill="var(--on-surface-variant)" font-size="12">女性</text>
+          <text x="330" y="48" fill="var(--on-surface-variant)" font-size="12">═ 婚姻關係　─ 血親關係</text>
+
+          <!-- Gen 1: Wu (M) = Ji (F) -->
+          <rect x="132" y="22" width="44" height="44" rx="4" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="2"/>
+          <text x="154" y="49" text-anchor="middle" fill="var(--on-primary-container)" font-size="16" font-weight="800">戊</text>
+
+          <line x1="176" y1="41" x2="224" y2="41" stroke="var(--on-surface)" stroke-width="2"/>
+          <line x1="176" y1="47" x2="224" y2="47" stroke="var(--on-surface)" stroke-width="2"/>
+
+          <circle cx="246" cy="44" r="22" fill="var(--background)" stroke="var(--on-surface)" stroke-width="2"/>
+          <text x="246" y="49" text-anchor="middle" fill="var(--on-surface)" font-size="16" font-weight="800">己</text>
+
+          <!-- Descent to Jia, Bing, Geng -->
+          <line x1="200" y1="47" x2="200" y2="105" stroke="var(--on-surface)" stroke-width="2"/>
+          <line x1="100" y1="105" x2="310" y2="105" stroke="var(--on-surface)" stroke-width="2"/>
+          <line x1="100" y1="105" x2="100" y2="132" stroke="var(--on-surface)" stroke-width="2"/>
+          <line x1="200" y1="105" x2="200" y2="132" stroke="var(--on-surface)" stroke-width="2"/>
+          <line x1="310" y1="105" x2="310" y2="132" stroke="var(--on-surface)" stroke-width="2"/>
+
+          <!-- Jia (M) = Yi (F) -->
+          <rect x="78" y="132" width="44" height="44" rx="4" fill="var(--background)" stroke="var(--on-surface)" stroke-width="2"/>
+          <text x="100" y="159" text-anchor="middle" fill="var(--on-surface)" font-size="16" font-weight="800">甲</text>
+
+          <line x1="122" y1="151" x2="152" y2="151" stroke="var(--on-surface)" stroke-width="2"/>
+          <line x1="122" y1="157" x2="152" y2="157" stroke="var(--on-surface)" stroke-width="2"/>
+
+          <circle cx="174" cy="154" r="22" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="2"/>
+          <text x="174" y="159" text-anchor="middle" fill="var(--on-primary-container)" font-size="16" font-weight="800">乙</text>
+
+          <!-- Bing (M) -->
+          <line x1="240" y1="105" x2="240" y2="132" stroke="var(--on-surface)" stroke-width="2"/>
+          <rect x="218" y="132" width="44" height="44" rx="4" fill="var(--background)" stroke="var(--on-surface)" stroke-width="2"/>
+          <text x="240" y="159" text-anchor="middle" fill="var(--on-surface)" font-size="16" font-weight="800">丙</text>
+
+          <!-- Geng (F) -->
+          <circle cx="310" cy="154" r="22" fill="var(--background)" stroke="var(--on-surface)" stroke-width="2"/>
+          <text x="310" y="159" text-anchor="middle" fill="var(--on-surface)" font-size="16" font-weight="800">庚</text>
+        </svg>`;
+
+    case 'u2_cruise_map':
+      return `
+        <svg viewBox="0 0 600 135" role="img" aria-label="郵輪家族房間分配平面圖">
+          <!-- Row 1 -->
+          <g font-size="13" font-weight="700" text-anchor="middle">
+            <rect x="10" y="12" width="80" height="48" rx="4" fill="var(--background)" stroke="var(--outline)"/>
+            <text x="50" y="41" fill="var(--on-surface)">嬸嬸</text>
+
+            <rect x="94" y="12" width="80" height="48" rx="4" fill="var(--background)" stroke="var(--outline)"/>
+            <text x="134" y="41" fill="var(--on-surface)">堂妹</text>
+
+            <rect x="178" y="12" width="66" height="48" rx="4" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="2"/>
+            <text x="211" y="41" fill="var(--on-primary-container)">甲</text>
+
+            <rect x="248" y="12" width="96" height="48" rx="4" fill="var(--background)" stroke="var(--outline)"/>
+            <text x="296" y="41" fill="var(--on-surface)">爸爸媽媽</text>
+
+            <rect x="348" y="12" width="66" height="48" rx="4" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="2"/>
+            <text x="381" y="41" fill="var(--on-primary-container)">乙</text>
+
+            <rect x="418" y="12" width="82" height="48" rx="4" fill="var(--background)" stroke="var(--outline)"/>
+            <text x="459" y="41" fill="var(--on-surface)">堂哥</text>
+
+            <rect x="504" y="12" width="82" height="48" rx="4" fill="var(--background)" stroke="var(--outline)"/>
+            <text x="545" y="41" fill="var(--on-surface)">堂弟</text>
+
+            <!-- Row 2 -->
+            <rect x="10" y="72" width="80" height="48" rx="4" fill="var(--background)" stroke="var(--outline)"/>
+            <text x="50" y="101" fill="var(--on-surface)">祖父</text>
+
+            <rect x="94" y="72" width="80" height="48" rx="4" fill="var(--background)" stroke="var(--outline)"/>
+            <text x="134" y="101" fill="var(--on-surface)">祖母</text>
+
+            <rect x="178" y="72" width="66" height="48" rx="4" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="2"/>
+            <text x="211" y="101" fill="var(--on-primary-container)">丙</text>
+
+            <rect x="248" y="72" width="96" height="48" rx="4" fill="var(--background)" stroke="var(--outline)"/>
+            <text x="296" y="101" fill="var(--on-surface)">伯父叔叔</text>
+
+            <rect x="348" y="72" width="66" height="48" rx="4" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="2"/>
+            <text x="381" y="101" fill="var(--on-primary-container)">丁</text>
+
+            <rect x="418" y="72" width="82" height="48" rx="4" fill="var(--background)" stroke="var(--outline)"/>
+            <text x="459" y="101" fill="var(--on-surface)">姑姑</text>
+
+            <rect x="504" y="72" width="82" height="48" rx="4" fill="var(--background)" stroke="var(--outline)"/>
+            <text x="545" y="101" fill="var(--on-surface)">姑丈</text>
+          </g>
+        </svg>`;
+
+    case 'u3_housework_bar':
+      return `
+        <svg viewBox="0 0 540 225" role="img" aria-label="有偶女性與丈夫每日家務勞動時數長條圖">
+          <rect x="290" y="8" width="14" height="14" rx="3" fill="var(--data-1)"/>
+          <text x="310" y="20" fill="var(--on-surface)" font-size="12" font-weight="600">有偶女性（小時）</text>
+          <rect x="425" y="8" width="14" height="14" rx="3" fill="var(--data-context)"/>
+          <text x="445" y="20" fill="var(--on-surface)" font-size="12" font-weight="600">丈夫（小時）</text>
+
+          <!-- Categories -->
+          <g font-size="12" font-weight="600">
+            <text x="92" y="54" text-anchor="end" fill="var(--on-surface)">每日總計</text>
+            <rect x="102" y="38" width="310" height="14" rx="3" fill="var(--data-1)"/>
+            <text x="418" y="50" fill="var(--data-1)" font-weight="700">3.88</text>
+            <rect x="102" y="55" width="90" height="14" rx="3" fill="var(--data-context)"/>
+            <text x="198" y="67" fill="var(--on-surface-variant)" font-weight="700">1.13</text>
+
+            <text x="92" y="98" text-anchor="end" fill="var(--on-surface)">照顧子女</text>
+            <rect x="102" y="82" width="264" height="14" rx="3" fill="var(--data-1)"/>
+            <text x="372" y="94" fill="var(--data-1)" font-weight="700">3.30</text>
+            <rect x="102" y="99" width="113" height="14" rx="3" fill="var(--data-context)"/>
+            <text x="221" y="111" fill="var(--on-surface-variant)" font-weight="700">1.41</text>
+
+            <text x="92" y="142" text-anchor="end" fill="var(--on-surface)">照顧老人</text>
+            <rect x="102" y="126" width="150" height="14" rx="3" fill="var(--data-1)"/>
+            <text x="258" y="138" fill="var(--data-1)" font-weight="700">1.87</text>
+            <rect x="102" y="143" width="118" height="14" rx="3" fill="var(--data-context)"/>
+            <text x="226" y="155" fill="var(--on-surface-variant)" font-weight="700">1.48</text>
+
+            <text x="92" y="186" text-anchor="end" fill="var(--on-surface)">做家事</text>
+            <rect x="102" y="170" width="178" height="14" rx="3" fill="var(--data-1)"/>
+            <text x="286" y="182" fill="var(--data-1)" font-weight="700">2.23</text>
+            <rect x="102" y="187" width="70" height="14" rx="3" fill="var(--data-context)"/>
+            <text x="178" y="199" fill="var(--on-surface-variant)" font-weight="700">0.87</text>
+          </g>
+          <line x1="102" y1="28" x2="102" y2="212" stroke="var(--outline)" stroke-width="1.5"/>
+        </svg>`;
+
+    case 'u3_female_work_line':
+      return `
+        <svg viewBox="0 0 500 205" role="img" aria-label="2000至2016年已婚女性就業率折線圖">
+          <line x1="65" y1="165" x2="465" y2="165" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="65" y1="125" x2="465" y2="125" stroke="var(--outline-variant)"/>
+          <line x1="65" y1="85" x2="465" y2="85" stroke="var(--outline-variant)"/>
+          <line x1="65" y1="45" x2="465" y2="45" stroke="var(--outline-variant)"/>
+
+          <text x="55" y="169" text-anchor="end" fill="var(--on-surface-variant)" font-size="11">44%</text>
+          <text x="55" y="129" text-anchor="end" fill="var(--on-surface-variant)" font-size="11">49%</text>
+          <text x="55" y="89" text-anchor="end" fill="var(--on-surface-variant)" font-size="11">54%</text>
+          <text x="55" y="49" text-anchor="end" fill="var(--on-surface-variant)" font-size="11">59%</text>
+
+          <polyline fill="none" stroke="var(--data-1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+            points="85,145 158,136 230,115 302,102 374,80 446,66"/>
+
+          <g fill="var(--data-1)" font-size="11" font-weight="700" text-anchor="middle">
+            <circle cx="85" cy="145" r="4.5"/><text x="85" y="135">46.5%</text>
+            <circle cx="158" cy="136" r="4.5"/><text x="158" y="126">47.6%</text>
+            <circle cx="230" cy="115" r="4.5"/><text x="230" y="105">50.3%</text>
+            <circle cx="302" cy="102" r="4.5"/><text x="302" y="92">51.9%</text>
+            <circle cx="374" cy="80" r="4.5"/><text x="374" y="70">54.6%</text>
+            <circle cx="446" cy="66" r="5"/><text x="446" y="54">56.4%</text>
+          </g>
+
+          <g fill="var(--on-surface-variant)" font-size="11" text-anchor="middle">
+            <text x="85" y="185">2000</text>
+            <text x="158" y="185">2003</text>
+            <text x="230" y="185">2006</text>
+            <text x="302" y="185">2010</text>
+            <text x="374" y="185">2013</text>
+            <text x="446" y="185">2016年</text>
+          </g>
+        </svg>`;
+
+    case 'u3_protection_flow':
+      return `
+        <svg viewBox="0 0 560 175" role="img" aria-label="家庭暴力保護令聲請與核發流程圖">
+          <!-- Left applicants -->
+          <g font-size="12" font-weight="700" text-anchor="middle">
+            <rect x="14" y="12" width="118" height="32" rx="6" fill="var(--background)" stroke="var(--outline)"/>
+            <text x="73" y="33" fill="var(--on-surface)">警察局 / 檢察官</text>
+
+            <rect x="14" y="62" width="118" height="32" rx="6" fill="var(--background)" stroke="var(--outline)"/>
+            <text x="73" y="83" fill="var(--on-surface)">地方主管機關</text>
+
+            <rect x="14" y="112" width="118" height="32" rx="6" fill="var(--background)" stroke="var(--outline)"/>
+            <text x="73" y="133" fill="var(--on-surface)">家庭暴力受害人</text>
+          </g>
+
+          <!-- Connectors -->
+          <path d="M 132 28 L 160 28 L 160 128 L 132 128" fill="none" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="132" y1="78" x2="215" y2="78" stroke="var(--primary)" stroke-width="2"/>
+          <polygon points="215,73 226,78 215,83" fill="var(--primary)"/>
+          <text x="188" y="69" text-anchor="middle" fill="var(--primary)" font-size="12" font-weight="700">聲請</text>
+
+          <!-- Node Jia -->
+          <rect x="228" y="52" width="110" height="52" rx="8" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="2"/>
+          <text x="283" y="85" text-anchor="middle" fill="var(--on-primary-container)" font-size="18" font-weight="800">甲</text>
+
+          <line x1="338" y1="78" x2="395" y2="78" stroke="var(--primary)" stroke-width="2"/>
+          <polygon points="395,73 406,78 395,83" fill="var(--primary)"/>
+          <text x="370" y="69" text-anchor="middle" fill="var(--primary)" font-size="12" font-weight="700">核發</text>
+
+          <!-- Right outcomes -->
+          <g font-size="13" font-weight="700" text-anchor="middle">
+            <rect x="410" y="12" width="134" height="34" rx="6" fill="var(--positive-tint)" stroke="var(--tertiary)"/>
+            <text x="477" y="34" fill="var(--secondary)">緊急保護令</text>
+
+            <rect x="410" y="61" width="134" height="34" rx="6" fill="var(--positive-tint)" stroke="var(--tertiary)"/>
+            <text x="477" y="83" fill="var(--secondary)">暫時保護令</text>
+
+            <rect x="410" y="110" width="134" height="34" rx="6" fill="var(--positive-tint)" stroke="var(--tertiary)"/>
+            <text x="477" y="132" fill="var(--secondary)">通常保護令</text>
+          </g>
+        </svg>`;
+
+    case 'u4_taiwan_aging':
+      return `
+        <svg viewBox="0 0 540 220" role="img" aria-label="臺灣65歲以上高齡人口比例時程圖">
+          <!-- Milestone threshold bands -->
+          <line x1="65" y1="150" x2="505" y2="150" stroke="var(--data-3)" stroke-dasharray="4 4"/>
+          <text x="505" y="145" text-anchor="end" fill="var(--data-3)" font-size="11" font-weight="700">7% 門檻</text>
+
+          <line x1="65" y1="115" x2="505" y2="115" stroke="var(--primary)" stroke-dasharray="4 4"/>
+          <text x="505" y="110" text-anchor="end" fill="var(--primary)" font-size="11" font-weight="700">14% 門檻</text>
+
+          <line x1="65" y1="84" x2="505" y2="84" stroke="var(--error)" stroke-dasharray="4 4"/>
+          <text x="505" y="79" text-anchor="end" fill="var(--error)" font-size="11" font-weight="700">20% 門檻</text>
+
+          <line x1="65" y1="185" x2="505" y2="185" stroke="var(--outline)" stroke-width="1.5"/>
+
+          <!-- Bars -->
+          <rect x="92" y="149" width="52" height="36" rx="3" fill="var(--data-3)"/>
+          <text x="118" y="141" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="700">7.1%</text>
+          <text x="118" y="203" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="700">1993年</text>
+
+          <rect x="195" y="112" width="52" height="73" rx="3" fill="var(--data-1)"/>
+          <text x="221" y="104" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="700">14.6%</text>
+          <text x="221" y="203" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="700">2018年</text>
+
+          <rect x="298" y="84" width="52" height="101" rx="3" fill="var(--error)"/>
+          <text x="324" y="76" text-anchor="middle" fill="var(--error)" font-size="12" font-weight="700">20.1%</text>
+          <text x="324" y="203" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="700">2025年</text>
+
+          <rect x="401" y="34" width="52" height="151" rx="3" fill="var(--data-4)"/>
+          <text x="427" y="26" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="700">36.6%+</text>
+          <text x="427" y="203" text-anchor="middle" fill="var(--on-surface)" font-size="12" font-weight="700">2050年推估</text>
+        </svg>`;
+
+    case 'u4_menmen_line':
+      return `
+        <svg viewBox="0 0 520 210" role="img" aria-label="門門國65歲以上老年人口比例折線圖">
+          <line x1="65" y1="168" x2="480" y2="168" stroke="var(--outline)" stroke-width="1.5"/>
+          <line x1="65" y1="138" x2="480" y2="138" stroke="var(--outline-variant)"/>
+          <line x1="65" y1="108" x2="480" y2="108" stroke="var(--outline-variant)"/>
+          <line x1="65" y1="78" x2="480" y2="78" stroke="var(--outline-variant)"/>
+          <line x1="65" y1="48" x2="480" y2="48" stroke="var(--outline-variant)"/>
+
+          <!-- 7% threshold line -->
+          <line x1="65" y1="123" x2="480" y2="123" stroke="var(--tertiary)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <text x="480" y="117" text-anchor="end" fill="var(--tertiary)" font-size="11" font-weight="700">7% 高齡化社會門檻</text>
+
+          <text x="55" y="172" text-anchor="end" fill="var(--on-surface-variant)" font-size="11">4%</text>
+          <text x="55" y="142" text-anchor="end" fill="var(--on-surface-variant)" font-size="11">6%</text>
+          <text x="55" y="112" text-anchor="end" fill="var(--on-surface-variant)" font-size="11">8%</text>
+          <text x="55" y="82" text-anchor="end" fill="var(--on-surface-variant)" font-size="11">10%</text>
+          <text x="55" y="52" text-anchor="end" fill="var(--on-surface-variant)" font-size="11">12%</text>
+
+          <polyline fill="none" stroke="var(--data-1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+            points="92,130 164,110 236,96 308,78 380,71 452,59"/>
+
+          <g fill="var(--data-1)" font-size="11" font-weight="700" text-anchor="middle">
+            <circle cx="92" cy="130" r="4.5"/><text x="92" y="148">6.53%</text>
+            <circle cx="164" cy="110" r="4.5"/><text x="164" y="99">7.86%</text>
+            <circle cx="236" cy="96" r="4.5"/><text x="236" y="85">8.81%</text>
+            <circle cx="308" cy="78" r="4.5"/><text x="308" y="67">10.0%</text>
+            <circle cx="380" cy="71" r="4.5"/><text x="380" y="60">10.43%</text>
+            <circle cx="452" cy="59" r="5"/><text x="452" y="48">11.23%</text>
+          </g>
+
+          <g fill="var(--on-surface-variant)" font-size="11" text-anchor="middle">
+            <text x="92" y="188">1991年</text>
+            <text x="164" y="188">1996年</text>
+            <text x="236" y="188">2001年</text>
+            <text x="308" y="188">2006年</text>
+            <text x="380" y="188">2011年</text>
+            <text x="452" y="188">2016年</text>
+          </g>
+        </svg>`;
+
+    case 'u4_menzhi_dual':
+      return `
+        <svg viewBox="0 0 540 215" role="img" aria-label="門之國出生人口與老年人口數雙數據對照圖">
+          <rect x="65" y="14" width="215" height="186" rx="8" fill="var(--background)" stroke="var(--outline-variant)"/>
+          <text x="172" y="36" text-anchor="middle" fill="var(--primary)" font-size="13" font-weight="700">出生人口數（萬人）</text>
+          <g font-size="12" font-weight="700">
+            <text x="108" y="64" text-anchor="end" fill="var(--on-surface-variant)">2015</text>
+            <rect x="116" y="52" width="120" height="15" rx="3" fill="var(--data-1)"/><text x="242" y="64" fill="var(--data-1)">26</text>
+
+            <text x="108" y="92" text-anchor="end" fill="var(--on-surface-variant)">2016</text>
+            <rect x="116" y="80" width="110" height="15" rx="3" fill="var(--data-1)"/><text x="232" y="92" fill="var(--data-1)">24</text>
+
+            <text x="108" y="120" text-anchor="end" fill="var(--on-surface-variant)">2017</text>
+            <rect x="116" y="108" width="101" height="15" rx="3" fill="var(--data-1)"/><text x="223" y="120" fill="var(--data-1)">22</text>
+
+            <text x="108" y="148" text-anchor="end" fill="var(--on-surface-variant)">2018</text>
+            <rect x="116" y="136" width="96" height="15" rx="3" fill="var(--data-1)"/><text x="218" y="148" fill="var(--data-1)">21</text>
+
+            <text x="108" y="176" text-anchor="end" fill="var(--on-surface-variant)">2019</text>
+            <rect x="116" y="164" width="91" height="15" rx="3" fill="var(--data-1)"/><text x="213" y="176" fill="var(--data-1)">20</text>
+          </g>
+
+          <rect x="295" y="14" width="215" height="186" rx="8" fill="var(--background)" stroke="var(--outline-variant)"/>
+          <text x="402" y="36" text-anchor="middle" fill="var(--data-3)" font-size="13" font-weight="700">老年人口數（萬人）</text>
+          <g font-size="12" font-weight="700">
+            <text x="338" y="64" text-anchor="end" fill="var(--on-surface-variant)">2015</text>
+            <rect x="346" y="52" width="102" height="15" rx="3" fill="var(--data-3)"/><text x="454" y="64" fill="var(--data-3)">197</text>
+
+            <text x="338" y="92" text-anchor="end" fill="var(--on-surface-variant)">2016</text>
+            <rect x="346" y="80" width="106" height="15" rx="3" fill="var(--data-3)"/><text x="458" y="92" fill="var(--data-3)">203</text>
+
+            <text x="338" y="120" text-anchor="end" fill="var(--on-surface-variant)">2017</text>
+            <rect x="346" y="108" width="110" height="15" rx="3" fill="var(--data-3)"/><text x="462" y="120" fill="var(--data-3)">209</text>
+
+            <text x="338" y="148" text-anchor="end" fill="var(--on-surface-variant)">2018</text>
+            <rect x="346" y="136" width="114" height="15" rx="3" fill="var(--data-3)"/><text x="466" y="148" fill="var(--data-3)">214</text>
+
+            <text x="338" y="176" text-anchor="end" fill="var(--on-surface-variant)">2019</text>
+            <rect x="346" y="164" width="120" height="15" rx="3" fill="var(--data-3)"/><text x="472" y="176" fill="var(--data-3)">222</text>
+          </g>
+        </svg>`;
+
+    case 'u4_dashu_ratio':
+      return `
+        <svg viewBox="0 0 480 185" role="img" aria-label="大樹國過去現在未來老年與就業人口比率變化圖">
+          <rect x="255" y="10" width="14" height="14" rx="3" fill="var(--data-3)"/>
+          <text x="275" y="22" fill="var(--on-surface)" font-size="12" font-weight="600">老年人口比率</text>
+          <rect x="365" y="10" width="14" height="14" rx="3" fill="var(--data-1)"/>
+          <text x="385" y="22" fill="var(--on-surface)" font-size="12" font-weight="600">就業人口比率</text>
+
+          <g font-size="13" font-weight="700">
+            <text x="72" y="64" text-anchor="end" fill="var(--on-surface)">過去</text>
+            <rect x="85" y="45" width="38" height="28" rx="3" fill="var(--data-3)"/>
+            <text x="104" y="64" text-anchor="middle" fill="var(--on-primary)" font-size="11">8%</text>
+            <rect x="125" y="45" width="290" height="28" rx="3" fill="var(--data-1)"/>
+            <text x="270" y="64" text-anchor="middle" fill="var(--on-primary)" font-size="12">就業支撐寬裕</text>
+
+            <text x="72" y="108" text-anchor="end" fill="var(--on-surface)">現在</text>
+            <rect x="85" y="89" width="76" height="28" rx="3" fill="var(--data-3)"/>
+            <text x="123" y="108" text-anchor="middle" fill="var(--on-primary)" font-size="11">16%</text>
+            <rect x="163" y="89" width="252" height="28" rx="3" fill="var(--data-1)"/>
+            <text x="289" y="108" text-anchor="middle" fill="var(--on-primary)" font-size="12">扶養壓力增加</text>
+
+            <text x="72" y="152" text-anchor="end" fill="var(--on-surface)">未來</text>
+            <rect x="85" y="133" width="152" height="28" rx="3" fill="var(--data-3)"/>
+            <text x="161" y="152" text-anchor="middle" fill="var(--on-primary)" font-size="11">32%+</text>
+            <rect x="239" y="133" width="176" height="28" rx="3" fill="var(--data-1)"/>
+            <text x="327" y="152" text-anchor="middle" fill="var(--on-primary)" font-size="12">扶養負擔沉重</text>
+          </g>
+        </svg>`;
+
+    default:
+      return '';
+  }
+}
+
+/* ===== Render Functions ===== */
+function renderAll() {
+  renderUnitFilters();
+  renderModeButtons();
+  const activeQuestions = getActiveQuestions();
+  renderDashboardKPIs(activeQuestions);
+  renderScoreRuler(activeQuestions);
+  renderJumpGrid(activeQuestions);
+  renderQuestionCards(activeQuestions);
+  renderDiagnosticTable();
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons();
+  }
+}
+
+function renderUnitFilters() {
+  const container = document.getElementById('unit-filter-row');
+  if (!container) return;
+
+  const allCount = QUESTIONS.length;
+  let html = `<button type="button" class="filter-btn" aria-pressed="${appState.selectedUnit === 'all'}" onclick="setUnitFilter('all')">
+    <span>全部單元</span>
+    <span class="filter-count">${allCount}</span>
+  </button>`;
+
+  for (let i = 0; i < UNITS.length; i++) {
+    const u = UNITS[i];
+    const cnt = QUESTIONS.filter(function(q) { return q.unit === u.id; }).length;
+    const pressed = appState.selectedUnit === u.id;
+    html += `<button type="button" class="filter-btn" aria-pressed="${pressed}" onclick="setUnitFilter('${u.id}')">
+      <span>${u.name}</span>
+      <span class="filter-count">${cnt}</span>
+    </button>`;
+  }
+  container.innerHTML = html;
+}
+
+function renderModeButtons() {
+  const row = document.getElementById('mode-btn-row');
+  if (row) {
+    const buttons = row.querySelectorAll('.filter-btn');
+    for (let i = 0; i < buttons.length; i++) {
+      const m = buttons[i].getAttribute('data-mode');
+      buttons[i].setAttribute('aria-pressed', m === appState.quizMode ? 'true' : 'false');
+    }
+  }
+  const wrongBadge = document.getElementById('wrong-mode-badge');
+  if (wrongBadge) {
+    wrongBadge.textContent = String(appState.wrongIds.length);
+  }
+  const mockActions = document.getElementById('mock-actions');
+  if (mockActions) {
+    mockActions.style.display = appState.quizMode === 'mock' ? 'block' : 'none';
+  }
+}
+
+function computeStats(activeQuestions) {
+  const ansMap = getCurrentAnswerMap();
+  const total = activeQuestions.length;
+  let answered = 0;
+  let correct = 0;
+  let wrong = 0;
+
+  for (let i = 0; i < total; i++) {
+    const q = activeQuestions[i];
+    const chosen = ansMap[q.id];
+    if (typeof chosen === 'number') {
+      answered++;
+      if (chosen === q.answer) {
+        correct++;
+      } else {
+        wrong++;
+      }
+    }
+  }
+
+  const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+  const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : null;
+  const progressPct = total > 0 ? Math.round((answered / total) * 100) : 0;
+
+  return { total, answered, correct, wrong, score, accuracy, progressPct };
+}
+
+function renderDashboardKPIs(activeQuestions) {
+  const stats = computeStats(activeQuestions);
+
+  const scoreCard = document.getElementById('kpi-score-card');
+  const scoreVal = document.getElementById('kpi-score-value');
+  const scoreCap = document.getElementById('kpi-score-caption');
+  if (scoreVal && scoreCap && scoreCard) {
+    scoreVal.textContent = `${stats.score} 分`;
+    if (stats.answered === 0) {
+      scoreCard.setAttribute('data-status', 'info');
+      scoreCap.innerHTML = `<span class="chip" data-status="neutral">尚未作答</span><span>滿分 100 分</span>`;
+    } else if (stats.score >= 80) {
+      scoreCard.setAttribute('data-status', 'ok');
+      scoreCap.innerHTML = `<span class="chip">精熟優秀</span><span>已超越 60 分及格線</span>`;
+    } else if (stats.score >= 60) {
+      scoreCard.setAttribute('data-status', 'ok');
+      scoreCap.innerHTML = `<span class="chip">達標及格</span><span>距離精熟 80 分差 ${80 - stats.score} 分</span>`;
+    } else {
+      scoreCard.setAttribute('data-status', 'alert');
+      scoreCap.innerHTML = `<span class="chip" data-status="alert">未達及格</span><span>距 60 分及格線差 ${60 - stats.score} 分</span>`;
+    }
+  }
+
+  const progVal = document.getElementById('kpi-progress-value');
+  const progCap = document.getElementById('kpi-progress-caption');
+  if (progVal && progCap) {
+    progVal.textContent = `${stats.answered} / ${stats.total} 題`;
+    progCap.textContent = `完成度 ${stats.progressPct}%`;
+  }
+
+  const cntCard = document.getElementById('kpi-count-card');
+  const cntVal = document.getElementById('kpi-count-value');
+  const cntCap = document.getElementById('kpi-count-caption');
+  if (cntCard && cntVal && cntCap) {
+    cntVal.textContent = `${stats.correct} ／ ${stats.wrong} 題`;
+    cntCap.textContent = `錯題庫累計待複習：${appState.wrongIds.length} 題`;
+    cntCard.setAttribute('data-status', stats.wrong > 0 ? 'warn' : 'info');
+  }
+
+  const accCard = document.getElementById('kpi-acc-card');
+  const accVal = document.getElementById('kpi-acc-value');
+  const accCap = document.getElementById('kpi-acc-caption');
+  if (accCard && accVal && accCap) {
+    if (stats.accuracy === null) {
+      accVal.textContent = `--%`;
+      accCap.textContent = `請點選下方試題開始作答`;
+      accCard.setAttribute('data-status', 'info');
+    } else {
+      accVal.textContent = `${stats.accuracy}%`;
+      if (stats.accuracy >= 80) {
+        accCap.textContent = `概念掌握穩固，維持答題手感！`;
+        accCard.setAttribute('data-status', 'ok');
+      } else if (stats.accuracy >= 60) {
+        accCap.textContent = `已達及格標準，建議針對錯題加強。`;
+        accCard.setAttribute('data-status', 'info');
+      } else {
+        accCap.textContent = `建議詳閱解析並切換「錯題集中複習」。`;
+        accCard.setAttribute('data-status', 'alert');
+      }
+    }
+  }
+}
+
+function renderScoreRuler(activeQuestions) {
+  const wrap = document.getElementById('ruler-svg-container');
+  if (!wrap) return;
+  const stats = computeStats(activeQuestions);
+  const score = stats.score;
+
+  // Map 0..100 to x = 40..760 (width 720)
+  const startX = 40;
+  const trackW = 720;
+  const scoreX = startX + (score / 100) * trackW;
+  const x30 = startX + 0.30 * trackW;
+  const x60 = startX + 0.60 * trackW;
+  const x80 = startX + 0.80 * trackW;
+  const x100 = startX + trackW;
+
+  const barColor = score >= 60 ? 'var(--tertiary)' : (stats.answered > 0 ? 'var(--primary)' : 'var(--data-context)');
+  const markerLabelX = Math.max(startX + 42, Math.min(x100 - 42, scoreX));
+
+  wrap.innerHTML = `
+    <svg viewBox="0 0 800 96" role="img" aria-label="段考及格基準線量尺，目前得分 ${score} 分">
+      <!-- Background Track -->
+      <rect x="${startX}" y="44" width="${trackW}" height="18" rx="9" fill="var(--surface-container-low)" stroke="var(--outline-variant)" stroke-width="1"/>
+
+      <!-- 60-79 Passing Band -->
+      <rect x="${x60}" y="44" width="${x80 - x60}" height="18" fill="var(--tertiary)" fill-opacity="0.14"/>
+
+      <!-- 80-100 Mastery Band -->
+      <rect x="${x80}" y="44" width="${x100 - x80}" height="18" rx="9" fill="var(--tertiary)" fill-opacity="0.26"/>
+      <rect x="${x80}" y="44" width="12" height="18" fill="var(--tertiary)" fill-opacity="0.26"/>
+
+      <!-- Live Score Fill -->
+      ${score > 0 ? `<rect x="${startX}" y="44" width="${Math.max(12, scoreX - startX)}" height="18" rx="9" fill="${barColor}"/>` : ''}
+
+      <!-- Passing Green Dashed Line at 60 -->
+      <line x1="${x60}" y1="30" x2="${x60}" y2="72" stroke="var(--tertiary)" stroke-width="2.5" stroke-dasharray="4 3"/>
+
+      <!-- Tick Marks -->
+      <line x1="${startX}" y1="62" x2="${startX}" y2="70" stroke="var(--outline)" stroke-width="1.5"/>
+      <line x1="${x30}" y1="62" x2="${x30}" y2="70" stroke="var(--outline)" stroke-width="1.5"/>
+      <line x1="${x80}" y1="62" x2="${x80}" y2="70" stroke="var(--outline)" stroke-width="1.5"/>
+      <line x1="${x100}" y1="62" x2="${x100}" y2="70" stroke="var(--outline)" stroke-width="1.5"/>
+
+      <!-- Tick Labels -->
+      <g font-size="12" font-weight="600" text-anchor="middle">
+        <text x="${startX}" y="86" fill="var(--on-surface-variant)">0 分</text>
+        <text x="${x30}" y="86" fill="var(--on-surface-variant)">30 分</text>
+        <text x="${x60}" y="86" fill="var(--tertiary)" font-weight="800">60 分（及格線）</text>
+        <text x="${x80}" y="86" fill="var(--secondary)" font-weight="700">80 分（精熟）</text>
+        <text x="${x100}" y="86" fill="var(--on-surface-variant)">100 分</text>
+      </g>
+
+      <!-- Floating Score Pointer -->
+      <g transform="translate(${scoreX}, 0)">
+        <circle cx="0" cy="53" r="8" fill="var(--background)" stroke="var(--primary)" stroke-width="3"/>
+      </g>
+      <rect x="${markerLabelX - 42}" y="6" width="84" height="24" rx="12" fill="var(--primary)"/>
+      <text x="${markerLabelX}" y="22" text-anchor="middle" fill="var(--on-primary)" font-size="12" font-weight="800">目前 ${score} 分</text>
+    </svg>`;
+}
+
+function renderJumpGrid(activeQuestions) {
+  const grid = document.getElementById('jump-grid');
+  if (!grid) return;
+
+  if (activeQuestions.length === 0) {
+    grid.innerHTML = `<span class="section-sub">目前模式無題目可顯示</span>`;
+    return;
+  }
+
+  const ansMap = getCurrentAnswerMap();
+  let html = '';
+  for (let i = 0; i < activeQuestions.length; i++) {
+    const q = activeQuestions[i];
+    const chosen = ansMap[q.id];
+    let state = 'unanswered';
+    if (typeof chosen === 'number') {
+      state = chosen === q.answer ? 'correct' : 'wrong';
+    }
+    const isActive = appState.activeQid === q.id;
+    html += `<button type="button" class="jump-tile" data-state="${state}" data-active="${isActive}" onclick="jumpToQuestion('${q.id}')" aria-label="跳至第 ${i + 1} 題">${i + 1}</button>`;
+  }
+  grid.innerHTML = html;
+}
+
+function renderQuestionCards(activeQuestions) {
+  const container = document.getElementById('questions-container');
+  const titleEl = document.getElementById('quiz-section-title');
+  const metaEl = document.getElementById('quiz-section-meta');
+  if (!container) return;
+
+  const unitName = appState.selectedUnit === 'all' ? '全部單元' : getUnitById(appState.selectedUnit).name;
+  const modeLabel = appState.quizMode === 'mock' ? '段考模擬抽測' : (appState.quizMode === 'wrong' ? '錯題集中複習' : '完整練習');
+
+  if (titleEl) titleEl.textContent = `${modeLabel} ─ ${unitName}`;
+  if (metaEl) metaEl.textContent = `顯示 ${activeQuestions.length} 題`;
+
+  if (activeQuestions.length === 0) {
+    if (appState.quizMode === 'wrong') {
+      container.innerHTML = `
+        <div class="empty-state">
+          <i data-lucide="award" width="40" height="40" style="color:var(--tertiary);"></i>
+          <h3 class="empty-title">目前沒有待複習的錯題！</h3>
+          <p class="empty-desc">您在目前篩選範圍內尚無答錯紀錄，或所有錯題皆已完成訂正。您可以切換至「完整練習」或「段考模擬抽測」繼續挑戰。</p>
+          <button type="button" class="btn btn-primary" onclick="setQuizMode('all')">返回完整練習</button>
+        </div>`;
+    } else {
+      container.innerHTML = `
+        <div class="empty-state">
+          <h3 class="empty-title">此篩選條件下沒有試題</h3>
+          <p class="empty-desc">請選擇其他單元或切換至「全部單元」。</p>
+          <button type="button" class="btn btn-primary" onclick="setUnitFilter('all')">顯示全部單元</button>
+        </div>`;
+    }
+    return;
+  }
+
+  const ansMap = getCurrentAnswerMap();
+  const letters = ['A', 'B', 'C', 'D'];
+  let html = '';
+
+  for (let i = 0; i < activeQuestions.length; i++) {
+    const q = activeQuestions[i];
+    const unitInfo = getUnitById(q.unit);
+    const chosen = ansMap[q.id];
+    const isAnswered = typeof chosen === 'number';
+    const isCorrect = isAnswered && chosen === q.answer;
+    const resultAttr = isAnswered ? (isCorrect ? 'correct' : 'wrong') : '';
+    const isHighlight = appState.activeQid === q.id ? 'is-highlighted' : '';
+
+    html += `<article id="qcard-${q.id}" class="question-card ${isHighlight}" data-result="${resultAttr}">
+      <div class="q-meta-row">
+        <div class="q-badges">
+          <span class="q-number">第 ${String(i + 1).padStart(2, '0')} 題</span>
+          <span class="chip" data-status="info">${unitInfo.short}</span>
+          ${q.svgType ? `<span class="chip" data-status="neutral">圖表判讀</span>` : ''}
+          ${appState.quizMode === 'wrong' && isCorrect ? `<span class="chip">已訂正答對</span>` : ''}
+        </div>
+        <span class="q-source">出處：${q.source}</span>
+      </div>
+
+      <p class="q-stem">${q.stem}</p>`;
+
+    if (q.svgType) {
+      html += `<div class="q-figure">
+        ${renderQuestionSvg(q.svgType)}
+        <div class="q-figure-caption">${q.svgCaption || ''}</div>
+      </div>`;
+    }
+
+    html += `<div class="options-grid" role="group" aria-label="第 ${i + 1} 題選項">`;
+    for (let optIdx = 0; optIdx < q.options.length; optIdx++) {
+      let optState = '';
+      if (isAnswered) {
+        if (optIdx === q.answer) {
+          optState = 'correct';
+        } else if (optIdx === chosen) {
+          optState = 'wrong';
+        }
+      }
+      html += `<button type="button" class="option-btn" data-state="${optState}" ${isAnswered ? 'disabled' : ''} onclick="selectOption('${q.id}', ${optIdx})">
+        <span class="option-letter">${letters[optIdx]}</span>
+        <span class="option-text">${q.options[optIdx]}</span>
+      </button>`;
+    }
+    html += `</div>`;
+
+    if (isAnswered) {
+      const verdictText = isCorrect
+        ? `答對了！正確答案為 (${letters[q.answer]})`
+        : `答錯了，您選了 (${letters[chosen]})，正確答案為 (${letters[q.answer]})`;
+
+      html += `<div class="explanation-box" data-result="${resultAttr}">
+        <div class="explanation-head" data-result="${resultAttr}">
+          <span>${verdictText}</span>
+          ${appState.quizMode === 'wrong' ? `<button type="button" class="btn btn-secondary btn-compact" onclick="retryReviewQuestion('${q.id}')">再測一次</button>` : ''}
+        </div>
+        <p class="explanation-body">${q.explanation}</p>
+      </div>`;
+    }
+
+    html += `</article>`;
+  }
+
+  container.innerHTML = html;
+}
+
+function renderDiagnosticTable() {
+  const tbody = document.getElementById('diagnostic-tbody');
+  const tfoot = document.getElementById('diagnostic-tfoot');
+  if (!tbody || !tfoot) return;
+
+  let bodyHtml = '';
+  let sumTotal = 0;
+  let sumAnswered = 0;
+  let sumCorrect = 0;
+  let sumWrong = 0;
+
+  for (let i = 0; i < UNITS.length; i++) {
+    const u = UNITS[i];
+    const unitQs = QUESTIONS.filter(function(q) { return q.unit === u.id; });
+    const uTotal = unitQs.length;
+    let uAnswered = 0;
+    let uCorrect = 0;
+    let uWrong = 0;
+
+    for (let j = 0; j < unitQs.length; j++) {
+      const chosen = appState.answers[unitQs[j].id];
+      if (typeof chosen === 'number') {
+        uAnswered++;
+        if (chosen === unitQs[j].answer) uCorrect++;
+        else uWrong++;
+      }
+    }
+
+    sumTotal += uTotal;
+    sumAnswered += uAnswered;
+    sumCorrect += uCorrect;
+    sumWrong += uWrong;
+
+    const acc = uAnswered > 0 ? Math.round((uCorrect / uAnswered) * 100) : null;
+    let statusChip = `<span class="chip" data-status="neutral">尚未作答</span>`;
+    let tier = 'neutral';
+    if (acc !== null) {
+      if (acc >= 80) {
+        statusChip = `<span class="chip">已精熟</span>`;
+        tier = 'master';
+      } else if (acc >= 60) {
+        statusChip = `<span class="chip" data-status="info">達標穩定</span>`;
+        tier = 'pass';
+      } else {
+        statusChip = `<span class="chip" data-status="alert">待加強（弱點）</span>`;
+        tier = 'weak';
+      }
+    }
+
+    bodyHtml += `<tr>
+      <td><strong>${u.name}</strong></td>
+      <td class="diag-num">${uTotal}</td>
+      <td class="diag-num">${uAnswered}</td>
+      <td class="diag-num" style="color:var(--secondary);font-weight:700;">${uCorrect}</td>
+      <td class="diag-num" style="color:${uWrong > 0 ? 'var(--error)' : 'var(--on-surface-variant)'};font-weight:700;">${uWrong}</td>
+      <td>
+        <div class="mini-bar-wrap">
+          <div class="mini-bar-track">
+            <div class="mini-bar-fill" data-tier="${tier}" style="width:${acc !== null ? acc : 0}%;"></div>
+          </div>
+          <span style="min-width:42px;text-align:right;font-weight:700;">${acc !== null ? acc + '%' : '--%'}</span>
+        </div>
+      </td>
+      <td>${statusChip}</td>
+      <td>
+        <button type="button" class="btn btn-secondary btn-compact" onclick="practiceUnitFromTable('${u.id}')">練習此單元</button>
+      </td>
+    </tr>`;
+  }
+
+  tbody.innerHTML = bodyHtml;
+
+  const totalAcc = sumAnswered > 0 ? Math.round((sumCorrect / sumAnswered) * 100) : null;
+  let totalStatus = `<span class="chip" data-status="neutral">尚未作答</span>`;
+  if (totalAcc !== null) {
+    if (totalAcc >= 80) totalStatus = `<span class="chip">整體精熟</span>`;
+    else if (totalAcc >= 60) totalStatus = `<span class="chip" data-status="info">整體及格</span>`;
+    else totalStatus = `<span class="chip" data-status="alert">整體待加強</span>`;
+  }
+
+  tfoot.innerHTML = `<tr>
+    <td>全單元合計</td>
+    <td class="diag-num">${sumTotal}</td>
+    <td class="diag-num">${sumAnswered}</td>
+    <td class="diag-num">${sumCorrect}</td>
+    <td class="diag-num">${sumWrong}</td>
+    <td>${totalAcc !== null ? totalAcc + '%' : '--%'}</td>
+    <td>${totalStatus}</td>
+    <td>
+      <button type="button" class="btn btn-secondary btn-compact" onclick="practiceUnitFromTable('all')">全部單元</button>
+    </td>
+  </tr>`;
+}
+
+/* ===== User Interaction Handlers (Hoisted function declarations) ===== */
+function setUnitFilter(unitId) {
+  appState.selectedUnit = unitId;
+  if (appState.quizMode === 'mock') {
+    appState.mockIds = sampleMockIds(unitId);
+  }
+  const active = getActiveQuestions();
+  appState.activeQid = active.length > 0 ? active[0].id : '';
+  renderAll();
+  scheduleSave();
+}
+
+function setQuizMode(mode) {
+  appState.quizMode = mode;
+  if (mode === 'mock') {
+    appState.mockIds = sampleMockIds(appState.selectedUnit);
+  }
+  if (mode === 'wrong') {
+    appState.reviewAnswers = {};
+  }
+  const active = getActiveQuestions();
+  appState.activeQid = active.length > 0 ? active[0].id : '';
+  renderAll();
+  scheduleSave();
+}
+
+function rerollMockQuestions() {
+  appState.mockIds = sampleMockIds(appState.selectedUnit);
+  const active = getActiveQuestions();
+  appState.activeQid = active.length > 0 ? active[0].id : '';
+  renderAll();
+  scheduleSave();
+}
+
+function jumpToQuestion(qid) {
+  appState.activeQid = qid;
+  const activeQuestions = getActiveQuestions();
+  renderJumpGrid(activeQuestions);
+
+  const cards = document.querySelectorAll('.question-card');
+  for (let i = 0; i < cards.length; i++) {
+    cards[i].classList.remove('is-highlighted');
+  }
+  const target = document.getElementById(`qcard-${qid}`);
+  if (target) {
+    target.classList.add('is-highlighted');
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function jumpToNextUnanswered() {
+  const active = getActiveQuestions();
+  const ansMap = getCurrentAnswerMap();
+  for (let i = 0; i < active.length; i++) {
+    if (typeof ansMap[active[i].id] !== 'number') {
+      jumpToQuestion(active[i].id);
+      return;
+    }
+  }
+  if (active.length > 0) {
+    jumpToQuestion(active[0].id);
+  }
+}
+
+function selectOption(qid, optIdx) {
+  const q = getQuestionById(qid);
+  if (!q) return;
+
+  appState.activeQid = qid;
+
+  if (appState.quizMode === 'wrong') {
+    appState.reviewAnswers[qid] = optIdx;
+    appState.answers[qid] = optIdx;
+    if (optIdx === q.answer) {
+      // Keep visible in current review session via reviewAnswers, remove from wrongIds if fixed?
+      // Better: update wrongIds only when leaving or keep track cleanly; actually removing from wrongIds makes the badge drop immediately,
+      // Wait: if we remove from wrongIds immediately, getActiveQuestions() in 'wrong' mode would hide the card!
+      // So in 'wrong' mode, keep qid in wrongIds until they switch out OR provide a clean filter—or only update wrongIds when switching modes/resetting?
+      // Wait: let's keep it in wrongIds while reviewing, or update answers[qid] = optIdx and sync wrongIds when leaving wrong mode?
+      // Actually even simpler: if optIdx === q.answer in review, mark corrected; let's NOT drop it from wrongIds until user clicks "移出錯題庫" or switches away? No, automatic is nice if it doesn't vanish mid-read!
+      // Let's keep wrongIds containing qid until the user clicks "重新整理錯題列表" or switches mode, OR wait—if they refresh page, they expect corrected wrong questions to be cleared from wrongIds!
+      // Solution: filter getActiveQuestions() in 'wrong' mode using (wrongIds includes q.id OR reviewAnswers has q.id)! That way removing it from wrongIds immediately updates the badge count AND keeps the card visible with its「已訂正答對」explanation right there!
+      const idx = appState.wrongIds.indexOf(qid);
+      if (idx !== -1) appState.wrongIds.splice(idx, 1);
+    }
+  } else {
+    appState.answers[qid] = optIdx;
+    const idx = appState.wrongIds.indexOf(qid);
+    if (optIdx !== q.answer) {
+      if (idx === -1) appState.wrongIds.push(qid);
+    } else {
+      if (idx !== -1) appState.wrongIds.splice(idx, 1);
+    }
+  }
+
+  renderAll();
+  scheduleSave();
+}
+
+function retryReviewQuestion(qid) {
+  delete appState.reviewAnswers[qid];
+  renderAll();
+  scheduleSave();
+}
+
+function practiceUnitFromTable(unitId) {
+  appState.selectedUnit = unitId;
+  appState.quizMode = 'all';
+  const active = getActiveQuestions();
+  appState.activeQid = active.length > 0 ? active[0].id : '';
+  renderAll();
+  scheduleSave();
+  const qSection = document.getElementById('quiz-section-title');
+  if (qSection) qSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function handleResetQuiz(btn) {
+  if (!btn) return;
+  if (btn.dataset.armed !== 'true') {
+    btn.dataset.armed = 'true';
+    const span = btn.querySelector('span');
+    if (span) span.textContent = '確定清除全部作答？';
+    setTimeout(function() {
+      if (btn.dataset.armed === 'true') {
+        btn.dataset.armed = 'false';
+        const s = btn.querySelector('span');
+        if (s) s.textContent = '重新作答';
+      }
+    }, 4000);
+    return;
+  }
+
+  btn.dataset.armed = 'false';
+  const span = btn.querySelector('span');
+  if (span) span.textContent = '重新作答';
+
+  appState = cloneDefaultState();
+  renderAll();
+  saveState();
+}
+
+function printScoreReport() {
+  window.print();
+}
+
+function exportScoreReport() {
+  const active = getActiveQuestions();
+  const stats = computeStats(active);
+  const nowStr = new Date().toLocaleString('zh-TW', { hour12: false });
+
+  const lines = [
+    '====================================================',
+    '國中七年級公民科（7上第二次段考）即時評分測驗成績單',
+    '====================================================',
+    `匯出時間：${nowStr}`,
+    `目前測驗模式：${appState.quizMode === 'mock' ? '段考模擬抽測（10題）' : (appState.quizMode === 'wrong' ? '錯題集中複習' : '完整練習')}`,
+    `即時百分制得分：${stats.score} 分（60分及格）`,
+    `本回作答進度：${stats.answered} / ${stats.total} 題（完成度 ${stats.progressPct}%）`,
+    `答對 / 答錯題數：${stats.correct} 題 ／ ${stats.wrong} 題`,
+    `已作答正確率：${stats.accuracy !== null ? stats.accuracy + '%' : '尚未作答'}`,
+    '',
+    '【各單元表現統計】'
+  ];
+
+  for (let i = 0; i < UNITS.length; i++) {
+    const u = UNITS[i];
+    const uqs = QUESTIONS.filter(function(q) { return q.unit === u.id; });
+    let ua = 0, uc = 0;
+    for (let j = 0; j < uqs.length; j++) {
+      const ch = appState.answers[uqs[j].id];
+      if (typeof ch === 'number') {
+        ua++;
+        if (ch === uqs[j].answer) uc++;
+      }
+    }
+    const uAcc = ua > 0 ? Math.round((uc / ua) * 100) + '%' : '--%';
+    lines.push(`- ${u.name}：已答 ${ua}/${uqs.length} 題，答對 ${uc} 題，正確率 ${uAcc}`);
+  }
+
+  lines.push('');
+  lines.push('【錯題待複習清單】');
+  if (appState.wrongIds.length === 0) {
+    lines.push('目前無錯題紀錄。');
+  } else {
+    const letters = ['A', 'B', 'C', 'D'];
+    for (let i = 0; i < appState.wrongIds.length; i++) {
+      const q = getQuestionById(appState.wrongIds[i]);
+      if (q) {
+        lines.push(`* [${getUnitById(q.unit).short}] ${q.stem}`);
+        lines.push(`  正解：(${letters[q.answer]}) ${q.options[q.answer]}`);
+        lines.push(`  解析：${q.explanation}`);
+      }
+    }
+  }
+
+  const content = lines.join('\n');
+  const filename = '七年級公民_7上第二次段考成績單.txt';
+
+  if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === 'function') {
+    window.notebookAppApi.triggerFileDownload({
+      content: content,
+      contentType: 'text/plain',
+      encoding: 'UTF-8',
+      filename: filename
+    });
+    showSaveStatus('已匯出成績單檔案', false);
+    return;
+  }
+
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ===== App Init & State Restore ===== */
+async function initApp() {
+  if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+    try {
+      const saved = await window.notebookAppApi.getAppState();
+      if (saved && typeof saved === 'object') {
+        appState.answers = saved.answers && typeof saved.answers === 'object' ? saved.answers : {};
+        appState.wrongIds = Array.isArray(saved.wrongIds) ? saved.wrongIds : [];
+        appState.selectedUnit = typeof saved.selectedUnit === 'string' ? saved.selectedUnit : 'all';
+        appState.quizMode = typeof saved.quizMode === 'string' ? saved.quizMode : 'all';
+        appState.mockIds = Array.isArray(saved.mockIds) ? saved.mockIds : [];
+        appState.reviewAnswers = saved.reviewAnswers && typeof saved.reviewAnswers === 'object' ? saved.reviewAnswers : {};
+        appState.activeQid = typeof saved.activeQid === 'string' ? saved.activeQid : 'u1_01';
+      }
+    } catch (e) {
+      appState = cloneDefaultState();
+    }
+  }
+
+  renderAll();
+
+  if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+    window.notebookAppApi.notifyAppReady();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initApp();
+});
+</script>
+</body>
+</html>
