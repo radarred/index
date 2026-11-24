@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="dashboard">
+  <meta name="design-style" content="haven">
+  <title>七年級英語第二次段考互動式學習指南</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Haven) */
+      --background: #f5f6f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #e3ebe2;
+      --surface-container-high: #dbe2dd;
+
+      /* Ink */
+      --on-surface: #23272a;
+      --on-surface-variant: #5c6468;
+
+      /* Rules */
+      --outline: #c9d0cc;
+      --outline-variant: #dde2df;
+
+      /* Accents */
+      --primary: #3c5a6e;
+      --on-primary: #ffffff;
+      --primary-container: #e2e9ee;
+      --on-primary-container: #2a4152;
+      --secondary: #4f6b53;
+      --tertiary: #5f7c63;
+      --error: #a63d32;
+      --on-error: #ffffff;
+      --error-container: #f7e6e4;
+
+      /* Data series */
+      --data-1: #3c5a6e;
+      --data-2: #5f7c63;
+      --data-3: #a8694a;
+      --data-4: #8a7a68;
+      --data-context: #c3cac6;
+
+      /* Fonts */
+      --font-headline: 'Noto Sans TC', 'Outfit', sans-serif;
+      --font-body: 'Noto Sans TC', 'Hanken Grotesk', sans-serif;
+      --font-label: 'Noto Sans TC', 'Outfit', sans-serif;
+
+      /* Shape */
+      --rounded: 0.375rem;
+      --rounded-lg: 0.5rem;
+      --rounded-full: 9999px;
+
+      /* Style effects */
+      --hairline: 1px solid var(--outline-variant);
+      --hairline-control: 1px solid var(--outline);
+      --elevation: none;
+      --active-accent-bar: inset 0 3px 0 0 var(--primary);
+      --active-left-bar: inset 3px 0 0 0 var(--primary);
+
+      /* Shared semantic tokens */
+      --positive: #4f6b53;
+      --warning: #a8694a;
+      --focus: #3c5a6e;
+
+      /* Dashboard / Data Explorer type scale */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      letter-spacing: 0;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-xl);
+      padding: var(--space-xl) var(--space-lg);
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Header */
+    .guide-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+      padding-bottom: var(--space-lg);
+      border-bottom: var(--hairline);
+    }
+
+    .label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--on-surface-variant);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .headline {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: var(--display-size);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin: var(--space-xs) 0 0 0;
+    }
+    .headline strong { font-weight: 600; }
+
+    .section-title {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: var(--headline-size);
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .section-title strong { font-weight: 600; }
+
+    .caption-sage {
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: var(--body-size);
+      color: var(--secondary);
+      margin: var(--space-xs) 0 0 0;
+      max-width: 65ch;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+      box-shadow: var(--elevation);
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-primary:hover { background-color: var(--on-primary-container); }
+
+    .btn-secondary {
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      border: var(--hairline-control);
+    }
+    .btn-secondary:hover { background-color: var(--surface-container-high); }
+
+    .btn-danger-armed {
+      background-color: var(--error-container);
+      color: var(--error);
+      border: 1px solid var(--error);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* Panels & Tags */
+    .panel {
+      background-color: var(--surface-container-low);
+      border: var(--hairline);
+      border-radius: var(--rounded-lg);
+      box-shadow: var(--elevation);
+      padding: var(--space-lg);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: 0.2rem 0.65rem;
+      border-radius: var(--rounded-full);
+      background-color: var(--surface-container);
+      color: var(--secondary);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .tag-slate {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+
+    /* Overview Grid (Top Summary Cards) */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: var(--space-md);
+    }
+
+    .kpi-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    .kpi-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+
+    .kpi-value {
+      font-family: var(--font-headline);
+      font-weight: 500;
+      font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-sub {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background-color: var(--surface-container-high);
+      border-radius: var(--rounded-full);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background-color: var(--primary);
+      border-radius: var(--rounded-full);
+      transition: width var(--dur-short) var(--ease-out);
+      width: 0%;
+    }
+    .progress-fill-sage {
+      background-color: var(--tertiary);
+    }
+
+    /* Section Header Bar */
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    /* Middle Stage Cards */
+    .stages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+
+    .stage-card {
+      text-align: left;
+      width: 100%;
+      background-color: var(--surface-container-low);
+      border: var(--hairline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-md);
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out);
+      min-height: 44px;
+    }
+
+    .stage-card:hover {
+      background-color: var(--surface-container-high);
+    }
+
+    .stage-card.is-active {
+      background-color: var(--primary-container);
+      border-color: var(--primary);
+      box-shadow: var(--active-accent-bar);
+    }
+
+    .stage-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      width: 100%;
+    }
+
+    .stage-num {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .stage-title {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      color: var(--on-surface);
+      margin: var(--space-xs) 0;
+      line-height: 1.3;
+    }
+
+    .stage-summary {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .stage-card-foot {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      width: 100%;
+      padding-top: var(--space-sm);
+      border-top: var(--hairline);
+    }
+
+    .stage-card.is-active .stage-card-foot {
+      border-top-color: var(--outline);
+    }
+
+    .stage-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Expanded Detail Workspace */
+    .detail-section {
+      border-top: var(--hairline);
+      padding-top: var(--space-xl);
+      animation: fadeInDetail var(--dur-short) var(--ease-out);
+    }
+
+    @keyframes fadeInDetail {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .detail-banner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+
+    .detail-nav {
+      display: flex;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    /* Checklist Band */
+    .checklist-panel {
+      margin-bottom: var(--space-lg);
+    }
+
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      border: var(--hairline);
+      border-radius: var(--rounded);
+      background-color: var(--background);
+      cursor: pointer;
+      min-height: 44px;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out);
+    }
+
+    .check-item:hover {
+      background-color: var(--surface-container-high);
+    }
+
+    .check-item.is-checked {
+      background-color: var(--surface-container);
+      border-color: var(--secondary);
+    }
+
+    .check-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      accent-color: var(--secondary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .check-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .check-title {
+      font-weight: 500;
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+    }
+
+    .check-item.is-checked .check-title {
+      color: var(--secondary);
+    }
+
+    .check-hint {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+    }
+
+    /* Two-column Analytical Grid (Chart + Key Rules) */
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+
+    .chart-box {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    .chart-wrap {
+      position: relative;
+      min-height: 280px;
+      width: 100%;
+    }
+
+    .chart-source {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      border-top: var(--hairline);
+      padding-top: var(--space-sm);
+    }
+
+    /* Rules List */
+    .rules-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .rule-block {
+      padding-left: var(--space-md);
+      box-shadow: var(--active-left-bar);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .rule-block.is-trap {
+      box-shadow: inset 3px 0 0 0 var(--error);
+    }
+
+    .rule-head {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+    }
+
+    .rule-block.is-trap .rule-head {
+      color: var(--error);
+    }
+
+    .rule-body {
+      font-size: 0.9375rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+      max-width: 65ch;
+    }
+
+    .formula-strip {
+      display: inline-block;
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--rounded);
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-top: var(--space-xs);
+    }
+
+    /* Detailed Explanation Tables & Deep Dive */
+    .deep-dive-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+
+    .data-table-wrap {
+      overflow-x: auto;
+      margin-top: var(--space-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+    }
+
+    th {
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--outline);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--hairline);
+      color: var(--on-surface);
+      vertical-align: top;
+      font-variant-numeric: tabular-nums;
+    }
+
+    tr:hover td {
+      background-color: var(--background);
+    }
+
+    .highlight-en {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .trap-en {
+      color: var(--error);
+      font-weight: 500;
+    }
+
+    /* Interactive Quiz Lab inside Detail View */
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+
+    .quiz-card {
+      border: var(--hairline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md);
+      background-color: var(--background);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .quiz-q {
+      font-weight: 500;
+      color: var(--on-surface);
+      margin: 0;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-sm);
+    }
+
+    .quiz-opt {
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      border-radius: var(--rounded);
+      border: var(--hairline-control);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out);
+    }
+
+    .quiz-opt:hover {
+      background-color: var(--surface-container-high);
+    }
+
+    .quiz-opt.is-selected-correct {
+      background-color: var(--surface-container);
+      border-color: var(--secondary);
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .quiz-opt.is-selected-wrong {
+      background-color: var(--error-container);
+      border-color: var(--error);
+      color: var(--error);
+      font-weight: 600;
+    }
+
+    .quiz-opt.is-reveal-correct {
+      border-color: var(--secondary);
+      background-color: var(--surface-container);
+    }
+
+    .quiz-feedback {
+      font-size: 0.875rem;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      background-color: var(--surface-container-low);
+      border: var(--hairline);
+      color: var(--on-surface);
+    }
+    .quiz-feedback.is-ok {
+      border-left: 3px solid var(--secondary);
+    }
+    .quiz-feedback.is-bad {
+      border-left: 3px solid var(--error);
+    }
+
+    .status-toast {
+      font-size: var(--label-size);
+      color: var(--secondary);
+      font-weight: 500;
+      min-height: 1.2em;
+    }
+
+    /* Footer */
+    .guide-footer {
+      border-top: var(--hairline);
+      padding-top: var(--space-lg);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 960px) {
+      .overview-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .analysis-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+      .quiz-options {
+        grid-template-columns: 1fr;
+      }
+      .detail-banner {
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-grid">
+    <!-- Top Header -->
+    <header class="guide-header">
+      <div>
+        <span class="label">
+          <i data-lucide="book-open" style="width: 14px; height: 14px;" aria-hidden="true"></i>
+          七年級上學期第二次段考・翰林版 Book 1 Unit 3 – Review 2
+        </span>
+        <h1 class="headline">七年級英語段考<strong>互動式學習指南</strong></h1>
+        <p class="caption-sage">彙整台北仁愛、高雄陽明、新北桃子腳、土城、屏東明正、中山、崇林、平南、文昌、林園、歸仁、埤頭、溪湖、鹿港等歷屆試題與聽力解析</p>
+      </div>
+      <div class="header-actions">
+        <span id="save-status" class="status-toast" aria-live="polite"></span>
+        <button type="button" class="btn btn-secondary" onclick="exportProgress()">
+          <i data-lucide="download" style="width: 16px; height: 16px;" aria-hidden="true"></i>
+          匯出進度報告
+        </button>
+        <button type="button" id="reset-btn" class="btn btn-secondary" onclick="handleReset(this)">
+          <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;" aria-hidden="true"></i>
+          重設學習進度
+        </button>
+      </div>
+    </header>
+
+    <!-- Top Overview Cards -->
+    <section aria-label="學習總覽">
+      <div class="overview-grid">
+        <article class="panel kpi-card">
+          <div class="kpi-top">
+            <span class="label">整體複習掌握度</span>
+            <span id="overview-badge" class="tag">準備出發</span>
+          </div>
+          <div>
+            <div class="kpi-value" id="overview-percent">0%</div>
+            <p class="kpi-sub" id="overview-count">已完成 0 / 24 個重點檢核</p>
+          </div>
+          <div class="progress-track" aria-hidden="true">
+            <div id="overview-progress-bar" class="progress-fill progress-fill-sage"></div>
+          </div>
+        </article>
+
+        <article class="panel kpi-card">
+          <div class="kpi-top">
+            <span class="label">核心關卡完成數</span>
+            <span class="tag tag-slate">6 大主題</span>
+          </div>
+          <div>
+            <div class="kpi-value" id="overview-stages">0 / 6</div>
+            <p class="kpi-sub">點選下方任一關卡即可展開詳解與圖表</p>
+          </div>
+        </article>
+
+        <article class="panel kpi-card">
+          <div class="kpi-top">
+            <span class="label">歷屆真題練習</span>
+            <span class="tag">12 題精選</span>
+          </div>
+          <div>
+            <div class="kpi-value" id="overview-quiz">0 / 12</div>
+            <p class="kpi-sub" id="overview-quiz-acc">答對題數：尚未作答</p>
+          </div>
+        </article>
+
+        <article class="panel kpi-card">
+          <div class="kpi-top">
+            <span class="label">段考高頻扣分雷區</span>
+            <span class="tag">3 大重點</span>
+          </div>
+          <div>
+            <div class="kpi-value" style="font-size: 1.25rem; line-height: 1.35;">Everyone 單數 / Let's not / 星期拼字</div>
+            <p class="kpi-sub">跨 14 所國中試卷反覆出現之高頻考點</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Middle Clickable Stage Cards -->
+    <section aria-label="學習關卡選單">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">選擇學習<strong>關卡與章節</strong></h2>
+          <p class="kpi-sub">點擊任一卡片，下方將展開該章節的詳細說明、統計圖表比例、核心規則與進度檢核</p>
+        </div>
+        <span class="label" id="active-stage-indicator">目前檢視：關卡 01</span>
+      </div>
+      <div id="stages-grid" class="stages-grid"></div>
+    </section>
+
+    <!-- Bottom Expanded Detail Workspace -->
+    <section id="detail-workspace" class="detail-section" aria-live="polite">
+      <div class="detail-banner">
+        <div>
+          <span class="label" id="detail-kicker">關卡 01</span>
+          <h2 class="section-title" id="detail-title"></h2>
+          <p class="caption-sage" id="detail-subtitle"></p>
+        </div>
+        <div class="detail-nav">
+          <button type="button" id="prev-stage-btn" class="btn btn-secondary" onclick="stepStage(-1)">
+            <i data-lucide="chevron-left" style="width: 16px; height: 16px;" aria-hidden="true"></i>
+            上一關
+          </button>
+          <button type="button" id="next-stage-btn" class="btn btn-primary" onclick="stepStage(1)">
+            下一關
+            <i data-lucide="chevron-right" style="width: 16px; height: 16px;" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stage Progress Checklist -->
+      <article class="panel checklist-panel">
+        <div class="kpi-top">
+          <div>
+            <h3 class="section-title" style="font-size: var(--subhead-size);"><strong>學習進度追蹤</strong>・勾選已掌握的考點</h3>
+            <p class="kpi-sub">勾選狀態會自動儲存，並即時更新上方總覽卡與關卡進度條</p>
+          </div>
+          <span id="detail-checklist-badge" class="tag">0 / 4 已掌握</span>
+        </div>
+        <div id="detail-checklist" class="checklist-grid"></div>
+      </article>
+
+      <!-- Analytical Chart & Key Rules -->
+      <div class="analysis-grid">
+        <article class="panel chart-box">
+          <div>
+            <span class="label" id="chart-label">考點比例圖表</span>
+            <h3 class="section-title" style="font-size: var(--subhead-size); margin-top: 4px;" id="chart-title"></h3>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="stage-chart"></canvas>
+          </div>
+          <div class="chart-source" id="chart-source"></div>
+        </article>
+
+        <article class="panel">
+          <span class="label">核心文法與解題法則</span>
+          <h3 class="section-title" style="font-size: var(--subhead-size); margin-top: 4px; margin-bottom: var(--space-md);" id="rules-title">重點規則與扣分陷阱</h3>
+          <div id="detail-rules" class="rules-list"></div>
+        </article>
+      </div>
+
+      <!-- Detailed Tables & Explanations -->
+      <div id="detail-deep-dive" class="deep-dive-grid"></div>
+
+      <!-- Mini Quiz Practice -->
+      <article class="panel">
+        <div class="kpi-top">
+          <div>
+            <span class="label">實戰檢測</span>
+            <h3 class="section-title" style="font-size: var(--subhead-size); margin-top: 4px;">歷屆段考<strong>精選真題演練</strong></h3>
+          </div>
+          <span id="detail-quiz-status" class="tag tag-slate">點擊選項立即核對解析</span>
+        </div>
+        <div id="detail-quiz" class="quiz-grid"></div>
+      </article>
+    </section>
+
+    <footer class="guide-footer">
+      <span>資料來源：彙整自 108–114 學年度全國各國中七年級上學期第二次段考英語科試題、聽力稿與解答（仁愛、陽明、桃子腳、土城、明正、中山、崇林、平南、文昌、林園、歸仁、民族、福豐、埤頭、溪湖、鹿港）。</span>
+      <span>進度追蹤透過筆記本應用儲存 API 自動保存。</span>
+    </footer>
+  </main>
+
+  <api-shim></api-shim>
+  <script>
+    const STAGES = [
+      {
+        id: `vocab`,
+        num: `關卡 01`,
+        title: `核心字彙與課文兩大場景`,
+        shortSummary: `掌握 Magic Door 實驗室規範與偶像 Meet-and-Greet 必背高頻單字。`,
+        subtitle: `統整 16 份段考試卷中出現次數最高的文意字彙、課文填空金句與不規則名詞複數`,
+        checklist: [
+          { id: `v1`, title: `拼對高難度星期單字`, hint: `特別注意 Wednesday (不發音的 d)、Tuesday、Thursday` },
+          { id: `v2`, title: `熟記三大高頻形容詞與動詞`, hint: `popular (受歡迎)、careful (小心)、quiet (安靜)、follow (遵守)、fight (吵架)` },
+          { id: `v3`, title: `背熟不規則複數 men 與集合詞 everyone`, hint: `two men 搭配複數動詞；Everyone / Everybody 永遠搭配單數動詞` },
+          { id: `v4`, title: `默寫兩大課文核心句型`, hint: `With this door, we can go to many places. / Check the test tubes for cracks.` }
+        ],
+        chart: {
+          type: `bar`,
+          label: `跨校考頻統計`,
+          title: `各校文意字彙與翻譯高頻字彙出現校數`,
+          source: `統計範圍：仁愛、陽明、桃子腳、土城、明正、中山、崇林、平南、文昌、林園、歸仁、民族、埤頭、溪湖、鹿港等試卷之非選字彙與高頻選擇題。`,
+          labels: [`popular (受歡迎)`, `fight (吵架/打架)`, `sign (告示/簽名)`, `follow (遵守)`, `星期拼字 (Wed./Thu.)`, `careful (小心的)`, `quiet (安靜的)`, `men (男人複數)`],
+          data: [15, 13, 13, 10, 9, 9, 9, 7],
+          unit: `校`
+        },
+        rules: [
+          {
+            isTrap: false,
+            head: `一字多義必考：sign 與 turn`,
+            body: `sign 作名詞為「告示牌」(Look at the sign on the wall.)，作動詞為「簽名」(sign pictures for fans)。turn 作名詞為「輪流」(wait for your turn)，搭配副詞成片語 turn off (關掉手機/電視) 與 turn on (打開電燈)。`,
+            formula: `look at the sign / sign one's name / wait for your turn`
+          },
+          {
+            isTrap: true,
+            head: `高頻拼字陷阱：Wednesday 與 quiet / quite`,
+            body: `超過半數學校在文意字彙直接出「介於星期二與星期四之間的是 W___y」，中間的 d 不發音極易漏寫！另外 quiet (安靜的，e 在 t 前) 常與 quite (相當) 混淆，題目出現 be q___t 或 keep q___t 時務必寫 quiet。`,
+            formula: `Wed + nes + day = Wednesday ｜ Be quiet!`
+          },
+          {
+            isTrap: false,
+            head: `不規則複數：man → men 與 woman → women`,
+            body: `陽明、明正、中山、崇林、平南、林園皆考出「Who are the two m___n at the door?」，答案必須寫複數 men，不可誤寫單數 man。`,
+            formula: `the two men (複數) ＝ my father and my uncle`
+          },
+          {
+            isTrap: true,
+            head: `單數主詞陷阱：everyone / everybody`,
+            body: `中文雖翻成「每個人（大家）」，但文法上視同第三人稱單數！後面接 be 動詞必須用 is，不可用 are（仁愛 #28、土城 #22、明正 #14 必考）。`,
+            formula: `Everyone is having a good time. (✗ Everyone are...)`
+          }
+        ],
+        tableTitle: `課文雙場景必考填空與中翻英對照表`,
+        tableHeaders: [`場景主題`, `高頻課文英文原句`, `關鍵單字 / 介系詞`, `常考學校範例`],
+        tableRows: [
+          [`Unit 3 魔法門與博物館`, `With this door, we can go to many places.`, `With (用) / places (複數)`, `桃子腳、土城、崇林、明正、中山`],
+          [`Unit 3 博物館驚魂`, `Be careful! It's a mummy! Don't wake it up.`, `mummy / careful / wake up`, `陽明、崇林、仁愛、歸仁`],
+          [`Unit 3 實驗室規則`, `Check the test tubes for cracks. Wash them after class.`, `Check... for... / after class`, `仁愛、崇林、林園、溪湖`],
+          [`Unit 3 遵守規定`, `Please follow these lab rules and be safe.`, `follow / rules / safe`, `桃子腳、明正、平南、歸仁`],
+          [`Unit 4 偶像見面會`, `They are signing pictures, blowing kisses, and shaking hands with fans.`, `sign / blow kisses / shake hands with`, `陽明、桃子腳、明正、歸仁、林園`],
+          [`Unit 4 準備與催促`, `Are you ready for the concert? Hurry up!`, `ready for / concert / hurry`, `仁愛、崇林、林園、歸仁`]
+        ],
+        quizzes: [
+          {
+            id: `q_v1`,
+            source: `改編自 114 明正 / 110 中山 / 109 崇林`,
+            question: `The day between Tuesday and Thursday is ______, and the two ______ at the door are my uncles.`,
+            options: [`Wednesday; man`, `Wendesday; men`, `Wednesday; men`, `Thursday; men`],
+            answer: 2,
+            explanation: `介於 Tuesday 與 Thursday 之間是 Wednesday（注意 d 在 n 前，拼法為 Wed-nes-day）；主詞是 two 兩位，因此 man 要用不規則複數 men。`
+          },
+          {
+            id: `q_v2`,
+            source: `112 台北仁愛 #28 / 114 土城 #22`,
+            question: `Everyone ______ a good time at BTS's meet-and-greet now.`,
+            options: [`are having`, `is having`, `have`, `can making`],
+            answer: 1,
+            explanation: `Everyone / Everybody 為複合不定代名詞，文法上視為單數，加上句尾有時間線索 now，故現在進行式搭配單數 is having。`
+          }
+        ]
+      },
+      {
+        id: `imperative`,
+        num: `關卡 02`,
+        title: `祈使句與生活規範文法`,
+        shortSummary: `弄懂原形動詞開頭、Don't...or... 否定連接、Let's not 改寫與逗點法則。`,
+        subtitle: `祈使句是 Unit 3 的核心文法，幾乎每張考卷都會考「逗點位置」與「否定改寫」`,
+        checklist: [
+          { id: `i1`, title: `區分動詞句與形容詞句開頭`, hint: `動作開頭用原形 V (Listen!)；狀態/形容詞開頭必加 Be (Be quiet! / Don't be late!)` },
+          { id: `i2`, title: `正確改寫 Let's 的否定句`, hint: `Let's talk. → Let's not talk.（絕對不可寫 Don't let's）` },
+          { id: `i3`, title: `掌握否定句並列連接詞用 or`, hint: `Do not eat or drink in the lab.（肯定用 and，否定用 or）` },
+          { id: `i4`, title: `分辨人名呼格與 please 的逗點位置`, hint: `Tom, don't run, please. / Please look at the sign, Tom.` }
+        ],
+        chart: {
+          type: `doughnut`,
+          label: `題型權重分布`,
+          title: `祈使句四大高頻考點出題比例`,
+          source: `統計自仁愛、陽明、桃子腳、土城、明正、崇林、平南、文昌、林園、歸仁之單題選擇與句子改寫。`,
+          labels: [`V原 / Be Adj / Don't be 句型辨識`, `Let's → Let's not 否定改寫`, `人名與 please 逗點位置判斷`, `否定句連接詞 or vs. and`],
+          data: [35, 25, 22, 18],
+          unit: `%`
+        },
+        rules: [
+          {
+            isTrap: false,
+            head: `四大祈使句基本結構`,
+            body: `祈使句省略主詞 you，因此句首直接放原形動詞。若接的是形容詞（quiet, careful, nice, safe, good），前面一定要補上原形 Be 動詞！`,
+            formula: `肯定：V原... / Be + Adj. ｜ 否定：Don't + V原... / Don't be + Adj.`
+          },
+          {
+            isTrap: true,
+            head: `魔王考點 1：Let's 否定只能寫 Let's not`,
+            body: `崇林、平南、文昌、明正、溪湖皆在依提示作答考出「將 Let's + V 改為否定句」，或在選擇題挖空考 Let's ___ talk.（仁愛 #41、土城 #16）。正確寫法永遠是 Let's not + V原，不可選 don't 或 no！`,
+            formula: `Let's talk. → Let's not talk. (✗ Don't let's / ✗ Let's don't)`
+          },
+          {
+            isTrap: true,
+            head: `魔王考點 2：否定祈使句連接兩動作要用 or`,
+            body: `「不要跑步或說話」在中文常說「不能吃和喝」，但英文否定句中，兩個並列的名詞或動作必須用 or 連接，表示「既不⋯⋯也不⋯⋯」（明正 #15、土城 #28、崇林課文）。`,
+            formula: `Don't eat or drink in the museum. / You can't run or shout.`
+          },
+          {
+            isTrap: false,
+            head: `魔王考點 3：呼格(人名)與 please 的標點法則`,
+            body: `人名放句首或句尾都必須用逗點隔開；please 放句首時後面「不加逗點」直接接動詞，放句尾時前面「必須加逗點」（土城 #29、陽明改寫 #1、歸仁改寫 #2、文昌 #51）。`,
+            formula: `Please bring me the book, Joey. / Tom, don't run, please.`
+          }
+        ],
+        tableTitle: `祈使句常見錯誤與正確寫法對照表`,
+        tableHeaders: [`錯誤寫法 (✗)`, `正確寫法 (✓)`, `錯因解析`],
+        tableRows: [
+          [`Not run in the classroom.`, `Don't run in the classroom.`, `一般否定祈使句必須用助動詞 Don't（或 Do not），不可單用 Not（告示牌標語 No + V-ing 除外）。`],
+          [`Don't quiet in the library.`, `Don't talk / Be quiet in the library.`, `quiet 是形容詞，不可直接放在 Don't 後面，需改為 Be quiet 或 Don't be noisy。`],
+          [`Please, Josh bring me the book.`, `Please bring me the book, Josh.`, `Please 放句首時後面不加逗點；呼格人名 Josh 應放在句首或句尾並用逗點隔開。`],
+          [`Don't eat and drink on the bus.`, `Don't eat or drink on the bus.`, `否定句中列舉兩個禁止動作時，連接詞應使用 or 而非 and。`],
+          [`Let's don't draw on the desk.`, `Let's not draw on the desk.`, `Let's 的否定形式固定為 Let's not + 原形動詞。`]
+        ],
+        quizzes: [
+          {
+            id: `q_i1`,
+            source: `114 新北土城 #29 / 112 台北仁愛 #30`,
+            question: `Ms. Lin wants Joey to help her. Which sentence is CORRECT?`,
+            options: [`Joey bring me the book please.`, `Please, Joey bring me the book.`, `Please bring me the book Joey.`, `Please bring me the book, Joey.`],
+            answer: 3,
+            explanation: `呼格人名放在句尾時前面一定要有逗點（, Joey）；Please 放句首直接接原形動詞 bring，不需逗點。`
+          },
+          {
+            id: `q_i2`,
+            source: `114 屏東明正 #15 / 112 台北仁愛 #41`,
+            question: `Hey, class. Let's ______ talk in the library, and don't eat ______ drink here.`,
+            options: [`don't; and`, `not; or`, `no; or`, `not; and`],
+            answer: 1,
+            explanation: `Let's 的否定句為 Let's not + 原形V；後半句 don't 為否定祈使句，並列動作 eat 與 drink 必須用 or 連接。`
+          }
+        ]
+      },
+      {
+        id: `progressive`,
+        num: `關卡 03`,
+        title: `現在進行式與 V-ing 變化`,
+        shortSummary: `掌握 be + V-ing 句型線索詞、五大分詞拼字規則與原問句改寫公式。`,
+        subtitle: `中山、崇林、文昌、溪湖等校皆獨立出題考現在分詞拼寫與 What is S doing? 造原問句`,
+        checklist: [
+          { id: `p1`, title: `辨識現在進行式三大關鍵信號`, hint: `句中出現 Look! / Listen! / now 時，必選 be + V-ing` },
+          { id: `p2`, title: `熟記去 e 加 ing 與例外 see → seeing`, hint: `dance → dancing, shake → shaking, write → writing；但 see → seeing 不去 e` },
+          { id: `p3`, title: `掌握短母音＋單子音重複字尾`, hint: `run → running, sit → sitting, swim → swimming（studying / playing 不重複）` },
+          { id: `p4`, title: `熟練畫線造原問句公式`, hint: `Ken is jumping rope at the park. → What is Ken doing at the park?` }
+        ],
+        chart: {
+          type: `bar`,
+          label: `分詞拼寫考題分布`,
+          title: `各校「寫出現在分詞 V-ing」五大變化類型考頻佔比`,
+          source: `統計自中山 110、崇林 108/109、文昌 109、溪湖 111 等校手寫填空題實測動詞。`,
+          labels: [`字尾去 e + ing (dance/have/make/shake)`, `一般直接 + ing (eat/study/do/follow)`, `重複字尾 + ing (run/sit/swim)`, `ee 結尾直接 + ing (see)`, `ie 改 y + ing (lie/die)`],
+          data: [36, 32, 20, 6, 6],
+          unit: `%`
+        },
+        rules: [
+          {
+            isTrap: false,
+            head: `現在進行式公式：主詞 + am / is / are + V-ing`,
+            body: `表示「此刻正在進行的動作」，句首常有 Look!、Listen! 或句尾有 now。注意絕對不能漏掉 be 動詞（不可寫 Someone singing），也不能把 be 動詞後面的動詞寫成原形（不可寫 is sing）。`,
+            formula: `Listen! Someone is singing in the shower. (仁愛 #26)`
+          },
+          {
+            isTrap: true,
+            head: `五大 V-ing 拼寫變化陷阱：see 與 study`,
+            body: `1. 一般直接 + ing：eat → eating, study → studying（y 不去！）\n2. 不發音字尾 e 去 e + ing：come → coming, have → having, shake → shaking\n3. 字尾 ee 直接 + ing：see → seeing（崇林考過，不可去 e！）\n4. 短母音＋單子音重複字尾 + ing：run → running, sit → sitting\n5. ie 改 y + ing：lie → lying（對比 cry → crying）。`,
+            formula: `see → seeing ｜ study → studying ｜ run → running ｜ shake → shaking`
+          },
+          {
+            isTrap: false,
+            head: `造原問句與兩大動作並列`,
+            body: `問某人「正在做什麼」用 What + be + S + doing (+ 地點)?（如 What is Ken doing at the park?）。若問「和誰」做某事，介系詞 with 不可遺漏（Who is Vicky talking with?）。兩個進行中動作並排時，前後都要用 V-ing（is sitting and shaking hands）。`,
+            formula: `Is your dog sitting and shaking hands with you? (陽明改寫 #2)`
+          }
+        ],
+        tableTitle: `各校手寫必考 V-ing 動詞變化總整理`,
+        tableHeaders: [`變化規則`, `動詞原形`, `現在分詞 (V-ing)`, `易錯提醒`],
+        tableRows: [
+          [`規則 1：直接 + ing`, `eat / do / study / follow / cry`, `eating / doing / studying / following / crying`, `study 與 cry 字尾為 y，直接加 ing，不要改成 i`],
+          [`規則 2：去不發音 e + ing`, `come / have / make / dance / shake / take / write`, `coming / having / making / dancing / shaking / taking / writing`, `have 變 having，不可留 e；make 變 making`],
+          [`規則 3：ee / ye / oe 結尾`, `see`, `seeing`, `ee 結尾兩字母都要保留，直接加 ing`],
+          [`規則 4：短母音＋單子音`, `run / sit / swim / put / clap`, `running / sitting / swimming / putting / clapping`, `重複字尾後再加 ing；字尾為 w/x/y (如 blow/play) 不重複 → blowing`]
+        ],
+        quizzes: [
+          {
+            id: `q_p1`,
+            source: `112 台北仁愛 #26 / 113 新北桃子腳 #27`,
+            question: `Listen! Emily and Julia ______ on the stage, and someone ______ with them.`,
+            options: [`sing; dancing`, `are singing; is dancing`, `singing; is dance`, `are sing; dances`],
+            answer: 1,
+            explanation: `Listen! 提示現在進行式。Emily and Julia 為複數用 are singing；someone 為單數不定代名詞用 is dancing。`
+          },
+          {
+            id: `q_p2`,
+            source: `112 高雄陽明改寫 #2 / 110 台北中山`,
+            question: `將「Can your dog sit and shake hands with you?」改寫為現在進行式，下列何者正確？`,
+            options: [`Is your dog sit and shake hands with you?`, `Are your dog sitting and shaking hands with you?`, `Is your dog sitting and shaking hands with you?`, `Is your dog siting and shakeing hands with you?`],
+            answer: 2,
+            explanation: `your dog 為單數，Be 動詞用 Is；and 連接兩個進行中動作須對等（sitting and shaking），且 sit 需重複 t、shake 需去 e。`
+          }
+        ]
+      },
+      {
+        id: `can_pronoun`,
+        num: `關卡 04`,
+        title: `情態動詞 Can 與代名詞格位`,
+        shortSummary: `破解 Can't 否定問句回答邏輯、or 選擇問句，以及受格「介系詞後/動副中間」規則。`,
+        subtitle: `代名詞受格（them / us / him）與 Can 否定疑問句的回答是閱讀與選擇題最常失分的組合`,
+        checklist: [
+          { id: `c1`, title: `Can 後方永遠接原形動詞 (含 be)`, hint: `We can be good friends. / Can the woman be a police officer?` },
+          { id: `c2`, title: `破解否定疑問句 (Can't...? / Isn't...?)`, hint: `回答一律看事實：肯定用 Yes, S + can.；否定用 No, S + can't.（禁止 Yes, she can't）` },
+          { id: `c3`, title: `分辨介系詞與動詞後的受格`, hint: `fight with them / sign with them / talk to us / love him` },
+          { id: `c4`, title: `掌握代名詞放在動副片語中間`, hint: `wake your brother up → wake him up；turn the phone off → turn it off` }
+        ],
+        chart: {
+          type: `doughnut`,
+          label: `代名詞考點分析`,
+          title: `各校代名詞填空與選擇四大考點比例`,
+          source: `統計自仁愛、陽明、桃子腳、土城、明正、崇林、平南、林園、埤頭之代名詞專題與單題。`,
+          labels: [`介系詞後用受格 (with them/us/him)`, `一般及物動詞後用受格 (love him)`, `所有格修飾名詞 (our parents / their fans)`, `動副片語夾心受格 (wake him up / turn it off)`],
+          data: [38, 26, 22, 14],
+          unit: `%`
+        },
+        rules: [
+          {
+            isTrap: false,
+            head: `Can 的句型鐵律：無人稱變化＋原形動詞`,
+            body: `無論主詞是 I / he / they，助動詞一律用 can / cannot / can't，後面永遠接「原形動詞」或「原形 be」。注意沒有 can's、沒有 can + V-ing、也沒有 can + to V。`,
+            formula: `Can + S + V原...? ｜ We can be good friends. (陽明 #11)`
+          },
+          {
+            isTrap: true,
+            head: `超高頻陷阱：否定疑問句 (Can't...?) 的 Yes/No 邏輯`,
+            body: `問句「Can't Emma talk to her teacher now?」（土城 #26），千萬別被中文翻譯「難道不能嗎？是的，她不能」誤導！英文的 Yes 只接肯定、No 只接否定。此外，問句用 Can 問就用 can 答，不可用 No, she's not（仁愛 #27 誘答選項）。`,
+            formula: `能 → Yes, she can. ｜ 不能 → No, she can't. (✗ Yes, she can't.)`
+          },
+          {
+            isTrap: false,
+            head: `選擇問句 (or) 不可用 Yes / No 回答`,
+            body: `當問句問「Is Amy Zac's cousin or sister?」（陽明 #15），這是二選一的選擇問句，回答必須直接選出其中一項：She is his cousin.，不可出現 Yes 或 No。`,
+            formula: `A or B? → 直接回答選項，絕不用 Yes / No`
+          },
+          {
+            isTrap: true,
+            head: `代名詞受格位置與動副片語夾心規則`,
+            body: `動詞（love / see / read / help）或介系詞（with / to / for / at）後面一律使用受格（me / us / you / him / her / it / them）。特別注意 wake up 與 turn off：當受詞是代名詞（it / him / them）時，必須夾在中間！`,
+            formula: `Turn it off! (✗ Turn off it!) ｜ wake him up (✗ wake up him)`
+          }
+        ],
+        tableTitle: `人稱代名詞主格・所有格・受格完全對照表`,
+        tableHeaders: [`人稱`, `主格 (當主詞)`, `所有格 (+ 名詞)`, `受格 (動詞/介系詞後)`, `段考原題實例`],
+        tableRows: [
+          [`第一人稱單數`, `I`, `my`, `me`, `Read it for me. (林園)`],
+          [`第一人稱複數`, `we`, `our`, `us`, `Our parents are with us. (土城 #23)`],
+          [`第二人稱`, `you`, `your`, `you`, `I can read it for you. (林園)`],
+          [`第三人稱男單`, `he`, `his`, `him`, `We call him Mr. Su. (陽明 #12) / wake him up (崇林)`],
+          [`第三人稱女單`, `she`, `her`, `her`, `Don't wait with her. (土城 #21) / I am a fan of her.`],
+          [`第三人稱物/動物`, `it`, `its`, `it`, `Turn it off, please. (陽明 #26)`],
+          [`第三人稱複數`, `they`, `their`, `them`, `Sign with them. (土城 #17) / Be nice to them. (仁愛 #31)`]
+        ],
+        quizzes: [
+          {
+            id: `q_c1`,
+            source: `114 新北土城 #26 / 112 台北仁愛 #27`,
+            question: `A: Can't Emma talk to her English teacher now?  B: ______. She is busy studying.`,
+            options: [`Yes, she can't.`, `No, she's not.`, `No, she can't.`, `Yes, she is.`],
+            answer: 2,
+            explanation: `問句主助動詞為 Can't，且語意為「不能（因為她在忙著讀書）」。回答依事實：否定只能寫 No, she can't.；不可混用 be 動詞 (No, she's not) 或 Yes + 否定。`
+          },
+          {
+            id: `q_c2`,
+            source: `114 新北土城 #17 / 109 新北崇林填充 #2`,
+            question: `Please use the pens here. You can sign on the letter with ______, and don't forget to wake ______ up.`,
+            options: [`they; he`, `them; him`, `them; his`, `their; him`],
+            answer: 1,
+            explanation: `介系詞 with 後面用複數受格 them（指代前面的 pens）；wake ___ up 為動副片語，中間須放入代名詞受格 him。`
+          }
+        ]
+      },
+      {
+        id: `time_prep`,
+        num: `關卡 05`,
+        title: `時間問答、介系詞與時刻表閱讀`,
+        shortSummary: `徹底分清 What time vs. What day、at / on / in / 零介系詞(X)，以及電影票價計算題。`,
+        subtitle: `「問現在時間不加 at，問活動時間要加 at」與「星期日期加 on」是各校必出的單題陷阱`,
+        checklist: [
+          { id: `t1`, title: `區分「現在幾點」vs.「活動在幾點」`, hint: `It is 7:00.（現在）vs. The movie is at 7:00.（事件）` },
+          { id: `t2`, title: `區分「今天星期幾」vs.「活動在星期幾」`, hint: `Today is Friday.（現在）vs. The concert is on Friday.（事件）` },
+          { id: `t3`, title: `熟記四大時間介系詞 at / on / in / X`, hint: `at+時刻/noon/night；on+星期/特定早晚/節日；in+泛指早晚；X+every/this/that` },
+          { id: `t4`, title: `看懂課表與電影時刻表票價計算`, hint: `檢查 Weekday/Weekend、Early Bird/Night-Owl 時段、兒童身高或 Buy 3 get 1 free` }
+        ],
+        chart: {
+          type: `bar`,
+          label: `時間介系詞考點統計`,
+          title: `段考時間介系詞 at / on / in / 零介系詞(X) 出題佔比`,
+          source: `統計自仁愛、陽明、桃子腳、土城、明正、林園、文昌、溪湖之時間介系詞選擇與填空題。`,
+          labels: [`on (星期 / 特定早晚 / 週末 / 節日)`, `at (精確點鐘 / noon / night)`, `X 零介系詞 (現在幾點 / every / this)`, `in (泛指 morning / afternoon / evening)`],
+          data: [34, 28, 20, 18],
+          unit: `%`
+        },
+        rules: [
+          {
+            isTrap: true,
+            head: `核心必殺對比：詢問「現在」vs. 詢問「某活動」`,
+            body: `這題型在仁愛、陽明、桃子腳、土城、林園幾乎年年出現！問「現在幾點 / 今天星期幾」，回答的 It is / Today is 後面絕對不加介系詞 at / on。只有問「電影、派對、比賽、演唱會」在幾點或星期幾時，才需要加 at 或 on！`,
+            formula: `What time is it? → It's 4:50. ｜ What time is the game? → It's at 7 p.m.`
+          },
+          {
+            isTrap: true,
+            head: `零介系詞 (X) 兩大條件：every 與 this / next`,
+            body: `看到 every weekend（仁愛 #23）、every morning（土城 #27）、this Sunday（平南 #22）或 this weekend（文昌 #22），時間片語前面全部「不加介系詞 (X)」！`,
+            formula: `go jogging every morning (✗ in every morning) ｜ on weekends (✓)`
+          },
+          {
+            isTrap: false,
+            head: `時刻搭配：on + 特定早中晚 vs. in + 泛指早中晚`,
+            body: `單獨講「在早上/下午/晚上」用 in the morning / in the afternoon / in the evening；但只要前面加上「星期幾」或「特定某天」，介系詞立刻變成 on！`,
+            formula: `in the morning ↔ on Monday night (土城 #24) / on Saturday morning (溪湖 #2)`
+          },
+          {
+            isTrap: false,
+            head: `時刻表與票價計算題（閱讀測驗必出題組）`,
+            body: `陽明 #37-38、桃子腳 #38-40 均考「電影院時刻表與優惠票價」：計算步驟為 (1) 先確認星期幾（Weekday 平日 vs. Weekend 假日）；(2) 看場次時間是否落在早鳥（Morning-Bird / Early Bird）或午夜/夜貓（Midnight / Night-Owl）；(3) 留意平日買三送一（Buy 3 get 1 free）與 12:30 a.m. 是凌晨零點半！`,
+            formula: `例：桃子腳 #40 週三 00:30 a.m. 4人看電影 → Night-Owl 平日 NT$220 × 3張 (買3送1) = NT$660`
+          }
+        ],
+        tableTitle: `時間介系詞速查總表`,
+        tableHeaders: [`介系詞`, `適用時間類型`, `英文實例`, `常見陷阱提醒`],
+        tableRows: [
+          [`at`, `精確時刻、中午、夜晚`, `at 7 p.m. / at 8:15 / at noon / at night`, `回答「現在幾點 (It is 8:15.)」時不可加 at`],
+          [`on`, `星期、特定日期、節日、週末、特定早中晚`, `on Friday / on Monday night / on Mother's Day / on weekends`, `「Today is Friday.」不加 on；特定某天晚上一律用 on`],
+          [`in`, `泛指早・中・晚、月份、季節`, `in the morning / in the evening / in December`, `不可與 every 連用（✗ in every morning）`],
+          [`from... to...`, `時間起訖區間`, `from 10 a.m. to 11:50 a.m. / from Monday to Friday`, `林園書寫 #3 必考片語`],
+          [`X (不填)`, `every / this / that / next + 時間`, `every weekend / every morning / this Sunday`, `在選擇題中看到 X 選項時，先檢查有無 every 或 this`]
+        ],
+        quizzes: [
+          {
+            id: `q_t1`,
+            source: `114 新北土城 #24 & #27 / 112 台北仁愛 #23`,
+            question: `Jobs's party is ______ 9:00 ______ Monday night, and Lisa goes jogging ______ morning.`,
+            options: [`at; on; in every`, `at; in; every`, `at; on; every`, `X; on; on every`],
+            answer: 2,
+            explanation: `9:00 為精確時刻用 at；Monday night 為特定星期夜晚用 on；every morning 前面不加介系詞（選 every）。`
+          },
+          {
+            id: `q_t2`,
+            source: `113 新北桃子腳 #40 (KYT 電影院閱讀題)`,
+            question: `Cody 和她的 3 位朋友（共 4 人）週三凌晨 12:30 a.m. 去看電影，平日 Night-Owl (12 a.m.–6 a.m.) 票價為 NT$220，且平日優惠「Buy 3 tickets and get 1 free」。總共要付多少錢？`,
+            options: [`NT$440`, `NT$660`, `NT$750`, `NT$880`],
+            answer: 1,
+            explanation: `共 4 人，週三適用平日買三送一，只需買 3 張票；12:30 a.m. 落在 12 a.m.–6 a.m. Night-Owl 時段（每張 NT$220），220 × 3 = NT$660。`
+          }
+        ]
+      },
+      {
+        id: `strategy`,
+        num: `關卡 06`,
+        title: `段考配分藍圖與聽力攻略`,
+        shortSummary: `拆解全國各校試卷配分結構，破解聽力「時間差」與「否定對比」兩大經典陷阱。`,
+        subtitle: `考前最後衝刺：掌握 25% 聽力秒殺技巧與 19% 非選不扣分守則`,
+        checklist: [
+          { id: `s1`, title: `熟練聽力「電影時間差」經典計算`, hint: `聽到 9:30、7:30、wait 30 minutes，要分清問「現在幾點」還是「電影幾點」` },
+          { id: `s2`, title: `聽懂「不是 A 而是 B」句型`, hint: `My son is sleeping, not watching TV. / Smith and his son are not dancing.` },
+          { id: `s3`, title: `掌握閱讀測驗「圖表 / 規則分類題」`, hint: `將 Dos 與 Don'ts 分類（如陽明 Library BROWN 規則），並找出代名詞 it/them 指代誰` },
+          { id: `s4`, title: `完成手寫卷防呆檢查三步驟`, hint: `檢查句首大寫、標點符號、第三人稱單數/複數，並使用藍/黑筆作答` }
+        ],
+        chart: {
+          type: `doughnut`,
+          label: `段考配分結構`,
+          title: `七年級第二次段考各校平均配分比例`,
+          source: `統計自仁愛、陽明、桃子腳、土城、平南、文昌、林園等完整 100 分制段考試卷之題型配分平均值。`,
+          labels: [`單題選擇（字彙與語法）`, `題組測驗（克漏字與閱讀）`, `聽力測驗（辨識/問答/言談）`, `非選擇題（字彙/改寫/翻譯）`],
+          data: [30, 26, 25, 19],
+          unit: `%`
+        },
+        rules: [
+          {
+            isTrap: true,
+            head: `聽力神題「7:30 vs 8:00」跨校重複出現！`,
+            body: `陽明 #8、桃子腳 #13、文昌 #12 幾乎一字不差考同一段對話：「Iron Man is at 9:30. / It's just 7:30 now. / How about Spider-Man? Let's wait 30 minutes from now.」。請務必聽到最後一句 Question！問「現在幾點 (What time are they talking now?)」選 7:30；問「Spider-Man 幾點？」選 8:00！`,
+            formula: `7:30 (現在) ＋ 30 minutes ＝ 8:00 (Spider-Man 開演)`
+          },
+          {
+            isTrap: false,
+            head: `聽力第一大題必備預讀法`,
+            body: `在音檔開始前 30 秒，先快速掃視圖片差異：例如三張圖分別是「禁止飲食 / 安靜 / 博物館」、「7 p.m. Saturday / 7 a.m. Sunday / 7 p.m. Sunday」（林園 #4）、「10:30 Sophia's place / Mike's place」（陽明 #1、中山 #2），聽到關鍵詞立刻鎖定！`,
+            formula: `聽力重點：先看圖中「時間 / 星期 / 人物 / 場所標誌」差異`
+          },
+          {
+            isTrap: false,
+            head: `閱讀測驗指代題解題法 (them / it)`,
+            body: `桃子腳 #36 問「What do them mean?」、平南 #27 問「What is it in the reading?」。代名詞一定是替換「前面剛出現過的單數（it）或複數（them）名詞」，把選項代回原句讀一次即可確定！`,
+            formula: `make fun songs and cool music videos for them → them 指 K-pop stars`
+          },
+          {
+            isTrap: true,
+            head: `手寫非選常見失分：分段給分細節`,
+            body: `依提示作答與翻譯通常錯一處扣 1 分：忘記加句點/問號、人名沒大寫、didn't/don't 漏掉、please 放句尾沒逗點、複數 s 漏寫。考卷規定限用藍或黑色原子筆作答！`,
+            formula: `寫完檢查清單：大小寫 → 時態 (V-ing/原形) → 單複數 → 標點`
+          }
+        ],
+        tableTitle: `跨校聽力三大題型高頻陷阱對照`,
+        tableHeaders: [`題型分類`, `聽力原文關鍵句`, `常見問句`, `正確解題邏輯`],
+        tableRows: [
+          [`時間計算`, `Iron Man is at 9:30. Now is 7:30. Let's wait 30 minutes.`, `What time is Spider-Man? / What time is it now?`, `問現在選 7:30（陽明）；問蜘蛛人選 8:00（桃子腳）`],
+          [`否定對比`, `My son is sleeping, not watching TV.`, `選出符合描述的圖片`, `聽到 not 後面的動作直接排除，選正在睡覺的圖`],
+          [`場所規範`, `Don't run in the lab. Can we talk? Sure. Turn off your phone.`, `What can the students do in the lab?`, `只能選對話說 Sure/OK 的項目（talk / clean the lab）`],
+          [`字義推論`, `Don't be a rude girl. You are bad to your teacher and classmates.`, `What is "rude"?`, `從後句 bad to... 推論出選項 Not nice（桃子腳 #15）`]
+        ],
+        quizzes: [
+          {
+            id: `q_s1`,
+            source: `113 新北桃子腳聽力 #13 & #15`,
+            question: `聽力對話說「It's 7:30 now. Let's watch Spider-Man. I can wait for 30 minutes from now.」，請問 Spider-Man 電影是幾點？`,
+            options: [`7:30`, `8:00`, `8:30`, `9:30`],
+            answer: 1,
+            explanation: `對話中明確提到現在是 7:30，再等 30 分鐘開演，7:30 + 30 分鐘 = 8:00。若題目問「他們現在幾點在對話（如陽明 #8）」才是 7:30！`
+          },
+          {
+            id: `q_s2`,
+            source: `113 新北桃子腳閱讀 #36`,
+            question: `原文：「K-pop stars, or K-pop idols. They sing and dance for many years before they show in front of everyone. Some big companies like SM, JYP, and YG make fun songs and cool music videos for them.」請問 them 指的是什麼？`,
+            options: [`Companies`, `Fans`, `Stars`, `Songs`],
+            answer: 2,
+            explanation: `前一句主詞是 K-pop stars (They)，經紀公司製作歌曲與 MV 是為了讓這些偶像演出，因此 them 指的是 K-pop stars。`
+          }
+        ]
+      }
+    ];
+
+    const appState = {
+      activeStage: `vocab`,
+      checkedItems: {},
+      quizAnswers: {}
+    };
+
+    let activeChartInstance = null;
+
+    function getCssVar(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    function applySavedState(saved) {
+      if (saved.activeStage && STAGES.some((s) => s.id === saved.activeStage)) {
+        appState.activeStage = saved.activeStage;
+      }
+      if (saved.checkedItems && typeof saved.checkedItems === `object`) {
+        appState.checkedItems = saved.checkedItems;
+      }
+      if (saved.quizAnswers && typeof saved.quizAnswers === `object`) {
+        appState.quizAnswers = saved.quizAnswers;
+      }
+    }
+
+    async function persistState() {
+      const statusEl = document.getElementById(`save-status`);
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState({
+            activeStage: appState.activeStage,
+            checkedItems: appState.checkedItems,
+            quizAnswers: appState.quizAnswers
+          });
+        }
+        if (statusEl) {
+          statusEl.textContent = `進度已自動儲存`;
+          clearTimeout(window._saveToastTimer);
+          window._saveToastTimer = setTimeout(() => {
+            const el = document.getElementById(`save-status`);
+            if (el) el.textContent = ``;
+          }, 2200);
+        }
+      } catch (err) {
+        if (statusEl) statusEl.textContent = `儲存失敗，請稍後再試`;
+      }
+    }
+
+    function selectStage(stageId) {
+      if (!STAGES.some((s) => s.id === stageId)) return;
+      appState.activeStage = stageId;
+      renderAll();
+      persistState();
+      const detailEl = document.getElementById(`detail-workspace`);
+      if (detailEl && window.innerWidth <= 768) {
+        detailEl.scrollIntoView({ behavior: `smooth`, block: `start` });
+      }
+    }
+
+    function stepStage(delta) {
+      const idx = STAGES.findIndex((s) => s.id === appState.activeStage);
+      if (idx === -1) return;
+      const nextIdx = idx + delta;
+      if (nextIdx >= 0 && nextIdx < STAGES.length) {
+        selectStage(STAGES[nextIdx].id);
+      }
+    }
+
+    function toggleCheckItem(itemId) {
+      appState.checkedItems[itemId] = !appState.checkedItems[itemId];
+      renderOverview();
+      renderStageCards();
+      renderChecklistAndBadges();
+      persistState();
+    }
+
+    function answerQuiz(quizId, optionIdx) {
+      appState.quizAnswers[quizId] = optionIdx;
+      renderOverview();
+      renderQuizzes();
+      persistState();
+    }
+
+    function handleReset(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.classList.remove(`btn-secondary`);
+        btn.classList.add(`btn-danger-armed`);
+        btn.innerHTML = `再次點擊確認重設`;
+        clearTimeout(window._resetArmTimer);
+        window._resetArmTimer = setTimeout(() => {
+          btn.dataset.armed = `false`;
+          btn.classList.remove(`btn-danger-armed`);
+          btn.classList.add(`btn-secondary`);
+          btn.innerHTML = `<i data-lucide="rotate-ccw" style="width: 16px; height: 16px;" aria-hidden="true"></i> 重設學習進度`;
+          if (window.lucide) window.lucide.createIcons();
+        }, 4000);
+        return;
+      }
+
+      btn.dataset.armed = `false`;
+      btn.classList.remove(`btn-danger-armed`);
+      btn.classList.add(`btn-secondary`);
+      btn.innerHTML = `<i data-lucide="rotate-ccw" style="width: 16px; height: 16px;" aria-hidden="true"></i> 重設學習進度`;
+
+      appState.checkedItems = {};
+      appState.quizAnswers = {};
+      appState.activeStage = `vocab`;
+      renderAll();
+      persistState();
+    }
+
+    function exportProgress() {
+      const lines = [
+        `七年級英語第二次段考互動式學習指南 — 個人複習報告`,
+        `==================================================`,
+        ``
+      ];
+      let totalChecks = 0;
+      let doneChecks = 0;
+      STAGES.forEach((stage) => {
+        const sDone = stage.checklist.filter((c) => appState.checkedItems[c.id]).length;
+        totalChecks += stage.checklist.length;
+        doneChecks += sDone;
+        lines.push(`[${stage.num}] ${stage.title} (${sDone}/${stage.checklist.length})`);
+        stage.checklist.forEach((c) => {
+          const mark = appState.checkedItems[c.id] ? `✓` : `☐`;
+          lines.push(`  ${mark} ${c.title} — ${c.hint}`);
+        });
+        lines.push(``);
+      });
+      const pct = totalChecks > 0 ? Math.round((doneChecks / totalChecks) * 100) : 0;
+      lines.unshift(`總體掌握度：${pct}% (${doneChecks}/${totalChecks} 項)`);
+
+      const content = lines.join(`\n`);
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: content,
+          contentType: `text/plain`,
+          encoding: `UTF-8`,
+          filename: `7th_grade_english_midterm2_progress.txt`
+        });
+      }
+      const statusEl = document.getElementById(`save-status`);
+      if (statusEl) {
+        statusEl.textContent = `已匯出學習進度文字檔`;
+        setTimeout(() => {
+          const el = document.getElementById(`save-status`);
+          if (el) el.textContent = ``;
+        }, 2500);
+      }
+    }
+
+    function renderOverview() {
+      let totalItems = 0;
+      let doneItems = 0;
+      let completedStages = 0;
+      let totalQuizzes = 0;
+      let answeredQuizzes = 0;
+      let correctQuizzes = 0;
+
+      STAGES.forEach((stage) => {
+        const sTotal = stage.checklist.length;
+        const sDone = stage.checklist.filter((item) => Boolean(appState.checkedItems[item.id])).length;
+        totalItems += sTotal;
+        doneItems += sDone;
+        if (sTotal > 0 && sDone === sTotal) completedStages += 1;
+
+        stage.quizzes.forEach((q) => {
+          totalQuizzes += 1;
+          if (typeof appState.quizAnswers[q.id] === `number`) {
+            answeredQuizzes += 1;
+            if (appState.quizAnswers[q.id] === q.answer) correctQuizzes += 1;
+          }
+        });
+      });
+
+      const pct = totalItems > 0 ? Math.round((doneItems / totalItems) * 100) : 0;
+
+      const pctEl = document.getElementById(`overview-percent`);
+      const countEl = document.getElementById(`overview-count`);
+      const barEl = document.getElementById(`overview-progress-bar`);
+      const badgeEl = document.getElementById(`overview-badge`);
+      const stagesEl = document.getElementById(`overview-stages`);
+      const quizEl = document.getElementById(`overview-quiz`);
+      const quizAccEl = document.getElementById(`overview-quiz-acc`);
+
+      if (pctEl) pctEl.textContent = `${pct}%`;
+      if (countEl) countEl.textContent = `已完成 ${doneItems} / ${totalItems} 個重點檢核`;
+      if (barEl) barEl.style.width = `${pct}%`;
+      if (stagesEl) stagesEl.textContent = `${completedStages} / ${STAGES.length}`;
+      if (quizEl) quizEl.textContent = `${answeredQuizzes} / ${totalQuizzes}`;
+
+      if (badgeEl) {
+        if (pct === 0) badgeEl.textContent = `準備出發`;
+        else if (pct < 50) badgeEl.textContent = `暖身複習中`;
+        else if (pct < 100) badgeEl.textContent = `穩定推進中`;
+        else badgeEl.textContent = `段考全制霸`;
+      }
+
+      if (quizAccEl) {
+        if (answeredQuizzes === 0) {
+          quizAccEl.textContent = `答對題數：尚未作答`;
+        } else {
+          const acc = Math.round((correctQuizzes / answeredQuizzes) * 100);
+          quizAccEl.textContent = `已答對 ${correctQuizzes} 題（正確率 ${acc}%）`;
+        }
+      }
+    }
+
+    function renderStageCards() {
+      const container = document.getElementById(`stages-grid`);
+      if (!container) return;
+
+      container.innerHTML = STAGES.map((stage) => {
+        const isActive = stage.id === appState.activeStage;
+        const total = stage.checklist.length;
+        const done = stage.checklist.filter((c) => Boolean(appState.checkedItems[c.id])).length;
+        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+        const statusTag = done === total
+          ? `<span class="tag">已精熟 ✓</span>`
+          : (isActive ? `<span class="tag tag-slate">檢視中</span>` : `<span class="tag">${done}/${total} 項</span>`);
+
+        return `
+          <button
+            type="button"
+            class="stage-card ${isActive ? `is-active` : ``}"
+            onclick="selectStage('${stage.id}')"
+            aria-pressed="${isActive ? `true` : `false`}">
+            <div>
+              <div class="stage-card-header">
+                <span class="stage-num">${stage.num}</span>
+                ${statusTag}
+              </div>
+              <h3 class="stage-title">${stage.title}</h3>
+              <p class="stage-summary">${stage.shortSummary}</p>
+            </div>
+            <div class="stage-card-foot">
+              <div class="stage-meta-row">
+                <span>掌握進度</span>
+                <span>${pct}%</span>
+              </div>
+              <div class="progress-track" aria-hidden="true">
+                <div class="progress-fill ${done === total ? `progress-fill-sage` : ``}" style="width: ${pct}%;"></div>
+              </div>
+            </div>
+          </button>
+        `;
+      }).join(``);
+    }
+
+    function renderChecklistAndBadges() {
+      const stage = STAGES.find((s) => s.id === appState.activeStage) || STAGES[0];
+      const checklistEl = document.getElementById(`detail-checklist`);
+      const badgeEl = document.getElementById(`detail-checklist-badge`);
+      if (!checklistEl) return;
+
+      const doneCount = stage.checklist.filter((c) => Boolean(appState.checkedItems[c.id])).length;
+      if (badgeEl) badgeEl.textContent = `${doneCount} / ${stage.checklist.length} 已掌握`;
+
+      checklistEl.innerHTML = stage.checklist.map((item) => {
+        const checked = Boolean(appState.checkedItems[item.id]);
+        return `
+          <label class="check-item ${checked ? `is-checked` : ``}">
+            <input
+              type="checkbox"
+              ${checked ? `checked` : ``}
+              onchange="toggleCheckItem('${item.id}')">
+            <span class="check-text">
+              <span class="check-title">${item.title}</span>
+              <span class="check-hint">${item.hint}</span>
+            </span>
+          </label>
+        `;
+      }).join(``);
+    }
+
+    function renderQuizzes() {
+      const stage = STAGES.find((s) => s.id === appState.activeStage) || STAGES[0];
+      const quizEl = document.getElementById(`detail-quiz`);
+      const statusEl = document.getElementById(`detail-quiz-status`);
+      if (!quizEl) return;
+
+      let stageAnswered = 0;
+      let stageCorrect = 0;
+
+      quizEl.innerHTML = stage.quizzes.map((q, qIdx) => {
+        const userAns = appState.quizAnswers[q.id];
+        const hasAnswered = typeof userAns === `number`;
+        if (hasAnswered) {
+          stageAnswered += 1;
+          if (userAns === q.answer) stageCorrect += 1;
+        }
+
+        const optionsHtml = q.options.map((opt, optIdx) => {
+          let cls = `quiz-opt`;
+          if (hasAnswered) {
+            if (optIdx === userAns && optIdx === q.answer) cls += ` is-selected-correct`;
+            else if (optIdx === userAns && optIdx !== q.answer) cls += ` is-selected-wrong`;
+            else if (optIdx === q.answer) cls += ` is-reveal-correct`;
+          }
+          const prefix = [`(A)`, `(B)`, `(C)`, `(D)`][optIdx] || ``;
+          return `
+            <button
+              type="button"
+              class="${cls}"
+              onclick="answerQuiz('${q.id}', ${optIdx})">
+              ${prefix} ${opt}
+            </button>
+          `;
+        }).join(``);
+
+        const feedbackHtml = hasAnswered ? `
+          <div class="quiz-feedback ${userAns === q.answer ? `is-ok` : `is-bad`}">
+            <strong>${userAns === q.answer ? `答對了！` : `再注意一下：`}</strong>${q.explanation}
+          </div>
+        ` : ``;
+
+        return `
+          <div class="quiz-card">
+            <div class="kpi-top">
+              <span class="label">實戰題 ${qIdx + 1}</span>
+              <span class="tag">${q.source}</span>
+            </div>
+            <p class="quiz-q">${q.question}</p>
+            <div class="quiz-options">${optionsHtml}</div>
+            ${feedbackHtml}
+          </div>
+        `;
+      }).join(``);
+
+      if (statusEl) {
+        statusEl.textContent = stageAnswered === 0
+          ? `點擊選項立即核對解析`
+          : `本關已練習 ${stageAnswered}/${stage.quizzes.length} 題（答對 ${stageCorrect} 題）`;
+      }
+    }
+
+    function renderChart(stage) {
+      const canvas = document.getElementById(`stage-chart`);
+      const labelEl = document.getElementById(`chart-label`);
+      const titleEl = document.getElementById(`chart-title`);
+      const sourceEl = document.getElementById(`chart-source`);
+
+      if (labelEl) labelEl.textContent = stage.chart.label;
+      if (titleEl) titleEl.textContent = stage.chart.title;
+      if (sourceEl) sourceEl.textContent = stage.chart.source;
+
+      if (!canvas || typeof Chart === `undefined`) return;
+
+      if (activeChartInstance) {
+        activeChartInstance.destroy();
+        activeChartInstance = null;
+      }
+
+      const d1 = getCssVar(`--data-1`) || `#3c5a6e`;
+      const d2 = getCssVar(`--data-2`) || `#5f7c63`;
+      const d3 = getCssVar(`--data-3`) || `#a8694a`;
+      const d4 = getCssVar(`--data-4`) || `#8a7a68`;
+      const dCtx = getCssVar(`--data-context`) || `#c3cac6`;
+      const ink = getCssVar(`--on-surface`) || `#23272a`;
+      const mutedInk = getCssVar(`--on-surface-variant`) || `#5c6468`;
+      const gridColor = getCssVar(`--outline-variant`) || `#dde2df`;
+      const fontBody = getCssVar(`--font-body`) || `sans-serif`;
+
+      const palette = [d1, d2, d3, d4, dCtx, d1, d2, d3];
+      const isBar = stage.chart.type === `bar`;
+
+      activeChartInstance = new Chart(canvas, {
+        type: stage.chart.type,
+        data: {
+          labels: stage.chart.labels,
+          datasets: [{
+            label: stage.chart.title,
+            data: stage.chart.data,
+            backgroundColor: isBar
+              ? stage.chart.data.map((_, i) => (i === 0 ? d1 : (i < 3 ? d2 : dCtx)))
+              : palette.slice(0, stage.chart.data.length),
+            borderWidth: 0,
+            borderRadius: isBar ? 3 : 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: isBar ? `y` : `x`,
+          plugins: {
+            legend: {
+              display: !isBar,
+              position: `bottom`,
+              labels: {
+                color: ink,
+                font: { family: fontBody, size: 12 },
+                padding: 14,
+                boxWidth: 12
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function (ctx) {
+                  const val = ctx.parsed !== undefined && typeof ctx.parsed === `object`
+                    ? ctx.parsed.x
+                    : ctx.parsed;
+                  return ` ${ctx.label}: ${val} ${stage.chart.unit}`;
+                }
+              }
+            }
+          },
+          scales: isBar ? {
+            x: {
+              beginAtZero: true,
+              grid: { color: gridColor },
+              border: { display: false },
+              ticks: {
+                color: mutedInk,
+                font: { family: fontBody, size: 11 },
+                callback: function (val) { return `${val}${stage.chart.unit}`; }
+              }
+            },
+            y: {
+              grid: { display: false },
+              border: { display: false },
+              ticks: {
+                color: ink,
+                font: { family: fontBody, size: 12 }
+              }
+            }
+          } : undefined
+        }
+      });
+    }
+
+    function renderDetail() {
+      const idx = STAGES.findIndex((s) => s.id === appState.activeStage);
+      const stage = idx >= 0 ? STAGES[idx] : STAGES[0];
+
+      const indicatorEl = document.getElementById(`active-stage-indicator`);
+      const kickerEl = document.getElementById(`detail-kicker`);
+      const titleEl = document.getElementById(`detail-title`);
+      const subtitleEl = document.getElementById(`detail-subtitle`);
+      const prevBtn = document.getElementById(`prev-stage-btn`);
+      const nextBtn = document.getElementById(`next-stage-btn`);
+      const rulesEl = document.getElementById(`detail-rules`);
+      const deepDiveEl = document.getElementById(`detail-deep-dive`);
+
+      if (indicatorEl) indicatorEl.textContent = `目前檢視：${stage.num}｜${stage.title}`;
+      if (kickerEl) kickerEl.textContent = `${stage.num}・主題詳細解析`;
+      if (titleEl) titleEl.innerHTML = `${stage.title}`;
+      if (subtitleEl) subtitleEl.textContent = stage.subtitle;
+
+      if (prevBtn) prevBtn.disabled = idx <= 0;
+      if (nextBtn) nextBtn.disabled = idx >= STAGES.length - 1;
+
+      renderChecklistAndBadges();
+      renderChart(stage);
+
+      if (rulesEl) {
+        rulesEl.innerHTML = stage.rules.map((r) => `
+          <div class="rule-block ${r.isTrap ? `is-trap` : ``}">
+            <div class="rule-head">
+              <i data-lucide="${r.isTrap ? `alert-triangle` : `check-circle-2`}" style="width: 16px; height: 16px; flex-shrink: 0;" aria-hidden="true"></i>
+              <span>${r.head}</span>
+            </div>
+            <p class="rule-body">${r.body.replace(/\n/g, `<br>`)}</p>
+            <div><span class="formula-strip">${r.formula}</span></div>
+          </div>
+        `).join(``);
+      }
+
+      if (deepDiveEl) {
+        const headerCells = stage.tableHeaders.map((h) => `<th>${h}</th>`).join(``);
+        const bodyRows = stage.tableRows.map((row) => {
+          const cells = row.map((cell, cIdx) => {
+            let cls = ``;
+            if (cIdx === 0 && stage.id === `imperative`) cls = ` class="trap-en"`;
+            else if (cIdx === 1 || (cIdx === 2 && stage.id === `progressive`)) cls = ` class="highlight-en"`;
+            return `<td${cls}>${cell}</td>`;
+          }).join(``);
+          return `<tr>${cells}</tr>`;
+        }).join(``);
+
+        deepDiveEl.innerHTML = `
+          <article class="panel">
+            <span class="label">重點整理與對照表</span>
+            <h3 class="section-title" style="font-size: var(--subhead-size); margin-top: 4px;">${stage.tableTitle}</h3>
+            <div class="data-table-wrap">
+              <table>
+                <thead><tr>${headerCells}</tr></thead>
+                <tbody>${bodyRows}</tbody>
+              </table>
+            </div>
+          </article>
+        `;
+      }
+
+      renderQuizzes();
+    }
+
+    function renderAll() {
+      renderOverview();
+      renderStageCards();
+      renderDetail();
+      if (window.lucide && typeof window.lucide.createIcons === `function`) {
+        window.lucide.createIcons();
+      }
+    }
+
+    async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            applySavedState(saved);
+          }
+        }
+      } catch (err) {
+        // Fallback smoothly to default empty state
+      }
+      renderAll();
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>

@@ -1,0 +1,2514 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="showroom">
+  <title>國中七年級數學（上）第二次段考｜互動式學習指南</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/katex.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.18.2/dist/contrib/auto-render.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Showroom) */
+      --background: #fbfbfd;
+      --surface-container-low: #f5f5f7;
+      --surface-container: #e8e8ed;
+      --surface-container-high: #dcdce1;
+
+      /* Ink */
+      --on-surface: #1d1d1f;
+      --on-surface-variant: #6e6e73;
+
+      /* Rules */
+      --outline: #d2d2d7;
+      --outline-variant: #e5e5ea;
+
+      /* Accents */
+      --primary: #006bd6;
+      --on-primary: #ffffff;
+      --primary-container: #e8f1fd;
+      --on-primary-container: #0058b0;
+      --secondary: #bf4800;
+      --tertiary: #1d1d1f;
+      --error: #d70015;
+      --on-error: #ffffff;
+      --error-container: #fde8ea;
+
+      /* Data series */
+      --data-1: #006bd6;
+      --data-2: #bf4800;
+      --data-3: #248a3d;
+      --data-4: #8944ab;
+      --data-context: #aeaeb2;
+
+      /* Fonts (Non-Latin first per foundation) */
+      --font-headline: 'Noto Sans TC', 'Inter Tight', sans-serif;
+      --font-body: 'Noto Sans TC', 'Inter', sans-serif;
+      --font-label: 'Noto Sans TC', 'Inter', sans-serif;
+
+      /* Shape */
+      --rounded: 9999px;
+      --rounded-md: 0.75rem;
+      --rounded-lg: 1.25rem;
+      --rounded-full: 9999px;
+
+      /* Style effects */
+      --headline-tracking: -0.02em;
+      --figure-tracking: -0.03em;
+      --tile-shadow-hover: 0 8px 28px rgb(0 0 0 / 0.08);
+      --focus-ring: 0 0 0 3px rgb(0 107 214 / 0.25);
+
+      /* Shared semantic tokens */
+      --positive: #1b7332;
+      --positive-container: #e6f4ea;
+      --warning: #9a4a00;
+      --warning-container: #fef3e2;
+      --focus: var(--primary);
+
+      /* Type scale (Tool / Explorer) */
+      --display-size: clamp(1.85rem, 1.35rem + 1.8vw, 2.75rem);
+      --headline-size: clamp(1.25rem, 1.05rem + 0.65vw, 1.625rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.2rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { overflow-x: clip; margin: 0; padding: 0; }
+    header { position: static !important; }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      color: var(--on-surface);
+      background-color: var(--background);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus visibility */
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Headline Stack (Showroom treatment #1) */
+    .headline-stack {
+      text-align: center;
+      padding-block: var(--space-xl) var(--space-md);
+    }
+    .eyebrow {
+      display: inline-block;
+      font-family: var(--font-label);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: var(--space-sm);
+    }
+    .headline-stack h1 {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 700;
+      letter-spacing: var(--headline-tracking);
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .headline-stack .lede {
+      color: var(--on-surface-variant);
+      max-width: 56ch;
+      margin: var(--space-md) auto 0;
+      font-size: var(--subhead-size);
+      line-height: 1.55;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+    .mastery-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background: var(--surface-container-low);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--on-surface);
+    }
+    .mastery-bar-track {
+      width: 120px;
+      height: 8px;
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .mastery-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      border-radius: var(--rounded);
+      transition: width var(--dur-long) var(--ease-out);
+    }
+
+    /* Buttons & Chips (Showroom treatment #3) */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 0;
+      border-radius: var(--rounded);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary:hover { background: var(--on-primary-container); }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      border: 0;
+      border-radius: var(--rounded);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .btn-secondary:hover { background: var(--surface-container-high); }
+    .btn-secondary[data-armed="true"] {
+      background: var(--error-container);
+      color: var(--error);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: 0.3rem 0.75rem;
+      border-radius: var(--rounded);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-size: var(--label-size);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .chip.neutral {
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+    .chip.positive {
+      background: var(--positive-container);
+      color: var(--positive);
+    }
+    .chip.warning {
+      background: var(--warning-container);
+      color: var(--warning);
+    }
+
+    /* Section Headings */
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .section-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .section-subtitle {
+      color: var(--on-surface-variant);
+      font-size: 0.875rem;
+      margin: 0;
+    }
+
+    /* Overview KPI Cards (Showroom borderless rounded tiles) */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .tile {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      border: 0;
+    }
+    .kpi-tile {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .kpi-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      color: var(--on-surface-variant);
+    }
+    .kpi-value {
+      font-family: var(--font-headline);
+      font-size: clamp(1.5rem, 1.2rem + 1.1vw, 2.125rem);
+      font-weight: 700;
+      letter-spacing: var(--figure-tracking);
+      line-height: 1.1;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+    .kpi-value .kpi-unit {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--on-surface-variant);
+      margin-left: var(--space-xs);
+    }
+    .kpi-caption {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      line-height: 1.45;
+    }
+
+    /* Stage Selector Cards */
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .stage-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-md);
+      text-align: left;
+      background: var(--surface-container-low);
+      border: 0;
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      min-height: 164px;
+      cursor: pointer;
+      transition: transform var(--dur-short) var(--ease-out),
+                  box-shadow var(--dur-short) var(--ease-out),
+                  background-color var(--dur-short) var(--ease-out),
+                  outline-color var(--dur-short) var(--ease-out);
+      outline: 2px solid transparent;
+      outline-offset: -2px;
+    }
+    .stage-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--tile-shadow-hover);
+    }
+    .stage-card.active {
+      background: var(--primary-container);
+      outline: 2px solid var(--primary);
+    }
+    .stage-card.completed-all:not(.active) {
+      background: var(--positive-container);
+    }
+    .stage-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      width: 100%;
+    }
+    .stage-num {
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .stage-card.active .stage-num {
+      color: var(--on-primary-container);
+    }
+    .stage-weight {
+      font-size: var(--label-size);
+      font-weight: 500;
+      color: var(--on-surface-variant);
+      font-variant-numeric: tabular-nums;
+    }
+    .stage-card.active .stage-weight {
+      color: var(--on-primary-container);
+    }
+    .stage-title {
+      font-family: var(--font-headline);
+      font-size: 1.0625rem;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .stage-desc {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      margin: var(--space-xs) 0 0;
+      line-height: 1.45;
+    }
+    .stage-card.active .stage-desc {
+      color: var(--on-primary-container);
+    }
+    .stage-progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      width: 100%;
+      margin-top: auto;
+    }
+    .stage-track {
+      flex: 1;
+      height: 6px;
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .stage-card.active .stage-track {
+      background: var(--background);
+    }
+    .stage-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: var(--rounded);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .stage-card.completed-all .stage-fill {
+      background: var(--positive);
+    }
+    .stage-count {
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Detail Workbench */
+    .detail-wrapper {
+      container-type: inline-size;
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .detail-banner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-lg);
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+    }
+    .detail-banner-info {
+      max-width: 65ch;
+    }
+    .detail-banner-info h2 {
+      font-family: var(--font-headline);
+      font-size: clamp(1.375rem, 1.15rem + 0.9vw, 1.875rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: var(--space-xs) 0 var(--space-sm);
+      line-height: 1.2;
+    }
+    .detail-banner-info p {
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+    .detail-banner-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    /* Analytics & Interactive Lab Two-Column Split */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+      gap: var(--space-lg);
+    }
+    .chart-tile {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .tile-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .tile-title {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .chart-container {
+      position: relative;
+      min-height: 260px;
+      width: 100%;
+    }
+    .subtopic-bars {
+      display: grid;
+      gap: var(--space-sm);
+      margin-top: var(--space-xs);
+    }
+    .subtopic-item {
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .subtopic-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8125rem;
+      font-weight: 500;
+    }
+    .subtopic-track {
+      height: 8px;
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .subtopic-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: var(--rounded);
+    }
+
+    /* Interactive Concept Lab */
+    .lab-tile {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .preset-btn {
+      min-height: 36px;
+      padding: 0.35rem 0.85rem;
+      background: var(--background);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--on-surface);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .preset-btn:hover {
+      background: var(--primary-container);
+      border-color: var(--primary);
+      color: var(--on-primary-container);
+    }
+    .lab-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      gap: var(--space-md);
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      flex: 1 1 120px;
+    }
+    .field-label {
+      font-size: var(--label-size);
+      font-weight: 500;
+      color: var(--on-surface-variant);
+    }
+    .field-input, .field-select {
+      min-height: 44px;
+      padding: 0.5rem 0.9rem;
+      background: var(--background);
+      border: 1px solid var(--outline);
+      border-radius: var(--rounded-md);
+      font-size: 0.9375rem;
+      font-variant-numeric: tabular-nums;
+      width: 100%;
+    }
+    .field-select {
+      padding-right: 2rem;
+    }
+    .field-input:focus, .field-select:focus {
+      border-color: var(--primary);
+      box-shadow: var(--focus-ring);
+      outline: none;
+    }
+    .lab-output {
+      background: var(--background);
+      border-radius: var(--rounded-md);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .lab-result-main {
+      font-family: var(--font-headline);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      word-break: break-word;
+    }
+    .div-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .badge-item {
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--rounded);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+    }
+    .badge-item.pass {
+      background: var(--positive-container);
+      color: var(--positive);
+    }
+    .badge-item.fail {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      opacity: 0.72;
+    }
+
+    /* Checkable Rules Grid */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(460px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .rule-card {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      transition: background-color var(--dur-short) var(--ease-out);
+    }
+    .rule-card.checked {
+      background: var(--positive-container);
+    }
+    .rule-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .rule-title-group {
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .rule-tag {
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .rule-card.checked .rule-tag {
+      color: var(--positive);
+    }
+    .rule-title {
+      font-family: var(--font-headline);
+      font-size: 1.0625rem;
+      font-weight: 700;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .check-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      min-width: 44px;
+      padding: 0.4rem 0.9rem;
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline);
+      background: var(--background);
+      color: var(--on-surface);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .check-toggle:hover {
+      border-color: var(--primary);
+      background: var(--primary-container);
+    }
+    .check-toggle[aria-checked="true"] {
+      background: var(--positive);
+      border-color: var(--positive);
+      color: var(--on-primary);
+    }
+    .rule-body {
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+      line-height: 1.65;
+    }
+    .rule-formula {
+      background: var(--background);
+      border-radius: var(--rounded-md);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.9375rem;
+      overflow-x: auto;
+    }
+    .rule-trap {
+      background: var(--warning-container);
+      color: var(--warning);
+      border-radius: var(--rounded-md);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 1.55;
+    }
+
+    /* Practice Quiz Section */
+    .quiz-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(330px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .quiz-card {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .quiz-source {
+      font-size: var(--label-size);
+      font-weight: 500;
+      color: var(--on-surface-variant);
+    }
+    .quiz-stem {
+      font-weight: 600;
+      color: var(--on-surface);
+      line-height: 1.6;
+    }
+    .quiz-options {
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .quiz-opt-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      text-align: left;
+      min-height: 44px;
+      padding: 0.55rem 0.9rem;
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded-md);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .quiz-opt-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary-container);
+    }
+    .quiz-opt-btn.selected-correct {
+      background: var(--positive-container);
+      border-color: var(--positive);
+      color: var(--positive);
+      font-weight: 600;
+    }
+    .quiz-opt-btn.selected-wrong {
+      background: var(--error-container);
+      border-color: var(--error);
+      color: var(--error);
+    }
+    .quiz-opt-btn.reveal-correct {
+      background: var(--positive-container);
+      border-color: var(--positive);
+    }
+    .quiz-explain {
+      background: var(--background);
+      border-radius: var(--rounded-md);
+      padding: var(--space-md);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: var(--on-surface);
+    }
+
+    /* Footer Sources Note */
+    .sources-footer {
+      text-align: center;
+      padding-block: var(--space-lg) var(--space-xl);
+      color: var(--on-surface-variant);
+      font-size: 0.8125rem;
+      border-top: 1px solid var(--outline-variant);
+      line-height: 1.65;
+    }
+
+    /* Responsive adjustments */
+    @container (max-width: 780px) {
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .overview-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+      .detail-banner {
+        padding: var(--space-lg);
+      }
+      .rules-grid, .quiz-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-grid">
+    <!-- Hero / Header -->
+    <header class="headline-stack">
+      <span class="eyebrow">國中七年級上學期・第二次段考數學複習</span>
+      <h1>七年級數學互動式學習指南</h1>
+      <p class="lede">彙整全台 13 所國中歷屆段考試題重點，將因數與倍數、分數四則運算、指數律及一元一次方程式銜接概念拆解為 5 大互動關卡，協助你逐項複習、視覺化演練並追蹤掌握度。</p>
+      <div class="hero-actions">
+        <div class="mastery-pill" aria-live="polite">
+          <span>整體複習進度</span>
+          <div class="mastery-bar-track" aria-hidden="true">
+            <div class="mastery-bar-fill" id="hero-progress-fill"></div>
+          </div>
+          <strong id="hero-progress-text">0%</strong>
+        </div>
+        <button type="button" class="btn-secondary" id="reset-progress-btn" onclick="handleResetProgress(this)">重設學習紀錄</button>
+      </div>
+    </header>
+
+    <!-- Top Overview KPI Cards -->
+    <section aria-label="學習總覽卡片">
+      <div class="section-header">
+        <h2 class="section-title">段考複習總覽</h2>
+        <p class="section-subtitle">統計基準：112–113 學年度 7 份完整試卷共 160 道真題分析</p>
+      </div>
+      <div class="overview-grid">
+        <div class="tile kpi-tile">
+          <span class="kpi-label">重點規則完成度</span>
+          <div class="kpi-value" id="kpi-rules-value">0<span class="kpi-unit">/ 20 項</span></div>
+          <span class="kpi-caption" id="kpi-rules-caption">尚未開始勾選，點選下方關卡展開重點清單</span>
+        </div>
+        <div class="tile kpi-tile">
+          <span class="kpi-label">段考實戰練習</span>
+          <div class="kpi-value" id="kpi-quiz-value">0<span class="kpi-unit">/ 15 題</span></div>
+          <span class="kpi-caption" id="kpi-quiz-caption">每關精選 3 題段考真題與詳解即時對答案</span>
+        </div>
+        <div class="tile kpi-tile">
+          <span class="kpi-label">全卷佔比最高單元</span>
+          <div class="kpi-value">30.0<span class="kpi-unit">%</span></div>
+          <span class="kpi-caption">2-3 分數四則運算（48/160 題），分配律與餘數最關鍵</span>
+        </div>
+        <div class="tile kpi-tile">
+          <span class="kpi-label">關卡通關狀態</span>
+          <div class="kpi-value" id="kpi-stages-value">0<span class="kpi-unit">/ 5 關</span></div>
+          <span class="kpi-caption" id="kpi-stages-caption">完成該關卡所有規則勾選即視為通關</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Middle Clickable Stage Cards -->
+    <section aria-label="學習關卡切換區">
+      <div class="section-header">
+        <h2 class="section-title">選擇學習關卡</h2>
+        <p class="section-subtitle">點擊任一關卡卡片，下方將即時切換該章節詳細說明、圖表比例與重點清單</p>
+      </div>
+      <div class="stage-grid" id="stage-grid" role="tablist" aria-label="數學複習關卡"></div>
+    </section>
+
+    <!-- Expanded Stage Detail Area -->
+    <section class="detail-wrapper" id="detail-section" aria-live="polite">
+      <!-- Banner -->
+      <div class="detail-banner" id="detail-banner"></div>
+
+      <!-- Charts & Interactive Lab -->
+      <div class="analytics-grid">
+        <div class="tile chart-tile">
+          <div class="tile-header">
+            <h3 class="tile-title" id="chart-title">歷屆段考出題比例分析</h3>
+            <span class="chip neutral" id="chart-badge">160 題統計</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="topic-proportion-chart" aria-label="段考章節出題比例圖"></canvas>
+          </div>
+          <div class="subtopic-bars" id="subtopic-bars"></div>
+        </div>
+
+        <div class="tile lab-tile" id="interactive-lab"></div>
+      </div>
+
+      <!-- Checkable Key Rules -->
+      <div>
+        <div class="section-header">
+          <h3 class="section-title" id="rules-section-title">核心重點規則與段考地雷</h3>
+          <p class="section-subtitle">閱讀並演練後，點擊右側「標記已掌握」自動儲存進度</p>
+        </div>
+        <div class="rules-grid" id="rules-grid"></div>
+      </div>
+
+      <!-- Real Exam Practice -->
+      <div>
+        <div class="section-header">
+          <h3 class="section-title">段考真題實戰演練</h3>
+          <p class="section-subtitle">點擊選項立即核對答案並展開完整解析</p>
+        </div>
+        <div class="quiz-grid" id="quiz-grid"></div>
+      </div>
+    </section>
+
+    <footer class="sources-footer">
+      <strong>資料來源說明：</strong>本學習指南之重點歸納、出題比例統計（共 160 題）與關卡 01–04 實戰試題，均整理自筆記本收錄之歷屆國中七年級上學期第二次段考數學試卷與官方解答（包含新北市立土城國中 112–113、臺北市立仁愛國中 113、高雄市立陽明國中 112、新北市立桃子腳國中小 113、高雄市立大灣國中 110／113、桃園市立文昌國中 109／112、高雄市立林園高中國中部 109／112、臺北市立中山國中 110、桃園市立中興國中 111、嘉義市立北興國中 110、高雄市立大樹國中 108、新北市立崇林國中 109、桃園市立平南國中 110–111 及臺南市立歸仁國中 109）；關卡 05 為配合複習架構增編之第三章一元一次方程式銜接單元。
+    </footer>
+  </main>
+
+  <api-shim></api-shim>
+  <script>
+    // ==============================
+    // 1. Curriculum & Exam Dataset
+    // ==============================
+    const EXAM_PROPORTION_DATA = {
+      labels: [
+        `2-1 質因數分解`,
+        `2-2 公因數與公倍數`,
+        `2-3 分數四則運算`,
+        `2-4 指數律`
+      ],
+      counts: [43, 40, 48, 29],
+      percentages: [26.9, 25.0, 30.0, 18.1]
+    };
+
+    const STAGES = [
+      {
+        id: `stage-1`,
+        num: `關卡 01`,
+        unitTag: `康軒 2-1`,
+        weightLabel: `段考佔比 26.9%`,
+        proportionIndex: 0,
+        title: `因數、倍數與質因數分解`,
+        shortDesc: `倍數判別、質合數陷阱、標準分解式`,
+        overview: `本單元是整份第二次段考的基石（7 校真題佔 43/160 題）。考題常結合「倍數判別填空」、「1 是否為質數的觀念辨析」，以及「完全平方數具有奇數個正因數」等推理題。`,
+        subtopics: [
+          { name: `倍數判別法 (2, 3, 4, 9, 11)`, share: 37 },
+          { name: `質數、合數與整除觀念辨析`, share: 28 },
+          { name: `標準分解式與因數對稱性`, share: 35 }
+        ],
+        rules: [
+          {
+            id: `r1-1`,
+            tag: `觀念必考`,
+            title: `質數、合數與 1 的界線`,
+            body: `$1$ 既不是質數也不是合數；$2$ 是最小的質數，也是質數中唯一的偶數。$1$～$100$ 內共有 $25$ 個質數與 $74$ 個合數。`,
+            formula: `$1 \\notin \\text{質數},\\; 1 \\notin \\text{合數} \\quad|\\quad \\text{最小質數} = 2,\\; \\text{最小合數} = 4$`,
+            trap: `段考地雷（土城112／仁愛113）：因數與倍數必須滿足「整數整除」，$8 = 5 \\times 1.6$ 不能稱 $8$ 是 $5$ 的倍數；另外「互質」兩數不一定要是質數！`
+          },
+          {
+            id: `r1-2`,
+            tag: `速算規則`,
+            title: `五大倍數判別法`,
+            body: `判斷一個多位數是否能被 $2, 3, 4, 5, 9, 11$ 整除時，不需直接做長除法，只要檢查尾數、數字和或奇偶數位差即可快速篩選未知數 $\\square$。`,
+            formula: `$3, 9 \\text{ 倍數看「各位數字和」} \\quad|\\quad 4 \\text{ 倍數看「末兩位」} \\quad|\\quad 11 \\text{ 倍數看「|奇數位和 - 偶數位和|」}$`,
+            trap: `段考地雷（土城112／大灣113）：遇到「同時是 $3$ 和 $4$ 的倍數」（即 $12$ 的倍數）時，先用末兩位篩出 $4$ 的倍數候選值，再檢查數字和是否為 $3$ 的倍數，才不會漏解！`
+          },
+          {
+            id: `r1-3`,
+            tag: `核心工具`,
+            title: `標準分解式與因數條件`,
+            body: `將正整數分解成質因數連乘積，依質因數由小到大寫成指數形式。若 $B$ 為 $A$ 的因數，則 $B$ 所含的質因數種類不能超過 $A$，且各質因數次方 $\\le A$。`,
+            formula: `例：$\\; 1080 = 2^3 \\times 3^3 \\times 5 \\quad\\Rightarrow\\quad \\text{相異質因數為 } 2, 3, 5 \\text{ 共 } 3 \\text{ 個}$`,
+            trap: `段考地雷（仁愛113／中山110）：$1$ 和本身都不是「質因數」！例如 $35$ 的因數有 $1, 5, 7, 35$，但相異質因數只有 $5$ 和 $7$。`
+          },
+          {
+            id: `r1-4`,
+            tag: `對稱性質`,
+            title: `正因數頭尾配對與完全平方數`,
+            body: `將正整數 $N$ 的正因數由小到大排列，第 $1$ 個乘最後 $1$ 個等於 $N$，第 $2$ 個乘倒數第 $2$ 個也等於 $N$。只有「完全平方數」的正因數個數為奇數個！`,
+            formula: `例：$\\; N \\text{ 之因數 } 1, a, 3, \\dots, 42, h, N \\;\\Rightarrow\\; 3 \\times 42 = 126 = N$`,
+            trap: `段考地雷（大灣113／陽明112）：題目問「哪個數有奇數個正因數」或「拼成矩形只有一種方法」，前者找完全平方數（如 $121=11^2$），後者找質數（如 $97$）。`
+          }
+        ],
+        quizzes: [
+          {
+            id: `q1-1`,
+            source: `臺北市立仁愛國中 113 學年度第 1 學期第 2 次段考`,
+            stem: `下列敘述何者正確？`,
+            options: [
+              `因為 $8 = 5 \\times 1.6$，所以 $8$ 是 $5$ 的倍數`,
+              `$1$ 到 $100$ 的整數中，扣除 $25$ 個質數後，剩下的數皆為合數`,
+              `$35$ 的相異質因數是 $1、5、7、35$`,
+              `$1$ 是 $19$ 的因數`
+            ],
+            answer: 3,
+            explain: `正解為 (D)。$1$ 是任意正整數的因數。(A) 商必須是整數才算倍數；(B) 還需扣除既非質數也非合數的 $1$，合數只有 $74$ 個；(C) $1$ 和 $35$ 不是質數，相異質因數僅有 $5$ 與 $7$。`
+          },
+          {
+            id: `q1-2`,
+            source: `高雄市立大灣國中 113 學年度第 1 學期第 2 次段考`,
+            stem: `下列哪一個正整數的因數個數是奇數個？`,
+            options: [`$29$`, `$56$`, `$121$`, `$147$`],
+            answer: 2,
+            explain: `正解為 (C) $121$。因數個數為奇數個代表該數必為完全平方數，$121 = 11^2$，其正因數為 $1, 11, 121$ 共 $3$ 個。`
+          },
+          {
+            id: `q1-3`,
+            source: `新北市立土城國中 112 學年度第 1 學期第 2 次段考`,
+            stem: `已知六位數 $43215\\square$ 不但是 $3$ 的倍數，也是 $4$ 的倍數，則 $\\square$ 中可填入的數為何？`,
+            options: [`$0$`, `$2$`, `$6$`, `$8$`],
+            answer: 2,
+            explain: `正解為 (C) $6$。先看 $4$ 的倍數：末兩位 $5\\square$ 須為 $4$ 的倍數，故 $\\square$ 可能為 $2$ 或 $6$；再看 $3$ 的倍數：$4+3+2+1+5+\\square = 15+\\square$ 須為 $3$ 的倍數，故 $\\square=6$。`
+          }
+        ]
+      },
+      {
+        id: `stage-2`,
+        num: `關卡 02`,
+        unitTag: `康軒 2-2`,
+        weightLabel: `段考佔比 25.0%`,
+        proportionIndex: 1,
+        title: `最大公因數與最小公倍數`,
+        shortDesc: `短除法、互質推論、分裝與週期應用`,
+        overview: `本單元約佔段考 25%（40/160 題），重點在於辨別生活應用題該用「最大公因數（向內平分、裁切）」或「最小公倍數（向外擴展、同時相遇）」，並留意餘數修正與路燈端點 $+1 / -1$。`,
+        subtopics: [
+          { name: `標準分解式求 GCD / LCM 與反推`, share: 35 },
+          { name: `分裝、裁切與植樹路燈（GCD/間隔）`, share: 35 },
+          { name: `週期相遇與不足同餘（LCM）`, share: 30 }
+        ],
+        rules: [
+          {
+            id: `r2-1`,
+            tag: `公式核心`,
+            title: `標準分解式取法與兩數乘積恆等式`,
+            body: `兩數皆寫成標準分解式後，最大公因數 $(a, b)$ 取「共同質因數的較小次方」；最小公倍數 $[a, b]$ 取「所有出現質因數的較大次方」。`,
+            formula: `$(a, b) \\times [a, b] = a \\times b \\quad (\\text{僅適用於兩正整數，三數不成立！})$`,
+            trap: `段考地雷（林園112／土城113）：題目給定 $a \\times b = 3024$ 與 $[a, b] = 252$ 時，直接用 $3024 \\div 252 = 12$ 即可求出 $(a, b)$，不需硬湊兩數！`
+          },
+          {
+            id: `r2-2`,
+            tag: `高頻概念`,
+            title: `互質與公因數判斷`,
+            body: `若兩整數的最大公因數為 $1$，即 $(a, b) = 1$，則稱兩數互質。此時兩數的最小公倍數等於兩數乘積 $[a, b] = a \\times b$。`,
+            formula: `$(a, b) = 1 \\;\\Longleftrightarrow\\; a, b \\text{ 無共同質因數} \\;\\Longrightarrow\\; [a, b] = a \\times b$`,
+            trap: `段考地雷（仁愛113／北興110）：互質只要求「沒有共同質因數」，所以兩個合數（例如 $2^2 \\times 7 \\times 11$ 與 $39 = 3 \\times 13$）依然可以互質！`
+          },
+          {
+            id: `r2-3`,
+            tag: `應用分類 A`,
+            title: `GCD 應用：平分、裁切與剩餘修正`,
+            body: `遇到「全部分完不剩餘」、「切出最少塊大正方形」、「兩側植樹或設路燈」，先確認實際平分的數量（有剩先扣、不夠先補），再求最大公因數。`,
+            formula: `$\\text{每段最長} = (a, b) \\quad|\\quad \\text{兩端都裝盞數} = \\frac{\\text{總長}}{\\text{間隔}} + 1 \\quad|\\quad \\text{兩端不裝} = \\frac{\\text{總長}}{\\text{間隔}} - 1$`,
+            trap: `段考地雷（土城113／林園112）：看清題目寫「道路單側」還是「橋的兩側」、「橋頭尾都裝」還是「橋頭尾未裝」，差一字就差倍數與 $\\pm 2$！`
+          },
+          {
+            id: `r2-4`,
+            tag: `應用分類 B`,
+            title: `LCM 應用：同時相遇與同餘／不足問題`,
+            body: `不同週期同時出發、下次再同時發生（如返家、閃燈、公車發車），週期為 $[t_1, t_2, t_3]$。若被數個除數除都「不足 $r$」，則通式為 $[\\text{各除數}] \\times k - r$。`,
+            formula: `$\\text{同時次數} = \\left\\lfloor \\frac{\\text{總時長}}{[t_1, t_2]} \\right\\rfloor + 1 \\quad(\\text{含起點首次同時})$`,
+            trap: `段考地雷（仁愛113／林園112）：算「08:00 到 20:00 同時發車幾次」時，起點 08:00 算第 1 次，最後要記得 $+1$！而「幾天後」與「幾月幾日」要注意大月 31 天或小月 30 天。`
+          }
+        ],
+        quizzes: [
+          {
+            id: `q2-1`,
+            source: `新北市立土城國中 112 學年度第 1 學期第 2 次段考`,
+            stem: `阿妮買了三條緞帶分別長 $147$ 公分、$189$ 公分、$126$ 公分，要分成每條等長（長度為整數），最少共可分為幾條？`,
+            options: [`$21$ 條`, `$22$ 條`, `$23$ 條`, `$24$ 條`],
+            answer: 1,
+            explain: `正解為 (B) $22$ 條。要分最少條代表每條要盡量長，先求 $(147, 189, 126) = 21$ 公分，再加總段數：$147\\div 21 + 189\\div 21 + 126\\div 21 = 7 + 9 + 6 = 22$ 條。`
+          },
+          {
+            id: `q2-2`,
+            source: `臺北市立仁愛國中 113 學年度第 1 學期第 2 次段考`,
+            stem: `公路長 $3000$ 公尺，自起點開始每隔 $25$ 公尺設一盞路燈、每隔 $6$ 公尺設一面旗幟，起點及終點皆同時設置，共有多少處同時有路燈和旗幟？`,
+            options: [`$380$ 處`, `$150$ 處`, `$121$ 處`, `$21$ 處`],
+            answer: 3,
+            explain: `正解為 (D) $21$ 處。同時設置間隔為 $[25, 6] = 150$ 公尺，起點與終點皆有故為 $3000 \\div 150 + 1 = 20 + 1 = 21$ 處。`
+          },
+          {
+            id: `q2-3`,
+            source: `臺北市立仁愛國中 113 學年度第 1 學期第 2 次段考（非選改編）`,
+            stem: `有一個三位數，被 $2$ 除餘 $1$、被 $3$ 除餘 $2$、被 $4$ 除餘 $3$、被 $5$ 除餘 $4$、被 $6$ 除餘 $5$，具有此性質的三位數最大為多少？`,
+            options: [`$959$`, `$961$`, `$989$`, `$999$`],
+            answer: 0,
+            explain: `正解為 (A) $959$。觀察餘數發現被 $2, 3, 4, 5, 6$ 除均「不足 $1$」，先求 $[2, 3, 4, 5, 6] = 60$，最大三位數為 $60 \\times 16 - 1 = 960 - 1 = 959$。`
+          }
+        ]
+      },
+      {
+        id: `stage-3`,
+        num: `關卡 03`,
+        unitTag: `康軒 2-3`,
+        weightLabel: `段考佔比 30.0%`,
+        proportionIndex: 2,
+        title: `分數的四則運算與比較`,
+        shortDesc: `負分數比較、去括號、分配律與餘重陷阱`,
+        overview: `全卷佔比最高的核心章節（48/160 題，佔 30.0%）！最容易失分的不是不會算，而是「負帶分數拆解符號弄反」、「對除法亂用左分配律」以及「分裝除法把剩下的份數當成重量」。`,
+        subtopics: [
+          { name: `負帶分數拆解與去括號變號`, share: 28 },
+          { name: `分數大小比較、倒數與相反數`, share: 25 },
+          { name: `分配律速算與分數除法餘量應用`, share: 47 }
+        ],
+        rules: [
+          {
+            id: `r3-1`,
+            tag: `高危陷阱`,
+            title: `負帶分數的正確拆解與去括號`,
+            body: `負帶分數的負號屬於整個數，拆成整數與分數時兩部分皆為負！另外，括號前面若是減號，去括號時括號內每一項都要變號。`,
+            formula: `$-4\\frac{7}{15} = -4 - \\frac{7}{15} = -\\left(4 + \\frac{7}{15}\\right) \\neq -4 + \\frac{7}{15}$`,
+            trap: `段考地雷（陽明112／文昌109／崇林109）：幾乎每年必出選擇題考 $-3\\frac{2}{5}$ 等於 $-3+\\frac{2}{5}$ 還是 $-4+\\frac{3}{5}$！切記先換成負號包住總和再拆。`
+          },
+          {
+            id: `r3-2`,
+            tag: `數感技巧`,
+            title: `負分數比大小、倒數與相反數`,
+            body: `負數比大小時，「絕對值愈大，數值愈小」。若分子分母都差 $1$（如 $-\\frac{6}{7}, -\\frac{7}{8}, -\\frac{8}{9}$），愈接近 $-1$ 的反而愈小！`,
+            formula: `$\\text{倒數：} -\\frac{7}{3} \\leftrightarrow -\\frac{3}{7}\\text{（同號，乘積為 }1\\text{）} \\quad|\\quad \\text{相反數：} -\\frac{7}{3} \\leftrightarrow +\\frac{7}{3}\\text{（異號，和為 }0\\text{）}$`,
+            trap: `段考地雷（文昌109／陽明112）：帶分數求倒數，一定要「先化成假分數」再分子分母顛倒；另外 $0$ 的相反數是 $0$，但 $0$ 沒有倒數！`
+          },
+          {
+            id: `r3-3`,
+            tag: `速算規則`,
+            title: `分配律與「禁止使用的除法左分配律」`,
+            body: `加減乘混算時善用提出公因數 $a \\times b + a \\times c = a(b+c)$。除法僅在括號在「被除數」時可拆：$(a+b)\\div c = a\\div c + b\\div c$。`,
+            formula: `$c \\div (a + b) \\neq c \\div a + c \\div b \\quad\\text{（必須先算出 } a+b \\text{ 再轉乘倒數！）}$`,
+            trap: `段考地雷（林園112／文昌109）：看到 $8\\frac{1}{7} \\div 4\\frac{3}{5}$ 絕對不能把整數除整數、分數除分數！必須先化為假分數再「除變乘倒數」。`
+          },
+          {
+            id: `r3-4`,
+            tag: `應用關鍵`,
+            title: `分數分裝除法的「剩餘量」計算`,
+            body: `總重 $W$ 公斤，每 $u$ 公斤裝一包，若 $W \\div u = q \\text{ 又 } r$（其中 $q$ 為整數包數，$0 < r < 1$），則不滿一包的剩餘分數是「$r$ 包」，並非 $r$ 公斤！`,
+            formula: `$\\text{剩餘重量} = r \\times u \\;\\text{（或 } W - q \\times u \\text{）}$`,
+            trap: `段考地雷（文昌112 Q24／仁愛113 Q18／土城113 Q19）：三間學校同一年段考同時命題！$15\\frac{3}{7} \\div \\frac{3}{4} = 20\\frac{4}{7}$，剩下 $\\frac{4}{7} \\times \\frac{3}{4} = \\frac{3}{7}$ 公斤，不是 $\\frac{4}{7}$ 公斤！`
+          }
+        ],
+        quizzes: [
+          {
+            id: `q3-1`,
+            source: `高雄市立陽明國中 112 學年度第 1 學期第 2 次段考`,
+            stem: `若 $a = -\\frac{6}{7}$、$b = -\\frac{7}{8}$、$c = -\\frac{8}{9}$，請問哪一數最大？`,
+            options: [`$a$`, `$b$`, `$c$`, `一樣大`],
+            answer: 0,
+            explain: `正解為 (A) $a$。比較絕對值：$\\frac{6}{7} = 1 - \\frac{1}{7}$、$\\frac{7}{8} = 1 - \\frac{1}{8}$、$\\frac{8}{9} = 1 - \\frac{1}{9}$，因為 $\\frac{1}{7} > \\frac{1}{8} > \\frac{1}{9}$，所以 $|a| < |b| < |c|$；加上負號後大小反轉，$a > b > c$。`
+          },
+          {
+            id: `q3-2`,
+            source: `高雄市立林園高中附設國中 112 學年度第 1 學期第 2 次段考`,
+            stem: `若 $a, b, c$ 為任意三個不為 $0$ 的數，請問下列哪一個算式是**錯誤**的？`,
+            options: [
+              `$(a+b) \\div c = a \\div c + b \\div c$`,
+              `$c \\times (a-b) = c \\times a - c \\times b$`,
+              `$c \\div (a+b) = c \\div a + c \\div b$`,
+              `$a \\div b \\div c = (a \\div b) \\div c$`
+            ],
+            answer: 2,
+            explain: `正解為 (C)。除法不具左分配律！當除數是括號 $(a+b)$ 時，只能先將 $(a+b)$ 算完再相除，不能拆開分別當除數。`
+          },
+          {
+            id: `q3-3`,
+            source: `桃園市立文昌國中 112 學年度第 1 學期第 2 次段考`,
+            stem: `一袋麵粉重 $15\\frac{3}{7}$ 公斤，製作一份鬆餅需要 $\\frac{3}{4}$ 公斤的麵粉，在製作最多份鬆餅的情況下，還剩下多少公斤的麵粉？`,
+            options: [
+              `最多 $15$ 份，剩 $\\frac{3}{7}$ 公斤`,
+              `最多 $15$ 份，剩 $\\frac{4}{7}$ 公斤`,
+              `最多 $20$ 份，剩 $\\frac{3}{7}$ 公斤`,
+              `最多 $20$ 份，剩 $\\frac{4}{7}$ 公斤`
+            ],
+            answer: 2,
+            explain: `正解為 (C)。先算 $15\\frac{3}{7} \\div \\frac{3}{4} = \\frac{108}{7} \\times \\frac{4}{3} = \\frac{144}{7} = 20\\frac{4}{7}$（份），代表可做 $20$ 份，剩下 $\\frac{4}{7}$ 份鬆餅的麵粉，重量為 $\\frac{4}{7} \\times \\frac{3}{4} = \\frac{3}{7}$ 公斤。`
+          }
+        ]
+      },
+      {
+        id: `stage-4`,
+        num: `關卡 04`,
+        unitTag: `康軒 2-4`,
+        weightLabel: `段考佔比 18.1%`,
+        proportionIndex: 3,
+        title: `指數律與乘方比較`,
+        shortDesc: `括號正負、五大指數律、湊10算位數`,
+        overview: `在包含 2-4 的段考試題中佔比約 18%～28%（7 校合計 29/160 題）。核心考點集中在「負底數有無括號的差別」、「指數加法陷阱」以及「利用 $2 \\times 5 = 10$ 判斷 $4^m \\times 5^n$ 是幾位數」。`,
+        subtopics: [
+          { name: `負數乘方與括號正負判別`, share: 31 },
+          { name: `五大指數律與混合計算`, share: 41 },
+          { name: `湊 10 位數判斷與指數成長應用`, share: 28 }
+        ],
+        rules: [
+          {
+            id: `r4-1`,
+            tag: `符號關鍵`,
+            title: `括號位置決定正負：$(-a)^n$ 與 $-a^n$`,
+            body: `$(-a)^n$ 代表負號也一起連乘 $n$ 次，偶次方為正、奇次方為負；$-a^n$ 則是負號在乘方外面，先算 $a^n$ 再加負號，結果恆為負！`,
+            formula: `$(-3)^2 = (-3)\\times(-3) = +9 \\quad\\text{vs}\\quad -3^2 = -(3\\times 3) = -9$`,
+            trap: `段考地雷（仁愛113 非選2／文昌112 Q16）：注意 $(-\\frac{5}{7})^2 = +\\frac{25}{49}$，但 $-(\\frac{5}{7})^2 = -\\frac{25}{49}$；而奇次方時 $(-\\frac{5}{7})^3 = -(\\frac{5}{7})^3$ 兩者相等！`
+          },
+          {
+            id: `r4-2`,
+            tag: `運算定律`,
+            title: `五大指數律與零次方（底數不為 $0$）`,
+            body: `同底相乘指數相加、同底相除指數相減；括號外再乘方則指數相乘；任何非零數的 $0$ 次方都等於 $1$。`,
+            formula: `$a^m \\times a^n = a^{m+n} \\;\\;|\\;\\; a^m \\div a^n = a^{m-n} \\;\\;|\\;\\; (a^m)^n = a^{mn} \\;\\;|\\;\\; a^0 = 1\\;(a\\neq 0)$`,
+            trap: `段考地雷（仁愛113 Q16／土城113 Q17）：指數律只對「乘除」有效！$3^8 + 3^2 \\neq 3^{10}$；若遇到 $3^3 + 3^3 + 3^3$ 要提出相同項 $= 3 \\times 3^3 = 3^4$。`
+          },
+          {
+            id: `r4-3`,
+            tag: `大小推論`,
+            title: `負分數與真分數的乘方比大小`,
+            body: `先分出正負（偶次方為正 $>$ 奇次方為負）。正真分數次方愈高愈小；負真分數的奇次方則因絕對值變小，次方愈高反而愈接近 $0$（數值愈大）！`,
+            formula: `$-1 < r < 0 \\text{ 時：}\\; r^2 > r^4 > \\dots > 0 > \\dots > r^5 > r^3 > r^1$`,
+            trap: `段考地雷（土城112 Q14／大灣113 二8）：看清楚底數是真分數（如 $-\\frac{3}{4}$、$-0.5$）還是假分數（如 $-\\frac{5}{3}$、$-\\frac{6}{5}$），假分數次方愈高絕對值愈大！`
+          },
+          {
+            id: `r4-4`,
+            tag: `必考應用`,
+            title: `湊 $10$ 判斷位數與指數分裂`,
+            body: `遇到求 $A = 4^7 \\times 5^{11}$ 是幾位數，先將 $4$ 化為 $2^2$，把相同個數的 $2$ 和 $5$ 配對成 $(2\\times 5)^k = 10^k$，再用「剩餘係數的位數 $+ k$」算出總位數。`,
+            formula: `$4^7 \\times 5^{11} = 2^{14} \\times 5^{11} = 2^3 \\times (2\\times 5)^{11} = 8 \\times 10^{11} \\;\\Rightarrow\\; 1 + 11 = 12 \\text{ 位數}$`,
+            trap: `段考地雷（土城112／文昌112／桃子腳113）：若前面剩餘係數是兩位數（例如 $15 \\times 10^6$），總位數是 $2 + 6 = 8$ 位數，別忘了加係數本身的位數！`
+          }
+        ],
+        quizzes: [
+          {
+            id: `q4-1`,
+            source: `新北市立土城國中 112 學年度第 1 學期第 2 次段考`,
+            stem: `已知 $A = 4^7 \\times 5^{11}$，判斷 $A$ 是幾位數？`,
+            options: [`$10$ 位數`, `$11$ 位數`, `$12$ 位數`, `$14$ 位數`],
+            answer: 2,
+            explain: `正解為 (C) $12$ 位數。將 $4^7$ 改寫為 $(2^2)^7 = 2^{14}$，因此 $A = 2^{14} \\times 5^{11} = 2^3 \\times (2 \\times 5)^{11} = 8 \\times 10^{11}$，代表 $8$ 後面有 $11$ 個 $0$，共 $12$ 位數。`
+          },
+          {
+            id: `q4-2`,
+            source: `臺北市立仁愛國中 113 學年度第 1 學期第 2 次段考`,
+            stem: `若 $a = (-\\frac{6}{7})^4$、$b = (-\\frac{6}{7})^5$、$c = (-\\frac{6}{7})^6$，則 $a、b、c$ 三數的大小關係為何？`,
+            options: [`$a > c > b$`, `$c > b > a$`, `$c > a > b$`, `$a > b > c$`],
+            answer: 0,
+            explain: `正解為 (A) $a > c > b$。$a$ 和 $c$ 為偶次方皆為正數，底數小於 $1$ 次方愈高愈小，故 $a > c > 0$；$b$ 為奇次方是負數，故 $b$ 最小。`
+          },
+          {
+            id: `q4-3`,
+            source: `新北市立土城國中 113 學年度第 1 學期第 2 次段考`,
+            stem: `計算 $(-\\frac{7}{9})^6 \\times (-\\frac{9}{7})^5 + \\frac{2}{3} \\div (-1\\frac{1}{2}) + 2024^0$ 之值為何？`,
+            options: [`$\\frac{1}{9}$`, `$-\\frac{2}{9}$`, `$\\frac{7}{9}$`, `$-\\frac{11}{9}$`],
+            answer: 1,
+            explain: `正解為 (B) $-\\frac{2}{9}$。第一項拆為 $(-\\frac{7}{9}) \\times [(-\\frac{7}{9})\\times(-\\frac{9}{7})]^5 = -\\frac{7}{9} \\times 1^5 = -\\frac{7}{9}$；第二項 $\\frac{2}{3} \\times (-\\frac{2}{3}) = -\\frac{4}{9}$；第三項 $2024^0 = 1$。合計 $-\\frac{7}{9} - \\frac{4}{9} + 1 = -\\frac{11}{9} + 1 = -\\frac{2}{9}$。`
+          }
+        ]
+      },
+      {
+        id: `stage-5`,
+        num: `關卡 05`,
+        unitTag: `第3章銜接`,
+        weightLabel: `延伸銜接單元`,
+        proportionIndex: 2,
+        title: `一元一次方程式核心觀念`,
+        shortDesc: `等量公理、移項法則、分數去分母`,
+        overview: `將第 2 章學到的「公倍數」、「分數四則」與「分配律」無縫銜接到第 3 章一元一次方程式！掌握天平平衡的等量公理、過等號變號的移項規則，以及最容易粗心的分數去分母技巧。`,
+        subtopics: [
+          { name: `代數式去括號與同類項合併（銜接 2-3）`, share: 30 },
+          { name: `等量公理與移項法則`, share: 30 },
+          { name: `分數去分母與應用題列式（銜接 2-2/2-3）`, share: 40 }
+        ],
+        rules: [
+          {
+            id: `r5-1`,
+            tag: `代數基礎`,
+            title: `文字符號簡記與分配律化簡`,
+            body: `數字寫在文字前並省略乘號；括號前有負號或分數係數時，必須把係數連同正負號一起分配進去，再將同類項（含 $x$ 的項與常數項分開）合併。`,
+            formula: `$-2\\left(3x - \\frac{1}{2}\\right) + 5x = -6x + 1 + 5x = -x + 1$`,
+            trap: `常見地雷：常數項不能與 $x$ 項合併（例如 $3x + 2$ 不能寫成 $5x$）；括號前是減號時，後面每一項都要記得變號！`
+          },
+          {
+            id: `r5-2`,
+            tag: `求解核心`,
+            title: `等量公理與移項法則`,
+            body: `等號就像平衡的天平：兩邊同加、同減、同乘一數，或同除以一個不為 $0$ 的數，等號依然成立。「移項法則」則是把某一項跨越等號移到另一邊時改變運算符號。`,
+            formula: `$ax + b = c \\;\\xrightarrow{\\text{移項}}\\ ; ax = c - b \\;\\xrightarrow{\\text{同除 }a}\\ ; x = \\frac{c - b}{a}\\;(a\\neq 0)$`,
+            trap: `常見地雷：移項變號只適用「加減」與「乘除移項（正負號跟著係數走）」；把 $-3x = 12$ 兩邊同除 $-3$ 得 $x = -4$，別不小心把負號吃掉或變加號！`
+          },
+          {
+            id: `r5-3`,
+            tag: `高頻考點`,
+            title: `分數方程式：同乘最小公倍數去分母`,
+            body: `遇到含有分母的方程式，先求出所有分母的最小公倍數 $L$（應用 2-2），將等號左、右「每一項」同乘以 $L$ 消除分母，並記得將多項式分子加上括號。`,
+            formula: `$\\frac{x+1}{2} - \\frac{x-2}{3} = 1 \\;\\xrightarrow{\\times 6}\\; 3(x+1) - 2(x-2) = 6$`,
+            trap: `最致命雙重陷阱：(1) 整數常數項「$1$」忘記乘 $6$；(2) 分子沒加括號導致 $-2(x-2)$ 的 $-2\\times(-2)=+4$ 寫錯成 $-4$！此外「化簡算式（無等號）」只能通分，不能直接乘掉分母。`
+          },
+          {
+            id: `r5-4`,
+            tag: `實戰列式`,
+            title: `分數比例應用題列式與驗算`,
+            body: `延續第 2 章的打折與剩餘問題：先設總量或原價為 $x$，利用「剩下 $= \\text{原量} \\times (1 - \\text{消耗比例})$」列出等式，求出 $x$ 後代回檢驗是否符合整數或生活合理性。`,
+            formula: `$\\text{依題意：先用去 }\\frac{1}{3}\\text{，再用剩下 }\\frac{3}{4}\\text{，剩 }250\\text{ 元} \\;\\Rightarrow\\; x\\left(1-\\frac{1}{3}\\right)\\left(1-\\frac{3}{4}\\right) = 250$`,
+            trap: `應用題地雷：看清楚「剩下的 $\\frac{3}{4}$」還是「全部的 $\\frac{3}{4}$」；若題目問「原價打七折後再九折」，列式為 $x \\times 0.7 \\times 0.9$（相乘而非相加）。`
+          }
+        ],
+        quizzes: [
+          {
+            id: `q5-1`,
+            source: `第 3 章銜接基礎練習`,
+            stem: `解一元一次方程式 $3x - 7 = 11$ 時，第一步改寫成 $3x = 11 + 7$，這是運用了下列哪一個性質？`,
+            options: [`等量加法公理（移項法則）`, `乘法交換律`, `乘法結合律`, `除法分配律`],
+            answer: 0,
+            explain: `正解為 (A)。等號兩邊同時加 $7$（將 $-7$ 移項至等號右邊變成 $+7$），運用的即是等量加法公理。`
+          },
+          {
+            id: `q5-2`,
+            source: `第 3 章銜接必考陷阱題`,
+            stem: `解方程式 $\\frac{x+1}{2} - \\frac{x-2}{3} = 1$ 時，等號兩邊同乘以 $6$ 消去分母後，下列哪一個式子完全正確？`,
+            options: [
+              `$3x + 1 - 2x - 2 = 1$`,
+              `$3(x+1) - 2(x-2) = 1$`,
+              `$3(x+1) - 2(x-2) = 6$`,
+              `$2(x+1) - 3(x-2) = 6$`
+            ],
+            answer: 2,
+            explain: `正解為 (C)。$[2, 3] = 6$，等號兩邊每一項都要乘 $6$（右邊 $1 \\times 6 = 6$），且分子多項式須保留括號避免變號出錯。繼續展開得 $3x+3-2x+4=6 \\Rightarrow x=-1$。`
+          },
+          {
+            id: `q5-3`,
+            source: `第 2–3 章整合應用題`,
+            stem: `小綺帶 $x$ 元上街，先花掉全部的 $\\frac{1}{3}$ 買書，再用剩下錢的 $\\frac{3}{4}$ 買文具，最後還剩 $250$ 元。依題意可列出哪一個方程式？`,
+            options: [
+              `$x - \\frac{1}{3}x - \\frac{3}{4}x = 250$`,
+              `$\\frac{2}{3}x \\times \\frac{1}{4} = 250$`,
+              `$\\frac{1}{3}x \\times \\frac{3}{4} = 250$`,
+              `$x \\times (1 - \\frac{1}{3} - \\frac{3}{4}) = 250$`
+            ],
+            answer: 1,
+            explain: `正解為 (B)。花掉 $\\frac{1}{3}$ 後剩下 $\\frac{2}{3}x$；再花掉「剩下的 $\\frac{3}{4}$」後，最後剩下的是這部分的 $1 - \\frac{3}{4} = \\frac{1}{4}$，故 $\\frac{2}{3}x \\times \\frac{1}{4} = 250$，解得 $x = 1500$ 元。`
+          }
+        ]
+      }
+    ];
+
+    // ==============================
+    // 2. Application State & Persistence
+    // ==============================
+    const TOTAL_RULES = STAGES.reduce(function(sum, s) { return sum + s.rules.length; }, 0);
+    const TOTAL_QUIZZES = STAGES.reduce(function(sum, s) { return sum + s.quizzes.length; }, 0);
+
+    let appState = {
+      activeStageId: `stage-1`,
+      checkedRules: {},
+      quizAnswers: {}
+    };
+
+    let topicChartInstance = null;
+
+    // Interactive lab states (non-persisted session UI state)
+    let labState = {
+      s1Num: 1080,
+      s2A: 168,
+      s2B: 210,
+      s3Mode: `preset-yangming`,
+      s3N1: -3,
+      s3D1: 4,
+      s3N2: -4,
+      s3D2: 5,
+      s4Coeff: 1,
+      s4Pow2: 14,
+      s4Pow5: 11,
+      s4Base: 3,
+      s4Exp: 2,
+      s5Preset: `eq-basic`,
+      s5A: 3,
+      s5B: -7,
+      s5C: 0,
+      s5D: 11
+    };
+
+    function applySavedState(saved) {
+      if (saved.activeStageId && STAGES.some(function(s) { return s.id === saved.activeStageId; })) {
+        appState.activeStageId = saved.activeStageId;
+      }
+      if (saved.checkedRules && typeof saved.checkedRules === `object`) {
+        appState.checkedRules = saved.checkedRules;
+      }
+      if (saved.quizAnswers && typeof saved.quizAnswers === `object`) {
+        appState.quizAnswers = saved.quizAnswers;
+      }
+    }
+
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState({
+            activeStageId: appState.activeStageId,
+            checkedRules: appState.checkedRules,
+            quizAnswers: appState.quizAnswers
+          });
+        }
+      } catch (err) {
+        // Silent fallback if storage bridge unavailable
+      }
+    }
+
+    // ==============================
+    // 3. Math Helper Functions
+    // ==============================
+    function renderMathInContainer(el) {
+      if (!el) return;
+      if (typeof renderMathInElement === `function`) {
+        renderMathInElement(el, {
+          delimiters: [
+            { left: `$$`, right: `$$`, display: true },
+            { left: `$`, right: `$`, display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    function gcd(a, b) {
+      let x = Math.abs(a);
+      let y = Math.abs(b);
+      while (y !== 0) {
+        const t = x % y;
+        x = y;
+        y = t;
+      }
+      return x;
+    }
+
+    function primeFactorize(n) {
+      const factors = [];
+      let num = n;
+      let d = 2;
+      while (d * d <= num) {
+        if (num % d === 0) {
+          let count = 0;
+          while (num % d === 0) {
+            num = Math.floor(num / d);
+            count++;
+          }
+          factors.push({ p: d, e: count });
+        }
+        d = d === 2 ? 3 : d + 2;
+      }
+      if (num > 1) {
+        factors.push({ p: num, e: 1 });
+      }
+      return factors;
+    }
+
+    function formatFactorFormula(factors) {
+      return factors.map(function(f) {
+        return f.e > 1 ? `${f.p}^{${f.e}}` : `${f.p}`;
+      }).join(` \\times `);
+    }
+
+    function getPositiveDivisors(n) {
+      const small = [];
+      const large = [];
+      const limit = Math.floor(Math.sqrt(n));
+      for (let i = 1; i <= limit; i++) {
+        if (n % i === 0) {
+          small.push(i);
+          if (i !== n / i) {
+            large.push(n / i);
+          }
+        }
+      }
+      large.reverse();
+      return small.concat(large);
+    }
+
+    // ==============================
+    // 4. UI Rendering & Handlers
+    // ==============================
+    function getStageProgress(stage) {
+      let done = 0;
+      stage.rules.forEach(function(r) {
+        if (appState.checkedRules[r.id]) done++;
+      });
+      return { done: done, total: stage.rules.length };
+    }
+
+    function updateOverviewKPIs() {
+      let totalDoneRules = 0;
+      let completedStages = 0;
+
+      STAGES.forEach(function(stage) {
+        const prog = getStageProgress(stage);
+        totalDoneRules += prog.done;
+        if (prog.done === prog.total) completedStages++;
+      });
+
+      let answeredQuizzes = 0;
+      let correctQuizzes = 0;
+      STAGES.forEach(function(stage) {
+        stage.quizzes.forEach(function(q) {
+          if (Object.prototype.hasOwnProperty.call(appState.quizAnswers, q.id)) {
+            answeredQuizzes++;
+            if (appState.quizAnswers[q.id] === q.answer) {
+              correctQuizzes++;
+            }
+          }
+        });
+      });
+
+      const pct = Math.round((totalDoneRules / TOTAL_RULES) * 100);
+
+      const heroFill = document.getElementById(`hero-progress-fill`);
+      const heroText = document.getElementById(`hero-progress-text`);
+      if (heroFill) heroFill.style.width = `${pct}%`;
+      if (heroText) heroText.textContent = `${pct}%（${totalDoneRules}/${TOTAL_RULES}）`;
+
+      const kpiRules = document.getElementById(`kpi-rules-value`);
+      const kpiRulesCap = document.getElementById(`kpi-rules-caption`);
+      if (kpiRules) kpiRules.innerHTML = `${totalDoneRules}<span class="kpi-unit">/ ${TOTAL_RULES} 項</span>`;
+      if (kpiRulesCap) {
+        kpiRulesCap.textContent = totalDoneRules === 0
+          ? `尚未開始勾選，點選下方關卡展開重點清單`
+          : (totalDoneRules === TOTAL_RULES ? `全部 20 項段考核心規則已掌握！` : `已完成 ${pct}% 重點規則，繼續加油`);
+      }
+
+      const kpiQuiz = document.getElementById(`kpi-quiz-value`);
+      const kpiQuizCap = document.getElementById(`kpi-quiz-caption`);
+      if (kpiQuiz) kpiQuiz.innerHTML = `${correctQuizzes}<span class="kpi-unit">/ ${TOTAL_QUIZZES} 題</span>`;
+      if (kpiQuizCap) {
+        if (answeredQuizzes === 0) {
+          kpiQuizCap.textContent = `每關精選 3 題段考真題與詳解即時對答案`;
+        } else {
+          const acc = Math.round((correctQuizzes / answeredQuizzes) * 100);
+          kpiQuizCap.textContent = `已作答 ${answeredQuizzes} 題，目前正確率 ${acc}%`;
+        }
+      }
+
+      const kpiStages = document.getElementById(`kpi-stages-value`);
+      const kpiStagesCap = document.getElementById(`kpi-stages-caption`);
+      if (kpiStages) kpiStages.innerHTML = `${completedStages}<span class="kpi-unit">/ ${STAGES.length} 關</span>`;
+      if (kpiStagesCap) {
+        kpiStagesCap.textContent = completedStages === STAGES.length
+          ? `所有關卡皆已通關，準備迎接段考！`
+          : `完成該關卡所有規則勾選即視為通關`;
+      }
+    }
+
+    function renderStageCards() {
+      const container = document.getElementById(`stage-grid`);
+      if (!container) return;
+
+      container.innerHTML = STAGES.map(function(stage) {
+        const isActive = stage.id === appState.activeStageId;
+        const prog = getStageProgress(stage);
+        const isDoneAll = prog.done === prog.total;
+        const pct = Math.round((prog.done / prog.total) * 100);
+        const cls = [
+          `stage-card`,
+          isActive ? `active` : ``,
+          isDoneAll ? `completed-all` : ``
+        ].filter(Boolean).join(` `);
+
+        return `
+          <button
+            type="button"
+            class="${cls}"
+            role="tab"
+            aria-selected="${isActive ? `true` : `false`}"
+            onclick="selectStage('${stage.id}')"
+          >
+            <div class="stage-card-top">
+              <span class="stage-num">${stage.num}｜${stage.unitTag}</span>
+              <span class="stage-weight">${stage.weightLabel}</span>
+            </div>
+            <div>
+              <h3 class="stage-title">${stage.title}</h3>
+              <p class="stage-desc">${stage.shortDesc}</p>
+            </div>
+            <div class="stage-progress-row">
+              <div class="stage-track" aria-hidden="true">
+                <div class="stage-fill" style="width: ${pct}%"></div>
+              </div>
+              <span class="stage-count">${isDoneAll ? `已通關` : `${prog.done}/${prog.total}`}</span>
+            </div>
+          </button>
+        `;
+      }).join(``);
+    }
+
+    function selectStage(stageId) {
+      if (!STAGES.some(function(s) { return s.id === stageId; })) return;
+      appState.activeStageId = stageId;
+      renderStageCards();
+      renderStageDetail();
+      persistState();
+    }
+
+    function toggleRuleCheck(ruleId) {
+      appState.checkedRules[ruleId] = !appState.checkedRules[ruleId];
+      updateOverviewKPIs();
+      renderStageCards();
+      renderStageRules();
+      renderDetailBanner();
+      persistState();
+    }
+
+    function markStageAllChecked() {
+      const stage = getActiveStage();
+      if (!stage) return;
+      const prog = getStageProgress(stage);
+      const targetState = prog.done < prog.total;
+      stage.rules.forEach(function(r) {
+        appState.checkedRules[r.id] = targetState;
+      });
+      updateOverviewKPIs();
+      renderStageCards();
+      renderStageRules();
+      renderDetailBanner();
+      persistState();
+    }
+
+    function selectQuizOption(quizId, optIdx) {
+      appState.quizAnswers[quizId] = optIdx;
+      updateOverviewKPIs();
+      renderStageQuizzes();
+      persistState();
+    }
+
+    function handleResetProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `再點一次確認重設`;
+        setTimeout(function() {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.textContent = `重設學習紀錄`;
+          }
+        }, 4000);
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `重設學習紀錄`;
+      appState = {
+        activeStageId: `stage-1`,
+        checkedRules: {},
+        quizAnswers: {}
+      };
+      renderAll();
+      persistState();
+    }
+
+    function getActiveStage() {
+      return STAGES.find(function(s) { return s.id === appState.activeStageId; }) || STAGES[0];
+    }
+
+    function renderDetailBanner() {
+      const banner = document.getElementById(`detail-banner`);
+      if (!banner) return;
+      const stage = getActiveStage();
+      const prog = getStageProgress(stage);
+      const allDone = prog.done === prog.total;
+
+      banner.innerHTML = `
+        <div class="detail-banner-info">
+          <div style="display:flex; flex-wrap:wrap; gap:var(--space-sm); align-items:center;">
+            <span class="chip">${stage.num}・${stage.unitTag}</span>
+            <span class="chip ${allDone ? `positive` : `neutral`}">${allDone ? `本關規則已全部掌握` : `進度：${prog.done} / ${prog.total} 項規則`}</span>
+          </div>
+          <h2>${stage.title}</h2>
+          <p>${stage.overview}</p>
+        </div>
+        <div class="detail-banner-actions">
+          <button type="button" class="btn-primary" onclick="markStageAllChecked()">
+            ${allDone ? `取消本關全部勾選` : `將本關全部標記已掌握`}
+          </button>
+        </div>
+      `;
+    }
+
+    function renderProportionChart() {
+      const stage = getActiveStage();
+      const titleEl = document.getElementById(`chart-title`);
+      const badgeEl = document.getElementById(`chart-badge`);
+      const barsEl = document.getElementById(`subtopic-bars`);
+      const canvas = document.getElementById(`topic-proportion-chart`);
+
+      if (titleEl) {
+        titleEl.textContent = stage.id === `stage-5`
+          ? `第 2 章段考佔比與第 3 章銜接焦點`
+          : `${stage.unitTag} 段考命題佔比與題型分佈`;
+      }
+      if (badgeEl) {
+        badgeEl.textContent = stage.weightLabel;
+      }
+
+      if (barsEl) {
+        barsEl.innerHTML = stage.subtopics.map(function(sub) {
+          return `
+            <div class="subtopic-item">
+              <div class="subtopic-meta">
+                <span>${sub.name}</span>
+                <strong>${sub.share}%</strong>
+              </div>
+              <div class="subtopic-track" aria-hidden="true">
+                <div class="subtopic-fill" style="width: ${sub.share}%"></div>
+              </div>
+            </div>
+          `;
+        }).join(``);
+      }
+
+      if (!canvas || typeof Chart === `undefined`) return;
+
+      const styles = getComputedStyle(document.documentElement);
+      const colorBlue = styles.getPropertyValue(`--data-1`).trim();
+      const colorOrange = styles.getPropertyValue(`--data-2`).trim();
+      const colorContext = styles.getPropertyValue(`--data-context`).trim();
+      const colorInk = styles.getPropertyValue(`--on-surface`).trim();
+      const colorMuted = styles.getPropertyValue(`--on-surface-variant`).trim();
+      const colorGrid = styles.getPropertyValue(`--outline-variant`).trim();
+
+      const bgColors = EXAM_PROPORTION_DATA.labels.map(function(_, idx) {
+        if (stage.id === `stage-5`) {
+          return idx === 2 ? colorOrange : colorContext;
+        }
+        return idx === stage.proportionIndex ? colorBlue : colorContext;
+      });
+
+      if (topicChartInstance) {
+        topicChartInstance.destroy();
+      }
+
+      topicChartInstance = new Chart(canvas.getContext(`2d`), {
+        type: `bar`,
+        data: {
+          labels: EXAM_PROPORTION_DATA.labels,
+          datasets: [{
+            label: `歷屆段考佔比 (%)`,
+            data: EXAM_PROPORTION_DATA.percentages,
+            backgroundColor: bgColors,
+            borderRadius: 6,
+            barThickness: 28
+          }]
+        },
+        options: {
+          indexAxis: `y`,
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  const idx = ctx.dataIndex;
+                  const count = EXAM_PROPORTION_DATA.counts[idx];
+                  return `佔比 ${ctx.parsed.x}%（${count} / 160 題）`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              min: 0,
+              max: 36,
+              grid: { color: colorGrid },
+              ticks: {
+                color: colorMuted,
+                callback: function(val) { return `${val}%`; }
+              }
+            },
+            y: {
+              grid: { display: false },
+              ticks: {
+                color: colorInk,
+                font: { weight: `600`, size: 12 }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderStageRules() {
+      const grid = document.getElementById(`rules-grid`);
+      if (!grid) return;
+      const stage = getActiveStage();
+
+      grid.innerHTML = stage.rules.map(function(rule) {
+        const checked = Boolean(appState.checkedRules[rule.id]);
+        return `
+          <article class="rule-card ${checked ? `checked` : ``}">
+            <div class="rule-head">
+              <div class="rule-title-group">
+                <span class="rule-tag">${rule.tag}</span>
+                <h4 class="rule-title">${rule.title}</h4>
+              </div>
+              <button
+                type="button"
+                class="check-toggle"
+                role="checkbox"
+                aria-checked="${checked ? `true` : `false`}"
+                onclick="toggleRuleCheck('${rule.id}')"
+              >
+                ${checked ? `✓ 已掌握` : `標記掌握`}
+              </button>
+            </div>
+            <div class="rule-body">${rule.body}</div>
+            <div class="rule-formula">${rule.formula}</div>
+            <div class="rule-trap">${rule.trap}</div>
+          </article>
+        `;
+      }).join(``);
+
+      renderMathInContainer(grid);
+    }
+
+    function renderStageQuizzes() {
+      const grid = document.getElementById(`quiz-grid`);
+      if (!grid) return;
+      const stage = getActiveStage();
+      const letters = [`A`, `B`, `C`, `D`];
+
+      grid.innerHTML = stage.quizzes.map(function(q, qIdx) {
+        const hasAnswered = Object.prototype.hasOwnProperty.call(appState.quizAnswers, q.id);
+        const chosen = appState.quizAnswers[q.id];
+        const isCorrect = hasAnswered && chosen === q.answer;
+
+        const optsHtml = q.options.map(function(opt, idx) {
+          let cls = `quiz-opt-btn`;
+          if (hasAnswered) {
+            if (idx === chosen && idx === q.answer) cls += ` selected-correct`;
+            else if (idx === chosen && idx !== q.answer) cls += ` selected-wrong`;
+            else if (idx === q.answer) cls += ` reveal-correct`;
+          }
+          return `
+            <button
+              type="button"
+              class="${cls}"
+              onclick="selectQuizOption('${q.id}', ${idx})"
+            >
+              <strong>(${letters[idx]})</strong>
+              <span>${opt}</span>
+            </button>
+          `;
+        }).join(``);
+
+        return `
+          <article class="quiz-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:var(--space-sm);">
+              <span class="quiz-source">實戰第 ${qIdx + 1} 題・${q.source}</span>
+              ${hasAnswered ? `<span class="chip ${isCorrect ? `positive` : `warning`}">${isCorrect ? `答對` : `再檢查`}</span>` : ``}
+            </div>
+            <div class="quiz-stem">${q.stem}</div>
+            <div class="quiz-options">${optsHtml}</div>
+            ${hasAnswered ? `<div class="quiz-explain"><strong>詳解：</strong>${q.explain}</div>` : ``}
+          </article>
+        `;
+      }).join(``);
+
+      renderMathInContainer(grid);
+    }
+
+    // ==============================
+    // 5. Interactive Math Labs (Per Stage)
+    // ==============================
+    function renderInteractiveLab() {
+      const container = document.getElementById(`interactive-lab`);
+      if (!container) return;
+      const stage = getActiveStage();
+
+      if (stage.id === `stage-1`) renderLabStage1(container);
+      else if (stage.id === `stage-2`) renderLabStage2(container);
+      else if (stage.id === `stage-3`) renderLabStage3(container);
+      else if (stage.id === `stage-4`) renderLabStage4(container);
+      else renderLabStage5(container);
+
+      renderMathInContainer(container);
+    }
+
+    // --- Lab 1: Prime Factorization & Divisibility Tester ---
+    function setLab1Preset(num) {
+      labState.s1Num = num;
+      const input = document.getElementById(`lab1-input`);
+      if (input) input.value = num;
+      updateLab1Output();
+    }
+    function handleLab1Input(val) {
+      const parsed = parseInt(val, 10);
+      labState.s1Num = isNaN(parsed) ? 0 : parsed;
+      updateLab1Output();
+    }
+    function renderLabStage1(container) {
+      container.innerHTML = `
+        <div class="tile-header">
+          <h3 class="tile-title">互動實驗室：質因數分解與倍數判別器</h3>
+          <span class="chip">段考真題實測</span>
+        </div>
+        <div class="preset-row">
+          <button type="button" class="preset-btn" onclick="setLab1Preset(1080)">1080（中興111）</button>
+          <button type="button" class="preset-btn" onclick="setLab1Preset(2926)">2926（土城112密碼）</button>
+          <button type="button" class="preset-btn" onclick="setLab1Preset(432156)">432156（土城112）</button>
+          <button type="button" class="preset-btn" onclick="setLab1Preset(121)">121（大灣113）</button>
+        </div>
+        <div class="lab-controls">
+          <div class="field-group">
+            <label class="field-label" for="lab1-input">輸入正整數（2 ～ 9,999,999）</label>
+            <input type="number" id="lab1-input" class="field-input" min="2" max="9999999" value="${labState.s1Num}" oninput="handleLab1Input(this.value)">
+          </div>
+        </div>
+        <div class="lab-output" id="lab1-output"></div>
+      `;
+      updateLab1Output();
+    }
+    function updateLab1Output() {
+      const out = document.getElementById(`lab1-output`);
+      if (!out) return;
+      const n = labState.s1Num;
+      if (!Number.isInteger(n) || n < 2 || n > 9999999) {
+        out.innerHTML = `<div style="color:var(--error); font-weight:500;">請輸入 2 至 9,999,999 之間的正整數以執行質因數分解。</div>`;
+        return;
+      }
+
+      const factors = primeFactorize(n);
+      const isPrime = factors.length === 1 && factors[0].e === 1;
+      const totalDivCount = factors.reduce(function(acc, f) { return acc * (f.e + 1); }, 1);
+      const isSquare = totalDivCount % 2 === 1;
+      const divs = totalDivCount <= 48 ? getPositiveDivisors(n) : null;
+
+      // Divisibility tests
+      const str = String(n);
+      const digits = str.split(``).map(Number);
+      const digitSum = digits.reduce(function(a, b) { return a + b; }, 0);
+      const lastDigit = digits[digits.length - 1];
+      const lastTwo = n % 100;
+      let oddPosSum = 0;
+      let evenPosSum = 0;
+      for (let i = 0; i < digits.length; i++) {
+        const fromRight = digits.length - i;
+        if (fromRight % 2 === 1) oddPosSum += digits[i];
+        else evenPosSum += digits[i];
+      }
+      const diff11 = Math.abs(oddPosSum - evenPosSum);
+
+      const checks = [
+        { label: `2 的倍數`, pass: lastDigit % 2 === 0, detail: `個位 ${lastDigit}` },
+        { label: `3 的倍數`, pass: digitSum % 3 === 0, detail: `數字和 ${digitSum}` },
+        { label: `4 的倍數`, pass: lastTwo % 4 === 0, detail: `末兩位 ${String(lastTwo).padStart(2, `0`)}` },
+        { label: `5 的倍數`, pass: lastDigit === 0 || lastDigit === 5, detail: `個位 ${lastDigit}` },
+        { label: `9 的倍數`, pass: digitSum % 9 === 0, detail: `數字和 ${digitSum}` },
+        { label: `11 的倍數`, pass: diff11 % 11 === 0, detail: `奇偶位差 ${diff11}` }
+      ];
+
+      out.innerHTML = `
+        <div>
+          <div class="field-label">標準分解式與性質</div>
+          <div class="lab-result-main">${n} = ${formatFactorFormula(factors).replace(/\\times/g, `×`).replace(/\^\{(\d+)\}/g, `<sup>$1</sup>`)}</div>
+          <div style="font-size:0.875rem; color:var(--on-surface-variant); margin-top:var(--space-xs);">
+            分類：<strong>${isPrime ? `質數` : `合數`}</strong> ｜ 相異質因數：<strong>${factors.map(function(f){return f.p;}).join(`, `)}</strong>（共 ${factors.length} 個）｜ 正因數共 <strong>${totalDivCount}</strong> 個（${isSquare ? `奇數個・完全平方數` : `偶數個`}）
+          </div>
+        </div>
+        <div>
+          <div class="field-label" style="margin-bottom:var(--space-xs);">倍數判別逐項檢查</div>
+          <div class="div-grid">
+            ${checks.map(function(c) {
+              return `<span class="badge-item ${c.pass ? `pass` : `fail`}">${c.pass ? `✓` : `✕`} ${c.label}（${c.detail}）</span>`;
+            }).join(``)}
+          </div>
+        </div>
+        ${divs ? `
+          <div style="font-size:0.8125rem; color:var(--on-surface-variant);">
+            <strong>正因數由小到大排列：</strong>${divs.join(`、 `)}
+          </div>
+        ` : ``}
+      `;
+    }
+
+    // --- Lab 2: GCD & LCM Short Division Visualizer ---
+    function setLab2Preset(a, b) {
+      labState.s2A = a;
+      labState.s2B = b;
+      const inA = document.getElementById(`lab2-a`);
+      const inB = document.getElementById(`lab2-b`);
+      if (inA) inA.value = a;
+      if (inB) inB.value = b;
+      updateLab2Output();
+    }
+    function handleLab2Input(which, val) {
+      const parsed = parseInt(val, 10);
+      if (which === `a`) labState.s2A = isNaN(parsed) ? 0 : parsed;
+      else labState.s2B = isNaN(parsed) ? 0 : parsed;
+      updateLab2Output();
+    }
+    function renderLabStage2(container) {
+      container.innerHTML = `
+        <div class="tile-header">
+          <h3 class="tile-title">互動實驗室：短除法與 $(a,b)\\times[a,b]$ 驗證器</h3>
+          <span class="chip">視覺化短除步驟</span>
+        </div>
+        <div class="preset-row">
+          <button type="button" class="preset-btn" onclick="setLab2Preset(168, 210)">168 與 210（大灣110）</button>
+          <button type="button" class="preset-btn" onclick="setLab2Preset(147, 189)">147 與 189（土城112）</button>
+          <button type="button" class="preset-btn" onclick="setLab2Preset(15, 18)">15 與 18（土城112公車）</button>
+          <button type="button" class="preset-btn" onclick="setLab2Preset(27, 77)">27 與 77（互質範例）</button>
+        </div>
+        <div class="lab-controls">
+          <div class="field-group">
+            <label class="field-label" for="lab2-a">正整數 A（2 ～ 9,999）</label>
+            <input type="number" id="lab2-a" class="field-input" min="2" max="9999" value="${labState.s2A}" oninput="handleLab2Input('a', this.value)">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="lab2-b">正整數 B（2 ～ 9,999）</label>
+            <input type="number" id="lab2-b" class="field-input" min="2" max="9999" value="${labState.s2B}" oninput="handleLab2Input('b', this.value)">
+          </div>
+        </div>
+        <div class="lab-output" id="lab2-output"></div>
+      `;
+      updateLab2Output();
+    }
+    function updateLab2Output() {
+      const out = document.getElementById(`lab2-output`);
+      if (!out) return;
+      const a = labState.s2A;
+      const b = labState.s2B;
+      if (!Number.isInteger(a) || !Number.isInteger(b) || a < 2 || b < 2 || a > 9999 || b > 9999) {
+        out.innerHTML = `<div style="color:var(--error); font-weight:500;">請輸入 2 至 9,999 之間的正整數 A 與 B。</div>`;
+        return;
+      }
+
+      const g = gcd(a, b);
+      const l = (a / g) * b;
+
+      // Build short division steps
+      const steps = [];
+      let curA = a;
+      let curB = b;
+      let d = 2;
+      while (d <= Math.min(curA, curB)) {
+        if (curA % d === 0 && curB % d === 0) {
+          steps.push({ div: d, a: curA, b: curB });
+          curA = Math.floor(curA / d);
+          curB = Math.floor(curB / d);
+        } else {
+          d++;
+        }
+      }
+
+      const coprime = g === 1;
+
+      out.innerHTML = `
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:var(--space-sm);">
+          <div style="background:var(--primary-container); padding:var(--space-sm) var(--space-md); border-radius:var(--rounded-md);">
+            <div class="field-label" style="color:var(--on-primary-container);">最大公因數 (${a}, ${b})</div>
+            <div style="font-size:1.35rem; font-weight:700; color:var(--primary); font-variant-numeric:tabular-nums;">${g}</div>
+          </div>
+          <div style="background:var(--surface-container-low); padding:var(--space-sm) var(--space-md); border-radius:var(--rounded-md);">
+            <div class="field-label">最小公倍數 [${a}, ${b}]</div>
+            <div style="font-size:1.35rem; font-weight:700; color:var(--on-surface); font-variant-numeric:tabular-nums;">${l.toLocaleString()}</div>
+          </div>
+        </div>
+        <div style="font-size:0.875rem; line-height:1.6;">
+          <div><strong>互質狀態：</strong>${coprime ? `是（兩數最大公因數為 1，最小公倍數等於兩數乘積）` : `否（共同質因數乘積為 ${g}）`}</div>
+          <div><strong>乘積恆等式驗證：</strong>$(${a}, ${b}) \\times [${a}, ${b}] = ${g} \\times ${l} = ${(g * l).toLocaleString()} = ${a} \\times ${b}$</div>
+        </div>
+        <div style="font-family:monospace; font-size:0.875rem; background:var(--surface-container-low); padding:var(--space-sm) var(--space-md); border-radius:var(--rounded-md);">
+          ${steps.length === 0
+            ? `<div>無大於 1 之公因數，直接呈現底層互質對：(${curA}, ${curB})</div>`
+            : steps.map(function(st) {
+                return `<div>${String(st.div).padStart(3, ` `)} │ ${String(st.a).padStart(5, ` `)}   ${String(st.b).padStart(5, ` `)}</div>`;
+              }).join(``) + `<div style="border-top:1px solid var(--outline); margin-top:2px; padding-top:2px;">    │ ${String(curA).padStart(5, ` `)}   ${String(curB).padStart(5, ` `)}   （底層已互質）</div>`
+          }
+        </div>
+      `;
+      renderMathInContainer(out);
+    }
+
+    // --- Lab 3: Fraction Number Line & Comparison ---
+    function setLab3Preset(mode) {
+      labState.s3Mode = mode;
+      renderInteractiveLab();
+    }
+    function handleLab3Custom(field, val) {
+      labState.s3Mode = `custom`;
+      const parsed = parseInt(val, 10);
+      labState[field] = isNaN(parsed) ? 1 : parsed;
+      updateLab3Output();
+    }
+    function renderLabStage3(container) {
+      container.innerHTML = `
+        <div class="tile-header">
+          <h3 class="tile-title">互動實驗室：分數數線定位與大小比較</h3>
+          <span class="chip">負分數比大小直覺圖解</span>
+        </div>
+        <div class="preset-row">
+          <button type="button" class="preset-btn" onclick="setLab3Preset('preset-yangming')">陽明112：-6/7, -7/8, -8/9</button>
+          <button type="button" class="preset-btn" onclick="setLab3Preset('preset-linyuan-neg')">林園112：-2/5, -1/3, -3/7</button>
+          <button type="button" class="preset-btn" onclick="setLab3Preset('preset-linyuan-pos')">林園112：14/15, 15/16, 16/17</button>
+          <button type="button" class="preset-btn" onclick="setLab3Preset('custom')">自訂兩分數比較</button>
+        </div>
+        ${labState.s3Mode === `custom` ? `
+          <div class="lab-controls">
+            <div class="field-group">
+              <label class="field-label" for="lab3-n1">分數甲 分子</label>
+              <input type="number" id="lab3-n1" class="field-input" value="${labState.s3N1}" oninput="handleLab3Custom('s3N1', this.value)">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="lab3-d1">分數甲 分母 (≠0)</label>
+              <input type="number" id="lab3-d1" class="field-input" value="${labState.s3D1}" oninput="handleLab3Custom('s3D1', this.value)">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="lab3-n2">分數乙 分子</label>
+              <input type="number" id="lab3-n2" class="field-input" value="${labState.s3N2}" oninput="handleLab3Custom('s3N2', this.value)">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="lab3-d2">分數乙 分母 (≠0)</label>
+              <input type="number" id="lab3-d2" class="field-input" value="${labState.s3D2}" oninput="handleLab3Custom('s3D2', this.value)">
+            </div>
+          </div>
+        ` : ``}
+        <div class="lab-output" id="lab3-output"></div>
+      `;
+      updateLab3Output();
+    }
+    function updateLab3Output() {
+      const out = document.getElementById(`lab3-output`);
+      if (!out) return;
+
+      let items = [];
+      let tipText = ``;
+      let minRange = -1.05;
+      let maxRange = 0.05;
+
+      if (labState.s3Mode === `preset-yangming`) {
+        items = [
+          { name: `a`, label: `-6/7`, n: -6, d: 7, val: -6 / 7, color: `var(--data-1)` },
+          { name: `b`, label: `-7/8`, n: -7, d: 8, val: -7 / 8, color: `var(--data-2)` },
+          { name: `c`, label: `-8/9`, n: -8, d: 9, val: -8 / 9, color: `var(--data-3)` }
+        ];
+        minRange = -1.02;
+        maxRange = -0.78;
+        tipText = `三數皆在 -1 與 0 之間。-8/9 最靠近 -1（最左邊），故最小；-6/7 最靠近 0（最右邊），故最大！`;
+      } else if (labState.s3Mode === `preset-linyuan-neg`) {
+        items = [
+          { name: `a`, label: `-2/5`, n: -2, d: 5, val: -2 / 5, color: `var(--data-1)` },
+          { name: `b`, label: `-1/3`, n: -1, d: 3, val: -1 / 3, color: `var(--data-2)` },
+          { name: `c`, label: `-3/7`, n: -3, d: 7, val: -3 / 7, color: `var(--data-3)` }
+        ];
+        minRange = -0.5;
+        maxRange = -0.25;
+        tipText = `通分為分母 [5, 3, 7] = 105：a = -42/105、b = -35/105、c = -45/105，因此 c < a < b。`;
+      } else if (labState.s3Mode === `preset-linyuan-pos`) {
+        items = [
+          { name: `a`, label: `14/15`, n: 14, d: 15, val: 14 / 15, color: `var(--data-1)` },
+          { name: `b`, label: `15/16`, n: 15, d: 16, val: 15 / 16, color: `var(--data-2)` },
+          { name: `c`, label: `16/17`, n: 16, d: 17, val: 16 / 17, color: `var(--data-3)` }
+        ];
+        minRange = 0.88;
+        maxRange = 1.02;
+        tipText = `正真分數分子分母皆差 1 時，距離 1 愈近的值愈大！故 14/15 < 15/16 < 16/17。`;
+      } else {
+        const d1 = labState.s3D1 === 0 ? 1 : labState.s3D1;
+        const d2 = labState.s3D2 === 0 ? 1 : labState.s3D2;
+        const v1 = labState.s3N1 / d1;
+        const v2 = labState.s3N2 / d2;
+        items = [
+          { name: `甲`, label: `${labState.s3N1}/${d1}`, n: labState.s3N1, d: d1, val: v1, color: `var(--data-1)` },
+          { name: `乙`, label: `${labState.s3N2}/${d2}`, n: labState.s3N2, d: d2, val: v2, color: `var(--data-2)` }
+        ];
+        const minV = Math.min(v1, v2, 0);
+        const maxV = Math.max(v1, v2, 0);
+        const span = Math.max(maxV - minV, 0.5);
+        minRange = minV - span * 0.15;
+        maxRange = maxV + span * 0.15;
+        const sym = v1 > v2 ? `>` : (v1 < v2 ? `<` : `=`);
+        tipText = `數值比較：甲（${v1.toFixed(4)}） ${sym} 乙（${v2.toFixed(4)}），越往右邊數值越大。`;
+      }
+
+      const sorted = items.slice().sort(function(a, b) { return b.val - a.val; });
+      const orderStr = sorted.map(function(it) { return `${it.name}(${it.label})`; }).join(` > `);
+
+      // SVG Number line mapping [minRange, maxRange] -> [36, 464]
+      function toX(v) {
+        return 36 + ((v - minRange) / (maxRange - minRange)) * 428;
+      }
+
+      const dotsSvg = items.map(function(it, idx) {
+        const x = toX(it.val);
+        const yOff = idx % 2 === 0 ? 34 : 82;
+        const lineY2 = idx % 2 === 0 ? 44 : 74;
+        return `
+          <line x1="${x}" y1="58" x2="${x}" y2="${lineY2}" stroke="${it.color}" stroke-width="2" />
+          <circle cx="${x}" cy="58" r="6" fill="${it.color}" />
+          <text x="${x}" y="${yOff}" text-anchor="middle" font-size="12" font-weight="700" fill="${it.color}">${it.name}: ${it.label}</text>
+        `;
+      }).join(``);
+
+      const zeroRef = (0 >= minRange && 0 <= maxRange)
+        ? `<line x1="${toX(0)}" y1="48" x2="${toX(0)}" y2="68" stroke="var(--on-surface)" stroke-width="2" /><text x="${toX(0)}" y="98" text-anchor="middle" font-size="11" fill="var(--on-surface-variant)">0</text>`
+        : ``;
+
+      out.innerHTML = `
+        <div class="lab-result-main" style="font-size:1.1rem;">由大到小：${orderStr}</div>
+        <svg viewBox="0 0 500 108" width="100%" height="108" aria-label="分數數線位置比較圖">
+          <line x1="24" y1="58" x2="476" y2="58" stroke="var(--outline)" stroke-width="2.5" stroke-linecap="round" />
+          <polygon points="476,53 486,58 476,63" fill="var(--outline)" />
+          <text x="20" y="98" font-size="11" fill="var(--on-surface-variant)">${minRange.toFixed(2)}</text>
+          <text x="480" y="98" text-anchor="end" font-size="11" fill="var(--on-surface-variant)">${maxRange.toFixed(2)} (愈右愈大)</text>
+          ${zeroRef}
+          ${dotsSvg}
+        </svg>
+        <div style="font-size:0.875rem; color:var(--on-surface-variant);">${tipText}</div>
+      `;
+    }
+
+    // --- Lab 4: Power Digit Counter (2^m * 5^n) & Sign Explorer ---
+    function setLab4Preset(coeff, pow2, pow5) {
+      labState.s4Coeff = coeff;
+      labState.s4Pow2 = pow2;
+      labState.s4Pow5 = pow5;
+      const elC = document.getElementById(`lab4-c`);
+      const el2 = document.getElementById(`lab4-2`);
+      const el5 = document.getElementById(`lab4-5`);
+      if (elC) elC.value = coeff;
+      if (el2) el2.value = pow2;
+      if (el5) el5.value = pow5;
+      updateLab4Output();
+    }
+    function handleLab4Input(field, val) {
+      const parsed = parseInt(val, 10);
+      labState[field] = isNaN(parsed) ? 0 : parsed;
+      updateLab4Output();
+    }
+    function renderLabStage4(container) {
+      container.innerHTML = `
+        <div class="tile-header">
+          <h3 class="tile-title">互動實驗室：湊 10 判斷位數與負數括號對比</h3>
+          <span class="chip">BigInt 精確驗算</span>
+        </div>
+        <div class="preset-row">
+          <button type="button" class="preset-btn" onclick="setLab4Preset(1, 14, 11)">$4^7 \\times 5^{11}$（土城112）</button>
+          <button type="button" class="preset-btn" onclick="setLab4Preset(3, 9, 7)">$15 \\times 16^2 \\times 25^3$（文昌112）</button>
+          <button type="button" class="preset-btn" onclick="setLab4Preset(3, 10, 10)">$3 \\times 4^5 \\times 25^5$（大灣113）</button>
+        </div>
+        <div class="lab-controls">
+          <div class="field-group">
+            <label class="field-label" for="lab4-c">剩餘係數 c (1~99)</label>
+            <input type="number" id="lab4-c" class="field-input" min="1" max="99" value="${labState.s4Coeff}" oninput="handleLab4Input('s4Coeff', this.value)">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="lab4-2">2 的次方 m (0~30)</label>
+            <input type="number" id="lab4-2" class="field-input" min="0" max="30" value="${labState.s4Pow2}" oninput="handleLab4Input('s4Pow2', this.value)">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="lab4-5">5 的次方 n (0~30)</label>
+            <input type="number" id="lab4-5" class="field-input" min="0" max="30" value="${labState.s4Pow5}" oninput="handleLab4Input('s4Pow5', this.value)">
+          </div>
+        </div>
+        <div class="lab-output" id="lab4-output"></div>
+      `;
+      updateLab4Output();
+    }
+    function updateLab4Output() {
+      const out = document.getElementById(`lab4-output`);
+      if (!out) return;
+      const c = labState.s4Coeff;
+      const m = labState.s4Pow2;
+      const n = labState.s4Pow5;
+
+      if (!Number.isInteger(c) || c < 1 || c > 99 || m < 0 || m > 30 || n < 0 || n > 30) {
+        out.innerHTML = `<div style="color:var(--error); font-weight:500;">係數須為 1～99，次方須為 0～30。</div>`;
+        return;
+      }
+
+      const k = Math.min(m, n);
+      const rem2 = m - k;
+      const rem5 = n - k;
+      const frontBig = BigInt(c) * (2n ** BigInt(rem2)) * (5n ** BigInt(rem5));
+      const frontStr = frontBig.toString();
+      const totalDigits = frontStr.length + k;
+
+      const b = Math.max(1, Math.min(9, labState.s4Base));
+      const e = Math.max(1, Math.min(6, labState.s4Exp));
+      const withParen = Math.pow(-b, e);
+      const noParen = -Math.pow(b, e);
+
+      out.innerHTML = `
+        <div>
+          <div class="field-label">拆解湊 10 步驟</div>
+          <div class="lab-result-main">總共為 ${totalDigits} 位數（末尾有 ${k} 個 0）</div>
+          <div style="font-size:0.875rem; margin-top:var(--space-xs); line-height:1.6;">
+            $${c} \\times 2^{${m}} \\times 5^{${n}} = ${frontStr} \\times (2 \\times 5)^{${k}} = ${frontStr} \\times 10^{${k}}$<br>
+            前面係數 <strong>${frontStr}</strong> 共 <strong>${frontStr.length}</strong> 位，加上後面的 <strong>${k}</strong> 個零，合計 <strong>${totalDigits}</strong> 位數！
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--outline-variant); padding-top:var(--space-sm);">
+          <div class="field-label" style="margin-bottom:var(--space-xs);">負數括號即時對照（調整底數與次方觀察差異）</div>
+          <div class="lab-controls" style="margin-bottom:var(--space-sm);">
+            <div class="field-group">
+              <label class="field-label" for="lab4-base">底數 a (1~9)</label>
+              <input type="number" id="lab4-base" class="field-input" min="1" max="9" value="${b}" oninput="handleLab4Input('s4Base', this.value)">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="lab4-exp">次方 n (1~6)</label>
+              <input type="number" id="lab4-exp" class="field-input" min="1" max="6" value="${e}" oninput="handleLab4Input('s4Exp', this.value)">
+            </div>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:var(--space-md); font-size:0.9375rem;">
+            <span class="chip ${withParen > 0 ? `positive` : `warning`}">$(-${b})^{${e}} = ${withParen}$</span>
+            <span class="chip warning">$-${b}^{${e}} = ${noParen}$</span>
+            <span style="font-size:0.8125rem; color:var(--on-surface-variant); align-self:center;">
+              ${e % 2 === 0 ? `偶次方：有括號轉正、沒括號仍負（不相等！）` : `奇次方：兩者皆為負數（值相等）`}
+            </span>
+          </div>
+        </div>
+      `;
+      renderMathInContainer(out);
+    }
+
+    // --- Lab 5: Linear Equation Balance Scale & Step Solver ---
+    function setLab5Preset(a, b, c, d) {
+      labState.s5A = a;
+      labState.s5B = b;
+      labState.s5C = c;
+      labState.s5D = d;
+      const ea = document.getElementById(`lab5-a`);
+      const eb = document.getElementById(`lab5-b`);
+      const ec = document.getElementById(`lab5-c`);
+      const ed = document.getElementById(`lab5-d`);
+      if (ea) ea.value = a;
+      if (eb) eb.value = b;
+      if (ec) ec.value = c;
+      if (ed) ed.value = d;
+      updateLab5Output();
+    }
+    function handleLab5Input(field, val) {
+      const parsed = parseInt(val, 10);
+      labState[field] = isNaN(parsed) ? 0 : parsed;
+      updateLab5Output();
+    }
+    function renderLabStage5(container) {
+      container.innerHTML = `
+        <div class="tile-header">
+          <h3 class="tile-title">互動實驗室：天平平衡與移項逐步求解器</h3>
+          <span class="chip">型如 ax + b = cx + d</span>
+        </div>
+        <div class="preset-row">
+          <button type="button" class="preset-btn" onclick="setLab5Preset(3, -7, 0, 11)">3x - 7 = 11</button>
+          <button type="button" class="preset-btn" onclick="setLab5Preset(5, 3, 2, 18)">5x + 3 = 2x + 18</button>
+          <button type="button" class="preset-btn" onclick="setLab5Preset(1, 7, 0, 6)">分數去分母後：x + 7 = 6</button>
+          <button type="button" class="preset-btn" onclick="setLab5Preset(-4, 9, 2, -3)">-4x + 9 = 2x - 3</button>
+        </div>
+        <div class="lab-controls">
+          <div class="field-group">
+            <label class="field-label" for="lab5-a">左邊 x 係數 a</label>
+            <input type="number" id="lab5-a" class="field-input" value="${labState.s5A}" oninput="handleLab5Input('s5A', this.value)">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="lab5-b">左邊常數 b</label>
+            <input type="number" id="lab5-b" class="field-input" value="${labState.s5B}" oninput="handleLab5Input('s5B', this.value)">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="lab5-c">右邊 x 係數 c</label>
+            <input type="number" id="lab5-c" class="field-input" value="${labState.s5C}" oninput="handleLab5Input('s5C', this.value)">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="lab5-d">右邊常數 d</label>
+            <input type="number" id="lab5-d" class="field-input" value="${labState.s5D}" oninput="handleLab5Input('s5D', this.value)">
+          </div>
+        </div>
+        <div class="lab-output" id="lab5-output"></div>
+      `;
+      updateLab5Output();
+    }
+    function formatSideExpr(coef, constant) {
+      const parts = [];
+      if (coef !== 0) {
+        if (coef === 1) parts.push(`x`);
+        else if (coef === -1) parts.push(`-x`);
+        else parts.push(`${coef}x`);
+      }
+      if (constant !== 0 || parts.length === 0) {
+        if (parts.length > 0 && constant > 0) parts.push(`+ ${constant}`);
+        else if (parts.length > 0 && constant < 0) parts.push(`- ${Math.abs(constant)}`);
+        else parts.push(`${constant}`);
+      }
+      return parts.join(` `);
+    }
+    function updateLab5Output() {
+      const out = document.getElementById(`lab5-output`);
+      if (!out) return;
+      const a = labState.s5A;
+      const b = labState.s5B;
+      const c = labState.s5C;
+      const d = labState.s5D;
+
+      const leftText = formatSideExpr(a, b);
+      const rightText = formatSideExpr(c, d);
+      const netCoef = a - c;
+      const netConst = d - b;
+
+      let resultHeading = ``;
+      let stepsHtml = ``;
+
+      if (netCoef === 0) {
+        resultHeading = netConst === 0 ? `無限多組解（恆等式）` : `無解（左右常數矛盾）`;
+        stepsHtml = `<div>移項合併後得 $0 \\cdot x = ${netConst}$，故${resultHeading}。</div>`;
+      } else {
+        const g = gcd(netConst, netCoef);
+        let num = netConst / g;
+        let den = netCoef / g;
+        if (den < 0) {
+          num = -num;
+          den = -den;
+        }
+        const solLatex = den === 1 ? `${num}` : (num < 0 ? `-\\frac{${Math.abs(num)}}{${den}}` : `\\frac{${num}}{${den}}`);
+        resultHeading = `解得 x = ${den === 1 ? num : `${num}/${den}`}`;
+        stepsHtml = `
+          <div><strong>1. 原方程式：</strong>$${leftText} = ${rightText}$</div>
+          <div><strong>2. 移項（過等號變號）：</strong>將 $x$ 項移至左邊、常數項移至右邊 $\\Rightarrow (${a} - ${c < 0 ? `(${c})` : c})x = ${d} - ${b < 0 ? `(${b})` : b}$</div>
+          <div><strong>3. 合併同類項：</strong>$${netCoef}x = ${netConst}$</div>
+          <div><strong>4. 同除以 ${netCoef} 並化為最簡分數：</strong>$x = ${solLatex}$</div>
+        `;
+      }
+
+      out.innerHTML = `
+        <svg viewBox="0 0 460 112" width="100%" height="112" aria-label="等量公理天平示意圖">
+          <polygon points="230,68 214,104 246,104" fill="var(--surface-container-high)" />
+          <line x1="70" y1="68" x2="390" y2="68" stroke="var(--primary)" stroke-width="4" stroke-linecap="round" />
+          <circle cx="230" cy="68" r="6" fill="var(--primary)" />
+          <rect x="44" y="22" width="144" height="36" rx="10" fill="var(--primary-container)" />
+          <text x="116" y="45" text-anchor="middle" font-size="14" font-weight="700" fill="var(--on-primary-container)">${leftText}</text>
+          <rect x="272" y="22" width="144" height="36" rx="10" fill="var(--surface-container-low)" />
+          <text x="344" y="45" text-anchor="middle" font-size="14" font-weight="700" fill="var(--on-surface)">${rightText}</text>
+          <text x="230" y="46" text-anchor="middle" font-size="18" font-weight="700" fill="var(--primary)">=</text>
+        </svg>
+        <div class="lab-result-main">${resultHeading}</div>
+        <div style="font-size:0.875rem; line-height:1.75;">${stepsHtml}</div>
+      `;
+      renderMathInContainer(out);
+    }
+
+    function renderStageDetail() {
+      renderDetailBanner();
+      renderProportionChart();
+      renderInteractiveLab();
+      renderStageRules();
+      renderStageQuizzes();
+    }
+
+    function renderAll() {
+      updateOverviewKPIs();
+      renderStageCards();
+      renderStageDetail();
+    }
+
+    // ==============================
+    // 6. Lifecycle & Startup
+    // ==============================
+    async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            applySavedState(saved);
+          }
+        }
+      } catch (err) {
+        // Use clean initial defaults
+      }
+
+      renderAll();
+
+      // Re-run KaTeX after deferred scripts finish if needed
+      window.addEventListener(`load`, function() {
+        renderMathInContainer(document.getElementById(`detail-section`));
+      });
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>

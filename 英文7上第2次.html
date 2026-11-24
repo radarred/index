@@ -1,0 +1,2889 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="vitals">
+  <title>國中七年級英文第二次段考｜即時評分互動測驗</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Figtree:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Vitals) */
+      --background: #ffffff;
+      --surface-container-low: #f1f7f8;
+      --surface-container: #e3f1f3;
+      --surface-container-high: #d5e9ec;
+
+      /* Text */
+      --on-surface: #1b2b33;
+      --on-surface-variant: #46585f;
+
+      /* Rules */
+      --outline: #7b9198;
+      --outline-variant: #d5e3e5;
+
+      /* Accents */
+      --primary: #0f7c8a;
+      --primary-hover: #0b636f;
+      --on-primary: #ffffff;
+      --primary-container: #e3f1f3;
+      --on-primary-container: #0a5560;
+      --secondary: #1d5e3a;
+      --tertiary: #2e7d4f;
+      --tertiary-soft: #e6f3eb;
+      --error: #b3261e;
+      --error-soft: #fbeceb;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #0f7c8a;
+      --data-2: #2e7d4f;
+      --data-3: #b86e00;
+      --data-4: #5c5fb0;
+      --data-context: #b8c7ca;
+
+      /* Semantic */
+      --positive: #2e7d4f;
+      --warning: #b86e00;
+      --focus: #0f7c8a;
+
+      /* Fonts */
+      --font-headline: 'Figtree', 'Noto Sans TC', sans-serif;
+      --font-body: 'Atkinson Hyperlegible', 'Noto Sans TC', sans-serif;
+      --font-label: 'Figtree', 'Noto Sans TC', sans-serif;
+
+      /* Shape */
+      --rounded: 0.625rem;
+      --rounded-sm: 0.375rem;
+      --rounded-lg: 0.875rem;
+      --rounded-full: 9999px;
+
+      /* Style effects */
+      --top-bar: 6px solid var(--primary);
+      --status-bar-width: 4px;
+      --card-border: 1px solid var(--outline-variant);
+      --card-lift: 0 1px 2px rgb(27 43 51 / 0.05), 0 6px 16px rgb(27 43 51 / 0.05);
+
+      /* Type scale (Focused Tool) */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header { position: static !important; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    .page {
+      border-top: var(--top-bar);
+      min-height: 100vh;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-lg);
+      padding: var(--space-lg);
+      max-width: 1180px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    button:focus-visible,
+    [tabindex]:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Header */
+    .exam-header {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--card-lift);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-lg);
+    }
+
+    .header-copy {
+      flex: 1 1 520px;
+    }
+
+    .kicker {
+      display: inline-block;
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      letter-spacing: 0.04em;
+      color: var(--on-primary-container);
+      background: var(--primary-container);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      margin-bottom: var(--space-sm);
+    }
+
+    .title {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: var(--display-size);
+      letter-spacing: -0.015em;
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin: 0;
+    }
+
+    .lede {
+      font-size: var(--body-size);
+      line-height: 1.6;
+      color: var(--on-surface-variant);
+      max-width: 64ch;
+      margin: var(--space-sm) 0 0 0;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  transform var(--dur-micro) var(--ease-out);
+    }
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-secondary {
+      background: var(--background);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-secondary:hover { background: var(--surface-container-low); }
+
+    .btn-danger-outline {
+      background: var(--background);
+      color: var(--error);
+      border-color: var(--error);
+    }
+    .btn-danger-outline:hover { background: var(--error-soft); }
+    .btn-danger-outline[data-armed="true"] {
+      background: var(--error);
+      color: var(--on-error);
+    }
+
+    .btn-sm {
+      min-height: 38px;
+      padding: var(--space-xs) var(--space-md);
+      font-size: 0.875rem;
+    }
+
+    .inline-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded);
+      font-weight: 600;
+      font-size: 0.9375rem;
+    }
+    .inline-banner.visible { display: flex; }
+    .inline-banner[data-tone="ok"] {
+      background: var(--tertiary-soft);
+      color: var(--secondary);
+      border-left-color: var(--tertiary);
+    }
+    .inline-banner[data-tone="alert"] {
+      background: var(--error-soft);
+      color: var(--error);
+      border-left-color: var(--error);
+    }
+
+    /* Section Headings */
+    .section-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--headline-size);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin: 0 0 var(--space-xs) 0;
+      color: var(--on-surface);
+    }
+    .section-sub {
+      font-size: 0.9375rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    /* Dashboard Panel */
+    .dashboard-section {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-md);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+
+    .status-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      box-shadow: var(--card-lift);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .status-card[data-status="ok"] { border-left-color: var(--tertiary); }
+    .status-card[data-status="alert"] { border-left-color: var(--error); }
+    .status-card[data-status="warn"] { border-left-color: var(--data-3); }
+
+    .kpi-label {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      letter-spacing: 0.03em;
+    }
+
+    .kpi-value {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+      line-height: 1.15;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-caption {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      margin-top: auto;
+    }
+    .kpi-caption[data-tone="ok"] { color: var(--secondary); font-weight: 700; }
+    .kpi-caption[data-tone="alert"] { color: var(--error); font-weight: 700; }
+
+    .mini-progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--surface-container);
+      border-radius: var(--rounded-full);
+      overflow: hidden;
+      margin-top: var(--space-xs);
+    }
+    .mini-progress-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: var(--rounded-full);
+      transition: width var(--dur-short) var(--ease-out);
+      width: 0%;
+    }
+
+    /* Benchmark Ruler Card */
+    .ruler-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--card-lift);
+    }
+
+    .ruler-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    .ruler-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--subhead-size);
+      margin: 0;
+    }
+
+    .ruler-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-swatch {
+      width: 14px;
+      height: 10px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+    .legend-swatch-pass {
+      background: var(--tertiary-soft);
+      border: 1px solid var(--tertiary);
+    }
+    .legend-swatch-line {
+      width: 2px;
+      height: 14px;
+      border-left: 2px dashed var(--tertiary);
+    }
+
+    .ruler-track-wrap {
+      position: relative;
+      padding-top: 2.5rem;
+      padding-bottom: 2.25rem;
+    }
+
+    .ruler-track {
+      position: relative;
+      height: 22px;
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded-full);
+      overflow: visible;
+    }
+
+    .ruler-pass-band {
+      position: absolute;
+      left: 60%;
+      width: 40%;
+      top: 0;
+      bottom: 0;
+      background: color-mix(in srgb, var(--tertiary) 14%, transparent);
+      border-top-right-radius: var(--rounded-full);
+      border-bottom-right-radius: var(--rounded-full);
+    }
+
+    .ruler-mastery-band {
+      position: absolute;
+      left: 80%;
+      width: 20%;
+      top: 0;
+      bottom: 0;
+      background: color-mix(in srgb, var(--tertiary) 22%, transparent);
+      border-top-right-radius: var(--rounded-full);
+      border-bottom-right-radius: var(--rounded-full);
+    }
+
+    .ruler-fill {
+      position: absolute;
+      left: 0;
+      top: 3px;
+      bottom: 3px;
+      background: var(--primary);
+      border-radius: var(--rounded-full);
+      transition: width var(--dur-long) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+      width: 0%;
+    }
+    .ruler-fill[data-status="ok"] { background: var(--tertiary); }
+    .ruler-fill[data-status="alert"] { background: var(--error); }
+
+    .ruler-pass-line {
+      position: absolute;
+      left: 60%;
+      top: -8px;
+      bottom: -8px;
+      width: 0;
+      border-left: 2px dashed var(--tertiary);
+      z-index: 2;
+    }
+
+    .ruler-mastery-line {
+      position: absolute;
+      left: 80%;
+      top: -5px;
+      bottom: -5px;
+      width: 0;
+      border-left: 2px dotted var(--secondary);
+      z-index: 2;
+    }
+
+    .ruler-pointer {
+      position: absolute;
+      top: -34px;
+      transform: translateX(-50%);
+      transition: left var(--dur-long) var(--ease-out);
+      z-index: 4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .ruler-pointer-badge {
+      background: var(--on-surface);
+      color: var(--background);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: var(--rounded-full);
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .ruler-pointer-badge[data-status="ok"] { background: var(--tertiary); }
+    .ruler-pointer-badge[data-status="alert"] { background: var(--error); }
+
+    .ruler-pointer-pin {
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid var(--on-surface);
+    }
+    .ruler-pointer-badge[data-status="ok"] + .ruler-pointer-pin { border-top-color: var(--tertiary); }
+    .ruler-pointer-badge[data-status="alert"] + .ruler-pointer-pin { border-top-color: var(--error); }
+
+    .ruler-ticks {
+      position: relative;
+      margin-top: 10px;
+      height: 1.5rem;
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ruler-tick {
+      position: absolute;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
+    .ruler-tick-start { left: 0%; transform: translateX(0); }
+    .ruler-tick-30 { left: 30%; }
+    .ruler-tick-60 { left: 60%; color: var(--secondary); font-weight: 700; }
+    .ruler-tick-80 { left: 80%; color: var(--primary); font-weight: 700; }
+    .ruler-tick-100 { left: 100%; transform: translateX(-100%); }
+
+    /* Controls: Modes, Filters & Quick-Jump */
+    .controls-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--card-lift);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .control-label {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      letter-spacing: 0.04em;
+    }
+
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      border: 1px solid var(--outline-variant);
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out);
+    }
+    .pill-btn:hover { background: var(--surface-container-low); }
+    .pill-btn[aria-pressed="true"] {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    .count-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1px 7px;
+      border-radius: var(--rounded-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: var(--surface-container);
+      color: var(--on-primary-container);
+      font-variant-numeric: tabular-nums;
+    }
+    .pill-btn[aria-pressed="true"] .count-badge {
+      background: color-mix(in srgb, var(--on-primary) 22%, transparent);
+      color: var(--on-primary);
+    }
+
+    .divider-line {
+      height: 1px;
+      background: var(--outline-variant);
+      border: 0;
+      margin: 0;
+    }
+
+    /* Quick jump grid */
+    .jump-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .jump-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+    }
+
+    .jump-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      display: inline-block;
+      border: 1px solid var(--outline);
+      background: var(--background);
+    }
+    .jump-dot.ok { background: var(--tertiary-soft); border-color: var(--tertiary); }
+    .jump-dot.wrong { background: var(--error-soft); border-color: var(--error); }
+
+    .jump-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .jump-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      font-variant-numeric: tabular-nums;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  transform var(--dur-micro) var(--ease-out);
+    }
+    .jump-btn:hover { background: var(--surface-container-low); transform: translateY(-1px); }
+    .jump-btn[data-state="correct"] {
+      background: var(--tertiary-soft);
+      color: var(--secondary);
+      border-color: var(--tertiary);
+    }
+    .jump-btn[data-state="wrong"] {
+      background: var(--error-soft);
+      color: var(--error);
+      border-color: var(--error);
+    }
+    .jump-btn[data-active="true"] {
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+
+    /* Questions List */
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    .question-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--card-lift);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      scroll-margin-top: var(--space-lg);
+    }
+    .question-card[data-state="correct"] { border-left-color: var(--tertiary); }
+    .question-card[data-state="wrong"] { border-left-color: var(--error); }
+    .question-card.highlight-pulse {
+      box-shadow: 0 0 0 3px var(--primary-container), var(--card-lift);
+    }
+
+    .q-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .q-badges {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .q-num-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      height: 28px;
+      padding: 0 var(--space-sm);
+      border-radius: var(--rounded-sm);
+      background: var(--primary);
+      color: var(--on-primary);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.875rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      background: var(--tertiary-soft);
+      color: var(--secondary);
+    }
+    .chip[data-status="info"] {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .chip[data-status="neutral"] {
+      background: var(--surface-container-low);
+      color: var(--on-surface-variant);
+    }
+    .chip[data-status="alert"] {
+      background: var(--error-soft);
+      color: var(--error);
+    }
+    .chip[data-status="warn"] {
+      background: color-mix(in srgb, var(--data-3) 14%, var(--background));
+      color: var(--on-surface);
+    }
+
+    /* Audio simulation box for Listening */
+    .listening-bar {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .listening-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .listening-script {
+      display: none;
+      padding-top: var(--space-sm);
+      border-top: 1px solid var(--outline-variant);
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+      white-space: pre-line;
+    }
+    .listening-script.open { display: block; }
+
+    /* Visual SVG Container */
+    .visual-box {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      overflow-x: auto;
+    }
+    .visual-caption {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      margin-bottom: var(--space-sm);
+    }
+    .visual-box svg {
+      display: block;
+      width: 100%;
+      max-width: 760px;
+      height: auto;
+    }
+
+    /* Question stem */
+    .q-stem {
+      font-size: 1.0625rem;
+      line-height: 1.65;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .q-stem u {
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+      text-decoration-color: var(--primary);
+      font-weight: 700;
+    }
+    .q-prompt-zh {
+      font-size: 0.9375rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    /* Options Grid */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+    .options-grid.single-col {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .opt-btn {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: var(--space-md);
+      min-height: 48px;
+      width: 100%;
+      padding: var(--space-sm) var(--space-md);
+      text-align: left;
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out),
+                  border-color var(--dur-micro) var(--ease-out),
+                  box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .opt-btn:hover:not(:disabled) {
+      background: var(--surface-container-low);
+      border-color: var(--primary);
+    }
+    .opt-btn:disabled { cursor: default; }
+
+    .opt-letter {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--rounded-full);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.875rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .opt-text {
+      flex: 1 1 auto;
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .opt-status-icon {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .opt-btn[data-result="correct"] {
+      background: var(--tertiary-soft);
+      border-color: var(--tertiary);
+      box-shadow: inset 0 0 0 1px var(--tertiary);
+    }
+    .opt-btn[data-result="correct"] .opt-letter {
+      background: var(--tertiary);
+      color: var(--on-primary);
+    }
+
+    .opt-btn[data-result="wrong"] {
+      background: var(--error-soft);
+      border-color: var(--error);
+      box-shadow: inset 0 0 0 1px var(--error);
+    }
+    .opt-btn[data-result="wrong"] .opt-letter {
+      background: var(--error);
+      color: var(--on-error);
+    }
+
+    /* Explanation Box */
+    .explanation-box {
+      background: var(--primary-container);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+      color: var(--on-primary-container);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      animation: fadeSlide var(--dur-short) var(--ease-out);
+    }
+    .explanation-box[data-correct="true"] {
+      background: var(--tertiary-soft);
+      border-left-color: var(--tertiary);
+      color: var(--secondary);
+    }
+    .explanation-box[data-correct="false"] {
+      background: var(--error-soft);
+      border-left-color: var(--error);
+      color: var(--on-surface);
+    }
+
+    .exp-heading {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .exp-body {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--on-surface);
+    }
+    .exp-tip {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+      padding-top: var(--space-xs);
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    /* Empty state */
+    .empty-state {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      box-shadow: var(--card-lift);
+    }
+
+    /* Diagnostic Table */
+    .diagnostic-card {
+      background: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--card-lift);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .diag-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+    }
+    .diag-table th {
+      background: var(--surface-container-low);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      white-space: nowrap;
+    }
+    .diag-table td {
+      padding: var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: middle;
+    }
+    .diag-table th.num,
+    .diag-table td.num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .callout-note {
+      background: var(--primary-container);
+      border-left: var(--status-bar-width) solid var(--primary);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+      color: var(--on-primary-container);
+      font-size: 0.9375rem;
+    }
+
+    .sources-footer {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      padding: var(--space-md) 0 var(--space-xl) 0;
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-md);
+      }
+      .kpi-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .options-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .header-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .exam-header,
+      .ruler-card,
+      .controls-card,
+      .question-card,
+      .diagnostic-card {
+        padding: var(--space-md);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    @media print {
+      body { background: var(--background); }
+      .page { border-top: none; }
+      .header-actions,
+      .controls-card,
+      .listening-controls,
+      .diag-action-col,
+      .inline-banner {
+        display: none !important;
+      }
+      .question-card,
+      .diagnostic-card,
+      .exam-header,
+      .status-card,
+      .ruler-card {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <main class="page-grid">
+
+      <!-- 1. 頂部資訊與功能列 -->
+      <header class="exam-header">
+        <div class="header-copy">
+          <span class="kicker">國中七年級英語科・第二次段考複習測驗</span>
+          <h1 class="title">國中七年級英文第二次段考即時評分測驗</h1>
+          <p class="lede">
+            涵蓋翰林版 Book 1 Unit 3 至 Review 2 核心考點：祈使句與標點、受格代名詞、can 能力與許可、星期與時間介系詞、現在進行式、圖表閱讀與句型翻譯。每題點擊選項後立即批改並展開詳細解析，作答進度自動儲存。
+          </p>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="btn btn-primary" onclick="exportScoreReport()">
+            <i data-lucide="download" aria-hidden="true"></i>
+            <span>匯出成績單</span>
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="printScoreReport()">
+            <i data-lucide="printer" aria-hidden="true"></i>
+            <span>列印結果</span>
+          </button>
+          <button type="button" id="btn-reset-quiz" class="btn btn-danger-outline" onclick="handleResetQuiz(this)">
+            <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+            <span>重新作答</span>
+          </button>
+        </div>
+      </header>
+
+      <div id="status-banner" class="inline-banner" role="status" aria-live="polite">
+        <span id="status-banner-text"></span>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="hideBanner()">關閉</button>
+      </div>
+
+      <!-- 2. 即時數據看板（4 張 KPI 卡片） -->
+      <section class="dashboard-section" aria-label="即時數據看板與及格量尺">
+        <div class="kpi-grid">
+          <article class="status-card" id="kpi-score-card" data-status="info">
+            <span class="kpi-label">即時百分制得分（60分及格）</span>
+            <div class="kpi-value" id="kpi-score-value">0 分</div>
+            <div class="kpi-caption" id="kpi-score-caption">尚未作答，點選題目選項開始計分</div>
+          </article>
+
+          <article class="status-card" id="kpi-progress-card" data-status="info">
+            <span class="kpi-label">本回作答進度</span>
+            <div class="kpi-value" id="kpi-progress-value">0 / 28 題</div>
+            <div class="mini-progress-track" aria-hidden="true">
+              <div class="mini-progress-fill" id="kpi-progress-bar"></div>
+            </div>
+            <div class="kpi-caption" id="kpi-progress-caption">目前模式：完整練習 (0%)</div>
+          </article>
+
+          <article class="status-card" id="kpi-counts-card" data-status="info">
+            <span class="kpi-label">答對 / 答錯題數</span>
+            <div class="kpi-value" id="kpi-counts-value">0 對 / 0 錯</div>
+            <div class="kpi-caption" id="kpi-counts-caption">全題庫 28 題即時累計</div>
+          </article>
+
+          <article class="status-card" id="kpi-accuracy-card" data-status="info">
+            <span class="kpi-label">已作答正確率</span>
+            <div class="kpi-value" id="kpi-accuracy-value">--</div>
+            <div class="kpi-caption" id="kpi-accuracy-caption">完成 1 題後顯示正確率</div>
+          </article>
+        </div>
+
+        <!-- 3. 段考及格基準線量尺 -->
+        <section class="ruler-card" aria-label="段考及格基準線量尺">
+          <div class="ruler-header">
+            <h2 class="ruler-title">段考及格基準線量尺（即時得分落點）</h2>
+            <div class="ruler-legend">
+              <span class="legend-item">
+                <span class="legend-swatch legend-swatch-line"></span>
+                <span>60 分綠色虛線及格線</span>
+              </span>
+              <span class="legend-item">
+                <span class="legend-swatch legend-swatch-pass"></span>
+                <span>60–100 分及格至精熟區間</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="ruler-track-wrap">
+            <div class="ruler-pointer" id="ruler-pointer" style="left: 0%;">
+              <span class="ruler-pointer-badge" id="ruler-pointer-badge" data-status="info">目前 0 分</span>
+              <span class="ruler-pointer-pin"></span>
+            </div>
+
+            <div class="ruler-track">
+              <div class="ruler-pass-band" aria-hidden="true"></div>
+              <div class="ruler-mastery-band" aria-hidden="true"></div>
+              <div class="ruler-fill" id="ruler-fill" data-status="info" style="width: 0%;"></div>
+              <div class="ruler-pass-line" aria-hidden="true"></div>
+              <div class="ruler-mastery-line" aria-hidden="true"></div>
+            </div>
+
+            <div class="ruler-ticks" aria-hidden="true">
+              <span class="ruler-tick ruler-tick-start">0分</span>
+              <span class="ruler-tick ruler-tick-30">30分</span>
+              <span class="ruler-tick ruler-tick-60">60分（及格）</span>
+              <span class="ruler-tick ruler-tick-80">80分（精熟）</span>
+              <span class="ruler-tick ruler-tick-100">100分</span>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- 4. 題目篩選、三種出題模式與快速跳轉題號區 -->
+      <section class="controls-card" aria-label="出題模式與單元篩選">
+        <div class="control-row">
+          <div class="control-group">
+            <span class="control-label">出題模式切換</span>
+            <div class="pill-group" role="group" aria-label="出題模式">
+              <button type="button" class="pill-btn" id="mode-all" aria-pressed="true" onclick="setMode('all')">
+                <span>完整練習</span>
+                <span class="count-badge" id="badge-mode-all">28</span>
+              </button>
+              <button type="button" class="pill-btn" id="mode-mock" aria-pressed="false" onclick="setMode('mock')">
+                <span>段考模擬抽測（隨機 10 題）</span>
+                <span class="count-badge">10</span>
+              </button>
+              <button type="button" class="pill-btn" id="mode-wrong" aria-pressed="false" onclick="setMode('wrong')">
+                <span>錯題集中複習</span>
+                <span class="count-badge" id="badge-mode-wrong">0</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="mock-reshuffle-wrap" style="display: none;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="reshuffleMock()">
+              <i data-lucide="shuffle" aria-hidden="true"></i>
+              <span>重抽 10 題模擬考</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <span class="control-label">依單元／主題篩選</span>
+          <div class="pill-group" role="group" aria-label="單元篩選" id="unit-filter-group">
+            <button type="button" class="pill-btn" data-unit="all" aria-pressed="true" onclick="setUnitFilter('all')">全部單元</button>
+            <button type="button" class="pill-btn" data-unit="listening" aria-pressed="false" onclick="setUnitFilter('listening')">聽力與情境判讀</button>
+            <button type="button" class="pill-btn" data-unit="grammar" aria-pressed="false" onclick="setUnitFilter('grammar')">字彙與核心文法</button>
+            <button type="button" class="pill-btn" data-unit="reading" aria-pressed="false" onclick="setUnitFilter('reading')">圖表與閱讀理解</button>
+            <button type="button" class="pill-btn" data-unit="writing" aria-pressed="false" onclick="setUnitFilter('writing')">句型轉換與翻譯</button>
+          </div>
+        </div>
+
+        <hr class="divider-line">
+
+        <div class="control-group">
+          <div class="jump-header">
+            <span class="control-label" id="jump-title">快速跳轉題號區（共 28 題）</span>
+            <div class="jump-legend">
+              <span class="legend-item"><span class="jump-dot"></span>未作答</span>
+              <span class="legend-item"><span class="jump-dot ok"></span>答對</span>
+              <span class="legend-item"><span class="jump-dot wrong"></span>答錯</span>
+            </div>
+          </div>
+          <div class="jump-grid" id="jump-grid" role="navigation" aria-label="快速跳轉題號"></div>
+        </div>
+      </section>
+
+      <!-- 5. 題目與作答互動區 -->
+      <section aria-label="測驗題目列表">
+        <div class="questions-list" id="questions-list"></div>
+      </section>
+
+      <!-- 6. 各單元作答表現與弱點診斷表 -->
+      <section class="diagnostic-card" id="diagnostic-section" aria-label="各單元作答表現與弱點診斷表">
+        <div>
+          <h2 class="section-title">各單元作答表現與弱點診斷表</h2>
+          <p class="section-sub">即時統計四大單元掌握度，協助找出第二次段考前最需要補強的題型。</p>
+        </div>
+
+        <div class="table-wrap">
+          <table class="diag-table">
+            <thead>
+              <tr>
+                <th>單元主題</th>
+                <th class="num">總題數</th>
+                <th class="num">已作答數</th>
+                <th class="num">答對數</th>
+                <th class="num">正確率</th>
+                <th>掌握狀態</th>
+                <th class="diag-action-col">快速複習</th>
+              </tr>
+            </thead>
+            <tbody id="diag-tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="callout-note" id="diag-advice">
+          作答題目後，系統將自動為您分析最需要加強的單元與段考複習策略。
+        </div>
+      </section>
+
+      <footer class="sources-footer">
+        <strong>題庫來源說明：</strong>本測驗題目彙整改編自 109–114 學年度臺北市立仁愛國中、高雄市立陽明國中、新北市立桃子腳國民中小學、新北市立土城國中、屏東縣立明正國中、臺北市立中山國中、新北市立崇林國中、桃園市立平南國中、桃園市立文昌國中、高雄市立林園高中附設國中、臺南市立歸仁國中與彰化縣立埤頭、溪湖國中七年級第一學期第二次段考英語科試題與官方解答（翰林版 Book 1 Unit 3–Review 2 範圍）。
+      </footer>
+
+    </main>
+  </div>
+
+  <api-shim></api-shim>
+
+  <script>
+    /* ============================================================
+       1. 題庫資料 (28 題，全數使用反引號 template literals 避免跳脫錯誤)
+       ============================================================ */
+    const UNITS = [
+      { id: `listening`, name: `聽力與情境判讀` },
+      { id: `grammar`, name: `字彙與核心文法` },
+      { id: `reading`, name: `圖表與閱讀理解` },
+      { id: `writing`, name: `句型轉換與翻譯` }
+    ];
+
+    const QUESTIONS = [
+      // --- 單元一：聽力與情境判讀 (Q1–Q7) ---
+      {
+        id: 1,
+        unit: `listening`,
+        unitLabel: `聽力與情境判讀`,
+        source: `桃子腳國中 113-1・辨識句意`,
+        topic: `現在進行式情境判讀`,
+        audioText: `A boy is playing with a ball, and a woman is taking a walk with her dog in the park.`,
+        scriptDisplay: `錄音內容：\n"A boy is playing with a ball, and a woman is taking a walk with her dog in the park."\n（一位男孩正在玩球，一位女士正帶著她的狗在公園散步。）`,
+        svgId: `park_scene`,
+        svgCaption: `請依據語音描述，選出最符合情境的圖片 (A)、(B) 或 (C)`,
+        stem: `請點擊上方「朗讀英語音訊」後，選出符合聽力描述的公園情境圖片：`,
+        promptZh: `提示：注意關鍵動作「playing with a ball」與「taking a walk with her dog」。`,
+        options: [
+          `(A) 圖 A：男孩在看書，女士在廚房做菜`,
+          `(B) 圖 B：男孩在公園玩球，女士牽著小狗散步`,
+          `(C) 圖 C：男孩在跳繩，女士正在講手機`,
+          `(D) 以上皆非`
+        ],
+        answerIndex: 1,
+        explanation: `錄音描述「A boy is playing with a ball（男孩在玩球）」以及「a woman is taking a walk with her dog（女士帶狗散步）」，完全符合圖 (B) 的公園場景。`,
+        tip: `「take a walk with + 人/動物」為七年級第二次段考高頻片語，意為「和……一起散步」。`
+      },
+      {
+        id: 2,
+        unit: `listening`,
+        unitLabel: `聽力與情境判讀`,
+        source: `桃子腳國中 113-1・辨識句意`,
+        topic: `祈使句與公共場所規範`,
+        audioText: `Let's not run or talk in the museum.`,
+        scriptDisplay: `錄音內容：\n"Let's not run or talk in the museum."\n（我們在博物館裡不要奔跑或說話。）`,
+        svgId: `museum_signs`,
+        svgCaption: `請選出與語音內容相符的場所規範標誌 (A)、(B) 或 (C)`,
+        stem: `根據聽到的內容，哪一張圖片符合「博物館規定」的描述？`,
+        promptZh: `提示：注意地點「museum」與否定動作「not run or talk」。`,
+        options: [
+          `(A) 圖 A：博物館內禁止奔跑與交談標誌`,
+          `(B) 圖 B：圖書館內禁止飲食標誌`,
+          `(C) 圖 C：家中客廳請安靜並關掉電視標誌`,
+          `(D) 圖 A 與圖 B 皆符合`
+        ],
+        answerIndex: 0,
+        explanation: `關鍵字為「museum（博物館）」及「not run or talk（不要跑或講話）」。圖 (A) 標示 MUSEUM 且有禁止奔跑與說話圖示，故選 (A)。`,
+        tip: `否定列舉用 or 連接：「Let's not run or talk」，不可誤用 and。`
+      },
+      {
+        id: 3,
+        unit: `listening`,
+        unitLabel: `聽力與情境判讀`,
+        source: `土城國中 114-1・辨識句意`,
+        topic: `星期與時間海報判讀`,
+        audioText: `My favorite boy band concert is on Saturday night in the Taipei Dome. Let's go and see our idol!`,
+        scriptDisplay: `錄音內容：\n"My favorite boy band concert is on Saturday night in the Taipei Dome. Let's go and see our idol!"\n（我最喜歡的男團演唱會是在星期六晚上於臺北大巨蛋舉行。我們去看偶像吧！）`,
+        svgId: `concert_posters`,
+        svgCaption: `請依據聽力海報資訊，選出正確的演唱會時間海報`,
+        stem: `聽完對話後，哪一張海報標示的時間與地點符合描述？`,
+        promptZh: `提示：留意星期「Saturday」與時段「night（晚上）」。`,
+        options: [
+          `(A) 海報 A：Sunday 7:00 p.m. (週日晚上)`,
+          `(B) 海報 B：Saturday 7:30 p.m. (週六晚上)`,
+          `(C) 海報 C：Saturday 9:00 a.m. (週六早上)`,
+          `(D) 海報 B 與海報 C 皆正確`
+        ],
+        answerIndex: 1,
+        explanation: `「Saturday night」代表「星期六晚上（p.m.）」，海報 (B) 標示 Saturday 7:30 p.m.，海報 (A) 是星期日，海報 (C) 是上午 (a.m.)，因此選 (B)。`,
+        tip: `段考聽力常考 a.m.（上午）與 p.m.（下午／晚上）及 Saturday / Sunday 混淆，務必看清時段！`
+      },
+      {
+        id: 4,
+        unit: `listening`,
+        unitLabel: `聽力與情境判讀`,
+        source: `文昌國中 112-1・基本問答`,
+        topic: `生活情境應答`,
+        audioText: `Hurry up, Judy. Time for class.`,
+        scriptDisplay: `錄音內容：\n"Hurry up, Judy. Time for class."\n（快點，Judy，上課時間到了。）`,
+        stem: `聽到老師說：「Hurry up, Judy. Time for class.」時，下列哪一個回應最適合？`,
+        promptZh: `提示：選出最符合對話語境的回應句。`,
+        options: [
+          `(A) Hurry up! I am so hungry.`,
+          `(B) Let's go to the concert.`,
+          `(C) OK! I'm ready. Let's go!`,
+          `(D) No, it's on Tuesday.`
+        ],
+        answerIndex: 2,
+        explanation: `對方催促快點上課（Time for class），合理回應是「好的！我準備好了，走吧！」即 (C) OK! I'm ready. Let's go!。`,
+        tip: `「be ready for + N」表示「為……準備好了」，「Time for + 名詞」＝「該做……的時間了」。`
+      },
+      {
+        id: 5,
+        unit: `listening`,
+        unitLabel: `聽力與情境判讀`,
+        source: `平南國中 110-1・基本問答`,
+        topic: `What 進行式問句回應`,
+        audioText: `What are you doing now?`,
+        scriptDisplay: `錄音內容：\n"What are you doing now?"\n（你現在正在做什麼？）`,
+        stem: `聽到問句：「What are you doing now?」時，最適合的回答是哪一項？`,
+        promptZh: `提示：What 疑問詞開頭的現在進行式問句，不可用 Yes/No 回答。`,
+        options: [
+          `(A) Let's talk to Peter.`,
+          `(B) I'm watching a music video.`,
+          `(C) I'm a student from Taiwan.`,
+          `(D) Yes, I am.`
+        ],
+        answerIndex: 1,
+        explanation: `「What are you doing now?」詢問正在進行的動作，需用「I am + V-ing」回答，故選 (B) I'm watching a music video.。`,
+        tip: `注意「watch a music video / TV / a movie」用 watch；「read a comic book」用 read；「listen to music」用 listen to。`
+      },
+      {
+        id: 6,
+        unit: `listening`,
+        unitLabel: `聽力與情境判讀`,
+        source: `陽明國中 112-1・言談理解`,
+        topic: `時間推算與對話理解`,
+        audioText: `Man: The movie Iron Man is at nine-thirty. Woman: Nine-thirty? But it is just seven-thirty now. Man: Hmm. How about Spider-Man? It's at eight o'clock. Woman: That's okay. Let's wait 30 minutes from now. Question: What time are the man and the woman talking now?`,
+        scriptDisplay: `對話內容：\nM: The movie Iron Man is at nine-thirty.\nW: Nine-thirty? But it is just seven-thirty now.\nM: Hmm. How about Spider-Man? It's at eight o'clock.\nW: That's okay. Let's wait 30 minutes from now.\nQ: What time are the man and the woman talking now?`,
+        svgId: `clock_dialogue`,
+        svgCaption: `對話中的時間軸線索：現在時間 vs 兩部電影開演時間`,
+        stem: `根據對話與時間軸提示，請問「這對男女現在對話的時間」是幾點？`,
+        promptZh: `提示：題目問的是「現在（now）」是幾點，不是電影開演時間喔！`,
+        options: [
+          `(A) 7:30`,
+          `(B) 8:00`,
+          `(C) 8:30`,
+          `(D) 9:30`
+        ],
+        answerIndex: 0,
+        explanation: `女士明確說「But it is just seven-thirty now.（但現在才七點半而已）」，且 8:00 的電影只需等 30 分鐘，由此雙重確認現在時間為 (A) 7:30。`,
+        tip: `段考經典陷阱：若題目改問「What time is the movie Spider-Man?」答案才是 8:00，作答時務必聽清最後一題問句！`
+      },
+      {
+        id: 7,
+        unit: `listening`,
+        unitLabel: `聽力與情境判讀`,
+        source: `桃子腳國中 113-1・言談理解`,
+        topic: `實驗室規範理解`,
+        audioText: `Teacher: Students, here are some rules in the lab. First, don't run in the lab. It's not safe. Student: Can we talk in the lab? Teacher: Sure! Student: Can we talk on the phone? Teacher: Turn off your phone in class, please. Now, everyone, please clean the lab together. Question: What can the students do in the lab?`,
+        scriptDisplay: `對話內容：\nM: Students, here are some rules in the lab. First, don't run in the lab. It's not safe.\nW: Can we talk in the lab?\nM: Sure!\nW: Can we talk on the phone?\nM: Turn off your phone in class, please. Now, everyone, please clean the lab together.\nQ: What can the students do in the lab?`,
+        stem: `根據老師的說明，學生在實驗室裡「可以」做下列哪件事？`,
+        promptZh: `提示：區分「talk in the lab（交談）」與「talk on the phone（講電話）」的不同規定。`,
+        options: [
+          `(A) 清理實驗室並且彼此交談`,
+          `(B) 在實驗室裡講手機`,
+          `(C) 在實驗室裡奔跑玩耍`,
+          `(D) 把手機開機放在桌上`
+        ],
+        answerIndex: 0,
+        explanation: `老師允許「talk in the lab (Sure!)」並要求大家「clean the lab together」，但禁止奔跑（don't run）且必須關手機（Turn off your phone），因此選 (A)。`,
+        tip: `「turn off」是關掉（電源），「turn on」是打開（電源）；切勿說成 open/close the phone。`
+      },
+
+      // --- 單元二：字彙與核心文法 (Q8–Q16) ---
+      {
+        id: 8,
+        unit: `grammar`,
+        unitLabel: `字彙與核心文法`,
+        source: `仁愛國中 112-1 第30題`,
+        topic: `祈使句與呼格逗號`,
+        stem: `A: _______________<br>B: But I can't see from here!<br><span style="color: var(--on-surface-variant); font-size: 0.9375rem;">（請選出文法與標點符號完全正確的祈使句）</span>`,
+        promptZh: `提示：呼格（稱呼對方的名字）與 please 在句首或句尾時，必須加上逗號隔開。`,
+        options: [
+          `(A) Josh, don't stand up now.`,
+          `(B) Don't stand up, please Josh.`,
+          `(C) Josh don't stand up, now.`,
+          `(D) Don't, stand up, please.`
+        ],
+        answerIndex: 0,
+        explanation: `(A) 呼格 Josh 在句首後加逗號，完全正確。(B) Josh 在句尾前漏了逗號（應為 please, Josh）；(C) Josh 後缺逗號；(D) Don't 與 stand up 之間不可加逗號。`,
+        tip: `呼格逗號口訣：「人名在前逗在後，人名在後逗在前」，please 在句尾前方也一定要有逗號！`
+      },
+      {
+        id: 9,
+        unit: `grammar`,
+        unitLabel: `字彙與核心文法`,
+        source: `陽明國中 112-1 第12題`,
+        topic: `所有格與受格代名詞`,
+        stem: `The handsome man is our math teacher. _______ name is Patrick Su. We call _______ Mr. Su.`,
+        promptZh: `提示：第一格後方有名詞 name；第二格位於動詞 call 之後。`,
+        options: [
+          `(A) He; he`,
+          `(B) His; his`,
+          `(C) His; him`,
+          `(D) Her; her`
+        ],
+        answerIndex: 2,
+        explanation: `math teacher 是男性（the handsome man）。第一格修飾名詞 name 需用所有格「His」；第二格位於動詞 call 之後作受詞，需用受格「him」，故選 (C)。`,
+        tip: `動詞（如 call, love, talk to, wait for）與介系詞（with, for, to）後面一律接「受格」（me, him, her, us, them）。`
+      },
+      {
+        id: 10,
+        unit: `grammar`,
+        unitLabel: `字彙與核心文法`,
+        source: `土城國中 114-1 第16題`,
+        topic: `Let's 的否定祈使句`,
+        stem: `Shhhh, Cindy! We are in the meeting room. Let's _______ talk!`,
+        promptZh: `提示：「Let's（我們……吧）」的否定形式結構為 Let's + 否定詞 + 原形動詞。`,
+        options: [
+          `(A) not`,
+          `(B) don't`,
+          `(C) can't`,
+          `(D) no`
+        ],
+        answerIndex: 0,
+        explanation: `Let's 的否定句直接將 not 放在 Let's 之後、原形動詞之前，即「Let's not + V」，絕不可用 Let's don't，故選 (A)。`,
+        tip: `「Let's not + 原形動詞」是段考必考送分／陷阱題，記住不能加 don't！`
+      },
+      {
+        id: 11,
+        unit: `grammar`,
+        unitLabel: `字彙與核心文法`,
+        source: `土城國中 114-1 第24題`,
+        topic: `時間點與特定夜晚介系詞`,
+        stem: `Jobs's housewarming party is _______ 9:00 _______ Monday night. Can you come and join it?`,
+        promptZh: `提示：精確幾點幾分用 at；特定某天的早、午、晚介系詞為何？`,
+        options: [
+          `(A) in; on`,
+          `(B) X; X`,
+          `(C) at; on`,
+          `(D) on; in`
+        ],
+        answerIndex: 2,
+        explanation: `精確時間點「9:00」前用「at」；只要指定到「星期幾的早／午／晚」（Monday night），就不再用 in，而必須用「on」，故選 (C)。`,
+        tip: `比較：in the evening（泛指傍晚） vs. on Monday evening（星期一傍晚，特定日子的早午晚一律用 on）。`
+      },
+      {
+        id: 12,
+        unit: `grammar`,
+        unitLabel: `字彙與核心文法`,
+        source: `土城國中 114-1 第27題`,
+        topic: `every 搭配時間的介系詞規則`,
+        stem: `Lisa loves sports. She goes jogging _______ morning before school. It makes her happy and strong.`,
+        promptZh: `提示：當時間名詞前面出現 every, this, next, last 等詞時，還要加介系詞嗎？`,
+        options: [
+          `(A) in the every`,
+          `(B) on the every`,
+          `(C) at every`,
+          `(D) every`
+        ],
+        answerIndex: 3,
+        explanation: `「every + 時間（every morning / every day / every weekend）」前面不加任何介系詞（at/on/in）也不加 the，直接寫 every morning，故選 (D)。`,
+        tip: `重要原則：「this / every + 星期／時間」前方一律不加介系詞（例：this Sunday, every morning）。`
+      },
+      {
+        id: 13,
+        unit: `grammar`,
+        unitLabel: `字彙與核心文法`,
+        source: `仁愛國中 112-1・土城國中 114-1`,
+        topic: `不定代名詞 Everyone 與 can 句型`,
+        stem: `Everyone _______ a good time at the park. _______ you play basketball with me?`,
+        promptZh: `提示：Everyone / Everybody 作主詞時，視為單數還是複數？`,
+        options: [
+          `(A) are having; Are`,
+          `(B) is having; Can`,
+          `(C) are; Can`,
+          `(D) is; Are`
+        ],
+        answerIndex: 1,
+        explanation: `Everyone（每個人）作主詞時文法上視為「第三人稱單數」，be 動詞用 is，現在進行式為 is having；第二句動詞為原形 play，前面須用助動詞 Can，故選 (B)。`,
+        tip: `看到 Everyone / Everybody，腦中立刻亮紅燈：動詞要用單數（is / has / V-s）！`
+      },
+      {
+        id: 14,
+        unit: `grammar`,
+        unitLabel: `字彙與核心文法`,
+        source: `仁愛國中 112-1・土城國中 114-1`,
+        topic: `否定疑問句 Can't 的回答一致性`,
+        stem: `A: Can't Emma talk to her English teacher now?<br>B: _______________`,
+        promptZh: `提示：英文簡答時，「Yes 後接肯定、No 後接否定」，且用什麼問就用什麼答。`,
+        options: [
+          `(A) Yes, she is.`,
+          `(B) No, she's not.`,
+          `(C) No, she can't.`,
+          `(D) Yes, she can't.`
+        ],
+        answerIndex: 2,
+        explanation: `問句由「Can't」開頭，簡答也必須用 can/can't 回應，排除 (A)(B)；英文簡答不允許前肯定後否定，排除 (D)，因此唯一正確為 (C) No, she can't.。`,
+        tip: `不管是 Can...? 還是 Can't...?，回答永遠看事實：會／可以就「Yes, 主詞 can.」，不會／不可以就「No, 主詞 can't.」。`
+      },
+      {
+        id: 15,
+        unit: `grammar`,
+        unitLabel: `字彙與核心文法`,
+        source: `仁愛國中 112-1 第32題`,
+        topic: `Time for + N 與 this time 用法`,
+        stem: `Teacher: Time _______ class! No talking _______ this time.`,
+        promptZh: `提示：「Time for + 名詞」vs「Time to + 原形動詞」；以及 this time 前方需不需加介系詞？`,
+        options: [
+          `(A) for; on`,
+          `(B) to; X`,
+          `(C) to; on`,
+          `(D) for; X`
+        ],
+        answerIndex: 3,
+        explanation: `class（課堂）是名詞，故用「Time for class!」（若接動詞才用 Time to have class）；第二格「this time」前方不加介系詞 on，因此選 (D) for; X。`,
+        tip: `「Time for lunch.」＝「Time to have lunch.」，考前要分辨空格後面是名詞還是原形動詞！`
+      },
+      {
+        id: 16,
+        unit: `grammar`,
+        unitLabel: `字彙與核心文法`,
+        source: `各校文意字彙高頻題`,
+        topic: `星期拼字與前後順序`,
+        stem: `The day between Tuesday and Thursday is _______, and many people go to the night market on that day.`,
+        promptZh: `提示：請選出介於星期二與星期四之間、且拼字完全正確的單字。`,
+        options: [
+          `(A) Monday`,
+          `(B) Wednesday`,
+          `(C) Friday`,
+          `(D) Saturday`
+        ],
+        answerIndex: 1,
+        explanation: `Tuesday（星期二）與 Thursday（星期四）之間是星期三「Wednesday」。`,
+        tip: `Wednesday（Wed-nes-day）的「d」不發音，是七年級手寫文意字彙最常拼錯的單字之一，務必多寫幾次記熟！`
+      },
+
+      // --- 單元三：圖表與閱讀理解 (Q17–Q23) ---
+      {
+        id: 17,
+        unit: `reading`,
+        unitLabel: `圖表與閱讀理解`,
+        source: `陽明 112-1・桃子腳 113-1`,
+        topic: `時刻表資訊檢索`,
+        svgId: `movie_table`,
+        svgCaption: `KYT Movie Theater 電影時刻表與票價一覽表`,
+        stem: `Zac will see a movie with his friends. Now, they're at the theater and it's <strong>5:15 p.m.</strong> Which movies can they see right away (馬上看到)?`,
+        promptZh: `提示：5:15 p.m. 換算為 24 小時制是 17:15，請找出 17:15 之後最近開演的電影。`,
+        options: [
+          `(A) Black Widow and Baby Boss 2.`,
+          `(B) Baby Boss 2 and The King's Man.`,
+          `(C) Godzilla vs. Kong and Black Widow.`,
+          `(D) Fast & Furious 9 and Godzilla vs. Kong.`
+        ],
+        answerIndex: 0,
+        explanation: `現在時間 17:15。Baby Boss 2 有 17:30 場次，Black Widow 有 17:50 場次，兩部都可以接著入場；而 The King's Man (17:00)、Godzilla vs. Kong (16:05) 皆已開演或結束，Fast & Furious 9 的 17:00 場也已開演。故選 (A)。`,
+        tip: `解時刻表題時，先把題目的「a.m. / p.m.」換算成表格的「24 小時制（+12）」才不會看錯欄位！`
+      },
+      {
+        id: 18,
+        unit: `reading`,
+        unitLabel: `圖表與閱讀理解`,
+        source: `桃子腳國中 113-1 第39題`,
+        topic: `票價表推論判讀`,
+        svgId: `movie_table`,
+        svgCaption: `對照 KYT Movie Theater 下方票價表進行身份與日期推論`,
+        stem: `Nick spends <strong>NT$280</strong> on the movie today. Looking at the KYT Movie Theater price table, what can we know about Nick?`,
+        promptZh: `提示：在票價表中尋找「NT$280」對應的欄位條件。`,
+        options: [
+          `(A) Today is Wednesday.`,
+          `(B) Nick is twenty years old.`,
+          `(C) Nick is watching a movie at 10 a.m.`,
+          `(D) Nick is a junior high school student.`
+        ],
+        answerIndex: 3,
+        explanation: `票價表中只有「Weekend（週末）＋ Students（Under 18）」的票價剛好是 NT$280。既然是 18 歲以下學生，推論 Nick 可能是國中生（junior high school student）最合理！`,
+        tip: `閱讀推論題常透過「價格金額」反推「身分年齡」與「平假日」。`
+      },
+      {
+        id: 19,
+        unit: `reading`,
+        unitLabel: `圖表與閱讀理解`,
+        source: `桃子腳國中 113-1 第40題`,
+        topic: `多條件優惠票價計算`,
+        svgId: `movie_table`,
+        svgCaption: `留意「Weekday's special（平日買三送一）」與「Night-Owl（午夜場）」條件`,
+        stem: `Cody and her <strong>three friends</strong> will see <em>Fast &amp; Furious 9</em> at <strong>twelve thirty a.m. this Wednesday</strong>. What is the total price of the tickets?`,
+        promptZh: `提示：共有幾個人？星期三算平日嗎？12:30 a.m. 屬於哪一個票價時段？`,
+        options: [
+          `(A) NT$440`,
+          `(B) NT$660`,
+          `(C) NT$750`,
+          `(D) NT$880`
+        ],
+        answerIndex: 1,
+        explanation: `1. 總人數：Cody 加上 3 位朋友＝共 4 人。\n2. 日期優惠：Wednesday 是平日（Weekday），適用「買三送一（Buy 3 get 1 free）」，只需付 3 張票錢。\n3. 時段票價：12:30 a.m. 屬於 Night-Owl（from 12 a.m. to 6 a.m.）平日場，單張 NT$220。\n4. 總計：220 × 3 ＝ NT$660，故選 (B)。`,
+        tip: `這題有三大陷阱：①「Cody and her 3 friends」是 4 個人；②「12:30 a.m.」是凌晨（Night-Owl）不是中午；③ 平日買 3 送 1 只需付 3 張！`
+      },
+      {
+        id: 20,
+        unit: `reading`,
+        unitLabel: `圖表與閱讀理解`,
+        source: `陽明國中 112-1 第29題`,
+        topic: `百分比與人數換算圖表`,
+        svgId: `talent_chart`,
+        svgCaption: `全校 800 位學生才藝分布統計圖（部分項目以百分比呈現，部分以人數呈現）`,
+        stem: `There are 800 students in our school. Based on the chart and data, how many students can <strong>play balls</strong> (basketball or baseball)?`,
+        promptZh: `提示：先算出會打籃球的人數（30%），再加上會打棒球的人數（40 人）。`,
+        options: [
+          `(A) 240`,
+          `(B) 280`,
+          `(C) 320`,
+          `(D) 80`
+        ],
+        answerIndex: 1,
+        explanation: `全校 800 人中，會打籃球（play basketball）佔 30% ＝ 800 × 30% ＝ 240 人；會打棒球（play baseball）有 40 人。兩者相加 240 ＋ 40 ＝ 280 人，故選 (B)。`,
+        tip: `題目問「play balls（球類運動）」，必須把 basketball 與 baseball 兩個項目加總起來，不能只選 240！`
+      },
+      {
+        id: 21,
+        unit: `reading`,
+        unitLabel: `圖表與閱讀理解`,
+        source: `陽明國中 112-1 第30題`,
+        topic: `人數反推百分比`,
+        svgId: `talent_chart`,
+        svgCaption: `從 80 位會跳舞的學生人數反推佔全校 800 人的百分比`,
+        stem: `_______ percent of the students in the school can dance.`,
+        promptZh: `提示：80 人佔全校 800 人的百分之多少？`,
+        options: [
+          `(A) Ten`,
+          `(B) Twelve`,
+          `(C) Fifteen`,
+          `(D) Nine`
+        ],
+        answerIndex: 0,
+        explanation: `會跳舞的學生有 80 人，佔全校 800 人的比例為 80 ÷ 800 ＝ 0.10 ＝ 10%，即 Ten percent，故選 (A)。`,
+        tip: `「percent（百分之……）」前面接基數詞（ten, fifteen, thirty），且 percent 本身不加 s。`
+      },
+      {
+        id: 22,
+        unit: `reading`,
+        unitLabel: `圖表與閱讀理解`,
+        source: `土城國中 114-1 第35題`,
+        topic: `週課表資訊檢索`,
+        svgId: `jisoo_schedule`,
+        svgCaption: `Jisoo 的每週社團與才藝行程表（Monday 至 Friday）`,
+        stem: `Jisoo's friends like dancing. Based on Jisoo's weekly schedule, what days does she have dance class to invite them?`,
+        promptZh: `提示：在課表中尋找「Dance」課程出現的星期欄位。`,
+        options: [
+          `(A) Thursday and Friday.`,
+          `(B) Tuesday and Friday.`,
+          `(C) Monday and Wednesday.`,
+          `(D) Wednesday and Friday.`
+        ],
+        answerIndex: 1,
+        explanation: `檢視課表各欄位，Dance（舞蹈課）出現在星期二（T. 10:10–10:55）與星期五（F. 11:05–11:50），因此是 (B) Tuesday and Friday.。`,
+        tip: `英文課表星期簡寫務必分清楚：T. = Tuesday（週二），Th. = Thursday（週四），切勿混淆！`
+      },
+      {
+        id: 23,
+        unit: `reading`,
+        unitLabel: `圖表與閱讀理解`,
+        source: `土城國中 114-1 第37題`,
+        topic: `課表特定時段動態判讀`,
+        svgId: `jisoo_schedule`,
+        svgCaption: `對照課表「W.（星期三）」與「10:10–10:55」交叉格`,
+        stem: `It is <strong>10:40 on Wednesday</strong>. What is Jisoo doing?`,
+        promptZh: `提示：10:40 落在 10:10–10:55 這一節課區間內，請看 W. 欄位。`,
+        options: [
+          `(A) She's cooking.`,
+          `(B) She's reading a book.`,
+          `(C) She's swimming.`,
+          `(D) She's watching music videos.`
+        ],
+        answerIndex: 3,
+        explanation: `10:40 位於 10:10–10:55 的時段，對應星期三（W.）的課程為「Music Videos」，因此 Jisoo 正在看音樂錄影帶，選 (D) She's watching music videos.。`,
+        tip: `對照課表題時，先找橫軸星期（W.），再看縱軸時間區間（10:10–10:55 包含 10:40）。`
+      },
+
+      // --- 單元四：句型轉換與翻譯 (Q24–Q28) ---
+      {
+        id: 24,
+        unit: `writing`,
+        unitLabel: `句型轉換與翻譯`,
+        source: `陽明・文昌 112-1 改寫題`,
+        topic: `祈使句改寫與 please 位置`,
+        stem: `請依提示改寫句子（將 <strong>please</strong> 移到句尾並加上正確標點）：<br>「Please don't run in the house, Tom.」`,
+        promptZh: `提示：Tom 移到句首時後面要加逗號；please 移到句尾時前面要加逗號。`,
+        options: [
+          `(A) Tom, don't run in the house, please.`,
+          `(B) Tom don't run in the house please.`,
+          `(C) Don't run in the house Tom, please.`,
+          `(D) Tom, not run in the house, please.`
+        ],
+        answerIndex: 0,
+        explanation: `呼格 Tom 放在句首時後方需加逗號，且動詞轉為小寫 don't；please 放句尾時前方需加逗號，故唯一完全正確的是 (A) Tom, don't run in the house, please.。`,
+        tip: `手寫段考改寫題扣分最常見原因就是「漏掉 Tom 後的逗號」或「忘了把 Don't 改小寫 don't」！`
+      },
+      {
+        id: 25,
+        unit: `writing`,
+        unitLabel: `句型轉換與翻譯`,
+        source: `陽明國中 112-1 改寫第2題`,
+        topic: `can 句型改寫為現在進行式`,
+        stem: `將「Can your dog sit and shake hands with you? No, it can't.」的 <strong>can</strong> 改為 <strong>be 動詞（現在進行式）</strong>改寫兩句：`,
+        promptZh: `提示：對等連接詞 and 前後兩個動詞都要變成 V-ing，且注意 sit 與 shake 的拼字規則！`,
+        options: [
+          `(A) Is your dog sitting and shaking hands with you? No, it isn't.`,
+          `(B) Is your dog siting and shakeing hands with you? No, it isn't.`,
+          `(C) Are your dog sitting and shaking hands with you? No, it aren't.`,
+          `(D) Does your dog sitting and shaking hands with you? No, it doesn't.`
+        ],
+        answerIndex: 0,
+        explanation: `主詞 your dog 為單數，be 動詞用 Is；sit 為「短母音＋單子音」須重複字尾 t 再加 ing（sitting）；shake 字尾有不發音的 e，須去 e 加 ing（shaking）；否定簡答為 No, it isn't.。故選 (A)。`,
+        tip: `V-ing 三大變化必考：sit → sitting / run → running（重複字尾）、shake → shaking / dance → dancing（去 e 加 ing）。`
+      },
+      {
+        id: 26,
+        unit: `writing`,
+        unitLabel: `句型轉換與翻譯`,
+        source: `林園・文昌・歸仁國中 造原問句`,
+        topic: `依畫線部分造原問句`,
+        stem: `依畫線部分造原問句：<br>「Ken is <u>jumping rope</u> at the park now.」`,
+        promptZh: `提示：畫線部分是「正在做的動作」，請問疑問詞與原問句中的動詞要怎麼寫？`,
+        options: [
+          `(A) Where is Ken jumping rope now?`,
+          `(B) What is Ken doing at the park now?`,
+          `(C) What does Ken do at the park now?`,
+          `(D) Who is jumping rope at the park now?`
+        ],
+        answerIndex: 1,
+        explanation: `畫線部分為動作「jumping rope」，詢問「正在做什麼」須用疑問詞 What，並將原本的動作改為「doing」取代，保留主詞 Ken 與地點時間，成為「What is Ken doing at the park now?」，故選 (B)。`,
+        tip: `記住口訣：「問動作，用 What，原位改用 doing 補上去！」（例：is jumping rope → What is ... doing?）。`
+      },
+      {
+        id: 27,
+        unit: `writing`,
+        unitLabel: `句型轉換與翻譯`,
+        source: `平南・明正・崇林國中 改寫題`,
+        topic: `Let's 改寫為否定句`,
+        stem: `將肯定祈使句改寫為否定句：<br>「Let's talk in class.」`,
+        promptZh: `提示：直接加入否定詞 not 即可，切勿加入助動詞 don't。`,
+        options: [
+          `(A) Don't let's talk in class.`,
+          `(B) Let's don't talk in class.`,
+          `(C) Let's not talk in class.`,
+          `(D) Let's no talking in class.`
+        ],
+        answerIndex: 2,
+        explanation: `Let's 開頭的祈使句改為否定句時，直接在 Let's 後面加上 not 即可：「Let's not talk in class.」，故選 (C)。`,
+        tip: `一般祈使句否定用「Don't + V」，但「Let's + V」的否定是「Let's not + V」，兩者不可混用。`
+      },
+      {
+        id: 28,
+        unit: `writing`,
+        unitLabel: `句型轉換與翻譯`,
+        source: `桃子腳 113-1・土城 114-1 整句翻譯`,
+        topic: `Unit 3 課文核心整句翻譯`,
+        stem: `請選出最正確的整句英文翻譯：<br>「用這扇門，我們可以去很多地方。」`,
+        promptZh: `提示：「用（憑藉某工具／物品）」開頭的介系詞要用哪一個字？「很多地方」要注意單複數。`,
+        options: [
+          `(A) Use this door, we can go to many place.`,
+          `(B) With this door, we can go to many places.`,
+          `(C) In this door, we can going to many places.`,
+          `(D) For this door, we can go many places.`
+        ],
+        answerIndex: 1,
+        explanation: `表示「用／藉助（這扇任意門）」使用介系詞「With this door,」；後接完整子句「we can go to many places.」，many 後方名詞 place 必須加上 s（places），go 後方須有介系詞 to，故選 (B)。`,
+        tip: `翰林 Unit 3 課文原句：「With this door, we can go to many places.」是全國各校段考翻譯題出現率極高的經典句！`
+      }
+    ];
+
+    /* ============================================================
+       2. 應用程式狀態 (State)
+       ============================================================ */
+    let appState = {
+      answers: {},        // { [questionId]: selectedOptionIndex }
+      mode: `all`,        // 'all' | 'mock' | 'wrong'
+      unitFilter: `all`,  // 'all' | 'listening' | 'grammar' | 'reading' | 'writing'
+      mockIds: [],        // 隨機 10 題之題目 ID 陣列
+      wrongIds: [],       // 答錯過或待複習之題目 ID 陣列
+      activeQId: 1
+    };
+
+    /* ============================================================
+       3. 自製清晰 SVG 示意圖表渲染器 (全部引用 CSS Token，無硬編碼色碼)
+       ============================================================ */
+    function renderQuestionSVG(svgId) {
+      if (svgId === `park_scene`) {
+        return `
+          <svg viewBox="0 0 720 190" role="img" aria-label="公園情境三選一圖示" xmlns="http://www.w3.org/2000/svg">
+            <!-- Panel A -->
+            <g transform="translate(8,8)">
+              <rect x="0" y="0" width="224" height="174" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+              <rect x="10" y="10" width="32" height="24" rx="6" fill="var(--primary-container)"/>
+              <text x="26" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-primary-container)">(A)</text>
+              <!-- Boy reading -->
+              <circle cx="72" cy="68" r="14" fill="var(--surface-container-high)" stroke="var(--on-surface)" stroke-width="2"/>
+              <path d="M56 112 Q72 86 88 112 Z" fill="var(--primary)" opacity="0.25" stroke="var(--on-surface)" stroke-width="2"/>
+              <rect x="60" y="92" width="24" height="18" rx="2" fill="var(--background)" stroke="var(--primary)" stroke-width="2"/>
+              <line x1="72" y1="92" x2="72" y2="110" stroke="var(--primary)" stroke-width="1.5"/>
+              <!-- Woman cooking -->
+              <circle cx="160" cy="68" r="14" fill="var(--surface-container-high)" stroke="var(--on-surface)" stroke-width="2"/>
+              <path d="M144 114 Q160 86 176 114 Z" fill="var(--data-3)" opacity="0.25" stroke="var(--on-surface)" stroke-width="2"/>
+              <rect x="136" y="114" width="48" height="10" rx="2" fill="var(--outline-variant)"/>
+              <path d="M146 114 L174 114 L170 102 L150 102 Z" fill="var(--on-surface-variant)"/>
+              <text x="112" y="154" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface-variant)">看書 ＋ 烹飪</text>
+            </g>
+
+            <!-- Panel B -->
+            <g transform="translate(248,8)">
+              <rect x="0" y="0" width="224" height="174" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+              <rect x="10" y="10" width="32" height="24" rx="6" fill="var(--primary-container)"/>
+              <text x="26" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-primary-container)">(B)</text>
+              <!-- Park tree -->
+              <rect x="192" y="70" width="8" height="45" fill="var(--data-3)"/>
+              <circle cx="196" cy="56" r="20" fill="var(--tertiary-soft)" stroke="var(--tertiary)" stroke-width="1.5"/>
+              <!-- Boy playing ball -->
+              <circle cx="58" cy="66" r="13" fill="var(--surface-container-high)" stroke="var(--on-surface)" stroke-width="2"/>
+              <line x1="58" y1="79" x2="58" y2="108" stroke="var(--on-surface)" stroke-width="2.5"/>
+              <line x1="58" y1="88" x2="78" y2="96" stroke="var(--on-surface)" stroke-width="2"/>
+              <line x1="58" y1="108" x2="48" y2="128" stroke="var(--on-surface)" stroke-width="2"/>
+              <line x1="58" y1="108" x2="70" y2="128" stroke="var(--on-surface)" stroke-width="2"/>
+              <circle cx="88" cy="112" r="10" fill="var(--data-3)" stroke="var(--on-surface)" stroke-width="1.5"/>
+              <!-- Woman walking dog -->
+              <circle cx="134" cy="62" r="13" fill="var(--surface-container-high)" stroke="var(--on-surface)" stroke-width="2"/>
+              <path d="M122 104 L146 104 L138 77 L130 77 Z" fill="var(--primary)" opacity="0.25" stroke="var(--on-surface)" stroke-width="2"/>
+              <line x1="128" y1="104" x2="124" y2="126" stroke="var(--on-surface)" stroke-width="2"/>
+              <line x1="140" y1="104" x2="144" y2="126" stroke="var(--on-surface)" stroke-width="2"/>
+              <!-- Leash & dog -->
+              <line x1="142" y1="88" x2="165" y2="112" stroke="var(--primary)" stroke-width="1.5"/>
+              <rect x="162" y="110" width="22" height="12" rx="5" fill="var(--data-3)" opacity="0.65" stroke="var(--on-surface)" stroke-width="1.5"/>
+              <circle cx="184" cy="108" r="6" fill="var(--data-3)" opacity="0.65" stroke="var(--on-surface)" stroke-width="1.5"/>
+              <text x="112" y="154" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface-variant)">公園玩球 ＋ 遛狗散步</text>
+            </g>
+
+            <!-- Panel C -->
+            <g transform="translate(488,8)">
+              <rect x="0" y="0" width="224" height="174" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+              <rect x="10" y="10" width="32" height="24" rx="6" fill="var(--primary-container)"/>
+              <text x="26" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-primary-container)">(C)</text>
+              <!-- Boy jumping rope -->
+              <circle cx="68" cy="64" r="13" fill="var(--surface-container-high)" stroke="var(--on-surface)" stroke-width="2"/>
+              <line x1="68" y1="77" x2="68" y2="104" stroke="var(--on-surface)" stroke-width="2.5"/>
+              <path d="M44 92 Q68 134 92 92" fill="none" stroke="var(--primary)" stroke-width="2"/>
+              <!-- Woman on phone -->
+              <circle cx="156" cy="64" r="13" fill="var(--surface-container-high)" stroke="var(--on-surface)" stroke-width="2"/>
+              <path d="M144 110 L168 110 L160 80 L152 80 Z" fill="var(--data-4)" opacity="0.25" stroke="var(--on-surface)" stroke-width="2"/>
+              <rect x="168" y="64" width="8" height="15" rx="2" fill="var(--on-surface)"/>
+              <text x="112" y="154" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface-variant)">跳繩 ＋ 講手機</text>
+            </g>
+          </svg>
+        `;
+      }
+
+      if (svgId === `museum_signs`) {
+        return `
+          <svg viewBox="0 0 720 170" role="img" aria-label="場所規範標誌三選一" xmlns="http://www.w3.org/2000/svg">
+            <!-- A: Museum No Run / No Talk -->
+            <g transform="translate(8,8)">
+              <rect x="0" y="0" width="224" height="154" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+              <rect x="10" y="10" width="32" height="24" rx="6" fill="var(--primary-container)"/>
+              <text x="26" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-primary-container)">(A)</text>
+              <text x="128" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="800" font-size="13" fill="var(--primary)">MUSEUM 博物館</text>
+              <!-- No Run circle -->
+              <circle cx="72" cy="88" r="28" fill="var(--error-soft)" stroke="var(--error)" stroke-width="3"/>
+              <line x1="52" y1="68" x2="92" y2="108" stroke="var(--error)" stroke-width="3"/>
+              <text x="72" y="92" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="11" fill="var(--on-surface)">RUN</text>
+              <!-- No Talk circle -->
+              <circle cx="156" cy="88" r="28" fill="var(--error-soft)" stroke="var(--error)" stroke-width="3"/>
+              <line x1="136" y1="68" x2="176" y2="108" stroke="var(--error)" stroke-width="3"/>
+              <text x="156" y="92" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="11" fill="var(--on-surface)">TALK</text>
+              <text x="112" y="138" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface-variant)">禁止奔跑、禁止交談</text>
+            </g>
+
+            <!-- B: Library No Eat / No Drink -->
+            <g transform="translate(248,8)">
+              <rect x="0" y="0" width="224" height="154" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+              <rect x="10" y="10" width="32" height="24" rx="6" fill="var(--primary-container)"/>
+              <text x="26" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-primary-container)">(B)</text>
+              <text x="128" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="800" font-size="13" fill="var(--primary)">LIBRARY 圖書館</text>
+              <circle cx="72" cy="88" r="28" fill="var(--error-soft)" stroke="var(--error)" stroke-width="3"/>
+              <line x1="52" y1="68" x2="92" y2="108" stroke="var(--error)" stroke-width="3"/>
+              <text x="72" y="92" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="11" fill="var(--on-surface)">EAT</text>
+              <circle cx="156" cy="88" r="28" fill="var(--error-soft)" stroke="var(--error)" stroke-width="3"/>
+              <line x1="136" y1="68" x2="176" y2="108" stroke="var(--error)" stroke-width="3"/>
+              <text x="156" y="92" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="11" fill="var(--on-surface)">DRINK</text>
+              <text x="112" y="138" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface-variant)">禁止飲食</text>
+            </g>
+
+            <!-- C: Home Turn off TV -->
+            <g transform="translate(488,8)">
+              <rect x="0" y="0" width="224" height="154" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+              <rect x="10" y="10" width="32" height="24" rx="6" fill="var(--primary-container)"/>
+              <text x="26" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-primary-container)">(C)</text>
+              <text x="128" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="800" font-size="13" fill="var(--primary)">HOME 客廳</text>
+              <rect x="78" y="60" width="68" height="46" rx="6" fill="var(--surface-container-low)" stroke="var(--on-surface)" stroke-width="2"/>
+              <line x1="94" y1="70" x2="130" y2="96" stroke="var(--error)" stroke-width="3"/>
+              <text x="112" y="138" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface-variant)">關掉電視</text>
+            </g>
+          </svg>
+        `;
+      }
+
+      if (svgId === `concert_posters`) {
+        return `
+          <svg viewBox="0 0 720 165" role="img" aria-label="演唱會時間海報三選一" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(8,8)">
+              <rect x="0" y="0" width="224" height="148" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+              <rect x="0" y="0" width="224" height="36" rx="10" fill="var(--primary-container)"/>
+              <text x="112" y="24" text-anchor="middle" font-family="var(--font-label)" font-weight="800" font-size="13" fill="var(--on-primary-container)">(A) BOY BAND LIVE</text>
+              <text x="112" y="68" text-anchor="middle" font-family="var(--font-headline)" font-weight="800" font-size="18" fill="var(--on-surface)">Sunday</text>
+              <text x="112" y="96" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="16" fill="var(--primary)">7:00 p.m.</text>
+              <text x="112" y="126" text-anchor="middle" font-family="var(--font-label)" font-size="12" fill="var(--on-surface-variant)">Taipei Dome</text>
+            </g>
+            <g transform="translate(248,8)">
+              <rect x="0" y="0" width="224" height="148" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+              <rect x="0" y="0" width="224" height="36" rx="10" fill="var(--primary-container)"/>
+              <text x="112" y="24" text-anchor="middle" font-family="var(--font-label)" font-weight="800" font-size="13" fill="var(--on-primary-container)">(B) BOY BAND LIVE</text>
+              <text x="112" y="68" text-anchor="middle" font-family="var(--font-headline)" font-weight="800" font-size="18" fill="var(--on-surface)">Saturday</text>
+              <text x="112" y="96" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="16" fill="var(--primary)">7:30 p.m.</text>
+              <text x="112" y="126" text-anchor="middle" font-family="var(--font-label)" font-size="12" fill="var(--on-surface-variant)">Taipei Dome</text>
+            </g>
+            <g transform="translate(488,8)">
+              <rect x="0" y="0" width="224" height="148" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+              <rect x="0" y="0" width="224" height="36" rx="10" fill="var(--primary-container)"/>
+              <text x="112" y="24" text-anchor="middle" font-family="var(--font-label)" font-weight="800" font-size="13" fill="var(--on-primary-container)">(C) BOY BAND LIVE</text>
+              <text x="112" y="68" text-anchor="middle" font-family="var(--font-headline)" font-weight="800" font-size="18" fill="var(--on-surface)">Saturday</text>
+              <text x="112" y="96" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="16" fill="var(--primary)">9:00 a.m.</text>
+              <text x="112" y="126" text-anchor="middle" font-family="var(--font-label)" font-size="12" fill="var(--on-surface-variant)">Taipei Dome</text>
+            </g>
+          </svg>
+        `;
+      }
+
+      if (svgId === `clock_dialogue`) {
+        return `
+          <svg viewBox="0 0 720 130" role="img" aria-label="電影等待時間軸示意圖" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="8" width="704" height="114" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+            <line x1="90" y1="62" x2="620" y2="62" stroke="var(--outline)" stroke-width="2.5"/>
+            <!-- Node 1: Now -->
+            <circle cx="110" cy="62" r="10" fill="var(--primary)"/>
+            <text x="110" y="38" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--primary)">現在時間 (Now)</text>
+            <text x="110" y="95" text-anchor="middle" font-family="var(--font-headline)" font-weight="800" font-size="16" fill="var(--on-surface)">? : ?</text>
+            <!-- Wait 30 min arc -->
+            <path d="M122 50 Q235 20 348 50" fill="none" stroke="var(--tertiary)" stroke-width="2" stroke-dasharray="4 3"/>
+            <text x="235" y="30" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="12" fill="var(--secondary)">等待 30 分鐘 (wait 30 min)</text>
+            <!-- Node 2: Spider-Man -->
+            <circle cx="360" cy="62" r="10" fill="var(--tertiary)"/>
+            <text x="360" y="38" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--secondary)">Spider-Man</text>
+            <text x="360" y="95" text-anchor="middle" font-family="var(--font-headline)" font-weight="800" font-size="16" fill="var(--on-surface)">8:00</text>
+            <!-- Node 3: Iron Man -->
+            <circle cx="600" cy="62" r="10" fill="var(--data-context)"/>
+            <text x="600" y="38" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-surface-variant)">Iron Man</text>
+            <text x="600" y="95" text-anchor="middle" font-family="var(--font-headline)" font-weight="800" font-size="16" fill="var(--on-surface-variant)">9:30</text>
+          </svg>
+        `;
+      }
+
+      if (svgId === `movie_table`) {
+        return `
+          <svg viewBox="0 0 740 315" role="img" aria-label="KYT 電影院時刻表與票價表" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="732" height="307" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+            <!-- Header bar -->
+            <rect x="4" y="4" width="732" height="34" rx="10" fill="var(--primary)"/>
+            <text x="20" y="26" font-family="var(--font-headline)" font-weight="800" font-size="14" fill="var(--on-primary)">KYT Movie Theater — Showtimes &amp; Ticket Price</text>
+            <!-- Showtimes columns -->
+            <rect x="16" y="48" width="708" height="24" fill="var(--surface-container-low)"/>
+            <text x="26" y="64" font-family="var(--font-label)" font-weight="700" font-size="12" fill="var(--on-surface-variant)">MOVIE (片名)</text>
+            <text x="210" y="64" font-family="var(--font-label)" font-weight="700" font-size="12" fill="var(--on-surface-variant)">SHOWTIMES (場次時間・24小時制)</text>
+            <!-- Row 1 -->
+            <text x="26" y="90" font-family="var(--font-body)" font-weight="700" font-size="13" fill="var(--on-surface)">Baby Boss 2</text>
+            <text x="210" y="90" font-family="var(--font-label)" font-size="13" fill="var(--on-surface)">10:00   13:00   15:00   17:30   19:30   21:30   23:30</text>
+            <line x1="16" y1="98" x2="724" y2="98" stroke="var(--outline-variant)" stroke-width="1"/>
+            <!-- Row 2 -->
+            <text x="26" y="114" font-family="var(--font-body)" font-weight="700" font-size="13" fill="var(--on-surface)">Black Widow</text>
+            <text x="210" y="114" font-family="var(--font-label)" font-size="13" fill="var(--on-surface)">10:50   13:40   15:30   17:50   19:30   21:40   23:00</text>
+            <line x1="16" y1="122" x2="724" y2="122" stroke="var(--outline-variant)" stroke-width="1"/>
+            <!-- Row 3 -->
+            <text x="26" y="138" font-family="var(--font-body)" font-weight="700" font-size="13" fill="var(--on-surface)">The King's Man</text>
+            <text x="210" y="138" font-family="var(--font-label)" font-size="13" fill="var(--on-surface)">11:00   12:00   14:00   16:00   17:00</text>
+            <line x1="16" y1="146" x2="724" y2="146" stroke="var(--outline-variant)" stroke-width="1"/>
+            <!-- Row 4 -->
+            <text x="26" y="162" font-family="var(--font-body)" font-weight="700" font-size="13" fill="var(--on-surface)">Fast &amp; Furious 9</text>
+            <text x="210" y="162" font-family="var(--font-label)" font-size="13" fill="var(--on-surface)">12:20   14:30   17:00   20:00   22:30   00:30</text>
+            <line x1="16" y1="170" x2="724" y2="170" stroke="var(--outline-variant)" stroke-width="1"/>
+            <!-- Row 5 -->
+            <text x="26" y="186" font-family="var(--font-body)" font-weight="700" font-size="13" fill="var(--on-surface)">Godzilla vs. Kong</text>
+            <text x="210" y="186" font-family="var(--font-label)" font-size="13" fill="var(--on-surface)">10:00   13:40   15:20   16:05</text>
+
+            <!-- Ticket Price Header -->
+            <rect x="16" y="200" width="708" height="24" fill="var(--surface-container)"/>
+            <text x="26" y="216" font-family="var(--font-label)" font-weight="700" font-size="12" fill="var(--on-primary-container)">TICKET PRICE</text>
+            <text x="155" y="216" font-family="var(--font-label)" font-weight="700" font-size="12" fill="var(--on-primary-container)">Adults (&gt;18)</text>
+            <text x="275" y="216" font-family="var(--font-label)" font-weight="700" font-size="12" fill="var(--on-primary-container)">Students (&lt;18)</text>
+            <text x="415" y="216" font-family="var(--font-label)" font-weight="700" font-size="12" fill="var(--on-primary-container)">Morning-Bird (7–11 a.m.)</text>
+            <text x="580" y="216" font-family="var(--font-label)" font-weight="700" font-size="12" fill="var(--on-primary-container)">Night-Owl (12–6 a.m.)</text>
+
+            <text x="26" y="244" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-surface)">Weekday (平日)</text>
+            <text x="160" y="244" font-family="var(--font-label)" font-size="13" fill="var(--on-surface)">NT$270</text>
+            <text x="285" y="244" font-family="var(--font-label)" font-size="13" fill="var(--on-surface)">NT$250</text>
+            <text x="435" y="244" font-family="var(--font-label)" font-size="13" fill="var(--on-surface)">NT$200</text>
+            <text x="605" y="244" font-family="var(--font-label)" font-size="13" fill="var(--on-surface)">NT$220</text>
+            <line x1="16" y1="252" x2="724" y2="252" stroke="var(--outline-variant)" stroke-width="1"/>
+
+            <text x="26" y="272" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-surface)">Weekend (週末)</text>
+            <text x="160" y="272" font-family="var(--font-label)" font-size="13" fill="var(--on-surface)">NT$300</text>
+            <text x="285" y="272" font-family="var(--font-label)" font-size="13" fill="var(--on-surface)">NT$280</text>
+            <text x="435" y="272" font-family="var(--font-label)" font-size="13" fill="var(--on-surface)">NT$200</text>
+            <text x="605" y="272" font-family="var(--font-label)" font-size="13" fill="var(--on-surface)">NT$240</text>
+
+            <rect x="16" y="282" width="708" height="22" rx="4" fill="var(--tertiary-soft)"/>
+            <text x="26" y="297" font-family="var(--font-label)" font-weight="700" font-size="12" fill="var(--secondary)">★ Weekday's Special (平日優惠): Buy 3 tickets and get 1 free!</text>
+          </svg>
+        `;
+      }
+
+      if (svgId === `talent_chart`) {
+        return `
+          <svg viewBox="0 0 720 210" role="img" aria-label="全校 800 名學生才藝長條圖" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="712" height="202" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+            <text x="20" y="28" font-family="var(--font-headline)" font-weight="700" font-size="14" fill="var(--on-surface)">全校 800 名學生才藝統計 (School Talents Breakdown)</text>
+            <!-- Gridlines -->
+            <line x1="160" y1="45" x2="160" y2="188" stroke="var(--outline)" stroke-width="1"/>
+            <line x1="280" y1="45" x2="280" y2="188" stroke="var(--outline-variant)" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="400" y1="45" x2="400" y2="188" stroke="var(--outline-variant)" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="520" y1="45" x2="520" y2="188" stroke="var(--outline-variant)" stroke-width="1" stroke-dasharray="3 3"/>
+            <!-- Sing 40% -->
+            <text x="150" y="68" text-anchor="end" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-surface)">Sing (唱歌)</text>
+            <rect x="160" y="53" width="384" height="20" rx="4" fill="var(--data-1)"/>
+            <text x="554" y="68" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--primary)">40%</text>
+            <!-- Basketball 30% -->
+            <text x="150" y="98" text-anchor="end" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-surface)">Basketball (籃球)</text>
+            <rect x="160" y="83" width="288" height="20" rx="4" fill="var(--data-2)"/>
+            <text x="458" y="98" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--secondary)">30%</text>
+            <!-- Paint 15% -->
+            <text x="150" y="128" text-anchor="end" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-surface)">Paint (繪畫)</text>
+            <rect x="160" y="113" width="144" height="20" rx="4" fill="var(--data-4)"/>
+            <text x="314" y="128" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-surface)">15%</text>
+            <!-- Dance 80 students -->
+            <text x="150" y="158" text-anchor="end" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-surface)">Dance (跳舞)</text>
+            <rect x="160" y="143" width="96" height="20" rx="4" fill="var(--data-3)"/>
+            <text x="266" y="158" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-surface)">80 students</text>
+            <!-- Baseball 40 students -->
+            <text x="150" y="188" text-anchor="end" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-surface)">Baseball (棒球)</text>
+            <rect x="160" y="173" width="48" height="20" rx="4" fill="var(--data-2)" opacity="0.75"/>
+            <text x="218" y="188" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-surface)">40 students</text>
+          </svg>
+        `;
+      }
+
+      if (svgId === `jisoo_schedule`) {
+        return `
+          <svg viewBox="0 0 740 218" role="img" aria-label="Jisoo 每週課程表" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="732" height="210" rx="10" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1.5"/>
+            <!-- Header Row -->
+            <rect x="4" y="4" width="732" height="36" rx="10" fill="var(--primary)"/>
+            <text x="64" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-primary)">Time</text>
+            <text x="184" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-primary)">M. (Mon)</text>
+            <text x="304" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-primary)">T. (Tue)</text>
+            <text x="424" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-primary)">W. (Wed)</text>
+            <text x="544" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-primary)">Th. (Thu)</text>
+            <text x="664" y="27" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="13" fill="var(--on-primary)">F. (Fri)</text>
+
+            <!-- Row 1: 09:15 - 10:00 -->
+            <rect x="10" y="46" width="720" height="38" fill="var(--surface-container-low)" rx="4"/>
+            <text x="64" y="69" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="12" fill="var(--on-surface-variant)">09:15–10:00</text>
+            <text x="184" y="69" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Swimming</text>
+            <text x="304" y="69" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Cooking</text>
+            <text x="424" y="69" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Swimming</text>
+            <text x="544" y="69" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Painting</text>
+            <text x="664" y="69" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Cooking</text>
+
+            <!-- Row 2: 10:10 - 10:55 -->
+            <text x="64" y="109" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="12" fill="var(--on-surface-variant)">10:10–10:55</text>
+            <text x="184" y="109" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Cooking</text>
+            <text x="304" y="109" text-anchor="middle" font-family="var(--font-body)" font-weight="700" font-size="12" fill="var(--primary)">Dance</text>
+            <text x="424" y="109" text-anchor="middle" font-family="var(--font-body)" font-weight="700" font-size="12" fill="var(--secondary)">Music Videos</text>
+            <text x="544" y="109" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Cooking</text>
+            <text x="664" y="109" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Swimming</text>
+
+            <!-- Row 3: 11:05 - 11:50 -->
+            <rect x="10" y="124" width="720" height="38" fill="var(--surface-container-low)" rx="4"/>
+            <text x="64" y="147" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="12" fill="var(--on-surface-variant)">11:05–11:50</text>
+            <text x="184" y="147" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Music Videos</text>
+            <text x="304" y="147" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Painting</text>
+            <text x="424" y="147" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Cooking</text>
+            <text x="544" y="147" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Music Videos</text>
+            <text x="664" y="147" text-anchor="middle" font-family="var(--font-body)" font-weight="700" font-size="12" fill="var(--primary)">Dance</text>
+
+            <!-- Row 4: 13:15 - 14:00 -->
+            <text x="64" y="187" text-anchor="middle" font-family="var(--font-label)" font-weight="700" font-size="12" fill="var(--on-surface-variant)">13:15–14:00</text>
+            <text x="184" y="187" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Picture Book</text>
+            <text x="304" y="187" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Picture Book</text>
+            <text x="424" y="187" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Picture Book</text>
+            <text x="544" y="187" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Picture Book</text>
+            <text x="664" y="187" text-anchor="middle" font-family="var(--font-body)" font-size="12" fill="var(--on-surface)">Picture Book</text>
+          </svg>
+        `;
+      }
+
+      return ``;
+    }
+
+    /* ============================================================
+       4. 輔助與資料過濾邏輯
+       ============================================================ */
+    function generateMockIds() {
+      // 從各單元均衡抽取共 10 題：聽力 2 + 文法 4 + 閱讀 2 + 句型 2
+      const pick = (unitId, n) => {
+        const pool = QUESTIONS.filter(q => q.unit === unitId).map(q => q.id);
+        for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const tmp = pool[i];
+          pool[i] = pool[j];
+          pool[j] = tmp;
+        }
+        return pool.slice(0, n);
+      };
+      const ids = [
+        ...pick(`listening`, 2),
+        ...pick(`grammar`, 4),
+        ...pick(`reading`, 2),
+        ...pick(`writing`, 2)
+      ];
+      return ids.sort((a, b) => a - b);
+    }
+
+    function getActiveQuestions() {
+      let list = QUESTIONS;
+      if (appState.mode === `mock`) {
+        if (!Array.isArray(appState.mockIds) || appState.mockIds.length === 0) {
+          appState.mockIds = generateMockIds();
+        }
+        list = QUESTIONS.filter(q => appState.mockIds.includes(q.id));
+      } else if (appState.mode === `wrong`) {
+        list = QUESTIONS.filter(q => appState.wrongIds.includes(q.id));
+      }
+
+      if (appState.unitFilter !== `all`) {
+        list = list.filter(q => q.unit === appState.unitFilter);
+      }
+      return list;
+    }
+
+    function computeWrongIdsFromAnswers() {
+      const ids = [];
+      for (const q of QUESTIONS) {
+        const picked = appState.answers[q.id];
+        if (picked !== undefined && picked !== q.answerIndex) {
+          ids.push(q.id);
+        }
+      }
+      return ids;
+    }
+
+    /* ============================================================
+       5. 狀態持久化 (notebookAppApi)
+       ============================================================ */
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState({
+            answers: appState.answers,
+            mode: appState.mode,
+            unitFilter: appState.unitFilter,
+            mockIds: appState.mockIds,
+            wrongIds: appState.wrongIds,
+            activeQId: appState.activeQId
+          });
+        }
+      } catch (err) {
+        // 靜默容錯
+      }
+    }
+
+    async function loadSavedState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            if (saved.answers && typeof saved.answers === `object`) appState.answers = saved.answers;
+            if (typeof saved.mode === `string`) appState.mode = saved.mode;
+            if (typeof saved.unitFilter === `string`) appState.unitFilter = saved.unitFilter;
+            if (Array.isArray(saved.mockIds)) appState.mockIds = saved.mockIds;
+            if (Array.isArray(saved.wrongIds)) appState.wrongIds = saved.wrongIds;
+            if (typeof saved.activeQId === `number`) appState.activeQId = saved.activeQId;
+          }
+        }
+      } catch (err) {
+        // 靜默容錯
+      }
+    }
+
+    /* ============================================================
+       6. UI 互動處理 (全數使用 hoisted function 宣告)
+       ============================================================ */
+    function showBanner(msg, tone) {
+      const el = document.getElementById(`status-banner`);
+      const text = document.getElementById(`status-banner-text`);
+      if (!el || !text) return;
+      text.textContent = msg;
+      el.setAttribute(`data-tone`, tone || `info`);
+      el.classList.add(`visible`);
+    }
+
+    function hideBanner() {
+      const el = document.getElementById(`status-banner`);
+      if (el) el.classList.remove(`visible`);
+    }
+
+    function setMode(mode) {
+      appState.mode = mode;
+      if (mode === `mock` && (!appState.mockIds || appState.mockIds.length === 0)) {
+        appState.mockIds = generateMockIds();
+      }
+      if (mode === `wrong`) {
+        appState.wrongIds = computeWrongIdsFromAnswers();
+      }
+      renderAll();
+      persistState();
+    }
+
+    function reshuffleMock() {
+      appState.mockIds = generateMockIds();
+      // 模擬重抽時清除該 10 題先前的作答以便重新測驗？保留全局或提示，這裏清除新抽出題目的舊作答讓模擬更真實
+      for (const qId of appState.mockIds) {
+        delete appState.answers[qId];
+      }
+      appState.wrongIds = computeWrongIdsFromAnswers();
+      showBanner(`已重新抽取 10 題段考模擬試題（涵蓋四大單元）。`, `info`);
+      renderAll();
+      persistState();
+    }
+
+    function setUnitFilter(unit) {
+      appState.unitFilter = unit;
+      renderAll();
+      persistState();
+    }
+
+    function jumpToQuestion(qId) {
+      appState.activeQId = qId;
+      renderJumpGrid();
+      const card = document.getElementById(`q-card-${qId}`);
+      if (card) {
+        card.scrollIntoView({ behavior: `smooth`, block: `center` });
+        card.classList.remove(`highlight-pulse`);
+        void card.offsetWidth;
+        card.classList.add(`highlight-pulse`);
+      }
+    }
+
+    function selectOption(qId, optIndex) {
+      const q = QUESTIONS.find(item => item.id === qId);
+      if (!q) return;
+
+      // 在非錯題複習模式下，已作答則鎖定避免誤觸；在錯題集中複習模式下允許重新作答以驗證是否修正！
+      if (appState.mode !== `wrong` && appState.answers[qId] !== undefined) {
+        return;
+      }
+
+      appState.answers[qId] = optIndex;
+      appState.activeQId = qId;
+      if (appState.mode !== `wrong`) {
+        appState.wrongIds = computeWrongIdsFromAnswers();
+      }
+
+      renderAll();
+      persistState();
+    }
+
+    function toggleScript(qId) {
+      const el = document.getElementById(`script-${qId}`);
+      const btn = document.getElementById(`btn-script-${qId}`);
+      if (!el || !btn) return;
+      const isOpen = el.classList.toggle(`open`);
+      btn.textContent = isOpen ? `隱藏聽力原文` : `顯示聽力原文`;
+    }
+
+    function speakAudio(qId, rate) {
+      const q = QUESTIONS.find(item => item.id === qId);
+      if (!q || !q.audioText) return;
+      if (!(`speechSynthesis` in window)) {
+        showBanner(`目前環境不支援瀏覽器語音合成，請點擊「顯示聽力原文」閱讀題目內容。`, `info`);
+        const el = document.getElementById(`script-${qId}`);
+        if (el) el.classList.add(`open`);
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(q.audioText);
+      utter.lang = `en-US`;
+      utter.rate = rate || 1.0;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function handleResetQuiz(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.innerHTML = `<i data-lucide="alert-triangle" aria-hidden="true"></i><span>確定清除？再點一次重置</span>`;
+        if (window.lucide) window.lucide.createIcons();
+        setTimeout(() => {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.innerHTML = `<i data-lucide="rotate-ccw" aria-hidden="true"></i><span>重新作答</span>`;
+            if (window.lucide) window.lucide.createIcons();
+          }
+        }, 4000);
+        return;
+      }
+
+      btn.dataset.armed = `false`;
+      btn.innerHTML = `<i data-lucide="rotate-ccw" aria-hidden="true"></i><span>重新作答</span>`;
+      appState.answers = {};
+      appState.wrongIds = [];
+      appState.mockIds = generateMockIds();
+      appState.activeQId = 1;
+      showBanner(`已清除所有作答紀錄，您可以重新開始測驗。`, `ok`);
+      renderAll();
+      persistState();
+    }
+
+    function exportScoreReport() {
+      const activeList = getActiveQuestions();
+      const scopeList = activeList.length > 0 ? activeList : QUESTIONS;
+      let answered = 0;
+      let correct = 0;
+      for (const q of scopeList) {
+        if (appState.answers[q.id] !== undefined) {
+          answered++;
+          if (appState.answers[q.id] === q.answerIndex) correct++;
+        }
+      }
+      const total = scopeList.length;
+      const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+      const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+      const nowStr = new Date().toLocaleString(`zh-TW`);
+
+      const lines = [
+        `==================================================`,
+        `國中七年級英文第二次段考｜即時評分診斷成績單`,
+        `==================================================`,
+        `匯出時間：${nowStr}`,
+        `測驗範圍：翰林版 Book 1 Unit 3 ~ Review 2`,
+        `目前檢視題數：${total} 題（已作答 ${answered} 題）`,
+        `百分制得分：${score} 分（${score >= 60 ? `達及格標準` : `未達 60 分及格線`}）`,
+        `答對 / 答錯：${correct} 對 / ${answered - correct} 錯（已作答正確率 ${accuracy}%）`,
+        ``,
+        `--- 各單元表現診斷 ---`
+      ];
+
+      for (const u of UNITS) {
+        const uQs = QUESTIONS.filter(q => q.unit === u.id);
+        let uAns = 0;
+        let uCor = 0;
+        for (const q of uQs) {
+          if (appState.answers[q.id] !== undefined) {
+            uAns++;
+            if (appState.answers[q.id] === q.answerIndex) uCor++;
+          }
+        }
+        const uAcc = uAns > 0 ? `${Math.round((uCor / uAns) * 100)}%` : `--`;
+        lines.push(`${u.name}：總題數 ${uQs.length}｜已答 ${uAns}｜答對 ${uCor}｜正確率 ${uAcc}`);
+      }
+
+      const wrongList = QUESTIONS.filter(q => appState.answers[q.id] !== undefined && appState.answers[q.id] !== q.answerIndex);
+      lines.push(``);
+      lines.push(`--- 錯題複習清單（共 ${wrongList.length} 題）---`);
+      if (wrongList.length === 0) {
+        lines.push(`目前尚無錯題，繼續保持！`);
+      } else {
+        for (const wq of wrongList) {
+          lines.push(`[Q${wq.id}・${wq.unitLabel}] 正確答案：${wq.options[wq.answerIndex]}`);
+          lines.push(`  考點提醒：${wq.tip}`);
+        }
+      }
+
+      const reportText = lines.join(`\n`);
+      const filename = `七年級英文第二次段考成績單_${new Date().toISOString().slice(0, 10)}.txt`;
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: reportText,
+          contentType: `text/plain`,
+          encoding: `UTF-8`,
+          filename: filename
+        });
+        showBanner(`成績單已匯出下載（${filename}）。`, `ok`);
+      } else {
+        const blob = new Blob([reportText], { type: `text/plain;charset=utf-8` });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement(`a`);
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showBanner(`成績單已下載（${filename}）。`, `ok`);
+      }
+    }
+
+    function printScoreReport() {
+      window.print();
+    }
+
+    function jumpToUnitPractice(unitId) {
+      appState.mode = `all`;
+      appState.unitFilter = unitId;
+      renderAll();
+      persistState();
+      const listEl = document.getElementById(`questions-list`);
+      if (listEl) listEl.scrollIntoView({ behavior: `smooth`, block: `start` });
+    }
+
+    /* ============================================================
+       7. 畫面渲染函式 (KPI, 量尺, 跳轉區, 題目列表, 弱點診斷表)
+       ============================================================ */
+    function renderDashboard() {
+      // 計算「本回顯示範圍」（如果目前是 mock 抽測或全卷，KPI 即時反映本回作答與得分）
+      const activeList = getActiveQuestions();
+      const scopeList = appState.mode === `mock`
+        ? QUESTIONS.filter(q => appState.mockIds.includes(q.id))
+        : (appState.mode === `wrong` ? QUESTIONS.filter(q => appState.wrongIds.includes(q.id)) : activeList);
+
+      const total = scopeList.length;
+      let answered = 0;
+      let correct = 0;
+      let wrong = 0;
+
+      for (const q of scopeList) {
+        const ans = appState.answers[q.id];
+        if (ans !== undefined) {
+          answered++;
+          if (ans === q.answerIndex) correct++;
+          else wrong++;
+        }
+      }
+
+      const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+      const progressPct = total > 0 ? Math.round((answered / total) * 100) : 0;
+      const accuracyPct = answered > 0 ? Math.round((correct / answered) * 100) : null;
+
+      // KPI 1: 即時百分制得分
+      const scoreCard = document.getElementById(`kpi-score-card`);
+      const scoreVal = document.getElementById(`kpi-score-value`);
+      const scoreCap = document.getElementById(`kpi-score-caption`);
+      if (scoreCard && scoreVal && scoreCap) {
+        scoreVal.textContent = `${score} 分`;
+        if (answered === 0) {
+          scoreCard.setAttribute(`data-status`, `info`);
+          scoreCap.setAttribute(`data-tone`, `info`);
+          scoreCap.textContent = `尚未作答，點選題目選項立即計分`;
+        } else if (score >= 80) {
+          scoreCard.setAttribute(`data-status`, `ok`);
+          scoreCap.setAttribute(`data-tone`, `ok`);
+          scoreCap.textContent = `精熟表現！已超越 80 分精熟門檻`;
+        } else if (score >= 60) {
+          scoreCard.setAttribute(`data-status`, `ok`);
+          scoreCap.setAttribute(`data-tone`, `ok`);
+          scoreCap.textContent = `已達 60 分段考及格基準線`;
+        } else {
+          scoreCard.setAttribute(`data-status`, `alert`);
+          scoreCap.setAttribute(`data-tone`, `alert`);
+          scoreCap.textContent = `距 60 分及格線尚差 ${60 - score} 分`;
+        }
+      }
+
+      // KPI 2: 作答進度
+      const progVal = document.getElementById(`kpi-progress-value`);
+      const progBar = document.getElementById(`kpi-progress-bar`);
+      const progCap = document.getElementById(`kpi-progress-caption`);
+      const modeName = appState.mode === `mock` ? `模擬抽測` : (appState.mode === `wrong` ? `錯題複習` : `完整練習`);
+      if (progVal && progBar && progCap) {
+        progVal.textContent = `${answered} / ${total} 題`;
+        progBar.style.width = `${progressPct}%`;
+        progCap.textContent = `目前模式：${modeName}（完成 ${progressPct}%）`;
+      }
+
+      // KPI 3: 答對 / 答錯題數
+      const cntCard = document.getElementById(`kpi-counts-card`);
+      const cntVal = document.getElementById(`kpi-counts-value`);
+      const cntCap = document.getElementById(`kpi-counts-caption`);
+      if (cntCard && cntVal && cntCap) {
+        cntVal.textContent = `${correct} 對 / ${wrong} 錯`;
+        cntCard.setAttribute(`data-status`, wrong > 0 ? `warn` : (correct > 0 ? `ok` : `info`));
+        cntCap.textContent = total > 0 ? `本回共 ${total} 題即時統計` : `目前清單沒有待練習題目`;
+      }
+
+      // KPI 4: 已作答正確率
+      const accCard = document.getElementById(`kpi-accuracy-card`);
+      const accVal = document.getElementById(`kpi-accuracy-value`);
+      const accCap = document.getElementById(`kpi-accuracy-caption`);
+      if (accCard && accVal && accCap) {
+        if (accuracyPct === null) {
+          accVal.textContent = `--`;
+          accCard.setAttribute(`data-status`, `info`);
+          accCap.setAttribute(`data-tone`, `info`);
+          accCap.textContent = `完成 1 題後顯示正確率`;
+        } else {
+          accVal.textContent = `${accuracyPct}%`;
+          if (accuracyPct >= 80) {
+            accCard.setAttribute(`data-status`, `ok`);
+            accCap.setAttribute(`data-tone`, `ok`);
+            accCap.textContent = `狀態優良，維持答題手感`;
+          } else if (accuracyPct >= 60) {
+            accCard.setAttribute(`data-status`, `info`);
+            accCap.setAttribute(`data-tone`, `info`);
+            accCap.textContent = `穩定達標，可再複習易錯細節`;
+          } else {
+            accCard.setAttribute(`data-status`, `alert`);
+            accCap.setAttribute(`data-tone`, `alert`);
+            accCap.textContent = `建議先檢視解析並加強錯題`;
+          }
+        }
+      }
+
+      // 量尺即時移動指標
+      const pointer = document.getElementById(`ruler-pointer`);
+      const pointerBadge = document.getElementById(`ruler-pointer-badge`);
+      const rulerFill = document.getElementById(`ruler-fill`);
+      if (pointer && pointerBadge && rulerFill) {
+        const clamped = Math.max(0, Math.min(100, score));
+        pointer.style.left = `${clamped}%`;
+        rulerFill.style.width = `${clamped}%`;
+        pointerBadge.textContent = `目前 ${score} 分`;
+
+        const rulerStatus = answered === 0 ? `info` : (score >= 60 ? `ok` : `alert`);
+        pointerBadge.setAttribute(`data-status`, rulerStatus);
+        rulerFill.setAttribute(`data-status`, rulerStatus);
+      }
+    }
+
+    function renderControls() {
+      const modeAll = document.getElementById(`mode-all`);
+      const modeMock = document.getElementById(`mode-mock`);
+      const modeWrong = document.getElementById(`mode-wrong`);
+      const reshuffleWrap = document.getElementById(`mock-reshuffle-wrap`);
+      const wrongBadge = document.getElementById(`badge-mode-wrong`);
+
+      const currentWrongCount = computeWrongIdsFromAnswers().length;
+      if (wrongBadge) wrongBadge.textContent = String(currentWrongCount);
+
+      if (modeAll) modeAll.setAttribute(`aria-pressed`, String(appState.mode === `all`));
+      if (modeMock) modeMock.setAttribute(`aria-pressed`, String(appState.mode === `mock`));
+      if (modeWrong) modeWrong.setAttribute(`aria-pressed`, String(appState.mode === `wrong`));
+      if (reshuffleWrap) reshuffleWrap.style.display = appState.mode === `mock` ? `block` : `none`;
+
+      const unitButtons = document.querySelectorAll(`#unit-filter-group .pill-btn`);
+      unitButtons.forEach(btn => {
+        const u = btn.getAttribute(`data-unit`);
+        btn.setAttribute(`aria-pressed`, String(u === appState.unitFilter));
+      });
+    }
+
+    function renderJumpGrid() {
+      const grid = document.getElementById(`jump-grid`);
+      const title = document.getElementById(`jump-title`);
+      if (!grid || !title) return;
+
+      const list = getActiveQuestions();
+      title.textContent = `快速跳轉題號區（本回顯示 ${list.length} 題）`;
+
+      if (list.length === 0) {
+        grid.innerHTML = `<span style="font-size: 0.875rem; color: var(--on-surface-variant);">目前篩選條件下沒有題目。</span>`;
+        return;
+      }
+
+      grid.innerHTML = list.map((q, idx) => {
+        const picked = appState.answers[q.id];
+        let state = `unanswered`;
+        if (picked !== undefined) {
+          state = picked === q.answerIndex ? `correct` : `wrong`;
+        }
+        const isActive = appState.activeQId === q.id ? `true` : `false`;
+        return `<button type="button" class="jump-btn" data-state="${state}" data-active="${isActive}" onclick="jumpToQuestion(${q.id})" aria-label="跳至第 ${idx + 1} 題（題庫 Q${q.id}）">${idx + 1}</button>`;
+      }).join(``);
+    }
+
+    function renderQuestions() {
+      const container = document.getElementById(`questions-list`);
+      if (!container) return;
+
+      const list = getActiveQuestions();
+
+      if (list.length === 0) {
+        if (appState.mode === `wrong`) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <h3 class="section-title">目前沒有需要複習的錯題</h3>
+              <p class="section-sub">太棒了！您在目前的作答紀錄中還沒有答錯的題目，或是尚未開始作答。</p>
+              <button type="button" class="btn btn-primary" onclick="setMode('all')">回到完整練習</button>
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="empty-state">
+              <h3 class="section-title">此單元在目前抽測中未出現題目</h3>
+              <p class="section-sub">您可以切換為「全部單元」或回到「完整練習」查看所有題目。</p>
+              <button type="button" class="btn btn-primary" onclick="setUnitFilter('all')">顯示全部單元</button>
+            </div>
+          `;
+        }
+        return;
+      }
+
+      const letters = [`A`, `B`, `C`, `D`];
+      container.innerHTML = list.map((q, idx) => {
+        const picked = appState.answers[q.id];
+        const isAnswered = picked !== undefined;
+        const isCorrect = isAnswered && picked === q.answerIndex;
+        const cardState = !isAnswered ? `unanswered` : (isCorrect ? `correct` : `wrong`);
+        const statusChip = !isAnswered
+          ? `<span class="chip" data-status="neutral">尚未作答</span>`
+          : (isCorrect
+              ? `<span class="chip">答對了</span>`
+              : `<span class="chip" data-status="alert">答錯需複習</span>`);
+
+        const listeningHTML = q.audioText ? `
+          <div class="listening-bar">
+            <div class="listening-controls">
+              <button type="button" class="btn btn-primary btn-sm" onclick="speakAudio(${q.id}, 1.0)">
+                <i data-lucide="volume-2" aria-hidden="true"></i>
+                <span>朗讀英語音訊 (1.0x)</span>
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="speakAudio(${q.id}, 0.78)">
+                <i data-lucide="gauge" aria-hidden="true"></i>
+                <span>慢速朗讀 (0.8x)</span>
+              </button>
+              <button type="button" id="btn-script-${q.id}" class="btn btn-secondary btn-sm" onclick="toggleScript(${q.id})">顯示聽力原文</button>
+            </div>
+            <div id="script-${q.id}" class="listening-script">${q.scriptDisplay}</div>
+          </div>
+        ` : ``;
+
+        const svgHTML = q.svgId ? `
+          <div class="visual-box">
+            <div class="visual-caption">${q.svgCaption || `題組參考圖表`}</div>
+            ${renderQuestionSVG(q.svgId)}
+          </div>
+        ` : ``;
+
+        const isLongOption = q.options.some(o => o.length > 26);
+        const optionsHTML = q.options.map((opt, oIdx) => {
+          let resultAttr = ``;
+          let iconHTML = ``;
+          if (isAnswered) {
+            if (oIdx === q.answerIndex) {
+              resultAttr = `data-result="correct"`;
+              iconHTML = `<span class="opt-status-icon" aria-label="正確答案"><i data-lucide="check-circle-2" aria-hidden="true"></i></span>`;
+            } else if (oIdx === picked && picked !== q.answerIndex) {
+              resultAttr = `data-result="wrong"`;
+              iconHTML = `<span class="opt-status-icon" aria-label="您的誤選"><i data-lucide="x-circle" aria-hidden="true"></i></span>`;
+            }
+          }
+          const disableAttr = (isAnswered && appState.mode !== `wrong`) ? `disabled` : ``;
+          return `
+            <button type="button" class="opt-btn" ${resultAttr} ${disableAttr} onclick="selectOption(${q.id}, ${oIdx})">
+              <span class="opt-letter">${letters[oIdx]}</span>
+              <span class="opt-text">${opt.replace(/^\([A-D]\)\s*/, ``)}</span>
+              ${iconHTML}
+            </button>
+          `;
+        }).join(``);
+
+        const expHTML = isAnswered ? `
+          <div class="explanation-box" data-correct="${isCorrect}">
+            <div class="exp-heading">
+              <i data-lucide="${isCorrect ? `check-circle-2` : `alert-circle`}" aria-hidden="true"></i>
+              <span>${isCorrect ? `批改結果：答對了！` : `批改結果：答錯了 — 正確答案為 (${letters[q.answerIndex]})`}</span>
+            </div>
+            <div class="exp-body">${q.explanation.replace(/\n/g, `<br>`)}</div>
+            <div class="exp-tip"><strong>段考重點提醒：</strong>${q.tip}</div>
+          </div>
+        ` : ``;
+
+        return `
+          <article class="question-card" id="q-card-${q.id}" data-state="${cardState}">
+            <div class="q-meta">
+              <div class="q-badges">
+                <span class="q-num-badge">第 ${idx + 1} 題 (Q${q.id})</span>
+                <span class="chip" data-status="info">${q.unitLabel}</span>
+                <span class="chip" data-status="neutral">${q.source}・${q.topic}</span>
+              </div>
+              ${statusChip}
+            </div>
+            ${listeningHTML}
+            ${svgHTML}
+            <div>
+              <p class="q-stem">${q.stem}</p>
+              <p class="q-prompt-zh">${q.promptZh}</p>
+            </div>
+            <div class="options-grid ${isLongOption ? `single-col` : ``}">
+              ${optionsHTML}
+            </div>
+            ${expHTML}
+          </article>
+        `;
+      }).join(``);
+    }
+
+    function renderDiagnostics() {
+      const tbody = document.getElementById(`diag-tbody`);
+      const adviceEl = document.getElementById(`diag-advice`);
+      if (!tbody || !adviceEl) return;
+
+      let weakestUnit = null;
+      let weakestAcc = 101;
+      let totalAnsweredAll = 0;
+
+      tbody.innerHTML = UNITS.map(u => {
+        const uQs = QUESTIONS.filter(q => q.unit === u.id);
+        let ans = 0;
+        let cor = 0;
+        for (const q of uQs) {
+          if (appState.answers[q.id] !== undefined) {
+            ans++;
+            totalAnsweredAll++;
+            if (appState.answers[q.id] === q.answerIndex) cor++;
+          }
+        }
+        const acc = ans > 0 ? Math.round((cor / ans) * 100) : null;
+        if (acc !== null && acc < weakestAcc) {
+          weakestAcc = acc;
+          weakestUnit = u;
+        }
+
+        let badge = `<span class="chip" data-status="neutral">尚未作答</span>`;
+        if (acc !== null) {
+          if (acc >= 80) badge = `<span class="chip">精熟達標</span>`;
+          else if (acc >= 60) badge = `<span class="chip" data-status="info">基礎穩固</span>`;
+          else badge = `<span class="chip" data-status="alert">尚待加強</span>`;
+        }
+
+        return `
+          <tr>
+            <td><strong>${u.name}</strong></td>
+            <td class="num">${uQs.length}</td>
+            <td class="num">${ans}</td>
+            <td class="num">${cor}</td>
+            <td class="num">${acc !== null ? `${acc}%` : `--`}</td>
+            <td>${badge}</td>
+            <td class="diag-action-col">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="jumpToUnitPractice('${u.id}')">練習此單元</button>
+            </td>
+          </tr>
+        `;
+      }).join(``);
+
+      if (totalAnsweredAll === 0) {
+        adviceEl.innerHTML = `<strong>診斷提示：</strong>尚未有作答紀錄，建議可先切換至「段考模擬抽測（隨機 10 題）」快速檢測目前實力，系統將自動為您定位弱點單元。`;
+      } else if (weakestUnit && weakestAcc < 60) {
+        adviceEl.innerHTML = `<strong>弱點補強建議：</strong>目前「<strong>${weakestUnit.name}</strong>」正確率為 <strong>${weakestAcc}%</strong>，低於 60% 及格門檻。建議點擊上方「錯題集中複習」或點擊該列「練習此單元」針對解析重點反覆演練。`;
+      } else if (weakestUnit && weakestAcc < 80) {
+        adviceEl.innerHTML = `<strong>進階精熟建議：</strong>整體基礎穩固！若想衝刺 80 分以上精熟等級，可優先針對「<strong>${weakestUnit.name}</strong>」（目前正確率 ${weakestAcc}%）進行細部錯題檢討。`;
+      } else {
+        adviceEl.innerHTML = `<strong>學習表現評估：</strong>所有已作答單元正確率皆達 80% 以上精熟水準！建議持續完成剩餘未作答題目，鞏固段考滿分實力。`;
+      }
+    }
+
+    function renderAll() {
+      renderDashboard();
+      renderControls();
+      renderJumpGrid();
+      renderQuestions();
+      renderDiagnostics();
+      if (window.lucide && typeof window.lucide.createIcons === `function`) {
+        window.lucide.createIcons();
+      }
+    }
+
+    /* ============================================================
+       8. 初始化流程
+       ============================================================ */
+    async function initApp() {
+      await loadSavedState();
+      if (appState.mode === `mock` && (!appState.mockIds || appState.mockIds.length === 0)) {
+        appState.mockIds = generateMockIds();
+      }
+      renderAll();
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>

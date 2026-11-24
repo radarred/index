@@ -1,0 +1,2665 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="showroom">
+  <title>國中七年級英文（7上第二次段考）互動式學習指南</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Showroom) */
+      --background: #fbfbfd;
+      --surface-container-low: #f5f5f7;
+      --surface-container: #e8e8ed;
+      --surface-container-high: #dcdce1;
+
+      /* Ink */
+      --on-surface: #1d1d1f;
+      --on-surface-variant: #6e6e73;
+
+      /* Rules */
+      --outline: #d2d2d7;
+      --outline-variant: #e5e5ea;
+
+      /* Accents */
+      --primary: #006bd6;
+      --on-primary: #ffffff;
+      --primary-container: #e8f1fd;
+      --on-primary-container: #0058b0;
+      --secondary: #bf4800;
+      --tertiary: #1d1d1f;
+      --error: #d70015;
+      --on-error: #ffffff;
+      --error-container: #fdecee;
+
+      /* Data series */
+      --data-1: #006bd6;
+      --data-2: #bf4800;
+      --data-3: #248a3d;
+      --data-4: #8944ab;
+      --data-context: #aeaeb2;
+
+      /* Fonts (Showroom + Noto Sans TC for zh-TW) */
+      --font-headline: 'Inter Tight', 'Noto Sans TC', sans-serif;
+      --font-body: 'Inter', 'Noto Sans TC', sans-serif;
+      --font-label: 'Inter', 'Noto Sans TC', sans-serif;
+
+      /* Shape */
+      --rounded: 9999px;
+      --rounded-md: 1rem;
+      --rounded-lg: 1.25rem;
+      --rounded-full: 9999px;
+
+      /* Style effects */
+      --headline-tracking: -0.02em;
+      --figure-tracking: -0.03em;
+      --tile-shadow-hover: 0 8px 28px rgb(0 0 0 / 0.08);
+      --selected-ring: 0 0 0 2px var(--primary);
+      --correct-ring: 0 0 0 2px var(--positive);
+      --error-ring: 0 0 0 2px var(--error);
+      --chevron: " \203A";
+
+      /* Shared semantic tokens */
+      --positive: #248a3d;
+      --positive-container: #e8f6ec;
+      --warning: #bf4800;
+      --warning-container: #fdf0e6;
+      --focus: #006bd6;
+
+      /* Type scale (Tool) */
+      --display-size: clamp(1.85rem, 1.4rem + 1.4vw, 2.5rem);
+      --headline-size: clamp(1.35rem, 1.15rem + 0.6vw, 1.65rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.2rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.8125rem;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { overflow-x: clip; margin: 0; padding: 0; }
+    body {
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+    button, input, select, textarea { font-family: inherit; }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Headline stack */
+    .headline-stack {
+      text-align: center;
+      padding-block: var(--space-xl) var(--space-md);
+    }
+    .eyebrow {
+      display: inline-block;
+      color: var(--secondary);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: none;
+      margin-bottom: var(--space-sm);
+    }
+    .headline-stack h1 {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 700;
+      letter-spacing: var(--headline-tracking);
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .headline-stack .lede {
+      color: var(--on-surface-variant);
+      max-width: 58ch;
+      margin: var(--space-md) auto 0;
+      font-size: var(--subhead-size);
+      line-height: 1.55;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    /* Section openings */
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+    .section-head h2 {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      letter-spacing: var(--headline-tracking);
+      line-height: 1.2;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .section-head p {
+      margin: var(--space-xs) 0 0;
+      color: var(--on-surface-variant);
+      max-width: 60ch;
+    }
+
+    /* Showroom Tiles */
+    .tile {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      border: 0;
+    }
+    .tile-white {
+      background: var(--background);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      border: 0;
+    }
+
+    /* Buttons & Pills */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      background: var(--primary);
+      color: var(--on-primary);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-size: var(--body-size);
+      font-weight: 500;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      border: 0;
+      cursor: pointer;
+      transition: background-color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary:hover { background: var(--on-primary-container); }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border: 0;
+      cursor: pointer;
+      transition: background-color var(--dur-short) var(--ease-out);
+    }
+    .btn-secondary:hover { background: var(--surface-container-high); }
+    .btn-secondary.is-active {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      box-shadow: var(--selected-ring);
+    }
+
+    .link-more {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      color: var(--primary);
+      background: transparent;
+      border: 0;
+      font-family: var(--font-label);
+      font-size: var(--body-size);
+      font-weight: 500;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-xs);
+      cursor: pointer;
+    }
+    .link-more:hover { text-decoration: underline; }
+    .link-more::after { content: var(--chevron); }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-radius: var(--rounded);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      padding: var(--space-xs) var(--space-sm);
+      white-space: nowrap;
+    }
+    .chip-success {
+      background: var(--positive-container);
+      color: var(--positive);
+    }
+    .chip-warn {
+      background: var(--warning-container);
+      color: var(--secondary);
+    }
+    .chip-neutral {
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+
+    /* Overview Bento Grid */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr 1fr 1fr;
+      gap: var(--space-md);
+    }
+    .overview-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    .overview-card.hero-progress {
+      background: var(--primary-container);
+    }
+    .overview-card .label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      color: var(--on-surface-variant);
+    }
+    .overview-card.hero-progress .label {
+      color: var(--on-primary-container);
+    }
+    .overview-card .value {
+      font-family: var(--font-headline);
+      font-size: clamp(1.75rem, 1.4rem + 1vw, 2.35rem);
+      font-weight: 700;
+      letter-spacing: var(--figure-tracking);
+      line-height: 1.1;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+    .overview-card .caption {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: var(--background);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: var(--rounded);
+      transition: width var(--dur-long) var(--ease-out);
+      width: 0%;
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    /* Stage Selector Cards */
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .stage-card {
+      text-align: left;
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      border: 0;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-md);
+      min-height: 152px;
+      transition: transform var(--dur-short) var(--ease-out), box-shadow var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out);
+    }
+    .stage-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--tile-shadow-hover);
+    }
+    .stage-card.is-selected {
+      background: var(--primary-container);
+      box-shadow: var(--selected-ring);
+    }
+    .stage-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      width: 100%;
+    }
+    .stage-num {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--secondary);
+    }
+    .stage-card.is-selected .stage-num {
+      color: var(--on-primary-container);
+    }
+    .stage-card h3 {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      color: var(--on-surface);
+      margin: 0;
+      line-height: 1.3;
+    }
+    .stage-card p {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin: var(--space-xs) 0 0;
+      line-height: 1.45;
+    }
+
+    /* Stage Detail Panel (Expands directly below stage cards) */
+    .stage-detail-shell {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+      margin-top: var(--space-lg);
+      animation: panelFade var(--dur-long) var(--ease-out);
+    }
+    @keyframes panelFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .detail-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-lg);
+      padding-bottom: var(--space-lg);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .detail-title-group h3 {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      letter-spacing: var(--headline-tracking);
+      margin: var(--space-xs) 0;
+      color: var(--on-surface);
+    }
+    .detail-title-group p {
+      margin: 0;
+      color: var(--on-surface-variant);
+      max-width: 62ch;
+    }
+
+    /* Two-column asymmetric grid inside stage detail */
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: var(--space-lg);
+      margin-top: var(--space-lg);
+      align-items: start;
+    }
+    .detail-col {
+      display: grid;
+      gap: var(--space-lg);
+    }
+
+    /* Mastery Checklist inside Stage Detail */
+    .checklist-box {
+      background: var(--background);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .checklist-box h4 {
+      margin: 0 0 var(--space-md);
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .check-list {
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded-md);
+      background: var(--surface-container-low);
+      cursor: pointer;
+      min-height: 44px;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .check-item:hover { background: var(--surface-container); }
+    .check-item.is-checked { background: var(--positive-container); }
+    .check-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--positive);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .check-item-text {
+      font-size: var(--body-size);
+      font-weight: 500;
+      color: var(--on-surface);
+      line-height: 1.45;
+    }
+    .check-item.is-checked .check-item-text {
+      color: var(--positive);
+    }
+
+    /* Rule & Comparison Cards */
+    .rule-grid {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .rule-card {
+      background: var(--background);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .rule-card h4 {
+      margin: 0 0 var(--space-sm);
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      color: var(--on-surface);
+    }
+    .rule-summary {
+      margin: 0 0 var(--space-md);
+      color: var(--on-surface-variant);
+      line-height: 1.55;
+    }
+    .formula-pill {
+      display: inline-block;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-weight: 600;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded);
+      margin-bottom: var(--space-md);
+      font-size: var(--label-size);
+    }
+    .example-list {
+      display: grid;
+      gap: var(--space-sm);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .example-item {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-md);
+      padding: var(--space-sm) var(--space-md);
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .example-en {
+      font-weight: 600;
+      color: var(--on-surface);
+    }
+    .example-zh {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .trap-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      color: var(--secondary);
+      font-weight: 600;
+      font-size: var(--label-size);
+    }
+
+    /* Visual Chart & Interactive Lab Container */
+    .viz-card {
+      background: var(--background);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .viz-card h4 {
+      margin: 0 0 var(--space-xs);
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+    }
+    .viz-caption {
+      margin: 0 0 var(--space-md);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .chart-box {
+      position: relative;
+      height: 270px;
+      min-height: 270px;
+      width: 100%;
+    }
+
+    /* Tables (Showroom style: no vertical lines, outline-variant hairlines) */
+    .clean-table-wrap {
+      overflow-x: auto;
+    }
+    .clean-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums;
+      text-align: left;
+    }
+    .clean-table th {
+      color: var(--on-surface-variant);
+      font-weight: 600;
+      font-size: var(--label-size);
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .clean-table td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      color: var(--on-surface);
+      font-size: var(--body-size);
+    }
+    .clean-table tr:last-child td { border-bottom: 0; }
+
+    /* Interactive V-ing Lab & Vocab Chips */
+    .verb-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .verb-chip {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 0;
+      border-radius: var(--rounded);
+      padding: var(--space-xs) var(--space-md);
+      min-height: 44px;
+      font-size: var(--label-size);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .verb-chip:hover { background: var(--surface-container); }
+    .verb-chip.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .verb-transform-display {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-md);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .verb-equation {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Worked Practice Questions inside Stage */
+    .practice-card {
+      background: var(--background);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .practice-card h4 {
+      margin: 0 0 var(--space-md);
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 700;
+    }
+    .mini-q-list {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .mini-q {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-md);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .mini-q-stem {
+      font-weight: 600;
+      color: var(--on-surface);
+    }
+    .mini-q-answer {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-radius: var(--rounded-md);
+      padding: var(--space-sm) var(--space-md);
+      font-size: var(--label-size);
+      line-height: 1.5;
+    }
+
+    /* Tonal Band for Dedicated Listening Practice Zone */
+    .band-alt {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+    }
+    .listening-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+      background: var(--background);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+    .speed-control {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .speed-label {
+      font-size: var(--label-size);
+      font-weight: 500;
+      color: var(--on-surface-variant);
+    }
+
+    /* Listening Question Cards */
+    .listening-grid {
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .lq-card {
+      background: var(--background);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .lq-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .lq-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .lq-num {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--subhead-size);
+      color: var(--on-surface);
+    }
+    .lq-source {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .audio-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-md);
+      padding: var(--space-sm) var(--space-md);
+    }
+    .audio-status {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .audio-status.is-playing {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .transcript-box {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-md);
+      padding: var(--space-md);
+      font-size: var(--label-size);
+      color: var(--on-surface);
+      line-height: 1.6;
+    }
+
+    /* Options: Text & Picture SVG Cards */
+    .lq-options-text {
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .lq-options-pic {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .option-btn {
+      text-align: left;
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 0;
+      border-radius: var(--rounded-md);
+      padding: var(--space-md);
+      min-height: 44px;
+      font-size: var(--body-size);
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .option-btn:hover {
+      background: var(--surface-container);
+    }
+    .option-btn.pic-btn {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-sm);
+      padding: var(--space-md);
+    }
+    .option-btn.is-correct {
+      background: var(--positive-container);
+      color: var(--positive);
+      box-shadow: var(--correct-ring);
+    }
+    .option-btn.is-wrong {
+      background: var(--error-container);
+      color: var(--error);
+      box-shadow: var(--error-ring);
+    }
+    .option-letter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--rounded);
+      background: var(--background);
+      color: var(--on-surface);
+      font-weight: 700;
+      font-size: var(--label-size);
+      flex-shrink: 0;
+    }
+    .pic-frame {
+      background: var(--background);
+      border-radius: var(--rounded-md);
+      padding: var(--space-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 120px;
+    }
+    .pic-frame svg {
+      width: 100%;
+      max-width: 160px;
+      height: 112px;
+      display: block;
+    }
+    .lq-feedback {
+      border-radius: var(--rounded-md);
+      padding: var(--space-md);
+      font-size: var(--label-size);
+      line-height: 1.55;
+    }
+    .lq-feedback.is-correct {
+      background: var(--positive-container);
+      color: var(--on-surface);
+    }
+    .lq-feedback.is-wrong {
+      background: var(--error-container);
+      color: var(--on-surface);
+    }
+
+    /* Container query for stage detail cards */
+    .stage-detail-wrapper { container-type: inline-size; }
+    @container (max-width: 780px) {
+      .detail-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Footer */
+    .site-footer {
+      text-align: center;
+      padding: var(--space-xl) var(--space-md);
+      color: var(--on-surface-variant);
+      font-size: var(--label-size);
+      border-top: 1px solid var(--outline-variant);
+      line-height: 1.65;
+    }
+
+    /* Mobile breakpoint */
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+      .stage-detail-shell, .band-alt {
+        padding: var(--space-md);
+      }
+      .lq-options-pic {
+        grid-template-columns: 1fr;
+      }
+      .audio-status {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+    <header class="headline-stack">
+      <span class="eyebrow">7上第二次段考總複習 · 翰林版 Book 1 Unit 3 – Review 2</span>
+      <h1>國中七年級英文互動式學習指南</h1>
+      <p class="lede">系統整理全台 14 份國中段考真題與英聽題本，透過 5 大互動文法關卡、視覺化考點圖表、學習進度追蹤清單與專屬聽力模擬區，掌握段考高分關鍵。</p>
+      <div class="hero-actions">
+        <button type="button" class="btn-primary" onclick="scrollToSection('stages-section')">
+          <i data-lucide="compass" width="18" height="18" aria-hidden="true"></i>
+          開始關卡複習
+        </button>
+        <button type="button" class="link-more" onclick="scrollToSection('listening-section')">前往聽力練習題目區</button>
+      </div>
+    </header>
+
+    <!-- Top Overview Cards -->
+    <section aria-label="學習總覽指標">
+      <div class="overview-grid">
+        <div class="tile overview-card hero-progress">
+          <div>
+            <div class="label">整體學習進度</div>
+            <div class="value" id="ov-progress-pct">0%</div>
+            <div class="caption" id="ov-progress-detail">已完成 0 / 15 項核心重點</div>
+          </div>
+          <div>
+            <div class="progress-track" aria-hidden="true">
+              <div class="progress-fill" id="ov-progress-bar"></div>
+            </div>
+            <div class="progress-meta" style="margin-top: var(--space-sm);">
+              <span class="caption" id="ov-stages-done">0 / 5 關卡達標</span>
+              <button type="button" class="btn-secondary" id="reset-progress-btn" onclick="handleResetProgress(this)">重置進度</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tile overview-card">
+          <div>
+            <div class="label">段考核心關卡</div>
+            <div class="value">5 大主題</div>
+          </div>
+          <div class="caption">祈使句 · Can與受格 · 進行式 · 時間介系詞 · 閱讀實戰</div>
+        </div>
+
+        <div class="tile overview-card">
+          <div>
+            <div class="label">真題考點分析</div>
+            <div class="value">14 份考卷</div>
+          </div>
+          <div class="caption">跨校統計高頻文法與拼寫陷阱（Wednesday / Thursday 等）</div>
+        </div>
+
+        <div class="tile overview-card">
+          <div>
+            <div class="label">專屬聽力模擬</div>
+            <div class="value" id="ov-listening-score">0 / 15</div>
+          </div>
+          <div class="caption" id="ov-listening-detail">圖片聽力 · 基本問答 · 聽力對話（含語音朗讀）</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Middle Section: Clickable Stage Cards + Expandable Detail Below -->
+    <section id="stages-section" aria-label="五大核心學習關卡">
+      <div class="section-head">
+        <div>
+          <h2>五大核心複習關卡</h2>
+          <p>點選任一關卡卡片，下方立即展開詳細文法規則、視覺化考點圖表、段考陷阱題與精熟勾選清單。</p>
+        </div>
+        <span class="chip chip-neutral" id="active-stage-indicator">目前檢視：關卡 01</span>
+      </div>
+
+      <div class="stage-grid" id="stage-cards-container"></div>
+
+      <div class="stage-detail-wrapper">
+        <div class="stage-detail-shell" id="stage-detail-panel" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Dedicated Listening Practice Zone -->
+    <section id="listening-section" class="band-alt" aria-label="專屬聽力練習題目區">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Listening Practice Arena · 語音模擬與圖表測驗</span>
+          <h2>專屬聽力練習題目區</h2>
+          <p>精選自陽明、桃子腳、土城、平南、林園等校真實英聽腳本，包含「圖片聽力（辨識句意）」、「基本問答」與「聽力對話（言談理解）」三大必考題型。</p>
+        </div>
+        <div class="chip chip-success" id="listening-badge">已作答 0 / 15 題 · 答對 0 題</div>
+      </div>
+
+      <div class="listening-toolbar">
+        <div class="filter-group" role="group" aria-label="聽力題型篩選">
+          <button type="button" class="btn-secondary is-active" data-lfilter="all" onclick="setListeningFilter('all')">全部題型 (15)</button>
+          <button type="button" class="btn-secondary" data-lfilter="picture" onclick="setListeningFilter('picture')">圖片聽力 (5)</button>
+          <button type="button" class="btn-secondary" data-lfilter="qa" onclick="setListeningFilter('qa')">基本問答 (5)</button>
+          <button type="button" class="btn-secondary" data-lfilter="dialogue" onclick="setListeningFilter('dialogue')">聽力對話 (5)</button>
+        </div>
+        <div class="speed-control">
+          <span class="speed-label">朗讀語速：</span>
+          <button type="button" class="btn-secondary" id="speed-slow-btn" onclick="setSpeechRate(0.8)">0.8x 慢速</button>
+          <button type="button" class="btn-secondary is-active" id="speed-norm-btn" onclick="setSpeechRate(1.0)">1.0x 正常</button>
+          <button type="button" class="btn-secondary" id="reset-listening-btn" onclick="handleResetListening(this)">清除作答</button>
+        </div>
+      </div>
+
+      <div class="listening-grid" id="listening-questions-container"></div>
+    </section>
+
+    <footer class="site-footer">
+      <div><strong>資料來源說明：</strong>本學習指南內容整理自 7上第二次段考（翰林版 Book 1 Unit 3 ~ Review 2）跨校考古題彙整，涵蓋臺北市立仁愛國中、高雄市立陽明國中、新北市立桃子腳國中小、新北市立土城國中、屏東縣立明正國中、臺北市立中山國中、新北市立崇林國中、桃園市立平南國中、桃園市立文昌國中、高雄市立林園高中國中部、臺南市立歸仁國中、彰化縣立埤頭國中、彰化縣立溪湖國中與彰化縣立鹿港國中試題與聽力稿。</div>
+      <div style="margin-top: var(--space-xs);">提示：聽力題目使用瀏覽器內建英語語音合成（Web Speech API）即時朗讀；若裝置處於靜音模式，可隨時展開各題「查看聽力逐字稿」輔助複習。</div>
+    </footer>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    // =========================================================================
+    // 1. DATA DEFINITIONS (All string literals use backticks for apostrophes)
+    // =========================================================================
+
+    const EXAM_FREQUENCY_DATA = [
+      { label: `祈使句與否定 Let's not / Don't`, count: 14 },
+      { label: `現在進行式 (be + V-ing) 與拼字`, count: 14 },
+      { label: `星期與時間介系詞 (at / on / in / X)`, count: 14 },
+      { label: `人稱代名詞受格與片語位置`, count: 12 },
+      { label: `助動詞 Can / Can't 問答與原形V`, count: 12 },
+      { label: `圖表告示 / 時刻表閱讀測驗`, count: 12 },
+      { label: `Wednesday / Thursday 易錯拼寫`, count: 11 }
+    ];
+
+    const VING_VERBS = [
+      { base: `dance`, ing: `dancing`, rule: `字尾不發音 e → 去 e 加 -ing`, zh: `跳舞`, example: `Emily and Julia are dancing on the stage.` },
+      { base: `shake`, ing: `shaking`, rule: `字尾不發音 e → 去 e 加 -ing`, zh: `握手`, example: `The singer is shaking hands with his fans.` },
+      { base: `have`, ing: `having`, rule: `字尾不發音 e → 去 e 加 -ing`, zh: `進行/度過`, example: `Everyone is having a good time at the park.` },
+      { base: `make`, ing: `making`, rule: `字尾不發音 e → 去 e 加 -ing`, zh: `製作`, example: `He is making a birthday card.` },
+      { base: `take`, ing: `taking`, rule: `字尾不發音 e → 去 e 加 -ing`, zh: `拍照/散步`, example: `The fans are taking pictures of them.` },
+      { base: `come`, ing: `coming`, rule: `字尾不發音 e → 去 e 加 -ing`, zh: `來臨`, example: `The bus is coming. Let's hurry!` },
+      { base: `run`, ing: `running`, rule: `短母音 + 單子音 → 重複字尾 n 加 -ing`, zh: `跑步`, example: `The boys are running on the sports field.` },
+      { base: `sit`, ing: `sitting`, rule: `短母音 + 單子音 → 重複字尾 t 加 -ing`, zh: `坐著`, example: `The dog is sitting next to George.` },
+      { base: `get`, ing: `getting`, rule: `短母音 + 單子音 → 重複字尾 t 加 -ing`, zh: `得到/變得`, example: `They are getting ready for the concert.` },
+      { base: `study`, ing: `studying`, rule: `子音 + y 結尾 → 直接加 -ing（不可去 y！）`, zh: `研讀`, example: `My sister is studying English in her room.` },
+      { base: `cry`, ing: `crying`, rule: `子音 + y 結尾 → 直接加 -ing（不可去 y！）`, zh: `哭泣`, example: `Why is the baby crying?` },
+      { base: `see`, ing: `seeing`, rule: `雙母音 ee 結尾 → 直接加 -ing`, zh: `看見`, example: `We are seeing a movie together.` },
+      { base: `follow`, ing: `following`, rule: `一般動詞 → 直接加 -ing`, zh: `遵守/跟隨`, example: `They are following the lab rules.` },
+      { base: `cook`, ing: `cooking`, rule: `一般動詞 → 直接加 -ing`, zh: `烹飪`, example: `Mom is cooking dinner for us.` },
+      { base: `eat`, ing: `eating`, rule: `一般動詞 → 直接加 -ing`, zh: `吃`, example: `Don't talk when you are eating.` }
+    ];
+
+    const SPELLING_WORDS = [
+      { word: `Wednesday`, pos: `n.`, zh: `星期三`, tip: `注意中間不發音的 d 與 nes：Wed-nes-day（常考 Tuesday 與 Thursday 之間）` },
+      { word: `Thursday`, pos: `n.`, zh: `星期四`, tip: `開頭為 Th-，勿與 Tuesday 混淆（Wednesday 與 Friday 之間）` },
+      { word: `museum`, pos: `n.`, zh: `博物館`, tip: `字尾為 -eum（mu-se-um），段考高頻場所單字` },
+      { word: `careful`, pos: `adj.`, zh: `小心的`, tip: `字尾只有一個 l（-ful），Be careful with...` },
+      { word: `quiet`, pos: `adj.`, zh: `安靜的`, tip: `字尾為 -et（qui-et），勿與 quite（相當）混淆` },
+      { word: `popular`, pos: `adj.`, zh: `受歡迎的`, tip: `搭配介系詞 with：be popular with teenagers` },
+      { word: `everyone`, pos: `pron.`, zh: `每個人`, tip: `不定代名詞，文法上「永遠視為第三人稱單數」配 is` },
+      { word: `hurry`, pos: `v.`, zh: `趕快`, tip: `祈使句常用 Hurry up!（快一點！）` },
+      { word: `weekend`, pos: `n.`, zh: `週末`, tip: `on weekends / this weekend（搭配 this 時不加介系詞）` },
+      { word: `follow`, pos: `v.`, zh: `遵守；跟隨`, tip: `follow the rules（遵守規定），常與 be safe 並用` }
+    ];
+
+    const STAGES = [
+      {
+        id: `stage-1`,
+        num: `關卡 01`,
+        title: `祈使句與 Let's 規則`,
+        shortDesc: `原形動詞、Let's not 否定與 please 逗號位置`,
+        overview: `Unit 3 的核心文法為「祈使句」，用於表達請求、命令、建議與場所規範（如實驗室、博物館、圖書館標語）。`,
+        checklist: [
+          { id: `s1-c1`, text: `能分辨肯定祈使句（原形 V 開頭）與否定祈使句（Don't + 原形 V / Don't be...）` },
+          { id: `s1-c2`, text: `熟記 Let's 的否定為「Let's not + 原形 V」，絕不寫成 Let's don't` },
+          { id: `s1-c3`, text: `掌握稱呼語逗號規則與否定祈使句連接詞「or」（Don't eat or drink）` }
+        ],
+        rules: [
+          {
+            title: `1. 祈使句基本句型與 Be 動詞原形`,
+            formula: `肯定：(Please) 原形V / Be + adj. ｜ 否定：Don't + 原形V / Don't be + adj.`,
+            summary: `祈使句省略主詞 you，直接以「原形動詞」開頭。若句子沒有一般動作只有形容詞或名詞，必須補上「Be」或「Don't be」！`,
+            examples: [
+              { en: `Follow these lab rules and be safe.`, zh: `遵守這些實驗室規則並保持安全。（桃子腳翻譯）`, trap: `常見陷阱：不可寫 safe 單獨存在，必須寫 be safe / be quiet / be careful。` },
+              { en: `David, be a good student.`, zh: `大衛，當個好學生。（明正改寫題）`, trap: `原句 David is a good student. 改成祈使句時，is 必須還原為原形 be。` }
+            ]
+          },
+          {
+            title: `2. Let's 提議句與否定陷阱`,
+            formula: `肯定：Let's + 原形V ｜ 否定：Let's not + 原形V`,
+            summary: `Let's (= Let us) 用於邀約「我們一起…吧」。否定時直接在 not 後面加原形動詞，絕對不可加入助動詞 don't！`,
+            examples: [
+              { en: `Let's not talk in the library.`, zh: `我們在圖書館不要講話吧。（崇林、土城、平南、埤頭必考）`, trap: `超高頻陷阱：Let's don't talk (X) → 正確為 Let's not talk (O)。` },
+              { en: `Let's not run or talk in the museum.`, zh: `我們在博物館不要奔跑或說話。`, trap: `否定祈使句中並列動作，連接詞要用「or」，不可用「and」！（明正 #15、土城 #28）` }
+            ]
+          },
+          {
+            title: `3. 稱呼語與 please 的逗號規則`,
+            formula: `人名, + 祈使句, please. ｜ Please + 祈使句, + 人名.`,
+            summary: `稱呼的人名無論放在句首或句尾，一定要用逗號與主要祈使句隔開；please 放句首時後方不加逗號，放句尾時前方必加逗號！`,
+            examples: [
+              { en: `Please bring me the book, Joey.`, zh: `喬伊，請把那本書拿給我。（土城 #29）`, trap: `錯誤示範：Please, Joey bring me... (X) / Please bring me the book Joey. (X)。` },
+              { en: `Tom, don't run in the house, please.`, zh: `湯姆，請不要在屋裡奔跑。（陽明改寫）`, trap: `人名放句首後加逗號；please 放句尾前加逗號。` }
+            ]
+          }
+        ],
+        vizType: `chart-freq`,
+        practice: [
+          {
+            stem: `(土城國中) Shhhh, Cindy! We are in the meeting room. Let's ______ talk!  (A) not  (B) don't  (C) can't  (D) can`,
+            answer: `正解：(A) not。Let's 的否定句型固定為「Let's not + 原形動詞」，不可使用 don't。`
+          },
+          {
+            stem: `(屏東明正) ______ shout ______ run in the library.  (A) Can't; and  (B) Please; or  (C) Don't; or  (D) Let's; and`,
+            answer: `正解：(C) Don't; or。否定祈使句開頭用 Don't，且「不要 A 也不要 B」在否定句中必須以 or 連接兩個原形動詞。`
+          },
+          {
+            stem: `(桃園文昌) Let's read the picture book. (將肯定句改為否定句)`,
+            answer: `正解：Let's not read the picture book. （只需在 Let's 後加上 not 即可）。`
+          }
+        ]
+      },
+      {
+        id: `stage-2`,
+        num: `關卡 02`,
+        title: `Can 與人稱代名詞受格`,
+        shortDesc: `情態助動詞問答、受格轉換與片語代名詞位置`,
+        overview: `掌握情態助動詞 can（能/會）後接原形動詞的規則，並熟練人稱代名詞「主格、所有格、受格」在動詞與介系詞後的正確替換。`,
+        checklist: [
+          { id: `s2-c1`, text: `記住 can / can't 後面永遠接「原形動詞」（含原形 be），沒有三單變化` },
+          { id: `s2-c2`, text: `能正確簡答否定疑問句（如 Can't Emma talk? → No, she can't.）` },
+          { id: `s2-c3`, text: `介系詞與及物動詞後用「受格」，且代名詞受格在片語中放中間（turn it off）` }
+        ],
+        rules: [
+          {
+            title: `1. 助動詞 Can / Can't 句型與簡答`,
+            formula: `S + can / can't + 原形V ｜ Can / Can't + S + 原形V?`,
+            summary: `can 是助動詞，後面不論主詞為何，動詞一律用原形（包含 be）。回答 Can't...? 否定疑問句時，依事實回答：Yes 後接肯定、No 後接否定。`,
+            examples: [
+              { en: `All my classmates are nice. We can be good friends.`, zh: `我所有同學人都很好。我們可以成為好朋友。（陽明 #11）`, trap: `兩格差異：第一格缺一般動詞用 are，第二格在助動詞 can 後面必須用原形 be！` },
+              { en: `A: Can't Emma talk to her teacher now? B: No, she can't.`, zh: `A：艾瑪現在不能和老師說話嗎？ B：是的，她不能。（土城 #26）`, trap: `絕對不可出現「Yes, she can't.」或「No, he's not.」（問句用 Can 問，簡答就用 can/can't 回）。` }
+            ]
+          },
+          {
+            title: `2. 動詞/介系詞後用受格 & 可分離片語位置`,
+            formula: `動詞 / 介系詞 (to, with, for, at) + 受格 ｜ turn + 代名詞(it/them) + off/on`,
+            summary: `人稱代名詞放在句首當主詞用「主格」；放在名詞前表示「誰的」用「所有格」；放在及物動詞或介系詞後面則必須用「受格」。`,
+            examples: [
+              { en: `You can sign on the letter with them (the pens).`, zh: `你可以用它們（那些筆）在信上簽名。（土城 #17）`, trap: `主詞 the pens 為複數物，放在介系詞 with 後面要用複數受格 them，不可用 they。` },
+              { en: `Talk to us (Roy and I), please.`, zh: `請跟我們（羅伊和我）聊聊。（崇林、平南改寫）`, trap: `「Roy and I」包含說話者「我」，因此合併代名詞受格要用 us，不可用 them。` },
+              { en: `Look, the sign says "No Phone Use". Turn it off, please.`, zh: `看，告示牌寫著禁止用手機。請關掉它。（陽明 #26）`, trap: `雙字動詞片語 turn off / wake up 遇到「代名詞（it, them, me, him）」時，必須放在中間：turn it off / wake him up！` }
+            ]
+          }
+        ],
+        vizType: `pronoun-matrix`,
+        practice: [
+          {
+            stem: `(高雄陽明) I can't see ______ cookies anywhere. Are ______ in the kitchen?  (A) Lisa; their  (B) Lisa's; them  (C) Lisa; they  (D) Lisa's; they`,
+            answer: `正解：(D) Lisa's; they。cookies 為名詞，前面需要所有格「Lisa's」；第二格在 Are 前面當主詞，故用主格「they」。`
+          },
+          {
+            stem: `(台北仁愛) Mom: Don't fight ______ your sisters and be nice to ______.  (A) with; she  (B) to; her  (C) with; them  (D) to; her`,
+            answer: `正解：(C) with; them。與某人打架為 fight with；your sisters 為複數，接在介系詞 to 後方用複數受格 them。`
+          },
+          {
+            stem: `(新北崇林) Can the woman ______ (be) a police officer?`,
+            answer: `正解：be。助動詞 Can 置於句首造疑問句時，後方的動詞仍須保持原形 be。`
+          }
+        ]
+      },
+      {
+        id: `stage-3`,
+        num: `關卡 03`,
+        title: `現在進行式與 V-ing 變化`,
+        shortDesc: `be + V-ing 結構、Everyone 單數陷阱與 5 大拼字規則`,
+        overview: `Unit 4 主軸為描述「此刻正在進行的動作」，結合演唱會、粉絲見面會與校園活動場景。V-ing 拼寫與 Everyone 單複數一致是手寫與選擇題大熱門。`,
+        checklist: [
+          { id: `s3-c1`, text: `看到 now / Look! / Listen! 能立刻反應使用「beV + V-ing」，絕不遺漏 be 動詞` },
+          { id: `s3-c2`, text: `牢記 Everyone / Everybody 永遠配單數「is」（Everyone is having fun.）` },
+          { id: `s3-c3`, text: `熟練去 e（dancing/shaking）、重複字尾（running/sitting）與保留 y（studying）拼字` }
+        ],
+        rules: [
+          {
+            title: `1. 現在進行式結構與單數陷阱`,
+            formula: `主詞 + am / is / are + V-ing (+ now)`,
+            summary: `進行式一定要有「be 動詞 + V-ing」，兩者缺一不可！遇到祈使詞 Look! 或 Listen! 提示「現在看/聽」時，後方句子要用現在進行式。`,
+            examples: [
+              { en: `Listen! Someone is singing in the shower.`, zh: `聽！有人正在浴室裡唱歌。（仁愛 #26）`, trap: `Listen! 提示動作正在進行，Someone 與 Everyone 皆視為第三人稱單數，配 is singing。` },
+              { en: `Everyone is having a good time at the park.`, zh: `每個人在公園裡都玩得很開心。（仁愛 #28、土城 #22、明正 #14）`, trap: `超常考陷阱：雖然中文叫「每個人」，但 Everyone / Everybody 文法上必須配單數「is」，不可配 are！` }
+            ]
+          },
+          {
+            title: `2. Wh- 疑問句與「依畫線部分造原問句」`,
+            formula: `What + beV + S + doing (+ 地點)? ｜ Who + beV + S + V-ing + with?`,
+            summary: `問某人正在做什麼，一律用 What... doing?；若畫線部分是動作（如 jumping rope），問句必須用「doing」取代原動作，原本的地點（如 at the park）要保留！`,
+            examples: [
+              { en: `Ken is jumping rope at the park. → What is Ken doing at the park?`, zh: `肯正在公園跳繩。→ 肯正在公園做什麼？（中山、文昌、林園、崇林四校必考原句！）`, trap: `切記不可漏掉 doing，也不可把畫線的 jumping rope 寫進問句裡。` },
+              { en: `Vicky is talking with her father. → Who is Vicky talking with?`, zh: `維琪正在和她爸爸說話。→ 維琪正在和誰說話？（林園手寫 #7）`, trap: `問對象時用 Who 開頭，介系詞 with 保留在句尾。` }
+            ]
+          }
+        ],
+        vizType: `ving-lab`,
+        practice: [
+          {
+            stem: `(高雄陽明) Listen! Emily and Julia ______ on the stage. Let's ______ talk.  (A) sing; don't  (B) are singing; don't  (C) singing; not  (D) are singing; not`,
+            answer: `正解：(D) are singing; not。Listen! 提示現在進行式，兩人為複數配 are singing；Let's 否定直接加 not。`
+          },
+          {
+            stem: `(高雄陽明改寫) Can your dog sit and shake hands with you? No, it can't. (將 can 用 be 動詞改寫兩句)`,
+            answer: `正解：Is your dog sitting and shaking hands with you? No, it isn't. （改為現在進行式，注意 sit → sitting, shake → shaking）。`
+          },
+          {
+            stem: `(新北崇林) The OBA boys are ______ (shake) hands with their fans.`,
+            answer: `正解：shaking。字尾有不發音的 e，須先去掉 e 再加 -ing。`
+          }
+        ]
+      },
+      {
+        id: `stage-4`,
+        num: `關卡 04`,
+        title: `星期、時間與介系詞`,
+        shortDesc: `What time vs What day、at / on / in 漏斗與零介系詞`,
+        overview: `精準區分「問現在幾點」與「問活動幾點開始」，以及「at / on / in / 不加介系詞 (X)」的使用時機，同時熟記星期一到星期日的正確拼字。`,
+        checklist: [
+          { id: `s4-c1`, text: `區分「現在幾點（不加 at）」與「活動幾點開始（要加 at）」` },
+          { id: `s4-c2`, text: `記熟介系詞金字塔：at + 時刻 ｜ on + 星期/特定日期 ｜ in + 早午晚` },
+          { id: `s4-c3`, text: `遇到 every / this / today / tomorrow 時，時間前面「不加任何介系詞 (X)」` }
+        ],
+        rules: [
+          {
+            title: `1. What time 與 What day 問答關鍵差異`,
+            formula: `問現在時間：It's 7:30. (無 at) ｜ 問活動時間：It's at 7:30. (有 at) ｜ 問星期：It's on Friday.`,
+            summary: `問「現在幾點」回答直接說 It's + 時間（不加 at）；問「電影/演唱會幾點」是問事件發生的時間點，必須加 at！同理，問「今天星期幾」不加 on；問「派對在星期幾」必須加 on！`,
+            examples: [
+              { en: `A: What time is it?  B: It's four fifty.`, zh: `A：現在幾點？ B：四點五十分。（土城 #18，不可選 It's at four thirty）`, trap: `許多同學會誤選有 at 的選項！回答「現在時間」絕不加 at。` },
+              { en: `A: What time is the movie on TV?  B: It's at eight fifteen in the evening.`, zh: `A：電視上的電影幾點播？ B：在晚上八點十五分。（陽明 #17）`, trap: `這裡問的是「電影時間」，因此 8:15 前要加 at，evening 前用 in。` },
+              { en: `It's 12:00 p.m. Time for lunch.`, zh: `現在是中午 12 點。該吃午餐了。（陽明 #22、仁愛 #32）`, trap: `Time for + 名詞（lunch / class / bed）；若接動作要用 Time to + 原形動詞（Time to eat）。` }
+            ]
+          },
+          {
+            title: `2. 零介系詞 (X) 與特定日早午晚的陷阱`,
+            formula: `on Monday night (特定日晚上用 on) ｜ X every morning / this Sunday (不加介系詞)`,
+            summary: `單純「在早上/晚上」用 in the morning / in the evening；但只要前面加上「星期幾」變成「週一晚上」，介系詞就會被特定日吸走，改用 on！此外，時間前有 every、this、next、last 或 today 時，一律不加介系詞。`,
+            examples: [
+              { en: `Jobs's housewarming party is at 9:00 on Monday night.`, zh: `賈伯斯的喬遷派對在週一晚上九點。（土城 #24）`, trap: `Monday night 是特定某天的晚上，介系詞用 on，不可用 in！` },
+              { en: `Can you take a walk with me this Sunday?`, zh: `這週日你可以跟我去散步嗎？（平南 #22）`, trap: `因為有 this，Sunday 前面選 X（不填介系詞）！同理：every morning（土城 #27）也不加 in/at。` }
+            ]
+          }
+        ],
+        vizType: `prep-funnel`,
+        practice: [
+          {
+            stem: `(彰化溪湖) That singer's meet-and-greet is ______ ten ______ Saturday morning.  (A) on; on  (B) at; at  (C) on; at  (D) at; on`,
+            answer: `正解：(D) at; on。時刻 ten 前面用 at；特定某天早上 Saturday morning 前面用 on。`
+          },
+          {
+            stem: `(新北土城) Lisa loves sports. She goes jogging ______ morning before school.  (A) in the every  (B) on the every  (C) at every  (D) every`,
+            answer: `正解：(D) every。every morning 為時間副詞片語，前面不可再加 in/on/at 或 the。`
+          },
+          {
+            stem: `(高雄陽明) It's ______ 12:00 p.m. Time ______ lunch.  (A) at; for  (B) X; for  (C) at; to  (D) X; to`,
+            answer: `正解：(B) X; for。表示「現在是 12 點」不加 at；lunch 是名詞，故用 Time for lunch。`
+          }
+        ]
+      },
+      {
+        id: `stage-5`,
+        num: `關卡 05`,
+        title: `高頻字彙與閱讀解題`,
+        shortDesc: `十大必考單字、課本關鍵句型與時刻表/告示牌實戰`,
+        overview: `段考第三部分常考單字文意字彙、課文翻譯與生活圖表閱讀（電影票價優惠計算、圖書館 Dos & Don'ts 告示、週課表時間推算）。`,
+        checklist: [
+          { id: `s5-c1`, text: `完成下方 10 大跨校高頻單字拼寫確認（特別是 Wednesday 與 Thursday）` },
+          { id: `s5-c2`, text: `熟記課文必考翻譯句：「With this door, we can go to many places.」與「Are you free this weekend?」` },
+          { id: `s5-c3`, text: `掌握圖表閱讀解題步驟：先看星期/時段限制，再核對優惠資格（早鳥/平日買三送一）` }
+        ],
+        rules: [
+          {
+            title: `1. 跨校翻譯題必考課文黃金句`,
+            formula: `With this door, we can go to many places. ｜ Check the test tubes for cracks.`,
+            summary: `檢視仁愛、桃子腳、土城、明正、崇林、林園、埤頭等 7 校手寫翻譯題，以下 4 句重複出現率極高，務必練到一字不漏：`,
+            examples: [
+              { en: `With this door, we can go to many places.`, zh: `用這扇門，我們可以去很多地方。（桃子腳、土城、中山、埤頭四校直出翻譯！）`, trap: `注意介系詞用「With」，複數用「places」。` },
+              { en: `Check the test tubes for cracks, and wash them after class.`, zh: `檢查試管的裂縫，下課後清理試管（用代名詞）。（仁愛、崇林、林園必考）`, trap: `test tubes 為複數，後半句代名詞必須用「them」；為…檢查用「for」。` },
+              { en: `They are signing pictures, blowing kisses, and shaking hands with their fans.`, zh: `他們正在簽名照片、送飛吻並和粉絲握手。（桃子腳、平南、歸仁、林園）`, trap: `三個 V-ing 對等連接，注意 shake 去 e 加 ing，fans 加 s。` },
+              { en: `Are you free this weekend? / Are you ready for the show?`, zh: `你這週末有空嗎？／你們準備好要看表演了嗎？（桃子腳、埤頭、林園）`, trap: `this weekend 前面不加介系詞；準備好搭配「for + 名詞」。` }
+            ]
+          },
+          {
+            title: `2. 閱讀測驗圖表三大題型攻略`,
+            formula: `票價優惠計算 ｜ 規定分類 (Dos vs Don'ts) ｜ 課表時段推算`,
+            summary: `段考閱讀測驗不再只考純文字，而是將文法融入生活情境圖表，解題時建議「先圈出題目給的時間與身分條件，再回表比對」：`,
+            examples: [
+              { en: `電影票價題（陽明 #38 / 桃子腳 #40）：Cody and her three friends (共4人) see Fast & Furious 9 at 12:30 a.m. this Wednesday.`, zh: `解題：12:30 a.m. 屬 Night-Owl（午夜場 NT$220），Wednesday 為平日適用「買 3 送 1」，故 4 張只需付 3 張錢 = 220 × 3 = NT$660！`, trap: `最常見失分點：「Cody and her three friends」一共是「4 個人」，不是 3 個人！且 12:30 a.m. 是凌晨。` },
+              { en: `告示牌分類題（陽明 #31-33 / 桃子腳 #33-34）：Follow BROWN rules in the library.`, zh: `解題：將規定拆成 Dos（Be quiet / Walk / Read new books in the library）與 Don'ts（Run / Write in the books / Talk in the library），注意「Only teachers can use the photocopier」代表學生不能用！`, trap: `仔細核對主詞限制（Only teachers vs students）與場所範圍（Talk only in the bathroom）。` }
+            ]
+          }
+        ],
+        vizType: `vocab-cards`,
+        practice: [
+          {
+            stem: `(新北桃子腳 #40) Cody and her three friends will see Fast & Furious 9 at 12:30 a.m. this Wednesday. (平日 Night-Owl 票價 NT$220，Weekday's special: Buy 3 get 1 free) 總票價是多少？`,
+            answer: `正解：NT$660。共有 4 位（Cody + 3 friends），週三平日買三送一只需付 3 張票，12:30 a.m. 為午夜場 $220，220 × 3 = 660 元。`
+          },
+          {
+            stem: `(高雄陽明 #34) Everything is 30% OFF only from Mon. to Thur. Annie buys a bear doll (原價 NT$120) for only NT$84 today. What day is today?  (A) Sunday  (B) Monday  (C) Friday  (D) Saturday`,
+            answer: `正解：(B) Monday。30% OFF 即打七折（120 × 0.7 = 84），優惠僅限週一到週四，四個選項中只有 Monday 符合。`
+          }
+        ]
+      }
+    ];
+
+    // Listening Practice Questions (5 Picture, 5 Q&A, 5 Dialogue = 15 Authentic Items)
+    const LISTENING_QUESTIONS = [
+      // --- Type 1: Picture Listening (圖片聽力：辨識句意) ---
+      {
+        id: `lq1`,
+        type: `picture`,
+        typeLabel: `圖片聽力`,
+        source: `改編自 平南 / 文昌 / 埤頭 國中英聽`,
+        lines: [
+          { speaker: `F`, text: `We are in the museum. Please be quiet.` }
+        ],
+        question: `請聽句子，選出最符合描述的圖片：`,
+        options: [
+          { label: `A`, svgId: `pic-q1-a`, alt: `圖書館內跑步` },
+          { label: `B`, svgId: `pic-q1-b`, alt: `公園聊天` },
+          { label: `C`, svgId: `pic-q1-c`, alt: `博物館內保持安靜` }
+        ],
+        answerIndex: 2,
+        explanation: `關鍵字為「museum（博物館）」與「be quiet（保持安靜）」，選項 (C) 顯示博物館建築與安靜標誌。`
+      },
+      {
+        id: `lq2`,
+        type: `picture`,
+        typeLabel: `圖片聽力`,
+        source: `改編自 桃子腳國中 113-1 英聽 #3`,
+        lines: [
+          { speaker: `M`, text: `Henry is not a good cook, but he can jump rope very well.` }
+        ],
+        question: `請聽句子，選出最符合描述的圖片：`,
+        options: [
+          { label: `A`, svgId: `pic-q2-a`, alt: `男孩正在跳繩` },
+          { label: `B`, svgId: `pic-q2-b`, alt: `男孩正在煮菜` },
+          { label: `C`, svgId: `pic-q2-c`, alt: `男孩正在打籃球` }
+        ],
+        answerIndex: 0,
+        explanation: `句意為「Henry 不擅長煮飯，但他很會跳繩（jump rope）」，主詞強調「can jump rope very well」，故選 (A)。`
+      },
+      {
+        id: `lq3`,
+        type: `picture`,
+        typeLabel: `圖片聽力`,
+        source: `改編自 高雄陽明國中 112-1 英聽 #3`,
+        lines: [
+          { speaker: `F`, text: `The singer is shaking hands with his fan.` }
+        ],
+        question: `請聽句子，選出最符合描述的圖片：`,
+        options: [
+          { label: `A`, svgId: `pic-q3-a`, alt: `歌手簽名照片` },
+          { label: `B`, svgId: `pic-q3-b`, alt: `歌手與粉絲握手` },
+          { label: `C`, svgId: `pic-q3-c`, alt: `歌手送飛吻` }
+        ],
+        answerIndex: 1,
+        explanation: `「shake hands with...」意為「與…握手」，選項 (B) 描繪兩人正握手的畫面；(A) 為 sign pictures，(C) 為 blow kisses。`
+      },
+      {
+        id: `lq4`,
+        type: `picture`,
+        typeLabel: `圖片聽力`,
+        source: `改編自 桃園平南國中 110-1 英聽 #5`,
+        lines: [
+          { speaker: `M`, text: `It is ten thirty p.m. Don't watch TV. Go to bed now.` }
+        ],
+        question: `請聽句子，選出最符合描述的圖片：`,
+        options: [
+          { label: `A`, svgId: `pic-q4-a`, alt: `晚上十點半看電視` },
+          { label: `B`, svgId: `pic-q4-b`, alt: `晚上十點半在床上睡覺` },
+          { label: `C`, svgId: `pic-q4-c`, alt: `七點半在書桌讀書` }
+        ],
+        answerIndex: 1,
+        explanation: `聽到「ten thirty p.m.」與「Don't watch TV. Go to bed now.（不要看電視，現在上床睡覺）」，故選在床上睡覺且時鐘為 10:30 的 (B)。`
+      },
+      {
+        id: `lq5`,
+        type: `picture`,
+        typeLabel: `圖片聽力`,
+        source: `改編自 高雄林園國中 112-1 英聽 #4`,
+        lines: [
+          { speaker: `F`, text: `The concert is at seven p.m. on Sunday.` }
+        ],
+        question: `請聽句子，選出符合演唱會時間的門票圖片：`,
+        options: [
+          { label: `A`, svgId: `pic-q5-a`, alt: `週六晚上七點門票` },
+          { label: `B`, svgId: `pic-q5-b`, alt: `週日早上七點門票` },
+          { label: `C`, svgId: `pic-q5-c`, alt: `週日晚上七點門票` }
+        ],
+        answerIndex: 2,
+        explanation: `注意時間「seven p.m.（晚上七點）」與星期「Sunday（星期日）」，須同時符合兩者，故選 (C)。`
+      },
+
+      // --- Type 2: Q&A (基本問答) ---
+      {
+        id: `lq6`,
+        type: `qa`,
+        typeLabel: `基本問答`,
+        source: `高雄陽明國中 112-1 英聽 #5`,
+        lines: [
+          { speaker: `M`, text: `What is she doing in the living room?` }
+        ],
+        question: `請聽問句，選出一個最適合的回應：`,
+        options: [
+          { label: `A`, text: `She is dancing in her bedroom.` },
+          { label: `B`, text: `She is using the telephone there.` },
+          { label: `C`, text: `She is eating in the dining room.` }
+        ],
+        answerIndex: 1,
+        explanation: `問句詢問她在「living room（客廳）」做什麼。(A) 在臥室、(C) 在餐廳皆地點不符；(B) 的「there」即指客廳，符合問答邏輯。`
+      },
+      {
+        id: `lq7`,
+        type: `qa`,
+        typeLabel: `基本問答`,
+        source: `新北桃子腳國中小 113-1 英聽 #9`,
+        lines: [
+          { speaker: `F`, text: `We are at the museum. Please don't talk or run.` }
+        ],
+        question: `請聽敘述，選出一個最適合的回應：`,
+        options: [
+          { label: `A`, text: `Let's follow the rules in the lab.` },
+          { label: `B`, text: `Sure, but where are we now?` },
+          { label: `C`, text: `Sorry. Let's be quiet, Larry.` }
+        ],
+        answerIndex: 2,
+        explanation: `對方提醒「我們在博物館，請不要說話或奔跑」，最自然回應是道歉並保持安靜：「Sorry. Let's be quiet, Larry.」。`
+      },
+      {
+        id: `lq8`,
+        type: `qa`,
+        typeLabel: `基本問答`,
+        source: `新北桃子腳國中小 113-1 英聽 #11`,
+        lines: [
+          { speaker: `M`, text: `Hurry up, Judy. Time for class.` }
+        ],
+        question: `請聽敘述，選出一個最適合的回應：`,
+        options: [
+          { label: `A`, text: `Hurry up! I am so hungry.` },
+          { label: `B`, text: `Let's go to the concert.` },
+          { label: `C`, text: `OK! I'm ready. Let's go!` }
+        ],
+        answerIndex: 2,
+        explanation: `聽到「快一點，上課時間到了（Time for class）」，最適合的回應為「OK! I'm ready. Let's go!（好的！我準備好了，走吧！）」。`
+      },
+      {
+        id: `lq9`,
+        type: `qa`,
+        typeLabel: `基本問答`,
+        source: `桃園平南 / 高雄林園 英聽原題`,
+        lines: [
+          { speaker: `M`, text: `Mom, today is Monday. What day is Mother's Day?` }
+        ],
+        question: `請聽問句，選出一個最適合的回應：`,
+        options: [
+          { label: `A`, text: `Mother's Day is a happy time for everyone.` },
+          { label: `B`, text: `Let's have a party for Mom today.` },
+          { label: `C`, text: `It is on Sunday.` }
+        ],
+        answerIndex: 2,
+        explanation: `「What day is...?」是在詢問「星期幾」，因此必須回答星期並加上介系詞 on：「It is on Sunday.」。`
+      },
+      {
+        id: `lq10`,
+        type: `qa`,
+        typeLabel: `基本問答`,
+        source: `高雄林園國中 112-1 英聽 #11`,
+        lines: [
+          { speaker: `F`, text: `Can you turn off the phone? It's family time.` }
+        ],
+        question: `請聽請求句，選出一個最適合的回應：`,
+        options: [
+          { label: `A`, text: `Sure. Let me turn it off.` },
+          { label: `B`, text: `No, you can't watch TV now.` },
+          { label: `C`, text: `Yes, I can turn off the TV.` }
+        ],
+        answerIndex: 0,
+        explanation: `對方請你關掉手機（the phone），回應應使用單數受格 it 置於 turn 與 off 中間：「Sure. Let me turn it off.」。(B)(C) 誤說成 TV。`
+      },
+
+      // --- Type 3: Dialogue (聽力對話：言談理解) ---
+      {
+        id: `lq11`,
+        type: `dialogue`,
+        typeLabel: `聽力對話`,
+        source: `陽明 / 桃子腳 / 文昌 三校必考經典對話`,
+        lines: [
+          { speaker: `M`, text: `The movie Iron Man is at nine thirty.` },
+          { speaker: `F`, text: `Nine thirty? But it's only seven thirty now.` },
+          { speaker: `M`, text: `Hmm. How about Spider-Man?` },
+          { speaker: `F`, text: `OK! Let's watch Spider-Man. I can wait for thirty minutes from now.` }
+        ],
+        question: `Question: What time is the movie Spider-Man?`,
+        options: [
+          { label: `A`, text: `7:30` },
+          { label: `B`, text: `8:00` },
+          { label: `C`, text: `9:30` }
+        ],
+        answerIndex: 1,
+        explanation: `女生說「現在只有七點半（7:30 now）」，並說「從現在起我只要等 30 分鐘（wait for 30 minutes from now）」，7:30 + 30 分鐘 = 8:00！`
+      },
+      {
+        id: `lq12`,
+        type: `dialogue`,
+        typeLabel: `聽力對話`,
+        source: `新北桃子腳國中小 113-1 英聽 #14`,
+        lines: [
+          { speaker: `M`, text: `Students, here are some rules in the lab. First, don't run in the lab. It's not safe.` },
+          { speaker: `F`, text: `Can we talk in the lab?` },
+          { speaker: `M`, text: `Sure!` },
+          { speaker: `F`, text: `Can we talk on the phone?` },
+          { speaker: `M`, text: `Turn off your phone in class, please. Now everyone, please clean the lab together.` }
+        ],
+        question: `Question: What can the students do in the lab?`,
+        options: [
+          { label: `A`, text: `Clean the lab.` },
+          { label: `B`, text: `Talk on the phone.` },
+          { label: `C`, text: `Run and play.` }
+        ],
+        answerIndex: 0,
+        explanation: `實驗室裡不可奔跑（don't run）、上課要關手機（turn off your phone），最後老師請大家「clean the lab together（一起清理實驗室）」，且對話中也提到可以 talk in the lab，選項中只有 (A) 符合。`
+      },
+      {
+        id: `lq13`,
+        type: `dialogue`,
+        typeLabel: `聽力對話`,
+        source: `新北桃子腳國中小 113-1 英聽 #12`,
+        lines: [
+          { speaker: `M`, text: `It's Saturday night. I'm Bill Su and I'm reporting from the concert of Rock band. Look! They are singing and dancing. The fans are taking pictures of them. Now, let's stand up, sing, and dance with the singers!` }
+        ],
+        question: `Question: What is Bill Su doing?`,
+        options: [
+          { label: `A`, text: `He is taking some pictures.` },
+          { label: `B`, text: `He is reporting at a concert.` },
+          { label: `C`, text: `He is singing and dancing.` }
+        ],
+        answerIndex: 1,
+        explanation: `關鍵句為開頭的「I'm Bill Su and I'm reporting from the concert...（我正在演唱會現場報導）」。唱歌跳舞的是樂團，拍照的是粉絲（the fans）。`
+      },
+      {
+        id: `lq14`,
+        type: `dialogue`,
+        typeLabel: `聽力對話`,
+        source: `高雄陽明 / 高雄林園 英聽經典對話`,
+        lines: [
+          { speaker: `M`, text: `Let's look at this mummy. Be quiet, or the mummy can wake up!` },
+          { speaker: `F`, text: `Oh my! Please don't wake up! Let's run.` },
+          { speaker: `M`, text: `Haha. Please be quiet and just look at the mummy.` },
+          { speaker: `F`, text: `The picture is very beautiful. Can I go near it?` },
+          { speaker: `M`, text: `No, you can't. Don't go near the picture.` }
+        ],
+        question: `Question: Which is true?`,
+        options: [
+          { label: `A`, text: `The mummy wakes up.` },
+          { label: `B`, text: `The girl and the man are in a museum.` },
+          { label: `C`, text: `The girl can go near the picture.` }
+        ],
+        answerIndex: 1,
+        explanation: `兩人在看木乃伊（mummy）與畫作（picture），且被要求保持安靜、不可靠近畫作，由此可推知他們在「博物館（museum）」裡。(A) 男生只是開玩笑；(C) 不可以靠近畫作。`
+      },
+      {
+        id: `lq15`,
+        type: `dialogue`,
+        typeLabel: `聽力對話`,
+        source: `高雄陽明國中 112-1 英聽 #7`,
+        lines: [
+          { speaker: `F`, text: `Nathan. Don't run on the bus.` },
+          { speaker: `M`, text: `Sorry.` },
+          { speaker: `F`, text: `And don't eat or drink here.` },
+          { speaker: `M`, text: `But I am hungry now.` },
+          { speaker: `F`, text: `It is the rule. Please follow the bus rules.` },
+          { speaker: `M`, text: `Okay, okay.` }
+        ],
+        question: `Question: Where are the boy and the woman?`,
+        options: [
+          { label: `A`, text: `In the park.` },
+          { label: `B`, text: `On the bus.` },
+          { label: `C`, text: `At home.` }
+        ],
+        answerIndex: 1,
+        explanation: `對話反覆出現「on the bus」與「follow the bus rules（遵守公車規則）」，可知兩人正在公車上，介系詞搭配為 on the bus。`
+      }
+    ];
+
+    // =========================================================================
+    // 2. STATE MANAGEMENT
+    // =========================================================================
+    const DEFAULT_STATE = {
+      activeStageId: `stage-1`,
+      checkedItems: [],
+      selectedVerb: `dance`,
+      revealedPractice: {},
+      listeningFilter: `all`,
+      listeningAnswers: {},
+      revealedTranscripts: {},
+      speechRate: 1.0
+    };
+
+    let appState = Object.assign({}, DEFAULT_STATE);
+    let activeChartInstance = null;
+    let activeSpeechId = null;
+
+    function getTotalChecklistCount() {
+      let total = 0;
+      for (let i = 0; i < STAGES.length; i++) {
+        total += STAGES[i].checklist.length;
+      }
+      return total;
+    }
+
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (e) {
+        // Ignore persistence errors silently in local preview
+      }
+    }
+
+    function getCssToken(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    // =========================================================================
+    // 3. INLINE SVG ILLUSTRATIONS FOR PICTURE LISTENING
+    // =========================================================================
+    function getPictureSvg(svgId) {
+      switch (svgId) {
+        // Q1: Museum Quiet
+        case `pic-q1-a`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="144" height="96" rx="10" fill="var(--surface-container-low)"/>
+            <rect x="18" y="20" width="46" height="70" rx="4" fill="var(--background)" stroke="var(--outline)" stroke-width="2"/>
+            <line x1="25" y1="36" x2="57" y2="36" stroke="var(--primary)" stroke-width="3"/>
+            <line x1="25" y1="54" x2="57" y2="54" stroke="var(--primary)" stroke-width="3"/>
+            <line x1="25" y1="72" x2="57" y2="72" stroke="var(--primary)" stroke-width="3"/>
+            <circle cx="106" cy="36" r="9" fill="var(--on-surface)"/>
+            <path d="M106 46 L100 66 L88 86 M100 66 L118 82 M94 54 L120 48" stroke="var(--on-surface)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <text x="41" y="100" font-size="11" font-weight="700" text-anchor="middle" fill="var(--on-surface-variant)">Library (Run)</text>
+          </svg>`;
+        case `pic-q1-b`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="144" height="96" rx="10" fill="var(--surface-container-low)"/>
+            <circle cx="52" cy="52" r="10" fill="var(--on-surface)"/>
+            <path d="M38 88 C38 70 66 70 66 88" fill="var(--primary)"/>
+            <circle cx="108" cy="52" r="10" fill="var(--on-surface)"/>
+            <path d="M94 88 C94 70 122 70 122 88" fill="var(--secondary)"/>
+            <rect x="58" y="18" width="44" height="22" rx="8" fill="var(--background)" stroke="var(--primary)" stroke-width="2"/>
+            <text x="80" y="33" font-size="11" font-weight="700" text-anchor="middle" fill="var(--primary)">Talk!</text>
+            <text x="80" y="100" font-size="11" font-weight="700" text-anchor="middle" fill="var(--on-surface-variant)">Park</text>
+          </svg>`;
+        case `pic-q1-c`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="144" height="96" rx="10" fill="var(--surface-container-low)"/>
+            <polygon points="80,16 26,38 134,38" fill="var(--primary)"/>
+            <rect x="34" y="38" width="10" height="44" fill="var(--on-surface-variant)"/>
+            <rect x="75" y="38" width="10" height="44" fill="var(--on-surface-variant)"/>
+            <rect x="116" y="38" width="10" height="44" fill="var(--on-surface-variant)"/>
+            <rect x="26" y="82" width="108" height="8" rx="2" fill="var(--on-surface)"/>
+            <circle cx="122" cy="30" r="15" fill="var(--background)" stroke="var(--secondary)" stroke-width="2.5"/>
+            <text x="122" y="34" font-size="10" font-weight="700" text-anchor="middle" fill="var(--secondary)">Shh</text>
+            <text x="80" y="101" font-size="11" font-weight="700" text-anchor="middle" fill="var(--on-surface)">Museum</text>
+          </svg>`;
+
+        // Q2: Jump rope vs Cook vs Basketball
+        case `pic-q2-a`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="144" height="96" rx="10" fill="var(--surface-container-low)"/>
+            <path d="M44 58 C44 102 116 102 116 58" fill="none" stroke="var(--primary)" stroke-width="3" stroke-dasharray="4 3"/>
+            <circle cx="80" cy="28" r="9" fill="var(--on-surface)"/>
+            <line x1="80" y1="37" x2="80" y2="62" stroke="var(--on-surface)" stroke-width="4" stroke-linecap="round"/>
+            <path d="M80 44 L50 56 M80 44 L110 56" stroke="var(--on-surface)" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M80 62 L68 82 M80 62 L92 82" stroke="var(--on-surface)" stroke-width="3.5" stroke-linecap="round"/>
+            <text x="80" y="100" font-size="11" font-weight="700" text-anchor="middle" fill="var(--primary)">Jump Rope</text>
+          </svg>`;
+        case `pic-q2-b`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="144" height="96" rx="10" fill="var(--surface-container-low)"/>
+            <rect x="48" y="54" width="64" height="28" rx="6" fill="var(--on-surface)"/>
+            <line x1="32" y1="62" x2="48" y2="62" stroke="var(--on-surface)" stroke-width="4" stroke-linecap="round"/>
+            <path d="M64 46 C60 34 72 34 68 24 M84 46 C80 34 92 34 88 24" fill="none" stroke="var(--secondary)" stroke-width="3" stroke-linecap="round"/>
+            <text x="80" y="100" font-size="11" font-weight="700" text-anchor="middle" fill="var(--on-surface-variant)">Cooking</text>
+          </svg>`;
+        case `pic-q2-c`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="144" height="96" rx="10" fill="var(--surface-container-low)"/>
+            <circle cx="80" cy="48" r="22" fill="var(--secondary)"/>
+            <path d="M58 48 L102 48 M80 26 L80 70" stroke="var(--background)" stroke-width="2.5"/>
+            <path d="M64 33 C74 44 74 52 64 63 M96 33 C86 44 86 52 96 63" fill="none" stroke="var(--background)" stroke-width="2.5"/>
+            <text x="80" y="100" font-size="11" font-weight="700" text-anchor="middle" fill="var(--on-surface-variant)">Basketball</text>
+          </svg>`;
+
+        // Q3: Sign pictures vs Shake hands vs Blow kisses
+        case `pic-q3-a`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="144" height="96" rx="10" fill="var(--surface-container-low)"/>
+            <rect x="44" y="20" width="56" height="68" rx="6" fill="var(--background)" stroke="var(--outline)" stroke-width="2"/>
+            <circle cx="72" cy="40" r="10" fill="var(--primary)"/>
+            <path d="M56 64 Q64 56 72 64 T88 64" fill="none" stroke="var(--secondary)" stroke-width="2.5"/>
+            <line x1="94" y1="62" x2="122" y2="34" stroke="var(--on-surface)" stroke-width="5" stroke-linecap="round"/>
+            <text x="80" y="101" font-size="11" font-weight="700" text-anchor="middle" fill="var(--on-surface-variant)">Signing Pictures</text>
+          </svg>`;
+        case `pic-q3-b`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="144" height="96" rx="10" fill="var(--surface-container-low)"/>
+            <circle cx="48" cy="34" r="10" fill="var(--primary)"/>
+            <path d="M34 78 L34 52 Q48 44 58 56 L78 58" fill="none" stroke="var(--primary)" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="112" cy="34" r="10" fill="var(--on-surface)"/>
+            <path d="M126 78 L126 52 Q112 44 102 56 L82 58" fill="none" stroke="var(--on-surface)" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="80" cy="58" r="7" fill="var(--secondary)"/>
+            <text x="80" y="100" font-size="11" font-weight="700" text-anchor="middle" fill="var(--primary)">Shaking Hands</text>
+          </svg>`;
+        case `pic-q3-c`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="144" height="96" rx="10" fill="var(--surface-container-low)"/>
+            <circle cx="54" cy="48" r="14" fill="var(--primary)"/>
+            <path d="M96 40 C96 32 108 32 108 40 C108 32 120 32 120 40 C120 50 108 58 108 58 C108 58 96 50 96 40 Z" fill="var(--error)"/>
+            <line x1="74" y1="48" x2="90" y2="44" stroke="var(--secondary)" stroke-width="2.5" stroke-dasharray="3 3"/>
+            <text x="80" y="100" font-size="11" font-weight="700" text-anchor="middle" fill="var(--on-surface-variant)">Blowing Kisses</text>
+          </svg>`;
+
+        // Q4: 10:30 TV vs Bed vs Study
+        case `pic-q4-a`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="144" height="96" rx="10" fill="var(--surface-container-low)"/>
+            <rect x="26" y="28" width="68" height="46" rx="6" fill="var(--on-surface)"/>
+            <rect x="32" y="34" width="56" height="34" rx="3" fill="var(--primary-container)"/>
+            <text x="60" y="55" font-size="12" font-weight="700" text-anchor="middle" fill="var(--primary)">TV</text>
+            <circle cx="122" cy="44" r="18" fill="var(--background)" stroke="var(--on-surface)" stroke-width="2"/>
+            <text x="122" y="48" font-size="10" font-weight="700" text-anchor="middle" fill="var(--on-surface)">10:30</text>
+            <text x="80" y="98" font-size="11" font-weight="700" text-anchor="middle" fill="var(--on-surface-variant)">Watch TV (10:30 p.m.)</text>
+          </svg>`;
+        case `pic-q4-b`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="144" height="96" rx="10" fill="var(--surface-container-low)"/>
+            <rect x="22" y="56" width="76" height="24" rx="4" fill="var(--primary)"/>
+            <rect x="24" y="46" width="18" height="10" rx="3" fill="var(--background)"/>
+            <circle cx="33" cy="42" r="7" fill="var(--on-surface)"/>
+            <text x="64" y="40" font-size="13" font-weight="700" fill="var(--primary)">Zzz...</text>
+            <circle cx="124" cy="40" r="18" fill="var(--background)" stroke="var(--on-surface)" stroke-width="2"/>
+            <text x="124" y="44" font-size="10" font-weight="700" text-anchor="middle" fill="var(--on-surface)">10:30</text>
+            <text x="80" y="98" font-size="11" font-weight="700" text-anchor="middle" fill="var(--primary)">Go to bed (10:30 p.m.)</text>
+          </svg>`;
+        case `pic-q4-c`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="144" height="96" rx="10" fill="var(--surface-container-low)"/>
+            <rect x="26" y="60" width="66" height="8" rx="2" fill="var(--on-surface)"/>
+            <rect x="40" y="44" width="38" height="16" rx="2" fill="var(--background)" stroke="var(--primary)" stroke-width="2"/>
+            <circle cx="122" cy="44" r="18" fill="var(--background)" stroke="var(--on-surface)" stroke-width="2"/>
+            <text x="122" y="48" font-size="10" font-weight="700" text-anchor="middle" fill="var(--on-surface)">7:30</text>
+            <text x="80" y="98" font-size="11" font-weight="700" text-anchor="middle" fill="var(--on-surface-variant)">Study (7:30 p.m.)</text>
+          </svg>`;
+
+        // Q5: Concert Tickets
+        case `pic-q5-a`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="14" y="18" width="132" height="76" rx="10" fill="var(--background)" stroke="var(--outline)" stroke-width="2"/>
+            <text x="80" y="40" font-size="11" font-weight="700" text-anchor="middle" fill="var(--secondary)">CONCERT TICKET</text>
+            <text x="80" y="60" font-size="14" font-weight="700" text-anchor="middle" fill="var(--on-surface)">Saturday</text>
+            <text x="80" y="79" font-size="13" font-weight="700" text-anchor="middle" fill="var(--primary)">7:00 p.m.</text>
+          </svg>`;
+        case `pic-q5-b`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="14" y="18" width="132" height="76" rx="10" fill="var(--background)" stroke="var(--outline)" stroke-width="2"/>
+            <text x="80" y="40" font-size="11" font-weight="700" text-anchor="middle" fill="var(--secondary)">CONCERT TICKET</text>
+            <text x="80" y="60" font-size="14" font-weight="700" text-anchor="middle" fill="var(--on-surface)">Sunday</text>
+            <text x="80" y="79" font-size="13" font-weight="700" text-anchor="middle" fill="var(--secondary)">7:00 a.m.</text>
+          </svg>`;
+        case `pic-q5-c`:
+          return `<svg viewBox="0 0 160 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="14" y="18" width="132" height="76" rx="10" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="2"/>
+            <text x="80" y="40" font-size="11" font-weight="700" text-anchor="middle" fill="var(--on-primary-container)">CONCERT TICKET</text>
+            <text x="80" y="60" font-size="14" font-weight="700" text-anchor="middle" fill="var(--on-surface)">Sunday</text>
+            <text x="80" y="79" font-size="13" font-weight="700" text-anchor="middle" fill="var(--primary)">7:00 p.m.</text>
+          </svg>`;
+        default:
+          return ``;
+      }
+    }
+
+    // =========================================================================
+    // 4. SPEECH SYNTHESIS (Web Speech API for Listening Zone)
+    // =========================================================================
+    function stopSpeech() {
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+      if (activeSpeechId) {
+        const prev = activeSpeechId;
+        activeSpeechId = null;
+        updateAudioStatusUI(prev, false);
+      }
+    }
+
+    function updateAudioStatusUI(qId, isPlaying, customText) {
+      const statusEl = document.getElementById(`status-${qId}`);
+      const playBtn = document.getElementById(`play-${qId}`);
+      if (statusEl) {
+        if (isPlaying) {
+          statusEl.classList.add(`is-playing`);
+          statusEl.textContent = customText || `正在英語朗讀中…`;
+        } else {
+          statusEl.classList.remove(`is-playing`);
+          statusEl.textContent = customText || `點擊左側按鈕即可聆聽`;
+        }
+      }
+      if (playBtn) {
+        playBtn.innerHTML = isPlaying
+          ? `<i data-lucide="square" width="16" height="16" aria-hidden="true"></i> 停止播放`
+          : `<i data-lucide="volume-2" width="16" height="16" aria-hidden="true"></i> 播放題目音檔`;
+        if (window.lucide) window.lucide.createIcons();
+      }
+    }
+
+    function playListeningQuestion(qId) {
+      const q = LISTENING_QUESTIONS.find(function (item) { return item.id === qId; });
+      if (!q) return;
+
+      if (activeSpeechId === qId) {
+        stopSpeech();
+        return;
+      }
+      stopSpeech();
+
+      if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === `undefined`) {
+        updateAudioStatusUI(qId, false, `此環境不支援語音合成，請展開「聽力逐字稿」檢視題目內容。`);
+        const tBox = document.getElementById(`transcript-${qId}`);
+        if (tBox) tBox.hidden = false;
+        return;
+      }
+
+      activeSpeechId = qId;
+      updateAudioStatusUI(qId, true, `準備播放 (${appState.speechRate}x)…`);
+
+      const voices = window.speechSynthesis.getVoices();
+      const enVoices = voices.filter(function (v) { return v.lang && v.lang.toLowerCase().indexOf(`en`) === 0; });
+      const defaultEnVoice = enVoices.length > 0 ? enVoices[0] : null;
+
+      let lineIdx = 0;
+      const lines = q.lines.slice();
+      if (q.type === `dialogue` && q.question) {
+        lines.push({ speaker: `Q`, text: q.question });
+      }
+
+      function speakNext() {
+        if (activeSpeechId !== qId || lineIdx >= lines.length) {
+          if (activeSpeechId === qId) {
+            activeSpeechId = null;
+            updateAudioStatusUI(qId, false, `播放完畢，可再次重聽`);
+          }
+          return;
+        }
+        const current = lines[lineIdx];
+        const utt = new SpeechSynthesisUtterance(current.text);
+        utt.lang = `en-US`;
+        if (defaultEnVoice) utt.voice = defaultEnVoice;
+        utt.rate = appState.speechRate;
+        if (current.speaker === `F`) {
+          utt.pitch = 1.15;
+        } else if (current.speaker === `M`) {
+          utt.pitch = 0.92;
+        } else {
+          utt.pitch = 1.0;
+        }
+
+        const speakerTag = current.speaker === `F` ? `女聲` : (current.speaker === `M` ? `男聲` : `提問`);
+        updateAudioStatusUI(qId, true, `正在朗讀 (${lineIdx + 1}/${lines.length} · ${speakerTag})…`);
+
+        utt.onend = function () {
+          lineIdx += 1;
+          speakNext();
+        };
+        utt.onerror = function () {
+          activeSpeechId = null;
+          updateAudioStatusUI(qId, false, `無法啟動語音，請查看下方逐字稿`);
+        };
+        window.speechSynthesis.speak(utt);
+      }
+
+      speakNext();
+    }
+
+    // =========================================================================
+    // 5. RENDER FUNCTIONS
+    // =========================================================================
+
+    function scrollToSection(sectionId) {
+      const target = document.getElementById(sectionId);
+      if (target) {
+        target.scrollIntoView({ behavior: `smooth`, block: `start` });
+      }
+    }
+
+    function updateOverviewCards() {
+      const totalChecks = getTotalChecklistCount();
+      const checkedCount = appState.checkedItems.length;
+      const pct = totalChecks > 0 ? Math.round((checkedCount / totalChecks) * 100) : 0;
+
+      let stagesCompleted = 0;
+      for (let i = 0; i < STAGES.length; i++) {
+        const stage = STAGES[i];
+        const allDone = stage.checklist.every(function (c) {
+          return appState.checkedItems.indexOf(c.id) !== -1;
+        });
+        if (allDone) stagesCompleted += 1;
+      }
+
+      const pctEl = document.getElementById(`ov-progress-pct`);
+      const detailEl = document.getElementById(`ov-progress-detail`);
+      const barEl = document.getElementById(`ov-progress-bar`);
+      const stagesDoneEl = document.getElementById(`ov-stages-done`);
+
+      if (pctEl) pctEl.textContent = `${pct}%`;
+      if (detailEl) detailEl.textContent = `已完成 ${checkedCount} / ${totalChecks} 項核心重點`;
+      if (barEl) barEl.style.width = `${pct}%`;
+      if (stagesDoneEl) stagesDoneEl.textContent = `${stagesCompleted} / ${STAGES.length} 關卡達標`;
+
+      // Listening stats
+      let answeredCount = 0;
+      let correctCount = 0;
+      for (let i = 0; i < LISTENING_QUESTIONS.length; i++) {
+        const q = LISTENING_QUESTIONS[i];
+        const chosen = appState.listeningAnswers[q.id];
+        if (typeof chosen === `number`) {
+          answeredCount += 1;
+          if (chosen === q.answerIndex) correctCount += 1;
+        }
+      }
+      const lScoreEl = document.getElementById(`ov-listening-score`);
+      const lBadgeEl = document.getElementById(`listening-badge`);
+      if (lScoreEl) lScoreEl.textContent = `${correctCount} / ${LISTENING_QUESTIONS.length}`;
+      if (lBadgeEl) lBadgeEl.textContent = `已作答 ${answeredCount} / ${LISTENING_QUESTIONS.length} 題 · 答對 ${correctCount} 題`;
+    }
+
+    function renderStageCards() {
+      const container = document.getElementById(`stage-cards-container`);
+      if (!container) return;
+
+      let html = ``;
+      for (let i = 0; i < STAGES.length; i++) {
+        const st = STAGES[i];
+        const isSelected = appState.activeStageId === st.id;
+        let doneInStage = 0;
+        for (let j = 0; j < st.checklist.length; j++) {
+          if (appState.checkedItems.indexOf(st.checklist[j].id) !== -1) doneInStage += 1;
+        }
+        const totalInStage = st.checklist.length;
+        const isDone = doneInStage === totalInStage;
+        const badgeClass = isDone ? `chip chip-success` : `chip chip-neutral`;
+        const badgeText = isDone ? `已精熟 ${doneInStage}/${totalInStage}` : `${doneInStage}/${totalInStage} 已勾選`;
+
+        html += `
+          <button type="button"
+            class="stage-card ${isSelected ? `is-selected` : ``}"
+            aria-pressed="${isSelected ? `true` : `false`}"
+            onclick="selectStage('${st.id}')">
+            <div class="stage-card-top">
+              <span class="stage-num">${st.num}</span>
+              <span class="${badgeClass}">${badgeText}</span>
+            </div>
+            <div>
+              <h3>${st.title}</h3>
+              <p>${st.shortDesc}</p>
+            </div>
+          </button>
+        `;
+      }
+      container.innerHTML = html;
+
+      const indicator = document.getElementById(`active-stage-indicator`);
+      const currentStage = STAGES.find(function (s) { return s.id === appState.activeStageId; });
+      if (indicator && currentStage) {
+        indicator.textContent = `目前檢視：${currentStage.num} ${currentStage.title}`;
+      }
+    }
+
+    function renderStageVisualization(stage) {
+      if (stage.vizType === `chart-freq`) {
+        return `
+          <div class="viz-card">
+            <h4>視覺化圖表：14 份段考卷核心考點覆蓋校數</h4>
+            <p class="viz-caption">統計來源：仁愛、陽明、桃子腳、土城、明正、中山、崇林、平南、文昌、林園、歸仁、埤頭、溪湖、鹿港共 14 份試卷。</p>
+            <div class="chart-box">
+              <canvas id="stage-chart-canvas" aria-label="14份段考卷核心考點覆蓋校數長條圖"></canvas>
+            </div>
+          </div>
+          <div class="viz-card">
+            <h4>祈使句連接詞判斷圖解（and vs or）</h4>
+            <p class="viz-caption">「請勿飲食」在段考最常考的連詞選擇。</p>
+            <svg viewBox="0 0 460 150" style="width:100%; height:auto; display:block;" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="10" y="16" width="130" height="48" rx="12" fill="var(--positive-container)"/>
+              <text x="75" y="38" font-size="13" font-weight="700" text-anchor="middle" fill="var(--positive)">肯定祈使句</text>
+              <text x="75" y="55" font-size="11" text-anchor="middle" fill="var(--on-surface)">Eat and drink.</text>
+
+              <rect x="10" y="84" width="130" height="48" rx="12" fill="var(--error-container)"/>
+              <text x="75" y="106" font-size="13" font-weight="700" text-anchor="middle" fill="var(--error)">否定祈使句</text>
+              <text x="75" y="123" font-size="11" text-anchor="middle" fill="var(--on-surface)">Don't eat or drink.</text>
+
+              <line x1="140" y1="40" x2="190" y2="40" stroke="var(--positive)" stroke-width="2.5"/>
+              <line x1="140" y1="108" x2="190" y2="108" stroke="var(--error)" stroke-width="2.5"/>
+
+              <rect x="190" y="16" width="260" height="48" rx="12" fill="var(--surface-container-low)"/>
+              <text x="320" y="38" font-size="13" font-weight="700" text-anchor="middle" fill="var(--on-surface)">用「and」表「並且、同時」</text>
+              <text x="320" y="55" font-size="11" text-anchor="middle" fill="var(--on-surface-variant)">Listen carefully and be safe.</text>
+
+              <rect x="190" y="84" width="260" height="48" rx="12" fill="var(--primary-container)"/>
+              <text x="320" y="106" font-size="13" font-weight="700" text-anchor="middle" fill="var(--on-primary-container)">用「or」表「也不、兩者皆不可」</text>
+              <text x="320" y="123" font-size="11" text-anchor="middle" fill="var(--on-surface)">Don't run or talk in the museum.</text>
+            </svg>
+          </div>
+        `;
+      }
+
+      if (stage.vizType === `pronoun-matrix`) {
+        return `
+          <div class="viz-card">
+            <h4>視覺化對照表：人稱代名詞三格轉換矩陣</h4>
+            <p class="viz-caption">判斷順序：句首當主詞 → 主格 ｜ 名詞前面表所屬 → 所有格 ｜ 動詞或介系詞後面 → 受格</p>
+            <div class="clean-table-wrap">
+              <table class="clean-table">
+                <thead>
+                  <tr>
+                    <th>人稱</th>
+                    <th>主格（句首）</th>
+                    <th>所有格（+ 名詞）</th>
+                    <th>受格（動詞/介系詞後）</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>我</td><td>I</td><td>my</td><td><strong>me</strong></td></tr>
+                  <tr><td>你 / 你們</td><td>you</td><td>your</td><td><strong>you</strong></td></tr>
+                  <tr><td>他（男）</td><td>he</td><td>his</td><td><strong>him</strong></td></tr>
+                  <tr><td>她（女）</td><td>she</td><td>her</td><td><strong>her</strong></td></tr>
+                  <tr><td>它</td><td>it</td><td>its</td><td><strong>it</strong></td></tr>
+                  <tr><td>我們</td><td>we</td><td>our</td><td><strong>us</strong> (如 Roy and I)</td></tr>
+                  <tr><td>他們 / 它們</td><td>they</td><td>their</td><td><strong>them</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="viz-card">
+            <h4>可分離動詞片語「代名詞放中間」圖解</h4>
+            <p class="viz-caption">turn off / turn on / wake up 遇上名詞可放後或中間，但遇上「代名詞」必放中間！</p>
+            <svg viewBox="0 0 460 130" style="width:100%; height:auto; display:block;" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="8" y="14" width="444" height="44" rx="10" fill="var(--surface-container-low)"/>
+              <text x="22" y="41" font-size="13" font-weight="600" fill="var(--on-surface)">一般名詞（兩者皆可）：Turn off the phone. ＝ Turn the phone off.</text>
+
+              <rect x="8" y="70" width="215" height="46" rx="10" fill="var(--positive-container)"/>
+              <text x="115" y="98" font-size="13" font-weight="700" text-anchor="middle" fill="var(--positive)">O 正確：Turn it off. / Wake him up.</text>
+
+              <rect x="237" y="70" width="215" height="46" rx="10" fill="var(--error-container)"/>
+              <text x="344" y="98" font-size="13" font-weight="700" text-anchor="middle" fill="var(--error)">X 錯誤：Turn off it. / Wake up him.</text>
+            </svg>
+          </div>
+        `;
+      }
+
+      if (stage.vizType === `ving-lab`) {
+        const activeVerb = VING_VERBS.find(function (v) { return v.base === appState.selectedVerb; }) || VING_VERBS[0];
+        let chipsHtml = ``;
+        for (let i = 0; i < VING_VERBS.length; i++) {
+          const vb = VING_VERBS[i];
+          chipsHtml += `<button type="button" class="verb-chip ${vb.base === activeVerb.base ? `is-active` : ``}" onclick="selectVerb('${vb.base}')">${vb.base}</button>`;
+        }
+        return `
+          <div class="viz-card">
+            <h4>互動式 V-ing 變化實驗室</h4>
+            <p class="viz-caption">點擊下方段考高頻動詞，即時查看字尾拼寫轉換規則與真題例句。</p>
+            <div class="verb-chip-row">${chipsHtml}</div>
+            <div class="verb-transform-display">
+              <div class="verb-equation">${activeVerb.base} → ${activeVerb.ing}</div>
+              <div><span class="chip">${activeVerb.rule}</span> <span class="chip chip-neutral">${activeVerb.zh}</span></div>
+              <div class="example-en" style="margin-top: var(--space-xs);">${activeVerb.example}</div>
+            </div>
+          </div>
+          <div class="viz-card">
+            <h4>高頻 15 動詞之五大變化類型分佈</h4>
+            <p class="viz-caption">段考手寫「填入正確現在分詞」最容易在「去 e」與「重複字尾」失分。</p>
+            <div class="chart-box">
+              <canvas id="stage-chart-canvas" aria-label="V-ing 五大變化類型分佈圖"></canvas>
+            </div>
+          </div>
+        `;
+      }
+
+      if (stage.vizType === `prep-funnel`) {
+        return `
+          <div class="viz-card">
+            <h4>時間介系詞漏斗圖譜（at / on / in / X）</h4>
+            <p class="viz-caption">從精確時刻到特定日期與時段，由窄到寬一目了然。</p>
+            <svg viewBox="0 0 460 240" style="width:100%; height:auto; display:block;" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="20" y="10" width="420" height="46" rx="10" fill="var(--primary-container)"/>
+              <text x="40" y="38" font-size="14" font-weight="700" fill="var(--on-primary-container)">at（點）</text>
+              <text x="145" y="38" font-size="12" fill="var(--on-surface)">精確時刻：at 7:30 p.m. / at noon / at night</text>
+
+              <rect x="40" y="66" width="380" height="46" rx="10" fill="var(--surface-container-low)"/>
+              <text x="60" y="94" font-size="14" font-weight="700" fill="var(--secondary)">on（線/日）</text>
+              <text x="160" y="94" font-size="12" fill="var(--on-surface)">星期與特定日：on Friday / on Monday night / on weekends</text>
+
+              <rect x="60" y="122" width="340" height="46" rx="10" fill="var(--positive-container)"/>
+              <text x="80" y="150" font-size="14" font-weight="700" fill="var(--positive)">in（面/段）</text>
+              <text x="175" y="150" font-size="12" fill="var(--on-surface)">早午晚/月季：in the morning / in the evening</text>
+
+              <rect x="20" y="182" width="420" height="46" rx="10" fill="var(--error-container)"/>
+              <text x="40" y="210" font-size="14" font-weight="700" fill="var(--error)">X（零介系詞）</text>
+              <text x="165" y="210" font-size="12" fill="var(--on-surface)">接 this / every / today / tomorrow：this Sunday, every day</text>
+            </svg>
+          </div>
+          <div class="viz-card">
+            <h4>What time 兩大問法對照表</h4>
+            <div class="clean-table-wrap">
+              <table class="clean-table">
+                <thead>
+                  <tr><th>提問類型</th><th>問句範例</th><th>答句規則</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>問「現在幾點」</td>
+                    <td>What time is it (now)?</td>
+                    <td>It's 7:30. <strong>（不可加 at）</strong></td>
+                  </tr>
+                  <tr>
+                    <td>問「活動幾點」</td>
+                    <td>What time is the concert?</td>
+                    <td>It's <strong>at</strong> 7:00 p.m. <strong>（必加 at）</strong></td>
+                  </tr>
+                  <tr>
+                    <td>問「今天星期幾」</td>
+                    <td>What day is it today?</td>
+                    <td>It's Friday. <strong>（不可加 on）</strong></td>
+                  </tr>
+                  <tr>
+                    <td>問「活動在星期幾」</td>
+                    <td>What day is the party?</td>
+                    <td>It's <strong>on</strong> Saturday. <strong>（必加 on）</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
+      // Stage 5: Vocab Cards
+      let vocabRows = ``;
+      for (let i = 0; i < SPELLING_WORDS.length; i++) {
+        const vw = SPELLING_WORDS[i];
+        vocabRows += `
+          <tr>
+            <td><strong>${vw.word}</strong> <span class="caption" style="color:var(--on-surface-variant);">(${vw.pos})</span></td>
+            <td>${vw.zh}</td>
+            <td style="font-size: var(--label-size); color: var(--on-surface-variant);">${vw.tip}</td>
+          </tr>
+        `;
+      }
+      return `
+        <div class="viz-card">
+          <h4>十大段考高頻「文意字彙」必背清單</h4>
+          <p class="viz-caption">整理自各校手寫拼字測驗，出現率最高的 10 個關鍵單字與拼寫提醒。</p>
+          <div class="clean-table-wrap">
+            <table class="clean-table">
+              <thead>
+                <tr><th>單字</th><th>中文</th><th>段考高頻考點 / 提醒</th></tr>
+              </thead>
+              <tbody>${vocabRows}</tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderStageDetail() {
+      const panel = document.getElementById(`stage-detail-panel`);
+      if (!panel) return;
+      const stage = STAGES.find(function (s) { return s.id === appState.activeStageId; }) || STAGES[0];
+
+      let doneCount = 0;
+      let checklistHtml = ``;
+      for (let i = 0; i < stage.checklist.length; i++) {
+        const item = stage.checklist[i];
+        const checked = appState.checkedItems.indexOf(item.id) !== -1;
+        if (checked) doneCount += 1;
+        checklistHtml += `
+          <label class="check-item ${checked ? `is-checked` : ``}">
+            <input type="checkbox" ${checked ? `checked` : ``} onchange="toggleChecklist('${item.id}')">
+            <span class="check-item-text">${item.text}</span>
+          </label>
+        `;
+      }
+
+      let rulesHtml = ``;
+      for (let i = 0; i < stage.rules.length; i++) {
+        const rule = stage.rules[i];
+        let exHtml = ``;
+        for (let j = 0; j < rule.examples.length; j++) {
+          const ex = rule.examples[j];
+          exHtml += `
+            <li class="example-item">
+              <div class="example-en">${ex.en}</div>
+              <div class="example-zh">${ex.zh}</div>
+              <div class="trap-badge"><i data-lucide="alert-circle" width="14" height="14" aria-hidden="true"></i> ${ex.trap}</div>
+            </li>
+          `;
+        }
+        rulesHtml += `
+          <article class="rule-card">
+            <h4>${rule.title}</h4>
+            <div class="formula-pill">${rule.formula}</div>
+            <p class="rule-summary">${rule.summary}</p>
+            <ul class="example-list">${exHtml}</ul>
+          </article>
+        `;
+      }
+
+      let practiceHtml = ``;
+      for (let i = 0; i < stage.practice.length; i++) {
+        const p = stage.practice[i];
+        const pKey = `${stage.id}-p${i}`;
+        const isShown = !!appState.revealedPractice[pKey];
+        practiceHtml += `
+          <div class="mini-q">
+            <div class="mini-q-stem">${i + 1}. ${p.stem}</div>
+            <div>
+              <button type="button" class="btn-secondary" onclick="togglePractice('${pKey}')">
+                ${isShown ? `隱藏解析` : `查看解答與解析`}
+              </button>
+            </div>
+            <div class="mini-q-answer" ${isShown ? `` : `hidden`}>${p.answer}</div>
+          </div>
+        `;
+      }
+
+      const vizHtml = renderStageVisualization(stage);
+
+      panel.innerHTML = `
+        <div class="detail-header">
+          <div class="detail-title-group">
+            <span class="eyebrow">${stage.num}</span>
+            <h3>${stage.title}</h3>
+            <p>${stage.overview}</p>
+          </div>
+          <div class="chip ${doneCount === stage.checklist.length ? `chip-success` : ``}">
+            本關精熟度：${doneCount} / ${stage.checklist.length}
+          </div>
+        </div>
+
+        <div class="detail-layout">
+          <div class="detail-col">
+            <div class="rule-grid">${rulesHtml}</div>
+            <div class="practice-card">
+              <h4>精選段考實戰練習題</h4>
+              <div class="mini-q-list">${practiceHtml}</div>
+            </div>
+          </div>
+          <div class="detail-col">
+            <div class="checklist-box">
+              <h4>
+                <span>學習進度追蹤清單</span>
+                <span class="chip chip-neutral">${doneCount}/${stage.checklist.length}</span>
+              </h4>
+              <div class="check-list">${checklistHtml}</div>
+            </div>
+            ${vizHtml}
+          </div>
+        </div>
+      `;
+
+      if (window.lucide) window.lucide.createIcons();
+      mountStageChart(stage);
+    }
+
+    function mountStageChart(stage) {
+      if (activeChartInstance) {
+        activeChartInstance.destroy();
+        activeChartInstance = null;
+      }
+      const canvas = document.getElementById(`stage-chart-canvas`);
+      if (!canvas || typeof Chart === `undefined`) return;
+
+      const data1 = getCssToken(`--data-1`);
+      const data2 = getCssToken(`--data-2`);
+      const data3 = getCssToken(`--data-3`);
+      const data4 = getCssToken(`--data-4`);
+      const onSurface = getCssToken(`--on-surface`);
+      const onSurfaceVar = getCssToken(`--on-surface-variant`);
+      const gridColor = getCssToken(`--outline-variant`);
+
+      if (stage.vizType === `chart-freq`) {
+        activeChartInstance = new Chart(canvas, {
+          type: `bar`,
+          data: {
+            labels: EXAM_FREQUENCY_DATA.map(function (d) { return d.label; }),
+            datasets: [{
+              label: `出現此考點之段考校數（總計 14 校）`,
+              data: EXAM_FREQUENCY_DATA.map(function (d) { return d.count; }),
+              backgroundColor: [data1, data1, data1, data2, data2, data3, data4],
+              borderRadius: 6,
+              barThickness: 20
+            }]
+          },
+          options: {
+            indexAxis: `y`,
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: function (ctx) { return `${ctx.parsed.x} / 14 份試卷必考`; }
+                }
+              }
+            },
+            scales: {
+              x: {
+                beginAtZero: true,
+                max: 15,
+                grid: { color: gridColor },
+                ticks: { color: onSurfaceVar, stepSize: 2 }
+              },
+              y: {
+                grid: { display: false },
+                ticks: { color: onSurface, font: { size: 12, weight: `500` } }
+              }
+            }
+          }
+        });
+      } else if (stage.vizType === `ving-lab`) {
+        activeChartInstance = new Chart(canvas, {
+          type: `bar`,
+          data: {
+            labels: [`去 e 加 -ing`, `一般直接加`, `短母音重複字尾`, `y 結尾直接加`, `ee 結尾直接加`],
+            datasets: [{
+              label: `精選 15 個段考高頻動詞數量`,
+              data: [6, 3, 3, 2, 1],
+              backgroundColor: [data1, data3, data2, data4, data1],
+              borderRadius: 6,
+              barThickness: 28
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 7,
+                grid: { color: gridColor },
+                ticks: { color: onSurfaceVar, stepSize: 1 }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { color: onSurface, font: { size: 11 } }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    function renderListeningZone() {
+      const container = document.getElementById(`listening-questions-container`);
+      if (!container) return;
+
+      // Update filter buttons
+      const filterBtns = document.querySelectorAll(`[data-lfilter]`);
+      for (let i = 0; i < filterBtns.length; i++) {
+        const b = filterBtns[i];
+        b.classList.toggle(`is-active`, b.getAttribute(`data-lfilter`) === appState.listeningFilter);
+      }
+
+      const slowBtn = document.getElementById(`speed-slow-btn`);
+      const normBtn = document.getElementById(`speed-norm-btn`);
+      if (slowBtn) slowBtn.classList.toggle(`is-active`, appState.speechRate === 0.8);
+      if (normBtn) normBtn.classList.toggle(`is-active`, appState.speechRate === 1.0);
+
+      const filtered = LISTENING_QUESTIONS.filter(function (q) {
+        return appState.listeningFilter === `all` || q.type === appState.listeningFilter;
+      });
+
+      let html = ``;
+      for (let i = 0; i < filtered.length; i++) {
+        const q = filtered[i];
+        const qNum = LISTENING_QUESTIONS.indexOf(q) + 1;
+        const chosenIdx = appState.listeningAnswers[q.id];
+        const hasAnswered = typeof chosenIdx === `number`;
+        const isCorrect = hasAnswered && chosenIdx === q.answerIndex;
+        const showTranscript = !!appState.revealedTranscripts[q.id];
+
+        let transcriptHtml = ``;
+        for (let l = 0; l < q.lines.length; l++) {
+          const line = q.lines[l];
+          const spk = line.speaker === `F` ? `女聲` : `男聲`;
+          transcriptHtml += `<div><strong>${spk}：</strong>${line.text}</div>`;
+        }
+        if (q.type === `dialogue`) {
+          transcriptHtml += `<div style="margin-top: var(--space-xs); color: var(--primary);"><strong>${q.question}</strong></div>`;
+        }
+
+        let optionsHtml = ``;
+        if (q.type === `picture`) {
+          optionsHtml += `<div class="lq-options-pic">`;
+          for (let o = 0; o < q.options.length; o++) {
+            const opt = q.options[o];
+            let stateClass = ``;
+            if (hasAnswered) {
+              if (o === q.answerIndex) stateClass = `is-correct`;
+              else if (o === chosenIdx) stateClass = `is-wrong`;
+            }
+            optionsHtml += `
+              <button type="button" class="option-btn pic-btn ${stateClass}" onclick="answerListening('${q.id}', ${o})" aria-label="選項 ${opt.label}: ${opt.alt}">
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <span class="option-letter">${opt.label}</span>
+                  <span style="font-size: var(--label-size); color: var(--on-surface-variant);">${opt.alt}</span>
+                </div>
+                <div class="pic-frame">${getPictureSvg(opt.svgId)}</div>
+              </button>
+            `;
+          }
+          optionsHtml += `</div>`;
+        } else {
+          optionsHtml += `<div class="lq-options-text">`;
+          for (let o = 0; o < q.options.length; o++) {
+            const opt = q.options[o];
+            let stateClass = ``;
+            if (hasAnswered) {
+              if (o === q.answerIndex) stateClass = `is-correct`;
+              else if (o === chosenIdx) stateClass = `is-wrong`;
+            }
+            optionsHtml += `
+              <button type="button" class="option-btn ${stateClass}" onclick="answerListening('${q.id}', ${o})">
+                <span class="option-letter">${opt.label}</span>
+                <span>${opt.text}</span>
+              </button>
+            `;
+          }
+          optionsHtml += `</div>`;
+        }
+
+        const feedbackHtml = hasAnswered
+          ? `<div class="lq-feedback ${isCorrect ? `is-correct` : `is-wrong`}">
+              <strong>${isCorrect ? `答對了！` : `再檢查一下！正確答案為 (${q.options[q.answerIndex].label})。`}</strong>
+              ${q.explanation}
+            </div>`
+          : ``;
+
+        html += `
+          <article class="lq-card" id="card-${q.id}">
+            <div class="lq-header">
+              <div class="lq-meta">
+                <span class="lq-num">第 ${qNum} 題</span>
+                <span class="chip">${q.typeLabel}</span>
+                <span class="lq-source">${q.source}</span>
+              </div>
+              ${hasAnswered ? `<span class="chip ${isCorrect ? `chip-success` : `chip-warn`}">${isCorrect ? `已答對` : `已作答`}</span>` : ``}
+            </div>
+
+            <div class="audio-bar">
+              <button type="button" class="btn-primary" id="play-${q.id}" onclick="playListeningQuestion('${q.id}')">
+                <i data-lucide="volume-2" width="16" height="16" aria-hidden="true"></i> 播放題目音檔
+              </button>
+              <button type="button" class="btn-secondary" onclick="toggleTranscript('${q.id}')">
+                ${showTranscript ? `隱藏聽力逐字稿` : `查看聽力逐字稿`}
+              </button>
+              <span class="audio-status" id="status-${q.id}">點擊左側按鈕即可聆聽</span>
+            </div>
+
+            <div class="transcript-box" id="transcript-${q.id}" ${showTranscript ? `` : `hidden`}>
+              ${transcriptHtml}
+            </div>
+
+            <div style="font-weight: 600; color: var(--on-surface);">${q.question}</div>
+            ${optionsHtml}
+            ${feedbackHtml}
+          </article>
+        `;
+      }
+
+      container.innerHTML = html;
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    // =========================================================================
+    // 6. INTERACTION HANDLERS (Hoisted function declarations)
+    // =========================================================================
+    function selectStage(stageId) {
+      appState.activeStageId = stageId;
+      renderStageCards();
+      renderStageDetail();
+      persistState();
+    }
+
+    function toggleChecklist(itemId) {
+      const idx = appState.checkedItems.indexOf(itemId);
+      if (idx === -1) {
+        appState.checkedItems.push(itemId);
+      } else {
+        appState.checkedItems.splice(idx, 1);
+      }
+      updateOverviewCards();
+      renderStageCards();
+      renderStageDetail();
+      persistState();
+    }
+
+    function selectVerb(baseVerb) {
+      appState.selectedVerb = baseVerb;
+      renderStageDetail();
+      persistState();
+    }
+
+    function togglePractice(pKey) {
+      appState.revealedPractice[pKey] = !appState.revealedPractice[pKey];
+      renderStageDetail();
+      persistState();
+    }
+
+    function setListeningFilter(filterVal) {
+      stopSpeech();
+      appState.listeningFilter = filterVal;
+      renderListeningZone();
+      persistState();
+    }
+
+    function setSpeechRate(rate) {
+      appState.speechRate = rate;
+      renderListeningZone();
+      persistState();
+    }
+
+    function toggleTranscript(qId) {
+      appState.revealedTranscripts[qId] = !appState.revealedTranscripts[qId];
+      renderListeningZone();
+      persistState();
+    }
+
+    function answerListening(qId, optionIdx) {
+      appState.listeningAnswers[qId] = optionIdx;
+      updateOverviewCards();
+      renderListeningZone();
+      persistState();
+    }
+
+    function handleResetProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `再按一次確認重置`;
+        setTimeout(function () {
+          if (btn && btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.textContent = `重置進度`;
+          }
+        }, 3500);
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `重置進度`;
+      appState.checkedItems = [];
+      appState.revealedPractice = {};
+      updateOverviewCards();
+      renderStageCards();
+      renderStageDetail();
+      persistState();
+    }
+
+    function handleResetListening(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `再按一次確認清除`;
+        setTimeout(function () {
+          if (btn && btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            btn.textContent = `清除作答`;
+          }
+        }, 3500);
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `清除作答`;
+      stopSpeech();
+      appState.listeningAnswers = {};
+      appState.revealedTranscripts = {};
+      updateOverviewCards();
+      renderListeningZone();
+      persistState();
+    }
+
+    // =========================================================================
+    // 7. INITIALIZATION & API SHIM HOOK
+    // =========================================================================
+    async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            appState = Object.assign({}, DEFAULT_STATE, saved);
+            if (!Array.isArray(appState.checkedItems)) appState.checkedItems = [];
+            if (!appState.listeningAnswers || typeof appState.listeningAnswers !== `object`) appState.listeningAnswers = {};
+            if (!appState.revealedPractice || typeof appState.revealedPractice !== `object`) appState.revealedPractice = {};
+            if (!appState.revealedTranscripts || typeof appState.revealedTranscripts !== `object`) appState.revealedTranscripts = {};
+          }
+        }
+      } catch (e) {
+        // Fallback to default state
+      }
+
+      updateOverviewCards();
+      renderStageCards();
+      renderStageDetail();
+      renderListeningZone();
+
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>
