@@ -14,13 +14,13 @@
 
 | 科目 | 互動學習 | 考卷練習 |
 | :--- | :--- | :--- |
-| **國文** | [第2次](https://github.com/radarred/index/國文7上第2次段考互動學習指南.html) | [第2次](https://notebooklm.link.google/0sqYMyiUra1X) |
-| **自然** | [第2次](https://github.com/radarred/index/自然7上第2次段考互動學習指南.html) | [第2次](https://notebooklm.link.google/twWCzm9gNnWA) |
-| **歷史** | [第2次](https://github.com/radarred/index/歷史7上第2次段考互動學習指南.html) | [第2次](https://notebooklm.link.google/WfTJ3V80Z1SO) |
-| **地理** | [第2次](https://github.com/radarred/index/地理7上第2次段考互動學習指南.html) | [第2次](https://notebooklm.link.google/4VvC63LpL8HY) |
-| **公民** | [第2次](https://github.com/radarred/index/公民7上第2次段考互動學習指南.html) | [第2次](https://notebooklm.link.google/NWjfJg2Wg3P5) |
-| **數學** | [－](https://github.com/radarred/index/數學7上第2次段考互動學習指南.html) | [第2次](https://emath.math.ncu.edu.tw/e_school/junior/drive_through.php) |Name		
-| **英文** | [－](https://github.com/radarred/index/英文7上第2次段考互動學習指南.html) | [第2次](https://emath.math.ncu.edu.tw/e_school/junior/drive_through.php) |Name		
+| **國文** | [第2次](https://radarred.github.io/index/國文7上第2次段考互動學習指南.html) | [第2次](https://notebooklm.link.google/0sqYMyiUra1X) |
+| **數學** | [第2次](https://radarred.github.io/index/數學7上第2次段考互動學習指南.html) | [第2次](https://emath.math.ncu.edu.tw/e_school/junior/drive_through.php) |Name		
+| **英文** | [第2次](https://radarred.github.io/index/英文7上第2次段考互動學習指南.html) | [第2次](https://emath.math.ncu.edu.tw/e_school/junior/drive_through.php) |Name		
+| **自然** | [第2次](https://radarred.github.io/index/自然7上第2次段考互動學習指南.html) | [第2次](https://notebooklm.link.google/twWCzm9gNnWA) |
+| **歷史** | [第2次](https://radarred.github.io/index/歷史7上第2次段考互動學習指南.html) | [第2次](https://notebooklm.link.google/WfTJ3V80Z1SO) |
+| **地理** | [第2次](https://radarred.github.io/index/地理7上第2次段考互動學習指南.html) | [第2次](https://notebooklm.link.google/4VvC63LpL8HY) |
+| **公民** | [第2次](https://radarred.github.io/index/公民7上第2次段考互動學習指南.html) | [第2次](https://notebooklm.link.google/NWjfJg2Wg3P5) |
 
 
 
