@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DIVERGENT｜《分歧者》電影英文單字字卡複習系統</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+          },
+          colors: {
+            dauntless: {
+              500: '#f97316',
+              600: '#ea580c',
+            },
+            erudite: {
+              500: '#0ea5e9',
+              600: '#0284c7',
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* 3D Flashcard Flip Mechanics */
+    .perspective-1000 {
+      perspective: 1200px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    /* Subtle Dystopian Grid & Glow */
+    .bg-grid-pattern {
+      background-image: radial-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .dark .bg-grid-pattern {
+      background-image: radial-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.35);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.55);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 bg-grid-pattern transition-colors duration-300 selection:bg-orange-500 selection:text-white">
+
+  <!-- Toast Notification Container (Replaces alert) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Confirmation Modal (Replaces confirm) -->
+  <div id="confirm-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 shadow-2xl">
+      <div class="flex items-center gap-3 mb-3 text-orange-500">
+        <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">重置學習進度</h3>
+      </div>
+      <p class="text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
+        確定要清除所有「已熟記」與「需加強」的標記紀錄嗎？此動作無法復原。
+      </p>
+      <div class="flex justify-end gap-3">
+        <button id="cancel-reset-btn" class="px-4 py-2.5 rounded-xl text-sm font-medium bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+          取消
+        </button>
+        <button id="confirm-reset-btn" class="px-4 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white shadow-lg shadow-orange-500/20 transition">
+          確定重置
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-30 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/85 dark:bg-slate-950/85 backdrop-blur-md">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 via-amber-500 to-sky-500 p-[2px] shadow-md">
+          <div class="w-full h-full rounded-[10px] bg-slate-950 flex items-center justify-center">
+            <i class="fa-solid fa-fire-flame-curved text-orange-500 text-lg"></i>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold tracking-widest text-base sm:text-lg bg-gradient-to-r from-orange-500 to-sky-400 bg-clip-text text-transparent">
+              DIVERGENT
+            </span>
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 border border-sky-500/30">
+              50 精選詞彙
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400">《分歧者》電影原聲例句字卡複習系統</p>
+        </div>
+      </div>
+
+      <!-- Mode Switcher & Theme Toggle -->
+      <div class="flex items-center gap-2">
+        <nav class="flex p-1 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800" aria-label="學習模式切換">
+          <button data-mode="flashcard" class="mode-tab active px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>字卡模式</span>
+          </button>
+          <button data-mode="quiz" class="mode-tab px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-bolt"></i>
+            <span>克漏字測驗</span>
+          </button>
+          <button data-mode="list" class="mode-tab px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-list-check"></i>
+            <span>總覽列表</span>
+          </button>
+        </nav>
+
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle" title="切換深淺色模式" class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 transition">
+          <i id="theme-icon" class="fa-solid fa-sun text-amber-400"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Global Progress Bar -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-3">
+      <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-400 mb-1.5">
+        <div class="flex items-center gap-4">
+          <span class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            已熟記：<strong id="stat-mastered" class="text-slate-900 dark:text-white">0</strong>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+            需加強：<strong id="stat-review" class="text-slate-900 dark:text-white">0</strong>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+            未複習：<strong id="stat-unseen" class="text-slate-900 dark:text-white">50</strong>
+          </span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span>熟練度：<strong id="stat-percent" class="text-sky-500">0%</strong></span>
+          <button id="open-reset-modal" class="text-slate-400 hover:text-orange-500 transition underline underline-offset-2">
+            重置進度
+          </button>
+        </div>
+      </div>
+      <div class="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex">
+        <div id="bar-mastered" class="h-full bg-emerald-500 transition-all duration-500" style="width: 0%"></div>
+        <div id="bar-review" class="h-full bg-orange-500 transition-all duration-500" style="width: 0%"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6">
+
+    <!-- Filter & Search Control Panel (Shared across Flashcard & List modes) -->
+    <section id="filter-panel" class="mb-6 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 p-4 shadow-sm">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <!-- Search Input -->
+        <div class="md:col-span-4 relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+          <input
+            id="search-input"
+            type="text"
+            placeholder="搜尋英文單字、中文釋義或角色（如：翠絲、珍寧）..."
+            class="w-full pl-10 pr-8 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-sky-500 dark:focus:border-sky-500 transition"
+          />
+          <button id="clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="md:col-span-4">
+          <select id="category-filter" class="w-full px-3.5 py-2.5 rounded-xl text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-sky-500 transition">
+            <option value="all">所有主題分類（全部 50 字）</option>
+            <option value="cat1">一、核心設定與派別理念（1 - 15）</option>
+            <option value="cat2">二、測驗、儀式與社會制度（16 - 30）</option>
+            <option value="cat3">三、訓練、戰鬥與恐懼模擬（31 - 50）</option>
+          </select>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="md:col-span-4 flex flex-wrap gap-1.5 items-center justify-start md:justify-end">
+          <button data-status="all" class="status-chip active px-3 py-2 rounded-xl text-xs font-semibold border transition">
+            全部 (<span id="count-all">50</span>)
+          </button>
+          <button data-status="unseen" class="status-chip px-3 py-2 rounded-xl text-xs font-semibold border transition">
+            未複習 (<span id="count-unseen">50</span>)
+          </button>
+          <button data-status="review" class="status-chip px-3 py-2 rounded-xl text-xs font-semibold border transition">
+            需加強 (<span id="count-review">0</span>)
+          </button>
+          <button data-status="mastered" class="status-chip px-3 py-2 rounded-xl text-xs font-semibold border transition">
+            已熟記 (<span id="count-mastered">0</span>)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: FLASHCARD MODE                     -->
+    <!-- ========================================== -->
+    <section id="view-flashcard" class="space-y-5">
+      <!-- Top Card Controls -->
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span id="card-counter" class="px-3.5 py-1.5 rounded-xl text-sm font-bold bg-slate-200/70 dark:bg-slate-800 text-slate-800 dark:text-slate-100">
+            1 / 50
+          </span>
+          <span id="card-category-badge" class="hidden sm:inline-block px-3 py-1.5 rounded-xl text-xs font-medium bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/20">
+            一、核心設定與派別理念
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Toggle Front Hint (Character & Timestamp) -->
+          <button id="toggle-hint-btn" class="px-3 py-2 rounded-xl text-xs font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-sky-500 transition flex items-center gap-1.5">
+            <i id="hint-icon" class="fa-solid fa-eye text-sky-500"></i>
+            <span>正面顯示角色提示</span>
+          </button>
+          <!-- Shuffle Button -->
+          <button id="shuffle-btn" class="px-3 py-2 rounded-xl text-xs font-medium bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-orange-500 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-shuffle text-orange-500"></i>
+            <span>隨機洗牌</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty Filter State -->
+      <div id="flashcard-empty" class="hidden rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-12 text-center">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 text-2xl">
+          <i class="fa-solid fa-filter-circle-xmark"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-1">沒有符合條件的單字卡</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-5">請嘗試調整上方的搜尋關鍵字或篩選條件。</p>
+        <button id="reset-filters-btn" class="px-5 py-2.5 rounded-xl text-sm font-semibold bg-sky-500 hover:bg-sky-600 text-white transition">
+          顯示全部 50 個單字
+        </button>
+      </div>
+
+      <!-- 3D Flashcard Container -->
+      <div id="flashcard-stage" class="perspective-1000 w-full max-w-3xl mx-auto">
+        <div id="flashcard-inner" class="transform-style-3d relative w-full min-h-[370px] sm:min-h-[410px] cursor-pointer select-none">
+
+          <!-- FRONT FACE -->
+          <div class="backface-hidden absolute inset-0 rounded-3xl bg-white dark:bg-slate-900 border-2 border-slate-200/90 dark:border-slate-800 shadow-xl dark:shadow-2xl dark:shadow-black/50 p-6 sm:p-10 flex flex-col justify-between">
+            <!-- Top Row: Number, Status Badge, Audio -->
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span id="front-id" class="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                  #01
+                </span>
+                <span id="front-status-badge" class="text-xs font-semibold px-2.5 py-1 rounded-lg">
+                  未複習
+                </span>
+              </div>
+
+              <button id="speak-word-front" type="button" title="朗讀單字發音" class="p-3 rounded-2xl bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-400 border border-sky-500/20 transition flex items-center gap-2 text-xs font-semibold">
+                <i class="fa-solid fa-volume-high text-base"></i>
+                <span class="hidden sm:inline">單字發音</span>
+              </button>
+            </div>
+
+            <!-- Center Word & POS -->
+            <div class="my-auto text-center py-6">
+              <h2 id="front-word" class="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-3 break-words">
+                divergent
+              </h2>
+              <span id="front-pos" class="inline-block px-3.5 py-1 rounded-full text-sm font-mono font-semibold bg-orange-500/15 text-orange-600 dark:text-orange-400 border border-orange-500/30">
+                (adj.)
+              </span>
+
+              <!-- Optional Character/Timestamp Hint -->
+              <div id="front-hint-box" class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100/80 dark:bg-slate-800/80 text-xs sm:text-sm text-slate-600 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700/60">
+                <i class="fa-solid fa-film text-orange-500"></i>
+                <span id="front-meta">托莉（Tori Wu）｜00:13:45</span>
+              </div>
+            </div>
+
+            <!-- Bottom Flip Prompt -->
+            <div class="text-center text-xs text-slate-400 dark:text-slate-500 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-rotate"></i>
+              <span>點擊卡片或按「空白鍵」翻看中文與電影例句</span>
+            </div>
+          </div>
+
+          <!-- BACK FACE -->
+          <div class="backface-hidden rotate-y-180 absolute inset-0 rounded-3xl bg-white dark:bg-slate-900 border-2 border-sky-500/40 dark:border-sky-500/30 shadow-xl dark:shadow-2xl dark:shadow-black/50 p-6 sm:p-9 flex flex-col justify-between overflow-y-auto">
+            <!-- Header: Word + Meaning + Audio Buttons -->
+            <div class="flex flex-wrap items-start justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-4">
+              <div>
+                <div class="flex items-baseline gap-2.5 flex-wrap">
+                  <h3 id="back-word" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+                    divergent
+                  </h3>
+                  <span id="back-pos" class="text-sm font-mono font-semibold text-orange-500">
+                    (adj.)
+                  </span>
+                </div>
+                <p id="back-meaning" class="text-lg sm:text-xl font-bold text-sky-600 dark:text-sky-400 mt-1">
+                  分歧的；有差異的
+                </p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button id="speak-word-back" type="button" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-semibold flex items-center gap-1.5 transition">
+                  <i class="fa-solid fa-volume-low text-sky-500"></i>
+                  <span>單字</span>
+                </button>
+                <button id="speak-sentence-back" type="button" class="px-3 py-2 rounded-xl bg-orange-500/15 hover:bg-orange-500/25 text-orange-600 dark:text-orange-400 border border-orange-500/30 text-xs font-semibold flex items-center gap-1.5 transition">
+                  <i class="fa-solid fa-volume-high"></i>
+                  <span>朗讀例句</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Movie Quote & Translation -->
+            <div class="my-auto py-4 space-y-3">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-600 dark:text-slate-300">
+                <i class="fa-solid fa-clapperboard text-orange-500"></i>
+                <span id="back-meta">托莉（Tori Wu）｜00:13:45</span>
+              </div>
+
+              <blockquote id="back-en-quote" class="text-base sm:text-xl font-medium leading-relaxed text-slate-800 dark:text-slate-100 bg-slate-50 dark:bg-slate-950/70 p-4 rounded-2xl border-l-4 border-orange-500">
+                "Your results were inconclusive... they call it <strong class="text-orange-500 font-extrabold underline decoration-orange-500/40 underline-offset-4">Divergent</strong>."
+              </blockquote>
+
+              <p id="back-zh-quote" class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed pl-1">
+                （妳的測驗結果無法定論……他們稱之為「分歧者」。）
+              </p>
+            </div>
+
+            <!-- Footer Prompt -->
+            <div class="text-center text-xs text-slate-400 dark:text-slate-500 pt-2">
+              <span>點擊卡片翻回正面</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom Action Controls (Prev, Status Buttons, Next) -->
+      <div id="flashcard-controls" class="max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+        <button id="prev-card-btn" class="order-3 sm:order-1 py-3 px-4 rounded-2xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 font-semibold text-sm flex items-center justify-center gap-2 transition shadow-sm">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>上一張</span>
+        </button>
+
+        <button id="mark-review-btn" class="order-1 sm:order-2 py-3 px-4 rounded-2xl bg-orange-500/15 hover:bg-orange-500/25 text-orange-600 dark:text-orange-400 border border-orange-500/30 font-bold text-sm flex items-center justify-center gap-2 transition">
+          <i class="fa-solid fa-rotate-right"></i>
+          <span>需加強</span>
+        </button>
+
+        <button id="mark-mastered-btn" class="order-2 sm:order-3 py-3 px-4 rounded-2xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-bold text-sm flex items-center justify-center gap-2 transition">
+          <i class="fa-solid fa-check"></i>
+          <span>已熟記</span>
+        </button>
+
+        <button id="next-card-btn" class="order-4 sm:order-4 py-3 px-4 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-semibold text-sm flex items-center justify-center gap-2 transition shadow-md shadow-sky-500/20">
+          <span>下一張</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- Keyboard Shortcut Legend -->
+      <div class="hidden sm:flex items-center justify-center gap-6 text-xs text-slate-400 dark:text-slate-500 pt-1">
+        <span><kbd class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono">Space</kbd> 翻轉字卡</span>
+        <span><kbd class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono">←</kbd> / <kbd class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono">→</kbd> 切換字卡</span>
+        <span><kbd class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono">1</kbd> 需加強</span>
+        <span><kbd class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono">2</kbd> 已熟記</span>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: QUIZ MODE (CLOZE TEST)             -->
+    <!-- ========================================== -->
+    <section id="view-quiz" class="hidden max-w-3xl mx-auto">
+      <div class="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xl">
+        <!-- Quiz Top Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-5 mb-6 border-b border-slate-200 dark:border-slate-800">
+          <div class="flex items-center gap-3">
+            <span class="px-3 py-1 rounded-xl text-xs font-bold bg-orange-500/15 text-orange-500 border border-orange-500/30">
+              無畏派試煉｜克漏字測驗
+            </span>
+            <span id="quiz-progress-text" class="text-sm font-bold text-slate-600 dark:text-slate-300">
+              第 1 / 10 題
+            </span>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <span class="text-sm font-semibold">
+              得分：<strong id="quiz-score" class="text-emerald-500 text-base">0</strong>
+            </span>
+            <button id="restart-quiz-btn" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition">
+              <i class="fa-solid fa-arrows-rotate mr-1"></i>重新出題
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Active Question Area -->
+        <div id="quiz-question-box">
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <span id="quiz-meta" class="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-film text-sky-500"></i>
+              <span>翠絲（Tris Prior / 旁白）｜00:01:12</span>
+            </span>
+            <span id="quiz-hint-meaning" class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
+              提示：(n.) 派別；派系
+            </span>
+          </div>
+
+          <!-- Cloze Sentence -->
+          <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 mb-3">
+            <p id="quiz-sentence" class="text-lg sm:text-xl font-semibold leading-relaxed text-slate-900 dark:text-white">
+              "Our founders built the wall to keep us safe and they divided us into five groups, ________, to keep the peace."
+            </p>
+          </div>
+
+          <p id="quiz-zh-translation" class="text-sm text-slate-500 dark:text-slate-400 mb-6">
+            （我們的創始人建了高牆保護我們的安全，並將我們分成五個群體——「派別」，以維持和平。）
+          </p>
+
+          <!-- 4 Multiple Choice Options -->
+          <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+            <!-- Injected via JS -->
+          </div>
+
+          <!-- Feedback & Next Question -->
+          <div id="quiz-feedback" class="hidden rounded-2xl p-4 mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <i id="quiz-feedback-icon" class="fa-solid fa-circle-check text-xl"></i>
+              <div>
+                <p id="quiz-feedback-title" class="font-bold text-sm">答對了！</p>
+                <p id="quiz-feedback-desc" class="text-xs opacity-90">已自動播放完整原句發音。</p>
+              </div>
+            </div>
+            <button id="quiz-next-btn" class="px-5 py-2.5 rounded-xl text-sm font-bold bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 transition">
+              下一題 <i class="fa-solid fa-arrow-right ml-1"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Result Summary -->
+        <div id="quiz-summary" class="hidden text-center py-8">
+          <div class="w-20 h-20 mx-auto mb-4 rounded-3xl bg-gradient-to-br from-orange-500 to-sky-500 flex items-center justify-center text-white text-3xl shadow-lg">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+          <h3 class="text-2xl font-extrabold mb-2">試煉完成！</h3>
+          <p class="text-slate-500 dark:text-slate-400 mb-6">
+            你在本次 10 題電影例句測驗中獲得了 <strong id="quiz-final-score" class="text-2xl text-emerald-500">80</strong> 分！
+          </p>
+          <div class="flex flex-wrap justify-center gap-3">
+            <button id="quiz-play-again-btn" class="px-6 py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg shadow-orange-500/25 hover:opacity-95 transition">
+              再測驗一輪（隨機 10 題）
+            </button>
+            <button id="quiz-back-flashcard-btn" class="px-6 py-3 rounded-xl font-bold text-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+              返回字卡複習
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- VIEW 3: LIST OVERVIEW MODE                 -->
+    <!-- ========================================== -->
+    <section id="view-list" class="hidden space-y-4">
+      <!-- List View Self-Test Toggles -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5">
+        <span class="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
+          顯示 <strong id="list-visible-count" class="text-sky-500">50</strong> 個單字
+        </span>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="list-toggle-zh" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:border-sky-500 border border-transparent transition flex items-center gap-1.5">
+            <i class="fa-solid fa-eye text-sky-500"></i>
+            <span>隱藏中文釋義</span>
+          </button>
+          <button id="list-toggle-quote" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:border-orange-500 border border-transparent transition flex items-center gap-1.5">
+            <i class="fa-solid fa-eye text-orange-500"></i>
+            <span>隱藏電影例句</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Cards Grid -->
+      <div id="vocab-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-6xl mx-auto px-4 sm:px-6 py-8 text-center text-xs text-slate-400 dark:text-slate-500">
+    <p>《分歧者》（Divergent, 2014）電影原聲單字字卡複習系統｜資料自動儲存於本機瀏覽器</p>
+  </footer>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT DATA & APPLICATION LOGIC        -->
+  <!-- ========================================== -->
+  <script>
+    // Complete 50 Divergent Vocabulary Dataset
+    const VOCAB_DATA = [
+      {
+        id: 1,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'divergent',
+        pos: '(adj.)',
+        meaning: '分歧的；有差異的',
+        character: '托莉（Tori Wu）',
+        timestamp: '00:13:45',
+        enQuote: '"Your results were inconclusive... they call it Divergent."',
+        zhQuote: '（妳的測驗結果無法定論……他們稱之為「分歧者」。）',
+        targetRegex: /\b(Divergent)\b/gi
+      },
+      {
+        id: 2,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'faction',
+        pos: '(n.)',
+        meaning: '派別；派系',
+        character: '翠絲（Tris Prior / 旁白）',
+        timestamp: '00:01:12',
+        enQuote: '"Our founders built the wall to keep us safe and they divided us into five groups, factions, to keep the peace."',
+        zhQuote: '（我們的創始人建了高牆保護我們的安全，並將我們分成五個群體——「派別」，以維持和平。）',
+        targetRegex: /\b(factions)\b/gi
+      },
+      {
+        id: 3,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'abnegation',
+        pos: '(n.)',
+        meaning: '克己；自我否定（無私派名稱）',
+        character: '翠絲（Tris Prior / 旁白）',
+        timestamp: '00:02:28',
+        enQuote: '"My faction is Abnegation. The others all call us \'Stiffs.\'"',
+        zhQuote: '（我的派別是無私派。其他人都叫我們「死板鬼」。）',
+        targetRegex: /\b(Abnegation)\b/gi
+      },
+      {
+        id: 4,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'dauntless',
+        pos: '(adj.)',
+        meaning: '無畏的；大膽的（無畏派名稱）',
+        character: '翠絲（Tris Prior / 旁白）',
+        timestamp: '00:01:55',
+        enQuote: '"And then there\'s Dauntless. They\'re our protectors, our soldiers, our police."',
+        zhQuote: '（然後是無畏派。他們是我們的保護者、士兵和警察。）',
+        targetRegex: /\b(Dauntless)\b/gi
+      },
+      {
+        id: 5,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'erudite',
+        pos: '(adj.)',
+        meaning: '博學的（博學派名稱）',
+        character: '翠絲（Tris Prior / 旁白）',
+        timestamp: '00:01:24',
+        enQuote: '"The smart ones, the ones who value knowledge and logic are in Erudite."',
+        zhQuote: '（聰明的人、重視知識和邏輯的人都在博學派。）',
+        targetRegex: /\b(Erudite)\b/gi
+      },
+      {
+        id: 6,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'candor',
+        pos: '(n.)',
+        meaning: '坦率；直言（直言派名稱）',
+        character: '翠絲（Tris Prior / 旁白）',
+        timestamp: '00:01:44',
+        enQuote: '"Candor value honesty and order. They tell the truth, even when you wish they wouldn\'t."',
+        zhQuote: '（直言派重視誠實與秩序。他們總是說實話，即使你希望他們別說。）',
+        targetRegex: /\b(Candor)\b/gi
+      },
+      {
+        id: 7,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'amity',
+        pos: '(n.)',
+        meaning: '友好；和睦（友好派名稱）',
+        character: '翠絲（Tris Prior / 旁白）',
+        timestamp: '00:01:33',
+        enQuote: '"Amity farm the land. They\'re all about kindness and harmony, always happy."',
+        zhQuote: '（友好派耕種土地。他們崇尚善良與和諧，總是很快樂。）',
+        targetRegex: /\b(Amity)\b/gi
+      },
+      {
+        id: 8,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'selfless',
+        pos: '(adj.)',
+        meaning: '無私的',
+        character: '翠絲（Tris Prior / 旁白）',
+        timestamp: '00:02:35',
+        enQuote: '"We lead a simple life, selfless, dedicated to helping others."',
+        zhQuote: '（我們過著簡單、無私的生活，致力於幫助他人。）',
+        targetRegex: /\b(selfless)\b/gi
+      },
+      {
+        id: 9,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'vanity',
+        pos: '(n.)',
+        meaning: '虛榮；自負',
+        character: '翠絲（Tris Prior）',
+        timestamp: '00:10:15',
+        enQuote: '"We reject vanity."',
+        zhQuote: '（我們拒絕虛榮。）',
+        targetRegex: /\b(vanity)\b/gi
+      },
+      {
+        id: 10,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'harmony',
+        pos: '(n.)',
+        meaning: '和諧；融洽',
+        character: '翠絲（Tris Prior / 旁白）',
+        timestamp: '00:01:36',
+        enQuote: '"They\'re all about kindness and harmony, always happy."',
+        zhQuote: '（他們崇尚善良與和諧，總是很快樂。）',
+        targetRegex: /\b(harmony)\b/gi
+      },
+      {
+        id: 11,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'logic',
+        pos: '(n.)',
+        meaning: '邏輯',
+        character: '翠絲（Tris Prior / 旁白）',
+        timestamp: '00:01:27',
+        enQuote: '"The smart ones, the ones who value knowledge and logic are in Erudite."',
+        zhQuote: '（聰明的人、重視知識和邏輯的人都在博學派。）',
+        targetRegex: /\b(logic)\b/gi
+      },
+      {
+        id: 12,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'founder',
+        pos: '(n.)',
+        meaning: '創始人；建立者',
+        character: '翠絲（Tris Prior / 旁白）',
+        timestamp: '00:01:08',
+        enQuote: '"Our founders built the wall to keep us safe."',
+        zhQuote: '（我們的創始人建了這道牆來保護我們的安全。）',
+        targetRegex: /\b(founders)\b/gi
+      },
+      {
+        id: 13,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'conflict',
+        pos: '(n.)',
+        meaning: '衝突；爭端',
+        character: '馬可斯（Marcus Eaton）',
+        timestamp: '00:19:42',
+        enQuote: '"Our founders created a system they believed would prevent future conflict."',
+        zhQuote: '（我們的創始人創造了一個他們相信能防止未來衝突的制度。）',
+        targetRegex: /\b(conflict)\b/gi
+      },
+      {
+        id: 14,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'belong',
+        pos: '(v.)',
+        meaning: '屬於；歸屬',
+        character: '娜塔莉（Natalie Prior）',
+        timestamp: '00:17:18',
+        enQuote: '"I want you to choose who you truly are and where you truly belong."',
+        zhQuote: '（我希望妳選擇妳真正的樣子，以及妳真正歸屬的地方。）',
+        targetRegex: /\b(belong)\b/gi
+      },
+      {
+        id: 15,
+        category: 'cat1',
+        categoryName: '一、核心設定與派別理念',
+        word: 'amputee',
+        pos: '(n.)',
+        meaning: '截肢者',
+        character: '迦勒（Caleb Prior）',
+        timestamp: '00:04:40',
+        enQuote: '"What if she\'d been blind or an amputee? Would you have helped her then?"',
+        zhQuote: '（如果她是盲人或截肢者呢？那時妳還會幫她嗎？）',
+        targetRegex: /\b(amputee)\b/gi
+      },
+      {
+        id: 16,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'aptitude',
+        pos: '(n.)',
+        meaning: '天資；性向；才能',
+        character: '考場廣播系統（Voiceover）',
+        timestamp: '00:07:32',
+        enQuote: '"Today, aptitude testing based on your personality will assign you to one of the factions."',
+        zhQuote: '（今天，基於你們性格的性向測驗將會把你們分配到其中一個派別。）',
+        targetRegex: /\b(aptitude)\b/gi
+      },
+      {
+        id: 17,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'assign',
+        pos: '(v.)',
+        meaning: '分配；指派',
+        character: '考場廣播系統（Voiceover）',
+        timestamp: '00:07:35',
+        enQuote: '"Today, aptitude testing based on your personality will assign you to one of the factions."',
+        zhQuote: '（今天，基於你們性格的性向測驗將會把你們分配到其中一個派別。）',
+        targetRegex: /\b(assign)\b/gi
+      },
+      {
+        id: 18,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'regardless',
+        pos: '(adv.)',
+        meaning: '不管；不顧（常與 of 連用）',
+        character: '考場廣播系統（Voiceover）',
+        timestamp: '00:07:41',
+        enQuote: '"It is your right tomorrow at the choosing ceremony to choose any of the five factions, regardless of your test results."',
+        zhQuote: '（明天在選擇儀式上，無論測驗結果如何，你們都有權選擇五個派別中的任何一個。）',
+        targetRegex: /\b(regardless)\b/gi
+      },
+      {
+        id: 19,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'permit',
+        pos: '(v.)',
+        meaning: '允許；許可',
+        character: '考場廣播系統（Voiceover）',
+        timestamp: '00:07:50',
+        enQuote: '"However, once the choice has been made, there will be no change permitted."',
+        zhQuote: '（然而，一旦做出選擇，就不允許再做任何更改。）',
+        targetRegex: /\b(permitted)\b/gi
+      },
+      {
+        id: 20,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'serum',
+        pos: '(n.)',
+        meaning: '血清；藥劑',
+        character: '托莉（Tori Wu）',
+        timestamp: '00:14:12',
+        enQuote: '"You\'re going to tell your family that the serum made you sick."',
+        zhQuote: '（妳要告訴妳家人，那種藥劑讓妳身體不適。）',
+        targetRegex: /\b(serum)\b/gi
+      },
+      {
+        id: 21,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'inconclusive',
+        pos: '(adj.)',
+        meaning: '無定論的；非決定性的',
+        character: '托莉（Tori Wu）',
+        timestamp: '00:13:38',
+        enQuote: '"Your results were inconclusive. It\'s extremely rare."',
+        zhQuote: '（妳的測驗結果沒有定論。這種情況極為罕見。）',
+        targetRegex: /\b(inconclusive)\b/gi
+      },
+      {
+        id: 22,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'supervisor',
+        pos: '(n.)',
+        meaning: '監督者；主管',
+        character: '托莉（Tori Wu）',
+        timestamp: '00:14:22',
+        enQuote: '"We\'re going out the back door before a supervisor comes."',
+        zhQuote: '（我們要在監督員來之前從後門走。）',
+        targetRegex: /\b(supervisor)\b/gi
+      },
+      {
+        id: 23,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'scrutiny',
+        pos: '(n.)',
+        meaning: '詳細審查；嚴密監視',
+        character: '安德魯（Andrew Prior）',
+        timestamp: '00:16:05',
+        enQuote: '"I don\'t think you understand the level of scrutiny we\'re under."',
+        zhQuote: '（我想妳不了解我們正處於什麼樣嚴密的監視之下。）',
+        targetRegex: /\b(scrutiny)\b/gi
+      },
+      {
+        id: 24,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'discredit',
+        pos: '(v.)',
+        meaning: '使喪失信譽；敗壞名聲',
+        character: '安德魯（Andrew Prior）',
+        timestamp: '00:16:12',
+        enQuote: '"They\'re doing everything they can to discredit us right now."',
+        zhQuote: '（他們現在正盡一切努力敗壞我們的名聲。）',
+        targetRegex: /\b(discredit)\b/gi
+      },
+      {
+        id: 25,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'whim',
+        pos: '(n.)',
+        meaning: '一時興起；突發奇想',
+        character: '娜塔莉（Natalie Prior）',
+        timestamp: '00:17:23',
+        enQuote: '"I want you to choose who you truly are and where you truly belong. Not on a whim."',
+        zhQuote: '（我希望妳選擇妳真正的樣子與歸屬，而不是一時興起。）',
+        targetRegex: /\b(whim)\b/gi
+      },
+      {
+        id: 26,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'compose',
+        pos: '(v.)',
+        meaning: '組成；構成',
+        character: '珍寧（Jeanine Matthews）',
+        timestamp: '00:20:38',
+        enQuote: '"The faction system is a living being composed of cells, all of you."',
+        zhQuote: '（派別制度是一個由細胞組成的生命體，而你們每個人就是細胞。）',
+        targetRegex: /\b(composed)\b/gi
+      },
+      {
+        id: 27,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'thrive',
+        pos: '(v.)',
+        meaning: '繁榮；茁壯成長',
+        character: '珍寧（Jeanine Matthews）',
+        timestamp: '00:20:46',
+        enQuote: '"And the only way it can survive and thrive is for each of you to claim your rightful place."',
+        zhQuote: '（它能夠生存和繁榮的唯一途徑，就是你們每個人都各就各位。）',
+        targetRegex: /\b(thrive)\b/gi
+      },
+      {
+        id: 28,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'claim',
+        pos: '(v.)',
+        meaning: '認領；主張；獲得',
+        character: '珍寧（Jeanine Matthews）',
+        timestamp: '00:20:51',
+        enQuote: '"...is for each of you to claim your rightful place."',
+        zhQuote: '（……就是你們每個人都認領自己應得的位置。）',
+        targetRegex: /\b(claim)\b/gi
+      },
+      {
+        id: 29,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'dependent',
+        pos: '(n.)',
+        meaning: '受撫養者；家屬',
+        character: '馬可斯（Marcus Eaton）',
+        timestamp: '00:21:25',
+        enQuote: '"When we leave this room, you will no longer be dependents, but full-fledged members of our society."',
+        zhQuote: '（當我們離開這個房間時，你們將不再是受撫養的孩子，而是我們社會的正式成員。）',
+        targetRegex: /\b(dependents)\b/gi
+      },
+      {
+        id: 30,
+        category: 'cat2',
+        categoryName: '二、測驗、儀式與社會制度',
+        word: 'full-fledged',
+        pos: '(adj.)',
+        meaning: '羽毛豐滿的；正式的；成熟的',
+        character: '馬可斯（Marcus Eaton）',
+        timestamp: '00:21:30',
+        enQuote: '"...you will no longer be dependents, but full-fledged members of our society."',
+        zhQuote: '（……你們將不再是受撫養的孩子，而是我們社會的正式成員。）',
+        targetRegex: /(full-fledged)/gi
+      },
+      {
+        id: 31,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'initiate',
+        pos: '(n.)',
+        meaning: '新入會者；新成員',
+        character: '艾瑞克（Eric Coulter）',
+        timestamp: '00:27:45',
+        enQuote: '"Initiates, stand. You have chosen to join the warrior faction."',
+        zhQuote: '（新進成員們，起立。你們選擇了加入戰士派別。）',
+        targetRegex: /\b(Initiates)\b/gi
+      },
+      {
+        id: 32,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'transfer',
+        pos: '(n.)',
+        meaning: '轉派者；轉移者',
+        character: '四號（Four / Tobias Eaton）',
+        timestamp: '00:34:18',
+        enQuote: '"Dauntless-born, go with Lauren; transfers, stay with me."',
+        zhQuote: '（無畏派出生的人跟蘿倫走；轉派來的人跟我留下。）',
+        targetRegex: /\b(transfers)\b/gi
+      },
+      {
+        id: 33,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'recruit',
+        pos: '(v.)',
+        meaning: '招募；徵募',
+        character: '克莉絲汀娜（Christina）',
+        timestamp: '00:46:12',
+        enQuote: '"They tried to recruit him for leadership twice, but he said no."',
+        zhQuote: '（他們曾兩次試圖招募他進入領導層，但他拒絕了。）',
+        targetRegex: /\b(recruit)\b/gi
+      },
+      {
+        id: 34,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'inhabitant',
+        pos: '(n.)',
+        meaning: '居民；居住者',
+        character: '艾瑞克（Eric Coulter）',
+        timestamp: '00:27:52',
+        enQuote: '"...tasked with the defense of this city and all its inhabitants."',
+        zhQuote: '（……肩負著保衛這座城市及其所有居民的重任。）',
+        targetRegex: /\b(inhabitants)\b/gi
+      },
+      {
+        id: 35,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'bravery',
+        pos: '(n.)',
+        meaning: '勇敢；勇氣',
+        character: '四號（Four / Tobias Eaton）',
+        timestamp: '00:48:20',
+        enQuote: '"We believe in ordinary acts of bravery and the courage that drives one person to stand up for another."',
+        zhQuote: '（我們相信平凡的英勇之舉，以及驅使一個人為另一個人挺身而出的勇氣。）',
+        targetRegex: /\b(bravery)\b/gi
+      },
+      {
+        id: 36,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'cowardice',
+        pos: '(n.)',
+        meaning: '懦弱；膽怯',
+        character: '艾瑞克（Eric Coulter）',
+        timestamp: '00:54:10',
+        enQuote: '"Hang there and I\'ll forget your cowardice, fall and die, or give up."',
+        zhQuote: '（掛在那裡我就當沒看見妳的懦弱，不然就摔下去死掉，或者放棄。）',
+        targetRegex: /\b(cowardice)\b/gi
+      },
+      {
+        id: 37,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'chasm',
+        pos: '(n.)',
+        meaning: '深淵；裂口',
+        character: '艾瑞克（Eric Coulter）',
+        timestamp: '00:37:05',
+        enQuote: '"The next morning we found his body at the bottom of the chasm."',
+        zhQuote: '（隔天早上，我們在深淵底部發現了他的屍體。）',
+        targetRegex: /\b(chasm)\b/gi
+      },
+      {
+        id: 38,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'simulation',
+        pos: '(n.)',
+        meaning: '模擬；仿真',
+        character: '托莉（Tori Wu）',
+        timestamp: '01:02:15',
+        enQuote: '"Last day of the simulations, one of the Dauntless leaders came in to watch him."',
+        zhQuote: '（在恐懼模擬的最後一天，一位無畏派領袖進來觀看他的表現。）',
+        targetRegex: /\b(simulations)\b/gi
+      },
+      {
+        id: 39,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'manipulate',
+        pos: '(v.)',
+        meaning: '操縱；控制',
+        character: '四號（Four / Tobias Eaton）',
+        timestamp: '01:15:32',
+        enQuote: '"You manipulated the simulation; you\'re Divergent."',
+        zhQuote: '（妳操縱了模擬環境；妳是分歧者。）',
+        targetRegex: /\b(manipulated)\b/gi
+      },
+      {
+        id: 40,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'eradicate',
+        pos: '(v.)',
+        meaning: '根除；消滅',
+        character: '珍寧（Jeanine Matthews）',
+        timestamp: '01:36:40',
+        enQuote: '"It\'s human nature to keep secrets, lie, steal, and I want to eradicate that."',
+        zhQuote: '（保守秘密、撒謊、偷竊都是人的天性，而我想根除這一切。）',
+        targetRegex: /\b(eradicate)\b/gi
+      },
+      {
+        id: 41,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'maintain',
+        pos: '(v.)',
+        meaning: '維持；保持',
+        character: '珍寧（Jeanine Matthews）',
+        timestamp: '01:36:48',
+        enQuote: '"That\'s how we\'ll maintain a stable, peaceful society."',
+        zhQuote: '（這就是我們維持穩定、和平社會的方式。）',
+        targetRegex: /\b(maintain)\b/gi
+      },
+      {
+        id: 42,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'willingness',
+        pos: '(n.)',
+        meaning: '意願；樂意',
+        character: '珍寧（Jeanine Matthews）',
+        timestamp: '01:38:15',
+        enQuote: '"I admire your willingness to die for what you believe in, but so am I."',
+        zhQuote: '（我欽佩妳願意為信仰而死的決心，但我也是如此。）',
+        targetRegex: /\b(willingness)\b/gi
+      },
+      {
+        id: 43,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'hesitate',
+        pos: '(v.)',
+        meaning: '猶豫；躊躇',
+        character: '珍寧（Jeanine Matthews）',
+        timestamp: '02:06:10',
+        enQuote: '"You can\'t do it, can you? Don\'t hesitate."',
+        zhQuote: '（妳下不了手，對吧？別猶豫了。）',
+        targetRegex: /\b(hesitate)\b/gi
+      },
+      {
+        id: 44,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'desperation',
+        pos: '(n.)',
+        meaning: '絕望；拚命',
+        character: '珍寧（Jeanine Matthews）',
+        timestamp: '02:05:30',
+        enQuote: '"Look at you, driven to desperation."',
+        zhQuote: '（看看妳，被逼到絕望的境地。）',
+        targetRegex: /\b(desperation)\b/gi
+      },
+      {
+        id: 45,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'vial',
+        pos: '(n.)',
+        meaning: '小玻璃瓶；藥水瓶',
+        character: '翠絲（Tris Prior）',
+        timestamp: '02:07:12',
+        enQuote: '"Give me the vial."',
+        zhQuote: '（把那個小藥瓶給我。）',
+        targetRegex: /\b(vial)\b/gi
+      },
+      {
+        id: 46,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'inject',
+        pos: '(v.)',
+        meaning: '注射',
+        character: '克莉絲汀娜（Christina）',
+        timestamp: '01:28:14',
+        enQuote: '"They\'re going to inject us with a new tracking device."',
+        zhQuote: '（他們要幫我們注射一種新的追蹤裝置。）',
+        targetRegex: /\b(inject)\b/gi
+      },
+      {
+        id: 47,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'compliant',
+        pos: '(adj.)',
+        meaning: '順從的；服從的',
+        character: '珍寧（Jeanine Matthews）',
+        timestamp: '01:37:02',
+        enQuote: '"The serum makes the brain completely compliant."',
+        zhQuote: '（這種血清會讓大腦變得完全順從。）',
+        targetRegex: /\b(compliant)\b/gi
+      },
+      {
+        id: 48,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'terminate',
+        pos: '(v.)',
+        meaning: '終止；結束',
+        character: '翠絲（Tris Prior）',
+        timestamp: '02:08:05',
+        enQuote: '"Terminate the program!"',
+        zhQuote: '（終止程式！）',
+        targetRegex: /\b(Terminate)\b/gi
+      },
+      {
+        id: 49,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'resistance',
+        pos: '(n.)',
+        meaning: '抵抗；反抗',
+        character: '珍寧（Jeanine Matthews）',
+        timestamp: '02:05:45',
+        enQuote: '"Don\'t get me wrong; there was a certain beauty to your resistance."',
+        zhQuote: '（別誤會；妳的反抗確實有某種美感。）',
+        targetRegex: /\b(resistance)\b/gi
+      },
+      {
+        id: 50,
+        category: 'cat3',
+        categoryName: '三、訓練、戰鬥與恐懼模擬',
+        word: 'unconscious',
+        pos: '(adj.)',
+        meaning: '失去知覺的；昏迷的',
+        character: '艾瑞克（Eric Coulter）',
+        timestamp: '00:44:50',
+        enQuote: '"Check if he\'s still unconscious."',
+        zhQuote: '（檢查一下他是不是還昏迷著。）',
+        targetRegex: /\b(unconscious)\b/gi
+      }
+    ];
+
+    // Application State
+    const STORAGE_KEY = 'divergent_vocab_progress_v1';
+    const THEME_KEY = 'divergent_vocab_theme_v1';
+
+    let progressMap = {}; // { [id]: 'mastered' | 'review' }
+    let currentMode = 'flashcard'; // 'flashcard' | 'quiz' | 'list'
+    let filterCategory = 'all';
+    let filterStatus = 'all';
+    let searchQuery = '';
+
+    // Flashcard State
+    let filteredDeck = [...VOCAB_DATA];
+    let currentCardIndex = 0;
+    let isFlipped = false;
+    let showFrontHint = true;
+
+    // List View Self-Test Toggles
+    let listHideZh = false;
+    let listHideQuote = false;
+
+    // Quiz State
+    let quizQuestions = [];
+    let quizIndex = 0;
+    let quizScore = 0;
+    let quizAnswered = false;
+
+    // Initialize Application
+    document.addEventListener('DOMContentLoaded', () => {
+      loadTheme();
+      loadProgress();
+      bindEvents();
+      applyFiltersAndRender();
+      initQuiz();
+    });
+
+    // Load & Save Progress (localStorage)
+    function loadProgress() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          progressMap = JSON.parse(saved);
+        }
+      } catch (e) {
+        console.warn('Failed to load progress from localStorage:', e);
+      }
+      updateStatsUI();
+    }
+
+    function saveProgress() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(progressMap));
+      } catch (e) {
+        console.warn('Failed to save progress to localStorage:', e);
+      }
+      updateStatsUI();
+    }
+
+    // Theme Management
+    function loadTheme() {
+      const savedTheme = localStorage.getItem(THEME_KEY);
+      const html = document.documentElement;
+      const icon = document.getElementById('theme-icon');
+      if (savedTheme === 'light') {
+        html.classList.remove('dark');
+        icon.className = 'fa-solid fa-moon text-slate-700';
+      } else {
+        html.classList.add('dark');
+        icon.className = 'fa-solid fa-sun text-amber-400';
+      }
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const icon = document.getElementById('theme-icon');
+      const isDark = html.classList.toggle('dark');
+      localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+      icon.className = isDark ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-slate-700';
+    }
+
+    // Toast Feedback Helper (No alert!)
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const colors = {
+        success: 'bg-emerald-600 text-white border-emerald-400',
+        warning: 'bg-orange-600 text-white border-orange-400',
+        info: 'bg-slate-800 text-white border-slate-700'
+      };
+      toast.className = `px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold shadow-lg border ${colors[type] || colors.info} transition-all duration-300 transform translate-y-2 opacity-0`;
+      toast.textContent = message;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 2200);
+    }
+
+    // Web Speech API Pronunciation
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) {
+        showToast('您的瀏覽器不支援語音朗讀功能', 'warning');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const cleanText = text.replace(/^["']|["']$/g, '');
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.92;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Highlight Target Word in English Sentence
+    function formatHighlightedQuote(item) {
+      return item.enQuote.replace(
+        item.targetRegex,
+        '<strong class="text-orange-500 dark:text-orange-400 font-extrabold underline decoration-orange-500/40 underline-offset-4">$1</strong>'
+      );
+    }
+
+    // Update Global Stats & Filter Chip Counts
+    function updateStatsUI() {
+      let mastered = 0;
+      let review = 0;
+      VOCAB_DATA.forEach(item => {
+        const st = progressMap[item.id];
+        if (st === 'mastered') mastered++;
+        else if (st === 'review') review++;
+      });
+      const unseen = VOCAB_DATA.length - mastered - review;
+      const percent = Math.round((mastered / VOCAB_DATA.length) * 100);
+
+      document.getElementById('stat-mastered').textContent = mastered;
+      document.getElementById('stat-review').textContent = review;
+      document.getElementById('stat-unseen').textContent = unseen;
+      document.getElementById('stat-percent').textContent = `${percent}%`;
+
+      document.getElementById('bar-mastered').style.width = `${(mastered / VOCAB_DATA.length) * 100}%`;
+      document.getElementById('bar-review').style.width = `${(review / VOCAB_DATA.length) * 100}%`;
+
+      document.getElementById('count-all').textContent = VOCAB_DATA.length;
+      document.getElementById('count-unseen').textContent = unseen;
+      document.getElementById('count-review').textContent = review;
+      document.getElementById('count-mastered').textContent = mastered;
+    }
+
+    // Filter Logic
+    function applyFiltersAndRender(preserveIndex = false) {
+      const q = searchQuery.trim().toLowerCase();
+
+      filteredDeck = VOCAB_DATA.filter(item => {
+        // Category filter
+        if (filterCategory !== 'all' && item.category !== filterCategory) return false;
+
+        // Status filter
+        const st = progressMap[item.id] || 'unseen';
+        if (filterStatus !== 'all' && st !== filterStatus) return false;
+
+        // Search filter
+        if (q) {
+          const matchWord = item.word.toLowerCase().includes(q);
+          const matchMeaning = item.meaning.toLowerCase().includes(q);
+          const matchChar = item.character.toLowerCase().includes(q);
+          const matchEn = item.enQuote.toLowerCase().includes(q);
+          if (!matchWord && !matchMeaning && !matchChar && !matchEn) return false;
+        }
+        return true;
+      });
+
+      if (!preserveIndex) {
+        currentCardIndex = 0;
+      } else if (currentCardIndex >= filteredDeck.length) {
+        currentCardIndex = Math.max(0, filteredDeck.length - 1);
+      }
+
+      isFlipped = false;
+      renderFlashcard();
+      renderListView();
+    }
+
+    // Render Flashcard Mode
+    function renderFlashcard() {
+      const stage = document.getElementById('flashcard-stage');
+      const controls = document.getElementById('flashcard-controls');
+      const emptyBox = document.getElementById('flashcard-empty');
+      const inner = document.getElementById('flashcard-inner');
+
+      if (filteredDeck.length === 0) {
+        stage.classList.add('hidden');
+        controls.classList.add('hidden');
+        emptyBox.classList.remove('hidden');
+        document.getElementById('card-counter').textContent = '0 / 0';
+        return;
+      }
+
+      stage.classList.remove('hidden');
+      controls.classList.remove('hidden');
+      emptyBox.classList.add('hidden');
+
+      const item = filteredDeck[currentCardIndex];
+      const status = progressMap[item.id] || 'unseen';
+
+      // Flip state
+      if (isFlipped) {
+        inner.classList.add('rotate-y-180');
+      } else {
+        inner.classList.remove('rotate-y-180');
+      }
+
+      // Top metadata
+      document.getElementById('card-counter').textContent = `${currentCardIndex + 1} / ${filteredDeck.length}`;
+      document.getElementById('card-category-badge').textContent = item.categoryName;
+
+      // Front Face
+      document.getElementById('front-id').textContent = `#${String(item.id).padStart(2, '0')}`;
+      document.getElementById('front-word').textContent = item.word;
+      document.getElementById('front-pos').textContent = item.pos;
+      document.getElementById('front-meta').textContent = `${item.character}｜${item.timestamp}`;
+
+      const hintBox = document.getElementById('front-hint-box');
+      if (showFrontHint) {
+        hintBox.classList.remove('invisible');
+      } else {
+        hintBox.classList.add('invisible');
+      }
+
+      // Status Badge styling
+      const statusBadge = document.getElementById('front-status-badge');
+      if (status === 'mastered') {
+        statusBadge.textContent = '已熟記';
+        statusBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30';
+      } else if (status === 'review') {
+        statusBadge.textContent = '需加強';
+        statusBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-lg bg-orange-500/15 text-orange-600 dark:text-orange-400 border border-orange-500/30';
+      } else {
+        statusBadge.textContent = '未複習';
+        statusBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400';
+      }
+
+      // Back Face
+      document.getElementById('back-word').textContent = item.word;
+      document.getElementById('back-pos').textContent = item.pos;
+      document.getElementById('back-meaning').textContent = item.meaning;
+      document.getElementById('back-meta').textContent = `${item.character}｜${item.timestamp}`;
+      document.getElementById('back-en-quote').innerHTML = formatHighlightedQuote(item);
+      document.getElementById('back-zh-quote').textContent = item.zhQuote;
+    }
+
+    // Mark Card Status
+    function setCardStatus(status) {
+      if (filteredDeck.length === 0) return;
+      const item = filteredDeck[currentCardIndex];
+      progressMap[item.id] = status;
+      saveProgress();
+
+      if (status === 'mastered') {
+        showToast(`「${item.word}」已標記為熟記！`, 'success');
+      } else {
+        showToast(`「${item.word}」已加入需加強清單`, 'warning');
+      }
+
+      // Advance to next card smoothly if not filtering out immediately
+      if (filterStatus !== 'all' && filterStatus !== status) {
+        applyFiltersAndRender(true);
+      } else {
+        renderListView();
+        if (currentCardIndex < filteredDeck.length - 1) {
+          currentCardIndex++;
+          isFlipped = false;
+        }
+        renderFlashcard();
+      }
+    }
+
+    // Render List Overview Mode
+    function renderListView() {
+      const container = document.getElementById('vocab-list-container');
+      document.getElementById('list-visible-count').textContent = filteredDeck.length;
+
+      if (filteredDeck.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-10 text-center text-slate-500">
+            沒有符合條件的單字資料。
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filteredDeck.map(item => {
+        const st = progressMap[item.id] || 'unseen';
+        const statusPill = st === 'mastered'
+          ? '<span class="px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-500/15 text-emerald-500">已熟記</span>'
+          : st === 'review'
+          ? '<span class="px-2 py-0.5 rounded-md text-[11px] font-bold bg-orange-500/15 text-orange-500">需加強</span>'
+          : '<span class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-400">未複習</span>';
+
+        return `
+          <div class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 flex flex-col justify-between gap-3 hover:border-sky-500/40 transition shadow-sm">
+            <div>
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-baseline gap-2 flex-wrap">
+                  <span class="text-xs font-mono text-slate-400">#${String(item.id).padStart(2, '0')}</span>
+                  <h4 class="text-xl font-extrabold text-slate-900 dark:text-white">${item.word}</h4>
+                  <span class="text-xs font-mono font-semibold text-orange-500">${item.pos}</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  ${statusPill}
+                  <button onclick="speakText('${item.word}')" title="單字發音" class="p-1.5 rounded-lg bg-slate-100 hover:bg-sky-500/20 dark:bg-slate-800 text-sky-500 transition">
+                    <i class="fa-solid fa-volume-high text-xs"></i>
+                  </button>
+                </div>
+              </div>
+
+              <p class="text-sm font-bold text-sky-600 dark:text-sky-400 mb-3 transition-opacity ${listHideZh ? 'opacity-0 select-none' : ''}">
+                ${item.meaning}
+              </p>
+
+              <div class="space-y-1.5 transition-opacity ${listHideQuote ? 'opacity-0 select-none' : ''}">
+                <div class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                  <i class="fa-solid fa-film text-orange-500"></i>
+                  <span>${item.character}｜${item.timestamp}</span>
+                  <button onclick="speakText(VOCAB_DATA[${item.id - 1}].enQuote)" class="ml-auto text-sky-500 hover:underline">
+                    <i class="fa-solid fa-play mr-0.5"></i>聽例句
+                  </button>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-relaxed bg-slate-50 dark:bg-slate-950/70 p-3 rounded-xl border-l-2 border-orange-500">
+                  ${formatHighlightedQuote(item)}
+                </p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                  ${item.zhQuote}
+                </p>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-end gap-2">
+              <button onclick="quickToggleStatus(${item.id}, 'review')" class="px-2.5 py-1 rounded-lg text-xs font-semibold ${st === 'review' ? 'bg-orange-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-orange-500/20'} transition">
+                需加強
+              </button>
+              <button onclick="quickToggleStatus(${item.id}, 'mastered')" class="px-2.5 py-1 rounded-lg text-xs font-semibold ${st === 'mastered' ? 'bg-emerald-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-emerald-500/20'} transition">
+                已熟記
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Quick status toggle from List View
+    window.quickToggleStatus = function(id, targetStatus) {
+      if (progressMap[id] === targetStatus) {
+        delete progressMap[id];
+      } else {
+        progressMap[id] = targetStatus;
+      }
+      saveProgress();
+      applyFiltersAndRender(true);
+    };
+
+    // ==========================================
+    // QUIZ MODE LOGIC (10 Random Cloze Questions)
+    // ==========================================
+    function initQuiz() {
+      const shuffled = [...VOCAB_DATA].sort(() => Math.random() - 0.5);
+      const selected = shuffled.slice(0, 10);
+
+      quizQuestions = selected.map(item => {
+        // Extract exact matched inflected word from movie quote
+        const match = item.enQuote.match(item.targetRegex);
+        const answerWord = match ? match[0] : item.word;
+        const clozeSentence = item.enQuote.replace(
+          item.targetRegex,
+          '<span class="inline-block px-3 py-0.5 mx-1 rounded-lg bg-orange-500/20 border-b-2 border-orange-500 text-orange-500 font-mono">________</span>'
+        );
+
+        // Pick 3 distractors
+        const distractors = VOCAB_DATA
+          .filter(v => v.id !== item.id)
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 3)
+          .map(v => v.word);
+
+        const options = [answerWord, ...distractors].sort(() => Math.random() - 0.5);
+
+        return {
+          item,
+          answerWord,
+          clozeSentence,
+          options
+        };
+      });
+
+      quizIndex = 0;
+      quizScore = 0;
+      quizAnswered = false;
+
+      document.getElementById('quiz-summary').classList.add('hidden');
+      document.getElementById('quiz-question-box').classList.remove('hidden');
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      const q = quizQuestions[quizIndex];
+      quizAnswered = false;
+
+      document.getElementById('quiz-progress-text').textContent = `第 ${quizIndex + 1} / ${quizQuestions.length} 題`;
+      document.getElementById('quiz-score').textContent = quizScore;
+      document.getElementById('quiz-meta').innerHTML = `<i class="fa-solid fa-film text-sky-500"></i><span>${q.item.character}｜${q.item.timestamp}</span>`;
+      document.getElementById('quiz-hint-meaning').textContent = `提示：${q.item.pos} ${q.item.meaning}`;
+      document.getElementById('quiz-sentence').innerHTML = q.clozeSentence;
+      document.getElementById('quiz-zh-translation').textContent = q.item.zhQuote;
+      document.getElementById('quiz-feedback').classList.add('hidden');
+
+      const optionsContainer = document.getElementById('quiz-options');
+      optionsContainer.innerHTML = q.options.map((opt, idx) => `
+        <button
+          type="button"
+          data-opt="${opt}"
+          class="quiz-opt-btn p-4 rounded-2xl text-left font-bold text-base bg-slate-50 dark:bg-slate-950 hover:bg-sky-500/10 border-2 border-slate-200 dark:border-slate-800 hover:border-sky-500 transition flex items-center gap-3"
+        >
+          <span class="w-7 h-7 rounded-lg bg-slate-200 dark:bg-slate-800 text-xs font-mono flex items-center justify-center">
+            ${String.fromCharCode(65 + idx)}
+          </span>
+          <span>${opt}</span>
+        </button>
+      `).join('');
+
+      document.querySelectorAll('.quiz-opt-btn').forEach(btn => {
+        btn.addEventListener('click', () => handleQuizAnswer(btn.dataset.opt));
+      });
+    }
+
+    function handleQuizAnswer(selectedOpt) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+
+      const q = quizQuestions[quizIndex];
+      const isCorrect = selectedOpt.toLowerCase() === q.answerWord.toLowerCase();
+
+      if (isCorrect) {
+        quizScore += 10;
+        document.getElementById('quiz-score').textContent = quizScore;
+      }
+
+      // Reveal full sentence with highlighted word
+      document.getElementById('quiz-sentence').innerHTML = formatHighlightedQuote(q.item);
+
+      // Style buttons
+      document.querySelectorAll('.quiz-opt-btn').forEach(btn => {
+        btn.disabled = true;
+        const val = btn.dataset.opt;
+        if (val.toLowerCase() === q.answerWord.toLowerCase()) {
+          btn.className = 'quiz-opt-btn p-4 rounded-2xl text-left font-bold text-base bg-emerald-500/20 border-2 border-emerald-500 text-emerald-600 dark:text-emerald-300 flex items-center gap-3';
+        } else if (val === selectedOpt && !isCorrect) {
+          btn.className = 'quiz-opt-btn p-4 rounded-2xl text-left font-bold text-base bg-red-500/20 border-2 border-red-500 text-red-600 dark:text-red-300 flex items-center gap-3';
+        } else {
+          btn.classList.add('opacity-50');
+        }
+      });
+
+      // Show feedback banner
+      const feedback = document.getElementById('quiz-feedback');
+      const fbIcon = document.getElementById('quiz-feedback-icon');
+      const fbTitle = document.getElementById('quiz-feedback-title');
+      const fbDesc = document.getElementById('quiz-feedback-desc');
+
+      feedback.classList.remove('hidden', 'bg-emerald-500/15', 'text-emerald-600', 'dark:text-emerald-300', 'bg-red-500/15', 'text-red-600', 'dark:text-red-300');
+      if (isCorrect) {
+        feedback.classList.add('bg-emerald-500/15', 'text-emerald-600', 'dark:text-emerald-300');
+        fbIcon.className = 'fa-solid fa-circle-check text-2xl';
+        fbTitle.textContent = '答對了！表現無畏！';
+        fbDesc.textContent = `正確單字：${q.item.word} ${q.item.pos} ${q.item.meaning}`;
+      } else {
+        feedback.classList.add('bg-red-500/15', 'text-red-600', 'dark:text-red-300');
+        fbIcon.className = 'fa-solid fa-circle-xmark text-2xl';
+        fbTitle.textContent = `答錯了！正確答案是「${q.answerWord}」`;
+        fbDesc.textContent = `原形單字：${q.item.word} ${q.item.pos} ${q.item.meaning}`;
+      }
+
+      speakText(q.item.enQuote);
+    }
+
+    // Event Listeners Setup
+    function bindEvents() {
+      // Theme Toggle
+      document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+      // Mode Tabs
+      document.querySelectorAll('.mode-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          currentMode = tab.dataset.mode;
+          document.querySelectorAll('.mode-tab').forEach(t => {
+            t.classList.remove('active', 'bg-white', 'dark:bg-slate-800', 'text-sky-600', 'dark:text-sky-400', 'shadow-sm');
+            t.classList.add('text-slate-500', 'dark:text-slate-400');
+          });
+          tab.classList.add('active', 'bg-white', 'dark:bg-slate-800', 'text-sky-600', 'dark:text-sky-400', 'shadow-sm');
+          tab.classList.remove('text-slate-500', 'dark:text-slate-400');
+
+          document.getElementById('view-flashcard').classList.toggle('hidden', currentMode !== 'flashcard');
+          document.getElementById('view-quiz').classList.toggle('hidden', currentMode !== 'quiz');
+          document.getElementById('view-list').classList.toggle('hidden', currentMode !== 'list');
+          document.getElementById('filter-panel').classList.toggle('hidden', currentMode === 'quiz');
+        });
+      });
+      // Activate first tab visually
+      document.querySelector('.mode-tab[data-mode="flashcard"]').click();
+
+      // Search Input
+      const searchInput = document.getElementById('search-input');
+      const clearSearchBtn = document.getElementById('clear-search');
+      searchInput.addEventListener('input', e => {
+        searchQuery = e.target.value;
+        clearSearchBtn.classList.toggle('hidden', !searchQuery);
+        applyFiltersAndRender();
+      });
+      clearSearchBtn.addEventListener('click', () => {
+        searchQuery = '';
+        searchInput.value = '';
+        clearSearchBtn.classList.add('hidden');
+        applyFiltersAndRender();
+      });
+
+      // Category Filter
+      document.getElementById('category-filter').addEventListener('change', e => {
+        filterCategory = e.target.value;
+        applyFiltersAndRender();
+      });
+
+      // Status Chips
+      function updateChipStyles() {
+        document.querySelectorAll('.status-chip').forEach(chip => {
+          if (chip.dataset.status === filterStatus) {
+            chip.className = 'status-chip active px-3 py-2 rounded-xl text-xs font-bold border border-sky-500 bg-sky-500/15 text-sky-600 dark:text-sky-400 transition';
+          } else {
+            chip.className = 'status-chip px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:border-slate-400 transition';
+          }
+        });
+      }
+      updateChipStyles();
+
+      document.querySelectorAll('.status-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          filterStatus = chip.dataset.status;
+          updateChipStyles();
+          applyFiltersAndRender();
+        });
+      });
+
+      // Reset Filters Button
+      document.getElementById('reset-filters-btn').addEventListener('click', () => {
+        filterCategory = 'all';
+        filterStatus = 'all';
+        searchQuery = '';
+        document.getElementById('category-filter').value = 'all';
+        document.getElementById('search-input').value = '';
+        clearSearchBtn.classList.add('hidden');
+        updateChipStyles();
+        applyFiltersAndRender();
+      });
+
+      // Flashcard Flip
+      document.getElementById('flashcard-inner').addEventListener('click', () => {
+        isFlipped = !isFlipped;
+        renderFlashcard();
+      });
+
+      // Audio Buttons inside Flashcard (stopPropagation so card doesn't flip)
+      document.getElementById('speak-word-front').addEventListener('click', e => {
+        e.stopPropagation();
+        if (filteredDeck[currentCardIndex]) speakText(filteredDeck[currentCardIndex].word);
+      });
+      document.getElementById('speak-word-back').addEventListener('click', e => {
+        e.stopPropagation();
+        if (filteredDeck[currentCardIndex]) speakText(filteredDeck[currentCardIndex].word);
+      });
+      document.getElementById('speak-sentence-back').addEventListener('click', e => {
+        e.stopPropagation();
+        if (filteredDeck[currentCardIndex]) speakText(filteredDeck[currentCardIndex].enQuote);
+      });
+
+      // Toggle Front Hint
+      document.getElementById('toggle-hint-btn').addEventListener('click', () => {
+        showFrontHint = !showFrontHint;
+        const icon = document.getElementById('hint-icon');
+        icon.className = showFrontHint ? 'fa-solid fa-eye text-sky-500' : 'fa-solid fa-eye-slash text-slate-400';
+        renderFlashcard();
+      });
+
+      // Shuffle Deck
+      document.getElementById('shuffle-btn').addEventListener('click', () => {
+        filteredDeck.sort(() => Math.random() - 0.5);
+        currentCardIndex = 0;
+        isFlipped = false;
+        renderFlashcard();
+        showToast('已將目前字卡順序隨機洗牌！', 'info');
+      });
+
+      // Prev / Next / Status Buttons
+      document.getElementById('prev-card-btn').addEventListener('click', () => {
+        if (filteredDeck.length === 0) return;
+        currentCardIndex = (currentCardIndex - 1 + filteredDeck.length) % filteredDeck.length;
+        isFlipped = false;
+        renderFlashcard();
+      });
+      document.getElementById('next-card-btn').addEventListener('click', () => {
+        if (filteredDeck.length === 0) return;
+        currentCardIndex = (currentCardIndex + 1) % filteredDeck.length;
+        isFlipped = false;
+        renderFlashcard();
+      });
+      document.getElementById('mark-review-btn').addEventListener('click', () => setCardStatus('review'));
+      document.getElementById('mark-mastered-btn').addEventListener('click', () => setCardStatus('mastered'));
+
+      // Touch Swipe Support on Flashcard
+      let touchStartX = 0;
+      const stage = document.getElementById('flashcard-stage');
+      stage.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+      stage.addEventListener('touchend', e => {
+        const diff = e.changedTouches[0].screenX - touchStartX;
+        if (Math.abs(diff) > 55 && filteredDeck.length > 0) {
+          if (diff < 0) {
+            currentCardIndex = (currentCardIndex + 1) % filteredDeck.length;
+          } else {
+            currentCardIndex = (currentCardIndex - 1 + filteredDeck.length) % filteredDeck.length;
+          }
+          isFlipped = false;
+          renderFlashcard();
+        }
+      }, { passive: true });
+
+      // Keyboard Shortcuts
+      document.addEventListener('keydown', e => {
+        if (currentMode !== 'flashcard') return;
+        if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'SELECT') return;
+
+        if (e.code === 'Space') {
+          e.preventDefault();
+          isFlipped = !isFlipped;
+          renderFlashcard();
+        } else if (e.code === 'ArrowRight') {
+          e.preventDefault();
+          document.getElementById('next-card-btn').click();
+        } else if (e.code === 'ArrowLeft') {
+          e.preventDefault();
+          document.getElementById('prev-card-btn').click();
+        } else if (e.key === '1') {
+          setCardStatus('review');
+        } else if (e.key === '2') {
+          setCardStatus('mastered');
+        }
+      });
+
+      // List View Self-Test Toggles
+      document.getElementById('list-toggle-zh').addEventListener('click', e => {
+        listHideZh = !listHideZh;
+        e.currentTarget.innerHTML = listHideZh
+          ? '<i class="fa-solid fa-eye-slash text-slate-400"></i><span>顯示中文釋義</span>'
+          : '<i class="fa-solid fa-eye text-sky-500"></i><span>隱藏中文釋義</span>';
+        renderListView();
+      });
+      document.getElementById('list-toggle-quote').addEventListener('click', e => {
+        listHideQuote = !listHideQuote;
+        e.currentTarget.innerHTML = listHideQuote
+          ? '<i class="fa-solid fa-eye-slash text-slate-400"></i><span>顯示電影例句</span>'
+          : '<i class="fa-solid fa-eye text-orange-500"></i><span>隱藏電影例句</span>';
+        renderListView();
+      });
+
+      // Quiz Events
+      document.getElementById('quiz-next-btn').addEventListener('click', () => {
+        if (quizIndex < quizQuestions.length - 1) {
+          quizIndex++;
+          renderQuizQuestion();
+        } else {
+          document.getElementById('quiz-question-box').classList.add('hidden');
+          document.getElementById('quiz-summary').classList.remove('hidden');
+          document.getElementById('quiz-final-score').textContent = quizScore;
+        }
+      });
+      document.getElementById('restart-quiz-btn').addEventListener('click', initQuiz);
+      document.getElementById('quiz-play-again-btn').addEventListener('click', initQuiz);
+      document.getElementById('quiz-back-flashcard-btn').addEventListener('click', () => {
+        document.querySelector('.mode-tab[data-mode="flashcard"]').click();
+      });
+
+      // Reset Progress Modal
+      const modal = document.getElementById('confirm-modal');
+      document.getElementById('open-reset-modal').addEventListener('click', () => {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      });
+      document.getElementById('cancel-reset-btn').addEventListener('click', () => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      });
+      document.getElementById('confirm-reset-btn').addEventListener('click', () => {
+        progressMap = {};
+        saveProgress();
+        applyFiltersAndRender();
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        showToast('所有學習進度已重置', 'info');
+      });
+    }
+  </script>
+</body>
+</html>
