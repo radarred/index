@@ -1,0 +1,95 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row =>
+                    row.some(cell => cell !== '' && cell !== null && cell !== undefined)
+                );
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美國對等關稅懶人包</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; }
+        .slide { background-color: white; padding: 20px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; }
+        h2 { color: #34495e; }
+        ul { list-style-type: disc; padding-left: 20px; }
+        .highlight { color: #e74c3c; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="slide">
+        <h1>美國對等關稅懶人包</h1>
+        <p>2025年4月最新資訊，台灣廠商必知</p>
+    </div>
+
+    <div class="slide">
+        <h2>背景與政策概述</h2>
+        <ul>
+            <li>美國總統川普於2025年4月2日宣布對等關稅政策，針對貿易逆差國家加徵關稅。</li>
+            <li>台灣被課徵 <span class="highlight">32%</span> 對等關稅，名列全球第四。</li>
+            <li>基準關稅為10%，對逆差較大國家加徵額外關稅。</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h2>影響台灣的主要產業</h2>
+        <ul>
+            <li><span class="highlight">ICT產品</span>（如伺服器、筆電）：出口額占對美出口63.6%，首當其衝。</li>
+            <li>半導體：目前暫時豁免，但終端需求下滑可能間接影響。</li>
+            <li>其他電子產品：成本上升風險。</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h2>政府因應措施</h2>
+        <ul>
+            <li>行政院推出880億元支持方案，涵蓋9大面向、20項措施。</li>
+            <li>鼓勵台商調整供應鏈，分散風險。</li>
+            <li>與美國協商，爭取更多豁免。</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h2>廠商應對建議</h2>
+        <ul>
+            <li>評估產品成本，考慮轉移生產基地（如越南、泰國）。</li>
+            <li>增加美國本地投資，爭取關稅豁免。</li>
+            <li>關注最新政策更新，及時調整策略。</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <h2>參考資源</h2>
+        <ul>
+            <li>經濟部國際貿易署：查詢最新關稅細節</li>
+            <li>美國國際貿易委員會：HTSUS關稅表</li>
+        </ul>
+    </div>
+</body>
+</html>
